@@ -850,10 +850,10 @@ ARM Macro Assembler    Page 14
 
 
 ork --depend=.\objects\startup_stm32f2xx.d -o.\objects\startup_stm32f2xx.o -IC:
-\work_ch\printer\pro\RTE -IC:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.9.0 -IC:\Ke
-il_v5\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA 514" --predefine="S
-TM32F207xx SETA 1" --list=.\listings\startup_stm32f2xx.lst ..\core\startup_stm3
-2f2xx.s
+\work_ch\stm32f207_printer\pro\RTE -IC:\Keil_v5\ARM\PACK\Keil\STM32F2xx_DFP\2.9
+.0 -IC:\Keil_v5\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA 514" --pr
+edefine="STM32F207xx SETA 1" --list=.\listings\startup_stm32f2xx.lst ..\core\st
+artup_stm32f2xx.s
 
 
 
