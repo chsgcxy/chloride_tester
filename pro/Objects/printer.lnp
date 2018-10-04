@@ -29,7 +29,7 @@
 ".\objects\stm32f2xx_tim.o"
 ".\objects\stm32f2xx_usart.o"
 ".\objects\stm32f2xx_wwdg.o"
---strict --scatter ".\Objects\printer.sct"
+--library_type=microlib --strict --scatter ".\Objects\printer.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\Listings\printer.map" -o .\Objects\printer.axf
