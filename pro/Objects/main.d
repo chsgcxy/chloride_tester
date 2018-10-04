@@ -32,3 +32,4 @@
 .\objects\main.o: ..\lib\stm32f2xx_usart.h
 .\objects\main.o: ..\lib\stm32f2xx_wwdg.h
 .\objects\main.o: ..\lib\misc.h
+.\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

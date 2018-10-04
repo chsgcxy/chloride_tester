@@ -1,4 +1,8 @@
 #include "stm32f2xx_gpio.h"
+#include "stdio.h"
+
+
+extern int uart1_init(void);
 
 static void delay_ms(int ms)
 {
@@ -25,17 +29,19 @@ static void gpio_test(void)
 		GPIO_SetBits(GPIOC, GPIO_Pin_10);
 		GPIO_SetBits(GPIOC, GPIO_Pin_11);
 		GPIO_SetBits(GPIOC, GPIO_Pin_12);
+			printf("led on\r\b");
 		delay_ms(1000);
 			GPIO_ResetBits(GPIOC, GPIO_Pin_10);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_11);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_12);
 			delay_ms(1000);
+			printf("led off\r\n");
 		}
 }
 
 int main(void)
 {
-	
+	uart1_init();
 	gpio_test();
 	return 0;
 }

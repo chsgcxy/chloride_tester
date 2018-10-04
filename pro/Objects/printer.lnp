@@ -1,5 +1,6 @@
 --cpu Cortex-M3
 ".\objects\main.o"
+".\objects\uart.o"
 ".\objects\core_cm3.o"
 ".\objects\system_stm32f2xx.o"
 ".\objects\startup_stm32f2xx.o"
