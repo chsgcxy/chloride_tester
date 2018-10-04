@@ -12,7 +12,7 @@ static void delay_ms(int ms)
 		for (i = 0; i < 28000; i++);
 }
 
-static int led_init(void)
+static int gpio_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -32,7 +32,7 @@ int main(void)
 
 	while (1) {
 		GPIO_SetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
-		printf("led on\r\b");
+		printf("led on\r\n");
 		delay_ms(1000);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
 		delay_ms(1000);
