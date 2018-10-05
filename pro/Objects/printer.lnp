@@ -30,6 +30,14 @@
 ".\objects\stm32f2xx_tim.o"
 ".\objects\stm32f2xx_usart.o"
 ".\objects\stm32f2xx_wwdg.o"
+".\objects\timers.o"
+".\objects\tasks.o"
+".\objects\queue.o"
+".\objects\list.o"
+".\objects\event_groups.o"
+".\objects\croutine.o"
+".\objects\port.o"
+".\objects\heap_4.o"
 --library_type=microlib --strict --scatter ".\Objects\printer.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
