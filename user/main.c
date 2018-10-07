@@ -8,8 +8,9 @@
 #include "event_groups.h"
 
 extern int uart1_init(void);
+extern int lcd_init(void);
 
-static void delay_ms(int ms)
+void delay_ms(int ms)
 {
 	int i;
 	
@@ -77,6 +78,7 @@ int main(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 	uart1_init();
 	gpio_init();
+	lcd_init();
 	task_init();
 
 	vTaskStartScheduler();
