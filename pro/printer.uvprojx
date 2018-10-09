@@ -50,9 +50,9 @@
           <OutputName>printer</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>0</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\core;..\lib;..\user;..\emwin\Config;..\emwin\inc;..\freertos\CMSIS_RTOS;..\freertos\include;..\freertos\portable\RVDS\ARM_CM3</IncludePath>
+              <IncludePath>..\core;..\lib;..\user;..\emwin\Config;..\emwin\inc;..\freertos\CMSIS_RTOS;..\freertos\include;..\freertos\portable\RVDS\ARM_CM3;..\usblib\Core\Inc;..\usblib\Class\HID\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -662,6 +662,56 @@
               <FileName>GUI_X_OS.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\emwin\OS\GUI_X_OS.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>usb</GroupName>
+          <Files>
+            <File>
+              <FileName>usbh_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Core\Src\usbh_conf.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Core\Src\usbh_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_ctlreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Core\Src\usbh_ctlreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Core\Src\usbh_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_pipes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Core\Src\usbh_pipes.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Class\HID\Src\usbh_hid.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_keybd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Class\HID\Src\usbh_hid_keybd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_mouse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Class\HID\Src\usbh_hid_mouse.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usblib\Class\HID\Src\usbh_hid_parser.c</FilePath>
             </File>
           </Files>
         </Group>
