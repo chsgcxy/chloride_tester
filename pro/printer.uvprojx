@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\core;..\lib;..\user;..\emwin\Config;..\emwin\inc;..\freertos\CMSIS_RTOS;..\freertos\include;..\freertos\portable\RVDS\ARM_CM3;..\usblib\Core\Inc;..\usblib\Class\HID\Inc</IncludePath>
+              <IncludePath>..\core;..\lib;..\user;..\emwin\Config;..\emwin\inc;..\freertos\CMSIS_RTOS;..\freertos\include;..\freertos\portable\RVDS\ARM_CM3;..\usblib\Core\Inc;..\usblib\Class\MSC\Inc;..\fatfs\src;..\fatfs\src\drivers</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -694,24 +694,64 @@
               <FilePath>..\usblib\Core\Src\usbh_pipes.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_hid.c</FileName>
+              <FileName>usbh_msc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Class\HID\Src\usbh_hid.c</FilePath>
+              <FilePath>..\usblib\Class\MSC\Src\usbh_msc.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_hid_keybd.c</FileName>
+              <FileName>usbh_msc_bot.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Class\HID\Src\usbh_hid_keybd.c</FilePath>
+              <FilePath>..\usblib\Class\MSC\Src\usbh_msc_bot.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_hid_mouse.c</FileName>
+              <FileName>usbh_msc_scsi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Class\HID\Src\usbh_hid_mouse.c</FilePath>
+              <FilePath>..\usblib\Class\MSC\Src\usbh_msc_scsi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fatfs</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\src\diskio.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_hid_parser.c</FileName>
+              <FileName>ff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Class\HID\Src\usbh_hid_parser.c</FilePath>
+              <FilePath>..\fatfs\src\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff_gen_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\src\ff_gen_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>cc936.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\src\option\cc936.c</FilePath>
+            </File>
+            <File>
+              <FileName>syscall.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\src\option\syscall.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\src\drivers\usbh_diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_diskio.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\fatfs\src\drivers\usbh_diskio.h</FilePath>
+            </File>
+            <File>
+              <FileName>ffconf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\fatfs\src\ffconf.h</FilePath>
             </File>
           </Files>
         </Group>
