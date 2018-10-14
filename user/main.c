@@ -6,9 +6,12 @@
 #include "croutine.h"
 #include "semphr.h"
 #include "event_groups.h"
+#include "usbh_def.h"
 
 extern int uart1_init(void);
 extern int lcd_init(void);
+
+USBH_HandleTypeDef  hUSBH;
 
 void delay_ms(int ms)
 {
@@ -45,9 +48,9 @@ static void led_task2(void *param)
 {
 	while (1) {
 		GPIO_SetBits(GPIOC, GPIO_Pin_11);
-		vTaskDelay(500);
+		vTaskDelay(200);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_11);
-		vTaskDelay(500);
+		vTaskDelay(200);
 	}
 }
 
@@ -55,9 +58,10 @@ static void led_task3(void *param)
 {
 	while (1) {
 		GPIO_SetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelay(1000);
+		vTaskDelay(200);
 		GPIO_ResetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelay(1000);
+		vTaskDelay(200);
+        printf("hello world!\r\n");
 	}
 }
 
