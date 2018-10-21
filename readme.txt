@@ -8,11 +8,18 @@
 	- the usb lib and fatfs is from stm32_f105-07_f2_f4_usb-host-device_lib
 	- the stm32f207 lib is from stm32f2xx_stdperiph_lib
 
-    First I choose stdperiph lib for I am more familiar with it. The 
-usb lib and fatfs in en.stm32cubef2 is based on hal lib, but I choosed
-thi stdperiph lib, so I must used the usb lib and fatfs in
-stm32_f105-07_f2_f4_usb-host-device_lib. And it is easier to porting.
-It seems that the freertos does not depend on the lib type, user can use
-std lib or cube hal lib, so I use the em.stm32cubef2 version.
+    First I choose stdperiph lib for I am more familiar with it.
+    
+    The usb lib in en.stm32cubef2 is based on hal lib, but I choosed The
+    stdperiph lib, so I must used the usb lib in stm32_f105-07_f2_f4_usb-host-device_lib, 
+    and it is easier to porting.
+
+    The fatfs in em.stm32cubef2 has a better architecture, I can easy porting
+    sd or usb or flash.
+
+    It seems that the freertos does not depend on the lib type, user can use
+    std lib or cube hal lib, so I use the em.stm32cubef2 version.
+
+
 
 

@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\core;..\lib;..\user;..\emwin\Config;..\emwin\inc;..\freertos\CMSIS_RTOS;..\freertos\include;..\freertos\portable\RVDS\ARM_CM3;..\usblib\Core\Inc;..\usblib\Class\MSC\Inc;..\fatfs\src;..\fatfs\src\drivers</IncludePath>
+              <IncludePath>..\core;..\lib;..\user;..\emwin\Config;..\emwin\inc;..\freertos\CMSIS_RTOS;..\freertos\include;..\freertos\portable\RVDS\ARM_CM3;..\usb\STM32_USB_HOST_Library\Core\inc;..\usb\STM32_USB_HOST_Library\Class\MSC\inc;..\usb\STM32_USB_OTG_Driver\inc;..\usb\porting;..\fatfs\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -446,7 +446,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib</GroupName>
+          <GroupName>stm32f2xx-lib</GroupName>
           <Files>
             <File>
               <FileName>misc.c</FileName>
@@ -581,6 +581,41 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>emwin</GroupName>
+          <Files>
+            <File>
+              <FileName>GUIConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\emwin\Config\GUIConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDRV.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\emwin\Config\GUIDRV.c</FilePath>
+            </File>
+            <File>
+              <FileName>SIMConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\emwin\Config\SIMConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>STemWin532_CM3_OS_Keil.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\emwin\Lib\STemWin532_CM3_OS_Keil.lib</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\emwin\Config\LCDConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_X_OS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\emwin\OS\GUI_X_OS.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>freertos</GroupName>
           <Files>
             <File>
@@ -631,82 +666,97 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>emwin</GroupName>
+          <GroupName>usb-otg</GroupName>
           <Files>
             <File>
-              <FileName>GUIConf.c</FileName>
+              <FileName>usb_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\emwin\Config\GUIConf.c</FilePath>
+              <FilePath>..\usb\STM32_USB_OTG_Driver\src\usb_core.c</FilePath>
             </File>
             <File>
-              <FileName>GUIDRV.c</FileName>
+              <FileName>usb_hcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\emwin\Config\GUIDRV.c</FilePath>
+              <FilePath>..\usb\STM32_USB_OTG_Driver\src\usb_hcd.c</FilePath>
             </File>
             <File>
-              <FileName>SIMConf.c</FileName>
+              <FileName>usb_hcd_int.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\emwin\Config\SIMConf.c</FilePath>
-            </File>
-            <File>
-              <FileName>STemWin532_CM3_OS_Keil.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\emwin\Lib\STemWin532_CM3_OS_Keil.lib</FilePath>
-            </File>
-            <File>
-              <FileName>LCDConf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\emwin\Config\LCDConf.c</FilePath>
-            </File>
-            <File>
-              <FileName>GUI_X_OS.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\emwin\OS\GUI_X_OS.c</FilePath>
+              <FilePath>..\usb\STM32_USB_OTG_Driver\src\usb_hcd_int.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>usb</GroupName>
+          <GroupName>usb-host</GroupName>
           <Files>
-            <File>
-              <FileName>usbh_conf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usblib\Core\Src\usbh_conf.c</FilePath>
-            </File>
             <File>
               <FileName>usbh_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Core\Src\usbh_core.c</FilePath>
+              <FilePath>..\usb\STM32_USB_HOST_Library\Core\src\usbh_core.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_ctlreq.c</FileName>
+              <FileName>usbh_hcs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Core\Src\usbh_ctlreq.c</FilePath>
+              <FilePath>..\usb\STM32_USB_HOST_Library\Core\src\usbh_hcs.c</FilePath>
             </File>
             <File>
               <FileName>usbh_ioreq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Core\Src\usbh_ioreq.c</FilePath>
+              <FilePath>..\usb\STM32_USB_HOST_Library\Core\src\usbh_ioreq.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_pipes.c</FileName>
+              <FileName>usbh_stdreq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Core\Src\usbh_pipes.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_msc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usblib\Class\MSC\Src\usbh_msc.c</FilePath>
+              <FilePath>..\usb\STM32_USB_HOST_Library\Core\src\usbh_stdreq.c</FilePath>
             </File>
             <File>
               <FileName>usbh_msc_bot.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Class\MSC\Src\usbh_msc_bot.c</FilePath>
+              <FilePath>..\usb\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_bot.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usb\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_fatfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usb\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_fatfs.c</FilePath>
             </File>
             <File>
               <FileName>usbh_msc_scsi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\usblib\Class\MSC\Src\usbh_msc_scsi.c</FilePath>
+              <FilePath>..\usb\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_scsi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>usb-porting</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_bsp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usb\porting\usb_bsp.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_usr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usb\porting\usbh_usr.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\usb\porting\usb_conf.h</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\usb\porting\usbh_conf.h</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_usr.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\usb\porting\usbh_usr.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -714,44 +764,14 @@
           <GroupName>fatfs</GroupName>
           <Files>
             <File>
-              <FileName>diskio.c</FileName>
+              <FileName>fattime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\fatfs\src\diskio.c</FilePath>
+              <FilePath>..\fatfs\src\fattime.c</FilePath>
             </File>
             <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fatfs\src\ff.c</FilePath>
-            </File>
-            <File>
-              <FileName>ff_gen_drv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fatfs\src\ff_gen_drv.c</FilePath>
-            </File>
-            <File>
-              <FileName>cc936.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fatfs\src\option\cc936.c</FilePath>
-            </File>
-            <File>
-              <FileName>syscall.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fatfs\src\option\syscall.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_diskio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fatfs\src\drivers\usbh_diskio.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_diskio.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\fatfs\src\drivers\usbh_diskio.h</FilePath>
-            </File>
-            <File>
-              <FileName>ffconf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\fatfs\src\ffconf.h</FilePath>
             </File>
           </Files>
         </Group>

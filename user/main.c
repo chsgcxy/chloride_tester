@@ -6,12 +6,13 @@
 #include "croutine.h"
 #include "semphr.h"
 #include "event_groups.h"
-#include "usbh_def.h"
+#include "usbh_usr.h" 
 
 extern int uart1_init(void);
 extern int lcd_init(void);
 
-USBH_HandleTypeDef  hUSBH;
+USBH_HOST  USB_Host;
+USB_OTG_CORE_HANDLE  USB_OTG_Core;
 
 void delay_ms(int ms)
 {
