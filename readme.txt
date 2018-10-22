@@ -14,8 +14,7 @@
     stdperiph lib, so I must used the usb lib in stm32_f105-07_f2_f4_usb-host-device_lib, 
     and it is easier to porting.
 
-    The fatfs in em.stm32cubef2 has a better architecture, I can easy porting
-    sd or usb or flash.
+    The fatfs in from stm32_f105-07_f2_f4_usb-host-device_lib also.
 
     It seems that the freertos does not depend on the lib type, user can use
     std lib or cube hal lib, so I use the em.stm32cubef2 version.
