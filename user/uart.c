@@ -10,16 +10,26 @@ int uart1_init(void)
 	USART_InitTypeDef USART_InitStructure;
 	GPIO_InitTypeDef GPIO_InitStruct;
 
-		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;  
-		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
-		GPIO_Init(GPIOB, &GPIO_InitStruct);
-		GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_USART1);  
-		GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_USART1);
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;  
 
+#ifdef UART1_PIN_PA9_PA10
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;
+	GPIO_Init(GPIOA, &GPIO_InitStruct);
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_USART1);  
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);		
+#elif defined UART1_PIN_PB6_pB7
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
+	GPIO_Init(GPIOB, &GPIO_InitStruct);
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_USART1);  
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_USART1);
+#else
+	#error "must define UART1_PIN_xxx......"
+#endif
 
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
 	USART_InitStructure.USART_BaudRate = 115200;
@@ -65,10 +75,21 @@ int uart4_init(void)
 	return 0;
 }
 
+int uart_send_buf(USART_TypeDef* USARTx, uint8_t *buf, int len)
+{
+	while (len--) {
+		while (RESET == USART_GetFlagStatus(USARTx, USART_FLAG_TC));
+		USART_SendData(USARTx, *buf);
+		buf++;
+	}
+	return 0;
+}
+
+
 int fputc(int ch, FILE *f)
 { 	
-	while((USART1->SR&0X40)==0);  
-	USART1->DR = (u8)ch;      
+	while((DEBUG_PORT->SR & 0X40) == 0);  
+	DEBUG_PORT->DR = (u8)ch;      
 	return ch;
 }
 

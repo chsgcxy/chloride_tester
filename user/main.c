@@ -7,9 +7,7 @@
 #include "semphr.h"
 #include "event_groups.h"
 #include "usbh_usr.h" 
-
-extern int uart1_init(void);
-extern int lcd_init(void);
+#include "uart.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -82,8 +80,11 @@ int main(void)
 	/* rtos will not run if I set group_2, group_4 is work */
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 	uart1_init();
-	gpio_init();
-	lcd_init();
+	uart4_init();
+	printf("System Init!\r\n");
+	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
+    gpio_init();
+	//lcd_init();
 	task_init();
 
 	vTaskStartScheduler();
