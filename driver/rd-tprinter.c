@@ -101,6 +101,17 @@ int tprinter_flush_line(struct tprinter *printer, uint8_t line)
     return printer->send(cmd, 3);
 }
 
+int tprinter_pos(struct tprinter *printer, int pos)
+{
+    uint8_t cmd[4];
+
+    cmd[0] = 0x1B;
+    cmd[1] = 0x24;
+    cmd[2] = (uint8_t)(pos & 0xff);
+    cmd[3] = (uint8_t)((pos >> 8) & 0xff);
+    return printer->send(cmd, 4);   
+}
+
 /**
   * ESC c
   * enable / diable reverse

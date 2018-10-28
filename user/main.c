@@ -112,7 +112,6 @@ int main(void)
 	report_test.data[10] = 24.31;
 	report_test.data[11] = 34.5;
 
-	report_test.data_perline = 2;
 	report_test.data_num = 12;
 	report_test.nitrate_dosage = 32.78;
 	report_test.percentage = 0.78;

@@ -6,7 +6,6 @@
 
 struct report {
     float data[30];
-    uint8_t data_perline;
     uint8_t data_num;
 
     float nitrate_dosage;

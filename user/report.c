@@ -39,7 +39,7 @@ int report_init(struct tprinter *printer)
 
 int report_show(struct report *rp)
 {
-    int total, perline;
+    int total;
     char buf[16];
     
     tprinter_prepare(report_printer);
@@ -82,15 +82,18 @@ int report_show(struct report *rp)
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);
 
-    for (total = rp->data_num; total > 0; total--) {  
-        sprintf(buf, "%02d: %.1f   ", total, rp->data[total - 1]);
+    for (total = rp->data_num; total > 0; total -= 2) {  
+        tprinter_prepare(report_printer);
+        tprinter_pos(report_printer, 30);
+        sprintf(buf, "%02d:  %.1f", total - 1, rp->data[total - 2]);
         tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
-        perline++;
-        if (perline >= rp->data_perline) {
-            tprinter_newline(report_printer);
-            perline = 0;
-        } 
+
+        tprinter_pos(report_printer, 210);
+        sprintf(buf, "%02d:  %.1f", total, rp->data[total - 1]);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
     }
+    tprinter_prepare(report_printer);
     tprinter_newline(report_printer);
     
     tprinter_send(report_printer, str_ssjcdy, sizeof(str_ssjcdy));
