@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\core;..\lib;..\user;..\emwin\Config;..\emwin\inc;..\freertos\CMSIS_RTOS;..\freertos\include;..\freertos\portable\RVDS\ARM_CM3;..\usb\STM32_USB_HOST_Library\Core\inc;..\usb\STM32_USB_HOST_Library\Class\MSC\inc;..\usb\STM32_USB_OTG_Driver\inc;..\usb\porting;..\fatfs\inc</IncludePath>
+              <IncludePath>..\core;..\lib;..\user;..\emwin\Config;..\emwin\inc;..\freertos\CMSIS_RTOS;..\freertos\include;..\freertos\portable\RVDS\ARM_CM3;..\usb\STM32_USB_HOST_Library\Core\inc;..\usb\STM32_USB_HOST_Library\Class\MSC\inc;..\usb\STM32_USB_OTG_Driver\inc;..\usb\porting;..\fatfs\inc;..\driver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -422,6 +422,11 @@
               <FileName>lcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>report.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\report.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -772,6 +777,16 @@
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fatfs\src\ff.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>driver</GroupName>
+          <Files>
+            <File>
+              <FileName>rd-tprinter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\rd-tprinter.c</FilePath>
             </File>
           </Files>
         </Group>

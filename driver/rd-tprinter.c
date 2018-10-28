@@ -15,11 +15,28 @@
   */
 int tprinter_prepare(struct tprinter *printer)
 {
-    u8 cmd[2];
+    uint8_t cmd[2];
 
     cmd[0] = 0x1B;
     cmd[1] = 0x40;
     return printer->send(cmd, 2);
+}
+
+int tprinter_zoomin(struct tprinter *printer, uint8_t nx, uint8_t ny)
+{
+    uint8_t cmd[4];
+
+    cmd[0] = 0x1B;
+    cmd[1] = 0x58;
+    cmd[2] = nx;
+    cmd[3] = ny;
+
+    return printer->send(cmd, 4);
+}
+
+int tprinter_send(struct tprinter *printer, uint8_t *buf, int len)
+{
+    return printer->send(buf, len);
 }
 
 /**
@@ -27,7 +44,7 @@ int tprinter_prepare(struct tprinter *printer)
   */
 int tprinter_flush(struct tprinter *printer)
 {
-    u8 cmd[2];
+    uint8_t cmd[2];
 
     cmd[0] = 0x0C;
     return printer->send(cmd, 1);
@@ -38,7 +55,7 @@ int tprinter_flush(struct tprinter *printer)
   */
 int tprinter_flush_wrap(struct tprinter *printer)
 {
-    u8 cmd[2];
+    uint8_t cmd[2];
 
     cmd[0] = 0x0A;
     return printer->send(cmd, 1);
@@ -47,9 +64,9 @@ int tprinter_flush_wrap(struct tprinter *printer)
 /**
   * CR 
   */
-int tprinter_flush_enter(struct tprinter *printer)
+int tprinter_newline(struct tprinter *printer)
 {
-    u8 cmd[2];
+    uint8_t cmd[2];
 
     cmd[0] = 0x0D;
     return printer->send(cmd, 1);
@@ -59,13 +76,13 @@ int tprinter_flush_enter(struct tprinter *printer)
   * ESC J
   * flush and move to (step * 0.125mm)
   */
-int tprinter_flush_step(struct tprinter *printer, u8 step)
+int tprinter_flush_step(struct tprinter *printer, uint8_t step)
 {
-    u8 cmd[3];
+    uint8_t cmd[3];
 
     cmd[0] = 0x1B;
     cmd[1] = 0x4A;
-    cmd[3] = step;
+    cmd[2] = step;
     return printer->send(cmd, 3);
 }
 
@@ -74,13 +91,13 @@ int tprinter_flush_step(struct tprinter *printer, u8 step)
   * flush and move n line
   * a line = 24 * 0.125mm
   */
-int tprinter_flush_line(struct tprinter *printer, u8 line)
+int tprinter_flush_line(struct tprinter *printer, uint8_t line)
 {
-    u8 cmd[3];
+    uint8_t cmd[3];
 
     cmd[0] = 0x1B;
     cmd[1] = 0x64;
-    cmd[3] = line;
+    cmd[2] = line;
     return printer->send(cmd, 3);
 }
 
@@ -88,15 +105,15 @@ int tprinter_flush_line(struct tprinter *printer, u8 line)
   * ESC c
   * enable / diable reverse
   */
-int tprinter_flush_line(struct tprinter *printer, u8 enable)
+int tprinter_reverse_ctrl(struct tprinter *printer, uint8_t enable)
 {
-    u8 cmd[3];
+    uint8_t cmd[3];
 
     cmd[0] = 0x1B;
     cmd[1] = 0x63;
     if (enable)
-        cmd[3] = 1;
+        cmd[2] = 1;
     else
-        cmd[3] = 0;
+        cmd[2] = 0;
     return printer->send(cmd, 3);
 }
