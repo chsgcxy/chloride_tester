@@ -5,9 +5,15 @@
 #include "rd-tprinter.h"
 
 /**
+  * @ notes
+  * @ baudrate : 9600 (it seems can not be changed)
+  * @ 
+  */
+
+/**
   * ESC @
   */
-int tprinter_init(struct tprinter *printer)
+int tprinter_prepare(struct tprinter *printer)
 {
     u8 cmd[2];
 

@@ -8,7 +8,7 @@ struct tprinter {
     int (*send)(u8 *buf, int len);
 };
 
-extern int tprinter_init(struct tprinter *printer);
+extern int tprinter_prepare(struct tprinter *printer);
 extern int tprinter_flush(struct tprinter *printer);
 extern int tprinter_flush_wrap(struct tprinter *printer);
 extern int tprinter_flush_enter(struct tprinter *printer);
