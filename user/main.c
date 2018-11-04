@@ -95,10 +95,10 @@ int main(void)
 	//ad7705_test();
 
 	GUI_Init();
-	GUI_GotoXY(50, 50);
+	//GUI_GotoXY(50, 50);
 	GUI_SetFont(GUI_FONT_32B_ASCII);
-	GUI_SetColor(GUI_GREEN);
-	GUI_SetBkColor(GUI_RED);
+	GUI_SetColor(GUI_WHITE);
+	GUI_SetBkColor(GUI_BLUE);
 	GUI_DispString("hello world!");
 	
 	while (1) {

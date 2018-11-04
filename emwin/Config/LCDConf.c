@@ -439,32 +439,33 @@ static void LcdReadDataMultiple(U16 * pData, int NumItems) {
 *
 */
 void LCD_X_Config(void) {
-  GUI_DEVICE * pDevice;
-  CONFIG_FLEXCOLOR Config = {0};
-  GUI_PORT_API PortAPI = {0};
-  //
-  // Set display driver and color conversion
-  //
-  pDevice = GUI_DEVICE_CreateAndLink(GUIDRV_FLEXCOLOR, GUICC_565, 0, 0);
-  //
-  // Display driver configuration, required for Lin-driver
-  //
-  LCD_SetSizeEx (0, XSIZE_PHYS , YSIZE_PHYS);
-  LCD_SetVSizeEx(0, VXSIZE_PHYS, VYSIZE_PHYS);
-  //
-  // Orientation
-  //
-  //Config.Orientation = GUI_SWAP_XY | GUI_MIRROR_Y;
-  Config.Orientation = GUI_MIRROR_Y; //| GUI_MIRROR_X;
-  GUIDRV_FlexColor_Config(pDevice, &Config);
-  //
-  // Set controller and operation mode
-  //
-  PortAPI.pfWrite16_A0  = LcdWriteReg;
-  PortAPI.pfWrite16_A1  = LcdWriteData;
-  PortAPI.pfWriteM16_A1 = LcdWriteDataMultiple;
-  PortAPI.pfReadM16_A1  = LcdReadDataMultiple;
-  GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66709, GUIDRV_FLEXCOLOR_M16C0B16);
+    GUI_DEVICE * pDevice;
+    CONFIG_FLEXCOLOR Config = {0};
+    GUI_PORT_API PortAPI = {0};
+    //
+    // Set display driver and color conversion
+    //
+    pDevice = GUI_DEVICE_CreateAndLink(GUIDRV_FLEXCOLOR, GUICC_565, 0, 0);
+    //
+    // Display driver configuration, required for Lin-driver
+    //
+    LCD_SetSizeEx(0, XSIZE_PHYS , YSIZE_PHYS);
+    LCD_SetVSizeEx(0, VXSIZE_PHYS, VYSIZE_PHYS);
+    //
+    // Orientation
+    //
+    // the hardware have gpio to set flush mode
+    //Config.Orientation = GUI_SWAP_XY | GUI_MIRROR_Y;
+    //Config.Orientation = GUI_MIRROR_Y; //| GUI_MIRROR_X;
+    GUIDRV_FlexColor_Config(pDevice, &Config);
+    //
+    // Set controller and operation mode
+    //
+    PortAPI.pfWrite16_A0  = LcdWriteReg;
+    PortAPI.pfWrite16_A1  = LcdWriteData;
+    PortAPI.pfWriteM16_A1 = LcdWriteDataMultiple;
+    PortAPI.pfReadM16_A1  = LcdReadDataMultiple;
+    GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66709, GUIDRV_FLEXCOLOR_M16C0B16);
 }
 
 /*********************************************************************
@@ -489,29 +490,26 @@ void LCD_X_Config(void) {
 *      0 - Ok
 */
 int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData) {
-  int r;
-  (void) LayerIndex;
-  (void) pData;
-  
-  switch (Cmd) {
-  case LCD_X_INITCONTROLLER: {
-    //
-    // Called during the initialization process in order to set up the
-    // display controller and put it into operation. If the display
-    // controller is not initialized by any external routine this needs
-    // to be adapted by the customer...
-    //
-    // ...
-    printf("gui init................\r\n");
-    lcd_io_init();
-    lcd_fsmc_init();
-    lcd_ssd1963_config();
-    return 0;
-  }
-  default:
-    r = -1;
-  }
-  return r;
+    (void) LayerIndex;
+    (void) pData;
+
+    switch (Cmd) {
+    case LCD_X_INITCONTROLLER:
+        //
+        // Called during the initialization process in order to set up the
+        // display controller and put it into operation. If the display
+        // controller is not initialized by any external routine this needs
+        // to be adapted by the customer...
+        //
+        // ...
+        //printf("gui init................\r\n");
+        lcd_io_init();
+        lcd_fsmc_init();
+        lcd_ssd1963_config();
+        return 0;
+    default:
+        return -1;
+    }
 }
 
 /*************************** End of file ****************************/
