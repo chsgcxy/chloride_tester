@@ -419,14 +419,14 @@
               <FilePath>..\user\uart.c</FilePath>
             </File>
             <File>
-              <FileName>lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\lcd.c</FilePath>
-            </File>
-            <File>
               <FileName>report.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\report.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -787,6 +787,11 @@
               <FileName>rd-tprinter.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\driver\rd-tprinter.c</FilePath>
+            </File>
+            <File>
+              <FileName>AD7705Driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\AD7705Driver.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -54,6 +54,8 @@ Purpose     : Display driver configuration file
 #ifndef LCDCONF_H
 #define LCDCONF_H
 
+extern void lcd_draw_point(int x, int y, int color);
+
 #endif /* LCDCONF_H */
 
 /*************************** End of file ****************************/

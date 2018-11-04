@@ -9,6 +9,9 @@
 #include "usbh_usr.h" 
 #include "uart.h"
 #include "report.h"
+#include "AD7705Driver.h"
+#include "GUI.h"
+#include "WM.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -21,19 +24,6 @@ void delay_ms(int ms)
 	
 	while (ms--)
 		for (i = 0; i < 28000; i++);
-}
-
-static int gpio_init(void)
-{
-	GPIO_InitTypeDef GPIO_InitStructure;
-	
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-    GPIO_Init(GPIOC, &GPIO_InitStructure);
-	return 0;
 }
 
 static void led_task1(void *param)
@@ -79,8 +69,17 @@ static int g_printer_send(uint8_t *buf, int len)
 	return uart_send_buf(PRINTER_PORT, buf, len);
 }
 
+extern void ad7705_test(void);
+
+extern void lcd_ssd1963_config(void);
+extern void lcd_fsmc_init(void);
+extern void lcd_io_init(void);
+
 int main(void)
 {
+	u16 data[2];
+	float volt;
+	
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
@@ -91,8 +90,29 @@ int main(void)
 	uart4_init();
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
-    gpio_init();
-	//lcd_init();
+
+	//AD770xInit();
+	//ad7705_test();
+
+	GUI_Init();
+	GUI_GotoXY(50, 50);
+	GUI_SetFont(GUI_FONT_32B_ASCII);
+	GUI_SetColor(GUI_GREEN);
+	GUI_SetBkColor(GUI_RED);
+	GUI_DispString("hello world!");
+	
+	while (1) {
+		if(AD770xReadValue(data)) {
+			volt = (float)(data[0] * (2.5 / 65535));
+			printf("ad1 orign data = %d, volt = %.4f\r\n", data[0], volt);
+			volt = (float)(data[1] * (2.5 / 65535));
+			printf("ad2 orign data = %d, volt = %.4f\r\n", data[1], volt);
+		}
+		printf("wait ok.............\r\n");
+		delay_ms(1000);
+	}
+
+	
 	task_init();
 
 	g_printer.name = "simple printer";

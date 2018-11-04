@@ -55,6 +55,7 @@ Purpose     : Display controller configuration (single layer)
 #include "GUIDRV_FlexColor.h"
 #include "stm32f2xx_gpio.h"
 #include "stm32f2xx_fsmc.h"
+#include "stdio.h"
 /*********************************************************************
 *
 *       Layer configuration (to be modified)
@@ -65,8 +66,8 @@ Purpose     : Display controller configuration (single layer)
 //
 // Physical display size
 //
-#define XSIZE_PHYS  240 // To be adapted to x-screen size
-#define YSIZE_PHYS  320 // To be adapted to y-screen size
+#define XSIZE_PHYS  800 // To be adapted to x-screen size
+#define YSIZE_PHYS  480 // To be adapted to y-screen size
 
 /*********************************************************************
 *
@@ -93,6 +94,43 @@ Purpose     : Display controller configuration (single layer)
   #error No display driver defined!
 #endif
 
+
+#define LCD_RAM    *(__IO uint16_t *) (0x60020000)
+#define LCD_REG    *(__IO uint16_t *) (0x60000000)
+	
+#define LCD_WRITE_REG(value)     (LCD_REG = value)
+#define LCD_WRITE_RAM(value)    (LCD_RAM = value)	
+	
+#define  HDP  799  //Horizontal Display Period
+#define  HT   1000 //Horizontal Total
+#define  HPS  51  //LLINE Pulse Start Position
+#define  LPS  3   //	Horizontal Display Period Start Position
+#define  HPW  8   //	LLINE Pulse Width
+
+
+#define  VDP  479	//Vertical Display Period
+#define  VT   530	//Vertical Total
+#define  VPS  24	//	LFRAME Pulse Start Position
+#define  FPS  23	//Vertical Display Period Start Positio
+#define  VPW  3 	// LFRAME Pulse Width
+
+#define   Black        0x0000
+#define   Navy         0x000F
+#define   Dgreen       0x03E0
+#define   Dcyan        0x03EF
+#define   Marooon      0x7800
+#define   Purple       0x780F
+#define   Olive        0x7BE0
+#define   Lgray        0xC618
+#define   Dgray        0x7BEF
+#define   Blue         0x001F
+#define   Green        0x07E0
+#define   Cyan         0x07FF
+#define   Red          0xF800
+#define   Magenta      0xF81F
+#define   Yellow       0xFFE0
+#define   White        0xFFFF
+
 /*********************************************************************
 *
 *       Local functions
@@ -101,12 +139,21 @@ Purpose     : Display controller configuration (single layer)
 */
 extern void delay_ms(int ms);
 
-static void lcd_io_init(void)
+static void lcd_delay(int cnt)
+{
+	unsigned int dl;
+	
+	while (cnt--)
+		for (dl = 0; dl < 500; dl++);
+}
+
+void lcd_io_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
     /* Enable GPIOD, GPIOE, GPIOF, GPIOG and AFIO clocks */
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOE, ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_8 |
                                   GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_14 |
@@ -132,8 +179,7 @@ static void lcd_io_init(void)
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 |
                                  GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12 |
-                                 GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15 | 
-                                 GPIO_Pin_2;
+                                 GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 
     GPIO_PinAFConfig(GPIOE, GPIO_PinSource7 , GPIO_AF_FSMC);
@@ -147,49 +193,183 @@ static void lcd_io_init(void)
     GPIO_PinAFConfig(GPIOE, GPIO_PinSource15 , GPIO_AF_FSMC);
 
     /* force reset */
-    GPIO_ResetBits(GPIOE, GPIO_Pin_2);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_ResetBits(GPIOB, GPIO_Pin_11);
     delay_ms(500);
-    GPIO_SetBits(GPIOE, GPIO_Pin_2);	
+    GPIO_SetBits(GPIOB, GPIO_Pin_11);
 }
 
-static void lcd_fsmc_init(void)
+void lcd_fsmc_init(void)
 {
-  FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
-  FSMC_NORSRAMTimingInitTypeDef p;
-   
-  /* Enable FSMC clock */
-  RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG , ENABLE);
-  
-  p.FSMC_AddressSetupTime = 1;
-  p.FSMC_AddressHoldTime = 0;
-  p.FSMC_DataSetupTime = 9;
-  p.FSMC_BusTurnAroundDuration = 0;
-  p.FSMC_CLKDivision = 0;
-  p.FSMC_DataLatency = 0;
-  p.FSMC_AccessMode = FSMC_AccessMode_A;
+    FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
+    FSMC_NORSRAMTimingInitTypeDef p;
 
-  FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;
-  FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
-  FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;
-  FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
-  FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
-  FSMC_NORSRAMInitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
-  FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
-  FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable;
-  FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
-  FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;
-  FSMC_NORSRAMInitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable;
-  FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable;
-  FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
-  FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &p;
-  FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &p;
+    /* Enable FSMC clock */
+    RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
-  FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
-  FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
+    p.FSMC_AddressSetupTime = 1;
+    p.FSMC_AddressHoldTime = 0;
+    p.FSMC_DataSetupTime = 9;
+    p.FSMC_BusTurnAroundDuration = 0;
+    p.FSMC_CLKDivision = 0;
+    p.FSMC_DataLatency = 0;
+    p.FSMC_AccessMode = FSMC_AccessMode_A;
+
+    FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;
+    FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
+    FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;
+    FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
+    FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
+    FSMC_NORSRAMInitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
+    FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
+    FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable;
+    FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
+    FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;
+    FSMC_NORSRAMInitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable;
+    FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable;
+    FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
+    FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &p;
+    FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &p;
+
+    FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
+    FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
 }
 
+void lcd_draw_point(int x, int y, int color)
+{
+    printf("draw point...\r\n");
+    LCD_WRITE_REG(0x002A);	
+    LCD_WRITE_RAM(x >> 8);	    
+    LCD_WRITE_RAM(x & 0x00ff);
+    LCD_WRITE_RAM(HDP >> 8);	    
+    LCD_WRITE_RAM(HDP & 0x00ff);
+    LCD_WRITE_REG(0x002b);	
+    LCD_WRITE_RAM(y >> 8);	    
+    LCD_WRITE_RAM(y & 0x00ff);
+    LCD_WRITE_RAM(VDP >> 8);	    
+    LCD_WRITE_RAM(VDP & 0x00ff);
+    LCD_WRITE_REG(0x002c);	
+    LCD_WRITE_RAM(color); 
+}  
+ 
 
+static void lcd_clear(unsigned short Color)
+{
+    unsigned int count;
+
+	LCD_WRITE_REG(0x002A);	
+	LCD_WRITE_RAM(0);	    
+	LCD_WRITE_RAM(0);
+	LCD_WRITE_RAM(HDP>>8);	    
+	LCD_WRITE_RAM(HDP&0x00ff);
+    LCD_WRITE_REG(0x002b);	
+	LCD_WRITE_RAM(0);	    
+	LCD_WRITE_RAM(0);
+	LCD_WRITE_RAM(VDP>>8);	    
+	LCD_WRITE_RAM(VDP&0x00ff);
+	LCD_WRITE_REG(0x002c);
+
+	for (count = 0; count < (HDP + 1) * (VDP + 1); count++)		
+		LCD_WRITE_RAM(Color);
+}
+
+void lcd_ssd1963_config(void)
+{
+	lcd_delay(100);
+   
+  	LCD_WRITE_REG(0x002b);	
+	LCD_WRITE_RAM(0);
+
+	lcd_delay(50); // delay 50 ms 
+	LCD_WRITE_REG(0x00E2);					//PLL multiplier, set PLL clock to 120M
+	LCD_WRITE_RAM(0x0023);					//N=0x36 for 6.5M, 0x23 for 10M crystal
+	LCD_WRITE_RAM(0x0002);
+	LCD_WRITE_RAM(0x0004);
+	
+	LCD_WRITE_REG(0x00E0);					//PLL enable
+	LCD_WRITE_RAM(0x0001);
+	lcd_delay(1);
+	LCD_WRITE_REG(0x00E0);
+	LCD_WRITE_RAM(0x0003);
+	lcd_delay(5);
+	LCD_WRITE_REG(0x0001);  					//software reset
+	lcd_delay(5);
+	LCD_WRITE_REG(0x00E6);					//PLL setting for PCLK, depends on resolution
+
+	LCD_WRITE_RAM(0x0004);
+	LCD_WRITE_RAM(0x0093);
+	LCD_WRITE_RAM(0x00E0);
+
+
+
+	LCD_WRITE_REG(0x00B0);					//LCD SPECIFICATION
+	LCD_WRITE_RAM(0x0020);
+	LCD_WRITE_RAM(0x0000);
+	LCD_WRITE_RAM((HDP>>8)&0X00FF);			//Set HDP
+	LCD_WRITE_RAM(HDP&0X00FF);
+    LCD_WRITE_RAM((VDP>>8)&0X00FF);			//Set VDP
+	LCD_WRITE_RAM(VDP&0X00FF);
+    LCD_WRITE_RAM(0x0000);
+	lcd_delay(5);
+	LCD_WRITE_REG(0x00B4);					//HSYNC
+	LCD_WRITE_RAM((HT>>8)&0X00FF); 			//Set HT
+	LCD_WRITE_RAM(HT&0X00FF);
+	LCD_WRITE_RAM((HPS>>8)&0X00FF);			//Set HPS
+	LCD_WRITE_RAM(HPS&0X00FF);
+	LCD_WRITE_RAM(HPW);						//Set HPW
+	LCD_WRITE_RAM((LPS>>8)&0X00FF); 			//Set HPS
+	LCD_WRITE_RAM(LPS&0X00FF);
+	LCD_WRITE_RAM(0x0000);
+
+	LCD_WRITE_REG(0x00B6);					//VSYNC
+	LCD_WRITE_RAM((VT>>8)&0X00FF);   		//Set VT
+	LCD_WRITE_RAM(VT&0X00FF);
+	LCD_WRITE_RAM((VPS>>8)&0X00FF); 			//Set VPS
+	LCD_WRITE_RAM(VPS&0X00FF);
+	LCD_WRITE_RAM(VPW);						//Set VPW
+	LCD_WRITE_RAM((FPS>>8)&0X00FF);			//Set FPS
+	LCD_WRITE_RAM(FPS&0X00FF);
+	lcd_delay(5);
+	//=============================================
+
+	//=============================================
+	LCD_WRITE_REG(0x00BA);
+	LCD_WRITE_RAM(0x0005);//0x000F);    //GPIO[3:0] out 1
+
+	LCD_WRITE_REG(0x00B8);
+	LCD_WRITE_RAM(0x0007);    //GPIO3=input, GPIO[2:0]=output
+	LCD_WRITE_RAM(0x0001);    //GPIO0 normal
+
+	LCD_WRITE_REG(0x0036); //rotation
+	LCD_WRITE_RAM(0x0000);
+
+	lcd_delay(50);
+
+	LCD_WRITE_REG(0x00BE); //set PWM for B/L
+	LCD_WRITE_RAM(0x0006);
+	LCD_WRITE_RAM(0x0080);
+	
+	LCD_WRITE_RAM(0x0001);
+	LCD_WRITE_RAM(0x00f0);
+	LCD_WRITE_RAM(0x0000);
+	LCD_WRITE_RAM(0x0000);
+
+	LCD_WRITE_REG(0x00d0);//?????????? 
+	LCD_WRITE_RAM(0x000d);
+   
+	LCD_WRITE_REG(0x00F0); //pixel data interface
+	LCD_WRITE_RAM(0x0003); //03:16?   02:24?
+
+	LCD_WRITE_REG(0x0029); //display on
+
+  //while (1)
+  //lcd_clear(Red);
+}
+	
 
 /********************************************************************
 *
@@ -199,7 +379,8 @@ static void lcd_fsmc_init(void)
 *   Sets display register
 */
 static void LcdWriteReg(U16 Data) {
-  // ... TBD by user
+    // ... TBD by user
+    LCD_WRITE_REG(Data);
 }
 
 /********************************************************************
@@ -210,7 +391,8 @@ static void LcdWriteReg(U16 Data) {
 *   Writes a value to a display register
 */
 static void LcdWriteData(U16 Data) {
-  // ... TBD by user
+    // ... TBD by user
+    LCD_WRITE_RAM(Data);
 }
 
 /********************************************************************
@@ -221,9 +403,10 @@ static void LcdWriteData(U16 Data) {
 *   Writes multiple values to a display register.
 */
 static void LcdWriteDataMultiple(U16 * pData, int NumItems) {
-  while (NumItems--) {
-    // ... TBD by user
-  }
+    while (NumItems--) {
+        // ... TBD by user
+        LCD_WRITE_RAM(*pData++);
+    }
 }
 
 /********************************************************************
@@ -234,9 +417,10 @@ static void LcdWriteDataMultiple(U16 * pData, int NumItems) {
 *   Reads multiple values from a display register.
 */
 static void LcdReadDataMultiple(U16 * pData, int NumItems) {
-  while (NumItems--) {
-    // ... TBD by user
-  }
+    while (NumItems--) {
+        // ... TBD by user
+        *pData++ = LCD_RAM;
+    }
 }
 
 /*********************************************************************
@@ -270,7 +454,8 @@ void LCD_X_Config(void) {
   //
   // Orientation
   //
-  Config.Orientation = GUI_SWAP_XY | GUI_MIRROR_Y;
+  //Config.Orientation = GUI_SWAP_XY | GUI_MIRROR_Y;
+  Config.Orientation = GUI_MIRROR_Y; //| GUI_MIRROR_X;
   GUIDRV_FlexColor_Config(pDevice, &Config);
   //
   // Set controller and operation mode
@@ -317,8 +502,10 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData) {
     // to be adapted by the customer...
     //
     // ...
+    printf("gui init................\r\n");
     lcd_io_init();
     lcd_fsmc_init();
+    lcd_ssd1963_config();
     return 0;
   }
   default:

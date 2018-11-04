@@ -56,7 +56,7 @@ Purpose     : Template driver, could be used as starting point for new
 
 #include "LCD_Private.h"
 #include "GUI_Private.h"
-#include "LCD_ConfDefaults.h"
+#include "LCDConf.h"
 
 /*********************************************************************
 *
@@ -159,6 +159,7 @@ static void _SetPixelIndex(GUI_DEVICE * pDevice, int x, int y, int PixelIndex) {
       //
       // TBD by customer...
       //
+			lcd_draw_point(x, y, PixelIndex);
     }
     #if (LCD_MIRROR_X == 0) && (LCD_MIRROR_Y == 0) && (LCD_SWAP_XY == 0)
       #undef xPhys
@@ -198,7 +199,7 @@ static unsigned int _GetPixelIndex(GUI_DEVICE * pDevice, int x, int y) {
       //
       // TBD by customer...
       //
-      PixelIndex = 0;
+      //PixelIndex = lcd_ssd1963_get_pixel(x, y);
     }
     #if (LCD_MIRROR_X == 0) && (LCD_MIRROR_Y == 0) && (LCD_SWAP_XY == 0)
       #undef xPhys
