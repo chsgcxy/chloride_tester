@@ -137,7 +137,6 @@ Purpose     : Display controller configuration (single layer)
 *
 **********************************************************************
 */
-extern void delay_ms(int ms);
 
 static void lcd_delay(int cnt)
 {
@@ -147,7 +146,7 @@ static void lcd_delay(int cnt)
 		for (dl = 0; dl < 500; dl++);
 }
 
-void lcd_io_init(void)
+static void lcd_io_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -198,11 +197,11 @@ void lcd_io_init(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
     GPIO_ResetBits(GPIOB, GPIO_Pin_11);
-    delay_ms(500);
+    lcd_delay(50000);
     GPIO_SetBits(GPIOB, GPIO_Pin_11);
 }
 
-void lcd_fsmc_init(void)
+static void lcd_fsmc_init(void)
 {
     FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
     FSMC_NORSRAMTimingInitTypeDef p;
@@ -256,7 +255,7 @@ void lcd_draw_point(int x, int y, int color)
     LCD_WRITE_RAM(color); 
 }  
  
-
+#if 0
 static void lcd_clear(unsigned short Color)
 {
     unsigned int count;
@@ -276,16 +275,15 @@ static void lcd_clear(unsigned short Color)
 	for (count = 0; count < (HDP + 1) * (VDP + 1); count++)		
 		LCD_WRITE_RAM(Color);
 }
+#endif
 
-void lcd_ssd1963_config(void)
-{
-	lcd_delay(100);
-   
+static void lcd_ssd1963_config(void)
+{  
   	LCD_WRITE_REG(0x002b);	
 	LCD_WRITE_RAM(0);
-
-	lcd_delay(50); // delay 50 ms 
-	LCD_WRITE_REG(0x00E2);					//PLL multiplier, set PLL clock to 120M
+	lcd_delay(50);
+	
+    LCD_WRITE_REG(0x00E2);					//PLL multiplier, set PLL clock to 120M
 	LCD_WRITE_RAM(0x0023);					//N=0x36 for 6.5M, 0x23 for 10M crystal
 	LCD_WRITE_RAM(0x0002);
 	LCD_WRITE_RAM(0x0004);
@@ -293,18 +291,18 @@ void lcd_ssd1963_config(void)
 	LCD_WRITE_REG(0x00E0);					//PLL enable
 	LCD_WRITE_RAM(0x0001);
 	lcd_delay(1);
+
 	LCD_WRITE_REG(0x00E0);
 	LCD_WRITE_RAM(0x0003);
 	lcd_delay(5);
-	LCD_WRITE_REG(0x0001);  					//software reset
+	
+    LCD_WRITE_REG(0x0001);  					//software reset
 	lcd_delay(5);
-	LCD_WRITE_REG(0x00E6);					//PLL setting for PCLK, depends on resolution
 
+	LCD_WRITE_REG(0x00E6);					//PLL setting for PCLK, depends on resolution
 	LCD_WRITE_RAM(0x0004);
 	LCD_WRITE_RAM(0x0093);
 	LCD_WRITE_RAM(0x00E0);
-
-
 
 	LCD_WRITE_REG(0x00B0);					//LCD SPECIFICATION
 	LCD_WRITE_RAM(0x0020);
@@ -315,6 +313,7 @@ void lcd_ssd1963_config(void)
 	LCD_WRITE_RAM(VDP&0X00FF);
     LCD_WRITE_RAM(0x0000);
 	lcd_delay(5);
+
 	LCD_WRITE_REG(0x00B4);					//HSYNC
 	LCD_WRITE_RAM((HT>>8)&0X00FF); 			//Set HT
 	LCD_WRITE_RAM(HT&0X00FF);
@@ -334,9 +333,7 @@ void lcd_ssd1963_config(void)
 	LCD_WRITE_RAM((FPS>>8)&0X00FF);			//Set FPS
 	LCD_WRITE_RAM(FPS&0X00FF);
 	lcd_delay(5);
-	//=============================================
 
-	//=============================================
 	LCD_WRITE_REG(0x00BA);
 	LCD_WRITE_RAM(0x0005);//0x000F);    //GPIO[3:0] out 1
 
@@ -346,28 +343,23 @@ void lcd_ssd1963_config(void)
 
 	LCD_WRITE_REG(0x0036); //rotation
 	LCD_WRITE_RAM(0x0000);
-
 	lcd_delay(50);
 
 	LCD_WRITE_REG(0x00BE); //set PWM for B/L
 	LCD_WRITE_RAM(0x0006);
 	LCD_WRITE_RAM(0x0080);
-	
 	LCD_WRITE_RAM(0x0001);
 	LCD_WRITE_RAM(0x00f0);
 	LCD_WRITE_RAM(0x0000);
 	LCD_WRITE_RAM(0x0000);
 
-	LCD_WRITE_REG(0x00d0);//?????????? 
+	LCD_WRITE_REG(0x00d0);
 	LCD_WRITE_RAM(0x000d);
    
 	LCD_WRITE_REG(0x00F0); //pixel data interface
 	LCD_WRITE_RAM(0x0003); //03:16?   02:24?
 
 	LCD_WRITE_REG(0x0029); //display on
-
-  //while (1)
-  //lcd_clear(Red);
 }
 	
 

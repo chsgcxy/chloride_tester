@@ -1,4 +1,5 @@
 #include "stm32f2xx_usart.h"
+#include "stm32_uart.h"
 #include "stdio.h"
 
 /*

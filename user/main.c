@@ -7,9 +7,10 @@
 #include "semphr.h"
 #include "event_groups.h"
 #include "usbh_usr.h" 
-#include "uart.h"
+#include "stm32_uart.h"
+#include "stm32_spi.h"
 #include "report.h"
-#include "AD7705Driver.h"
+#include "ad770x.h"
 #include "GUI.h"
 #include "WM.h"
 
@@ -49,18 +50,18 @@ static void led_task2(void *param)
 static void led_task3(void *param)
 {
 	while (1) {
-		GPIO_SetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelay(200);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelay(200);
+		//GPIO_SetBits(GPIOC, GPIO_Pin_12);
+		//vTaskDelay(200);
+		//GPIO_ResetBits(GPIOC, GPIO_Pin_12);
+		vTaskDelay(3000);
         printf("hello world!\r\n");
 	}
 }
 
 static void task_init(void)
 {
-	xTaskCreate(led_task1, "led1", 64, NULL, 1, NULL);
-    xTaskCreate(led_task2, "led2", 64, NULL, 1, NULL);
+	//xTaskCreate(led_task1, "led1", 64, NULL, 1, NULL);
+   // xTaskCreate(led_task2, "led2", 64, NULL, 1, NULL);
 	xTaskCreate(led_task3, "led3", 64, NULL, 1, NULL);
 }
 
@@ -69,56 +70,42 @@ static int g_printer_send(uint8_t *buf, int len)
 	return uart_send_buf(PRINTER_PORT, buf, len);
 }
 
-extern void ad7705_test(void);
-
-extern void lcd_ssd1963_config(void);
-extern void lcd_fsmc_init(void);
-extern void lcd_io_init(void);
-
 int main(void)
 {
-	u16 data[2];
-	float volt;
-	
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
-	__set_PRIMASK(1);
+	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);
 	/* rtos will not run if I set group_2, group_4 is work */
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+	
+	/* console and uart init, depent on config.h */
 	uart1_init();
 	uart4_init();
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
 
-	//AD770xInit();
-	//ad7705_test();
+	//spi3_init();
 
+	/* ad7705 test */
+	ad770x_init();
+	ad7705_test();
+
+	/* GUI test */
 	GUI_Init();
-	//GUI_GotoXY(50, 50);
+	GUI_GotoXY(50, 50);
 	GUI_SetFont(GUI_FONT_32B_ASCII);
 	GUI_SetColor(GUI_WHITE);
 	GUI_SetBkColor(GUI_BLUE);
 	GUI_DispString("hello world!");
 	
-	while (1) {
-		if(AD770xReadValue(data)) {
-			volt = (float)(data[0] * (2.5 / 65535));
-			printf("ad1 orign data = %d, volt = %.4f\r\n", data[0], volt);
-			volt = (float)(data[1] * (2.5 / 65535));
-			printf("ad2 orign data = %d, volt = %.4f\r\n", data[1], volt);
-		}
-		printf("wait ok.............\r\n");
-		delay_ms(1000);
-	}
-
-	
+	/* creat freertos task */
 	task_init();
 
+	/* test the printer, fill obj report,  then show */
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;
 	report_init(&g_printer);
-	
 	report_test.data[0] = 12.31;
 	report_test.data[1] = 22.5;
 	report_test.data[2] = 23.84;
@@ -131,7 +118,6 @@ int main(void)
 	report_test.data[9] = 225.50;
 	report_test.data[10] = 24.31;
 	report_test.data[11] = 34.5;
-
 	report_test.data_num = 12;
 	report_test.nitrate_dosage = 32.78;
 	report_test.percentage = 0.78;
@@ -144,12 +130,13 @@ int main(void)
 
 	vTaskStartScheduler();
 
+
 	/* if run here, system error */
 	while (1) {
-		GPIO_SetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
-		delay_ms(100);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
-		delay_ms(100);
+		//GPIO_SetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
+		//delay_ms(100);
+		//GPIO_ResetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
+		//delay_ms(100);
 	}
 	return 0;
 }

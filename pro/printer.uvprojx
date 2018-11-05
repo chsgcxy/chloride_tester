@@ -175,7 +175,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -414,19 +414,9 @@
               <FilePath>..\user\main.c</FilePath>
             </File>
             <File>
-              <FileName>uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\uart.c</FilePath>
-            </File>
-            <File>
               <FileName>report.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\report.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -789,9 +779,19 @@
               <FilePath>..\driver\rd-tprinter.c</FilePath>
             </File>
             <File>
-              <FileName>AD7705Driver.c</FileName>
+              <FileName>ad770x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\driver\AD7705Driver.c</FilePath>
+              <FilePath>..\driver\ad770x.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\stm32_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\stm32_uart.c</FilePath>
             </File>
           </Files>
         </Group>
