@@ -71,7 +71,7 @@ void AD770xDelay( u16 i )
 
 uint16_t AD770xReadWriteByte(u8 data)
 {
-	return spi1_send_byte(data);
+	return spi_send_byte(SPI1, data, SPI_MODE_REG);
 }
 
 void AD770xRegRest(void)
@@ -128,7 +128,7 @@ void AD770xChangeChannel( u8 NewCh )
 	AD770xWriteSetupReg( SetupReg );
 }
 
-void AD770xIoInit( void )
+void AD770xIoInit(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
  	EXTI_InitTypeDef EXTI_InitStructure;
@@ -175,7 +175,6 @@ void AD770xIoInit( void )
 
 int ad770x_init(void)
 {	
-	spi1_init( );
 	AD770xIoInit( );
 	AD770xRegRest( );
 	

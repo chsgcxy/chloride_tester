@@ -418,6 +418,11 @@
               <FileType>1</FileType>
               <FilePath>..\user\report.c</FilePath>
             </File>
+            <File>
+              <FileName>touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\touch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

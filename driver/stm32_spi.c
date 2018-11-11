@@ -1,6 +1,5 @@
 #include "stm32_spi.h"
 #include "stm32f2xx.h"
-#include "stdio.h"
 
 int spi1_init(void)
 {	
@@ -36,103 +35,6 @@ int spi1_init(void)
     return 0;
 }
 
-uint16_t spi1_send_byte(uint8_t data)
-{
-#if 0
-	int cnt = 0;
-	while (!SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE)) {
-		cnt++;	
-		if (cnt > 5000000) {
-			return 0;
-		}
-	}
-	SPI_I2S_SendData(SPI1, data);
-	cnt = 0;
-	while (!SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE)) {
-		cnt++;	
-		if (cnt > 5000000) {
-			return 0;
-		}
-	}
-    //printf("\r\n");
-	return SPI_I2S_ReceiveData(SPI1);
-#else
-	u16 retry=0;				 
-	while( ( SPI1->SR&1<<1 ) == 0) {
-		retry++;
-		if( retry > 20000 )   
-		{
-            return 0;
-        }
-	}			  
-	SPI1->DR = data;
-	retry = 0;
-	while( ( SPI1->SR&1 << 0 ) == 0 )
-	{
-		retry++;
-		if( retry > 20000 ) 
-		{
-			return 0;
-		}
-	}	  						    
-	return SPI1->DR;
-
-#endif
-}
-
-#define CMD_RDY 0X90
-#define CMD_RDX	0XD0
-
-static unsigned char touchdrv_spi_sendb(unsigned char byte)
-{
-	int cnt = 0;
-	while (SPI_I2S_GetFlagStatus(SPI3, SPI_I2S_FLAG_TXE) == RESET) {
-		cnt++;	
-		if (cnt > 5000000) {
-			printf("spi errr1.................\r\n");
-			return 0;
-		}
-	}
-	SPI_I2S_SendData(SPI3, byte);
-	cnt = 0;
-	while (SPI_I2S_GetFlagStatus(SPI3, SPI_I2S_FLAG_RXNE) == RESET) {
-		cnt++;	
-		if (cnt > 5000000) {
-			printf("spi errr2.................\r\n");
-			return 0;
-		}
-	}
-	return SPI_I2S_ReceiveData(SPI3);
-}
-
-static u16 touchdrv_read_ad(u8 cmd)	  
-{ 	 
-	u16 val = 0;
-	
-    GPIO_ResetBits(GPIOA, GPIO_Pin_15);
-    touchdrv_spi_sendb(cmd); 
-	val = touchdrv_spi_sendb(0x00);
-	val <<= 8;
-	val |= touchdrv_spi_sendb(0x00);
-    val = (val >> 4) & 0xfff;
-    GPIO_SetBits(GPIOA, GPIO_Pin_15);
-	return(val); 
-}
-
-void trouchdrv_test(void)
-{
-	u16 xphy = 0xff;
-	u16 yphy = 0xff;
-
-	while (1) {
-        if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10) == 0) {
-		xphy = touchdrv_read_ad(CMD_RDX);
-		yphy = touchdrv_read_ad(CMD_RDY);
-		printf("TOUCH: xphy=%d, yphy=%d.\r\n", xphy, yphy);
-        }
-	}
-}
-
 int spi3_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -148,17 +50,6 @@ int spi3_init(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-    //GPIO_PinAFConfig(GPIOA, GPIO_PinSource15, GPIO_AF_SPI3);  
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource3, GPIO_AF_SPI3);	
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource4, GPIO_AF_SPI3);
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource5, GPIO_AF_SPI3);
@@ -175,7 +66,51 @@ int spi3_init(void)
 	SPI_Init(SPI3, &SPI_InitStructure);
 	SPI_Cmd(SPI3, ENABLE);
 
-    trouchdrv_test();
     return 0;
+}
+
+/**
+  * @mode
+  * 	SPI_MODE_REG
+  * 	SPI_MODE_LIB
+  * @note
+  * 	I don't know why the stmlib not work while read ad7705,
+  * 	so, I reserve the register type read for it.
+  */
+uint16_t spi_send_byte(SPI_TypeDef *SPIx, uint8_t data, int mode)
+{
+	u16 retry = 0;
+
+	if (mode) {
+		while (!SPI_I2S_GetFlagStatus(SPIx, SPI_I2S_FLAG_TXE)) {
+			if (retry++ > 20000)
+				return 0;
+		}
+
+		SPI_I2S_SendData(SPIx, data);
+		
+		retry = 0;
+		while (!SPI_I2S_GetFlagStatus(SPIx, SPI_I2S_FLAG_RXNE)) {
+			if (retry++ > 20000)
+				return 0;
+		}
+
+		return SPI_I2S_ReceiveData(SPIx);
+	} else {
+		while ((SPIx->SR & 1 << 1) == 0) {
+			if (retry++ > 20000)
+				return 0;
+		}
+		
+		SPIx->DR = data;
+
+		retry = 0;
+		while ((SPIx->SR & 1 << 0) == 0) {
+			if(retry++ > 20000)
+				return 0;
+		}
+
+		return SPIx->DR;
+	}
 }
 

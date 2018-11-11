@@ -11,6 +11,7 @@
 #include "stm32_spi.h"
 #include "report.h"
 #include "ad770x.h"
+#include "touch.h"
 #include "GUI.h"
 #include "WM.h"
 
@@ -57,20 +58,26 @@ int main(void)
 	/* console and uart init, depent on config.h */
 	uart1_init();
 	uart4_init();
+	spi1_init();
+	spi3_init();
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
 
+	/* USB Test */
+#if 0	
 	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host,
 		&USBH_MSC_cb, &USR_cb);
 	printf("USB inited...\r\n");
 	while (1) {
 		USBH_Process(&USB_OTG_Core, &USB_Host);
 	}
+#endif
 
-
+#if 0
 	/* ad7705 test */
 	ad770x_init();
-	//ad7705_test();
+	ad7705_test();
+#endif
 
 	/* GUI test */
 	GUI_Init();
@@ -79,11 +86,15 @@ int main(void)
 	GUI_SetColor(GUI_WHITE);
 	GUI_SetBkColor(GUI_BLUE);
 	GUI_DispString("hello world!");
-	spi3_init();
+
+	touch_init();
+	touch_test();
+
 	/* creat freertos task */
 	task_init();
 
 	/* test the printer, fill obj report,  then show */
+#if 0	
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;
 	report_init(&g_printer);
@@ -108,10 +119,10 @@ int main(void)
 	report_test.hour = 14;
 	report_test.minute = 28;
 	report_show(&report_test);
+#endif
 
+	/* run rtos */
 	vTaskStartScheduler();
-
-
 	/* if run here, system error */
 	while (1) {
 		printf("system error!\r\n");
