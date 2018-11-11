@@ -27,42 +27,17 @@ void delay_ms(int ms)
 		for (i = 0; i < 28000; i++);
 }
 
-static void led_task1(void *param)
+static void helloworld_task(void *args)
 {
 	while (1) {
-		GPIO_SetBits(GPIOC, GPIO_Pin_10);
-		vTaskDelay(200);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_10);
-		vTaskDelay(200);
-	}
-}
-
-static void led_task2(void *param)
-{
-	while (1) {
-		GPIO_SetBits(GPIOC, GPIO_Pin_11);
-		vTaskDelay(200);
-		GPIO_ResetBits(GPIOC, GPIO_Pin_11);
-		vTaskDelay(200);
-	}
-}
-
-static void led_task3(void *param)
-{
-	while (1) {
-		//GPIO_SetBits(GPIOC, GPIO_Pin_12);
-		//vTaskDelay(200);
-		//GPIO_ResetBits(GPIOC, GPIO_Pin_12);
-		vTaskDelay(3000);
-        printf("hello world!\r\n");
+		printf("hello world!\r\n");
+		vTaskDelay(2000);
 	}
 }
 
 static void task_init(void)
 {
-	//xTaskCreate(led_task1, "led1", 64, NULL, 1, NULL);
-   // xTaskCreate(led_task2, "led2", 64, NULL, 1, NULL);
-	xTaskCreate(led_task3, "led3", 64, NULL, 1, NULL);
+	xTaskCreate(helloworld_task, "hello world", 64, NULL, 1, NULL);
 }
 
 static int g_printer_send(uint8_t *buf, int len)
@@ -85,11 +60,17 @@ int main(void)
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
 
-	//spi3_init();
+	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host,
+		&USBH_MSC_cb, &USR_cb);
+	printf("USB inited...\r\n");
+	while (1) {
+		USBH_Process(&USB_OTG_Core, &USB_Host);
+	}
+
 
 	/* ad7705 test */
 	ad770x_init();
-	ad7705_test();
+	//ad7705_test();
 
 	/* GUI test */
 	GUI_Init();
@@ -98,7 +79,7 @@ int main(void)
 	GUI_SetColor(GUI_WHITE);
 	GUI_SetBkColor(GUI_BLUE);
 	GUI_DispString("hello world!");
-	
+	spi3_init();
 	/* creat freertos task */
 	task_init();
 
@@ -133,10 +114,8 @@ int main(void)
 
 	/* if run here, system error */
 	while (1) {
-		//GPIO_SetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
-		//delay_ms(100);
-		//GPIO_ResetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
-		//delay_ms(100);
+		printf("system error!\r\n");
+        delay_ms(2000);
 	}
 	return 0;
 }

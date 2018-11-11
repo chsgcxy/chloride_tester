@@ -56,8 +56,14 @@
 
 /** @defgroup USBH_USR_Private_Defines
 * @{
-*/ 
-#define IMAGE_BUFFER_SIZE    512
+*/
+#define USB_USR_DBG
+
+#ifdef USB_USR_DBG 
+    #define USB_DBG_PRINT(fmt, args...)     printf(fmt, ##args)
+#else
+    #define USB_DBG_PRINT(fmt, args...)
+#endif
 /**
 * @}
 */ 
@@ -77,36 +83,33 @@ extern USB_OTG_CORE_HANDLE          USB_OTG_Core;
 */ 
 uint8_t USBH_USR_ApplicationState = USH_USR_FS_INIT;
 uint8_t filenameString[15]  = {0};
-
 FATFS fatfs;
 FIL file;
-uint8_t Image_Buf[IMAGE_BUFFER_SIZE];
-uint8_t line_idx = 0;   
+uint8_t line_idx = 0;
 
 /*  Points to the DEVICE_PROP structure of current device */
 /*  The purpose of this register is to speed up the execution */
 
 USBH_Usr_cb_TypeDef USR_cb =
 {
-  USBH_USR_Init,
-  USBH_USR_DeInit,
-  USBH_USR_DeviceAttached,
-  USBH_USR_ResetDevice,
-  USBH_USR_DeviceDisconnected,
-  USBH_USR_OverCurrentDetected,
-  USBH_USR_DeviceSpeedDetected,
-  USBH_USR_Device_DescAvailable,
-  USBH_USR_DeviceAddressAssigned,
-  USBH_USR_Configuration_DescAvailable,
-  USBH_USR_Manufacturer_String,
-  USBH_USR_Product_String,
-  USBH_USR_SerialNum_String,
-  USBH_USR_EnumerationDone,
-  USBH_USR_UserInput,
-  USBH_USR_MSC_Application,
-  USBH_USR_DeviceNotSupported,
-  USBH_USR_UnrecoveredError
-    
+    USBH_USR_Init,
+    USBH_USR_DeInit,
+    USBH_USR_DeviceAttached,
+    USBH_USR_ResetDevice,
+    USBH_USR_DeviceDisconnected,
+    USBH_USR_OverCurrentDetected,
+    USBH_USR_DeviceSpeedDetected,
+    USBH_USR_Device_DescAvailable,
+    USBH_USR_DeviceAddressAssigned,
+    USBH_USR_Configuration_DescAvailable,
+    USBH_USR_Manufacturer_String,
+    USBH_USR_Product_String,
+    USBH_USR_SerialNum_String,
+    USBH_USR_EnumerationDone,
+    USBH_USR_UserInput,
+    USBH_USR_MSC_Application,
+    USBH_USR_DeviceNotSupported,
+    USBH_USR_UnrecoveredError
 };
 
 /**
@@ -117,44 +120,23 @@ USBH_Usr_cb_TypeDef USR_cb =
 * @{
 */ 
 /*--------------- LCD Messages ---------------*/
-const uint8_t MSG_HOST_INIT[]        = "> Host Library Initialized\n";
-const uint8_t MSG_DEV_ATTACHED[]     = "> Device Attached \n";
-const uint8_t MSG_DEV_DISCONNECTED[] = "> Device Disconnected\n";
-const uint8_t MSG_DEV_ENUMERATED[]   = "> Enumeration completed \n";
-const uint8_t MSG_DEV_HIGHSPEED[]    = "> High speed device detected\n";
-const uint8_t MSG_DEV_FULLSPEED[]    = "> Full speed device detected\n";
-const uint8_t MSG_DEV_LOWSPEED[]     = "> Low speed device detected\n";
-const uint8_t MSG_DEV_ERROR[]        = "> Device fault \n";
+const uint8_t MSG_HOST_INIT[]        = "> Host Library Initialized";
+const uint8_t MSG_DEV_ATTACHED[]     = "> Device Attached";
+const uint8_t MSG_DEV_DISCONNECTED[] = "> Device Disconnected";
+const uint8_t MSG_DEV_ENUMERATED[]   = "> Enumeration completed";
+const uint8_t MSG_DEV_HIGHSPEED[]    = "> High speed device detected";
+const uint8_t MSG_DEV_FULLSPEED[]    = "> Full speed device detected";
+const uint8_t MSG_DEV_LOWSPEED[]     = "> Low speed device detected";
+const uint8_t MSG_DEV_ERROR[]        = "> Device fault";
+const uint8_t MSG_USB_RESET[]        = "> USB reset";
 
-const uint8_t MSG_MSC_CLASS[]        = "> Mass storage device connected\n";
-const uint8_t MSG_HID_CLASS[]        = "> HID device connected\n";
-const uint8_t MSG_DISK_SIZE[]        = "> Size of the disk in MBytes: \n";
-const uint8_t MSG_LUN[]              = "> LUN Available in the device:\n";
-const uint8_t MSG_ROOT_CONT[]        = "> Exploring disk flash ...\n";
-const uint8_t MSG_WR_PROTECT[]       = "> The disk is write protected\n";
-const uint8_t MSG_UNREC_ERROR[]      = "> UNRECOVERED ERROR STATE\n";
-
-/**
-* @}
-*/
-
-
-/** @defgroup USBH_USR_Private_FunctionPrototypes
-* @{
-*/
-static uint8_t Explore_Disk (char* path , uint8_t recu_level);
-static uint8_t Image_Browser (char* path);
-//static void     Show_Image(void);
-//static void     Toggle_Leds(void);
-/**
-* @}
-*/ 
-
-
-/** @defgroup USBH_USR_Private_Functions
-* @{
-*/ 
-
+const uint8_t MSG_MSC_CLASS[]        = "> Mass storage device connected";
+const uint8_t MSG_HID_CLASS[]        = "> HID device connected";
+const uint8_t MSG_DISK_SIZE[]        = "> Size of the disk in MBytes:";
+const uint8_t MSG_LUN[]              = "> LUN Available in the device:";
+const uint8_t MSG_ROOT_CONT[]        = "> Exploring disk flash ...";
+const uint8_t MSG_WR_PROTECT[]       = "> The disk is write protected";
+const uint8_t MSG_UNREC_ERROR[]      = "> UNRECOVERED ERROR STATE";
 
 /**
 * @brief  USBH_USR_Init 
@@ -164,12 +146,7 @@ static uint8_t Image_Browser (char* path);
 */
 void USBH_USR_Init(void)
 {
-  static uint8_t startup = 0;  
-  
-  if(startup == 0)
-  {
-    startup = 1;
-  }
+    USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_HOST_INIT);
 }
 
 /**
@@ -180,7 +157,7 @@ void USBH_USR_Init(void)
 */
 void USBH_USR_DeviceAttached(void)
 {
-  //LCD_UsrLog((void *)MSG_DEV_ATTACHED);
+    USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_DEV_ATTACHED);
 }
 
 
@@ -191,9 +168,7 @@ void USBH_USR_DeviceAttached(void)
 */
 void USBH_USR_UnrecoveredError (void)
 {
-  
-  /* Set default screen color*/ 
-  //LCD_ErrLog((void *)MSG_UNREC_ERROR); 
+    USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_UNREC_ERROR);
 }
 
 
@@ -203,16 +178,9 @@ void USBH_USR_UnrecoveredError (void)
 * @param  None
 * @retval Staus
 */
-void USBH_USR_DeviceDisconnected (void)
+void USBH_USR_DeviceDisconnected(void)
 {
-  
-  //LCD_LOG_ClearTextZone();
-  
-  //LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 42, "                                      ");
-  //LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 30, "                                      ");  
-  
-  /* Set default screen color*/
-  //LCD_ErrLog((void *)MSG_DEV_DISCONNECTED);
+    USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_DEV_DISCONNECTED);
 }
 /**
 * @brief  USBH_USR_ResetUSBDevice 
@@ -221,7 +189,7 @@ void USBH_USR_DeviceDisconnected (void)
 */
 void USBH_USR_ResetDevice(void)
 {
-  /* callback for USB-Reset */
+    USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_DEV_DISCONNECTED);
 }
 
 
@@ -233,22 +201,15 @@ void USBH_USR_ResetDevice(void)
 */
 void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed)
 {
-  if(DeviceSpeed == HPRT0_PRTSPD_HIGH_SPEED)
-  {
-    //LCD_UsrLog((void *)MSG_DEV_HIGHSPEED);
-  }  
-  else if(DeviceSpeed == HPRT0_PRTSPD_FULL_SPEED)
-  {
-    //LCD_UsrLog((void *)MSG_DEV_FULLSPEED);
-  }
-  else if(DeviceSpeed == HPRT0_PRTSPD_LOW_SPEED)
-  {
-    //LCD_UsrLog((void *)MSG_DEV_LOWSPEED);
-  }
-  else
-  {
-    //LCD_UsrLog((void *)MSG_DEV_ERROR);
-  }
+    if(DeviceSpeed == HPRT0_PRTSPD_HIGH_SPEED) {
+        USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_DEV_HIGHSPEED);
+    } else if(DeviceSpeed == HPRT0_PRTSPD_FULL_SPEED) {
+        USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_DEV_FULLSPEED);
+    } else if(DeviceSpeed == HPRT0_PRTSPD_LOW_SPEED) {
+        USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_DEV_LOWSPEED);
+    } else {
+        USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_DEV_ERROR);
+    }
 }
 
 /**
@@ -259,12 +220,11 @@ void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed)
 */
 void USBH_USR_Device_DescAvailable(void *DeviceDesc)
 { 
-//  USBH_DevDesc_TypeDef *hs;
-//  hs = DeviceDesc;  
+    USBH_DevDesc_TypeDef *hs;
+    hs = DeviceDesc;
   
-  
-  //LCD_UsrLog("VID : %04Xh\n" , (uint32_t)(*hs).idVendor); 
-  //LCD_UsrLog("PID : %04Xh\n" , (uint32_t)(*hs).idProduct); 
+    USB_DBG_PRINT("%s: VID: %04Xh\n" , __FUNCTION__, (uint32_t)(*hs).idVendor); 
+    USB_DBG_PRINT("%s: PID: %04Xh\n" , __FUNCTION__, (uint32_t)(*hs).idProduct); 
 }
 
 /**
@@ -275,7 +235,7 @@ void USBH_USR_Device_DescAvailable(void *DeviceDesc)
 */
 void USBH_USR_DeviceAddressAssigned(void)
 {
-  
+    USB_DBG_PRINT("%s:\r\n", __FUNCTION__);
 }
 
 
@@ -289,18 +249,15 @@ void USBH_USR_Configuration_DescAvailable(USBH_CfgDesc_TypeDef * cfgDesc,
                                           USBH_InterfaceDesc_TypeDef *itfDesc,
                                           USBH_EpDesc_TypeDef *epDesc)
 {
-  USBH_InterfaceDesc_TypeDef *id;
-  
-  id = itfDesc;  
-  
-  if((*id).bInterfaceClass  == 0x08)
-  {
-    //LCD_UsrLog((void *)MSG_MSC_CLASS);
-  }
-  else if((*id).bInterfaceClass  == 0x03)
-  {
-    //LCD_UsrLog((void *)MSG_HID_CLASS);
-  }    
+    USBH_InterfaceDesc_TypeDef *id;
+
+    id = itfDesc;  
+
+    if ((*id).bInterfaceClass == 0x08) {
+        USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_MSC_CLASS);
+    } else if ((*id).bInterfaceClass == 0x03) {
+        USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_HID_CLASS);
+    }
 }
 
 /**
@@ -311,7 +268,7 @@ void USBH_USR_Configuration_DescAvailable(USBH_CfgDesc_TypeDef * cfgDesc,
 */
 void USBH_USR_Manufacturer_String(void *ManufacturerString)
 {
-  //LCD_UsrLog("Manufacturer : %s\n", (char *)ManufacturerString);
+    USB_DBG_PRINT("%s:Manufacturer: %s\r\n", __FUNCTION__, (char *)ManufacturerString);
 }
 
 /**
@@ -322,7 +279,7 @@ void USBH_USR_Manufacturer_String(void *ManufacturerString)
 */
 void USBH_USR_Product_String(void *ProductString)
 {
-  //LCD_UsrLog("Product : %s\n", (char *)ProductString);  
+    USB_DBG_PRINT("%s:Product : %s\r\n", __FUNCTION__, (char *)ProductString);  
 }
 
 /**
@@ -333,7 +290,7 @@ void USBH_USR_Product_String(void *ProductString)
 */
 void USBH_USR_SerialNum_String(void *SerialNumString)
 {
-  //LCD_UsrLog( "Serial Number : %s\n", (char *)SerialNumString);    
+    USB_DBG_PRINT("%s:Serial Number : %s\r\n", __FUNCTION__, (char *)SerialNumString);    
 } 
 
 
@@ -346,15 +303,7 @@ void USBH_USR_SerialNum_String(void *SerialNumString)
 */
 void USBH_USR_EnumerationDone(void)
 {
-  
-  /* Enumeration complete */
-  //LCD_UsrLog((void *)MSG_DEV_ENUMERATED);
-  
-  //LCD_SetTextColor(Green);
-  //LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 42, "To see the root content of the disk : " );
-  //LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 30, "Press Key...                       ");
-  //LCD_SetTextColor(LCD_LOG_DEFAULT_COLOR); 
-  
+    USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_DEV_ENUMERATED);  
 } 
 
 
@@ -366,7 +315,7 @@ void USBH_USR_EnumerationDone(void)
 */
 void USBH_USR_DeviceNotSupported(void)
 {
-  //LCD_ErrLog ("> Device not supported."); 
+    USB_DBG_PRINT("> Device not supported.\r\n"); 
 }  
 
 
@@ -378,18 +327,12 @@ void USBH_USR_DeviceNotSupported(void)
 */
 USBH_USR_Status USBH_USR_UserInput(void)
 {
-  USBH_USR_Status usbh_usr_status;
-  
-  usbh_usr_status = USBH_USR_NO_RESP;  
-  
-  /*Key B3 is in polling mode to detect user action */
-  //if(STM_EVAL_PBGetState(Button_KEY) == RESET) 
-  //{
-    
-  //  usbh_usr_status = USBH_USR_RESP_OK;
-    
-  //} 
-  return usbh_usr_status;
+    USBH_USR_Status usbh_usr_status;
+
+    //usbh_usr_status = USBH_USR_NO_RESP;  
+    usbh_usr_status = USBH_USR_RESP_OK;
+
+    return usbh_usr_status;
 }  
 
 /**
@@ -398,11 +341,65 @@ USBH_USR_Status USBH_USR_UserInput(void)
 * @param  None
 * @retval Staus
 */
-void USBH_USR_OverCurrentDetected (void)
+void USBH_USR_OverCurrentDetected(void)
 {
-  //LCD_ErrLog ("Overcurrent detected.");
+    USB_DBG_PRINT("Overcurrent detected.\r\n");
 }
 
+/**
+* @brief  Explore_Disk 
+*         Displays disk content
+* @param  path: pointer to root path
+* @retval None
+*/
+static uint8_t Explore_Disk(char *path , uint8_t recu_level)
+{
+    FRESULT res;
+    FILINFO fno;
+    DIR dir;
+    char *fn;
+    char tmp[14];
+  
+    res = f_opendir(&dir, path);
+    if (res == FR_OK) {
+        while (HCD_IsDeviceConnected(&USB_OTG_Core)) {
+            res = f_readdir(&dir, &fno);
+            if (res != FR_OK || fno.fname[0] == 0) {
+                break;
+            }
+            if (fno.fname[0] == '.') {
+                continue;
+            }
+
+            fn = fno.fname;
+            strcpy(tmp, fn); 
+
+            line_idx++;
+            if (line_idx > 9) {
+                line_idx = 0;
+            } 
+          
+            if (recu_level == 1) {
+                USB_DBG_PRINT("   |__");
+            } else if(recu_level == 2) {
+                USB_DBG_PRINT("   |   |__");
+            }
+          
+            if ((fno.fattrib & AM_MASK) == AM_DIR) {
+                strcat(tmp, "\n");
+                USB_DBG_PRINT("%s", tmp);
+            } else {
+                strcat(tmp, "\n"); 
+                USB_DBG_PRINT("%s", tmp);
+            }
+
+            if (((fno.fattrib & AM_MASK) == AM_DIR) && (recu_level == 1)) {
+                Explore_Disk(fn, 2);
+            }
+        }
+    }
+    return res;
+}
 
 /**
 * @brief  USBH_USR_MSC_Application 
@@ -412,293 +409,74 @@ void USBH_USR_OverCurrentDetected (void)
 */
 int USBH_USR_MSC_Application(void)
 {
-  FRESULT res;
-  uint8_t writeTextBuff[] = "STM32 Connectivity line Host Demo application using FAT_FS   ";
-  uint16_t bytesWritten, bytesToWrite;
+    FRESULT res;
+    uint8_t writeTextBuff[] = "STM32 USB Host demo!";
+    uint16_t bytesWritten;
   
-  switch(USBH_USR_ApplicationState)
-  {
-  case USH_USR_FS_INIT: 
-    
-    /* Initialises the File System*/
-    if ( f_mount( 0, &fatfs ) != FR_OK ) 
-    {
-      /* efs initialisation fails*/
-      //LCD_ErrLog("> Cannot initialize File System.\n");
-      return(-1);
-    }
-    //LCD_UsrLog("> File System initialized.\n");
-    //LCD_UsrLog("> Disk capacity : %d Bytes\n", USBH_MSC_Param.MSCapacity * \
-      USBH_MSC_Param.MSPageLength); 
-    
-    if(USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED)
-    {
-      //LCD_ErrLog((void *)MSG_WR_PROTECT);
-    }
-    
-    USBH_USR_ApplicationState = USH_USR_FS_READLIST;
-    break;
-    
-  case USH_USR_FS_READLIST:
-    
-    //LCD_UsrLog((void *)MSG_ROOT_CONT);
-    Explore_Disk("0:/", 1);
-    line_idx = 0;   
-    USBH_USR_ApplicationState = USH_USR_FS_WRITEFILE;
-    
-    break;
-    
-  case USH_USR_FS_WRITEFILE:
-    
-    //LCD_SetTextColor(Green);
-    //LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 42, "                                              ");
-    //LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 30, "Press Key to write file");
-    //LCD_SetTextColor(LCD_LOG_DEFAULT_COLOR); 
-    USB_OTG_BSP_mDelay(100);
-    
-    /*Key B3 in polling*/
-//    while((HCD_IsDeviceConnected(&USB_OTG_Core)) && \
-//      (STM_EVAL_PBGetState (BUTTON_KEY) == SET))          
-//    {
-//      Toggle_Leds();
-//    }
-    /* Writes a text file, STM32.TXT in the disk*/
-//    LCD_UsrLog("> Writing File to disk flash ...\n");
-    if(USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED)
-    {
-      
- //     LCD_ErrLog ( "> Disk flash is write protected \n");
-      USBH_USR_ApplicationState = USH_USR_FS_DRAW;
-      break;
-    }
-    
-    /* Register work area for logical drives */
-    f_mount(0, &fatfs);
-    
-    if(f_open(&file, "0:STM32.TXT",FA_CREATE_ALWAYS | FA_WRITE) == FR_OK)
-    { 
-      /* Write buffer to file */
-      bytesToWrite = sizeof(writeTextBuff); 
-      res= f_write (&file, writeTextBuff, bytesToWrite, (void *)&bytesWritten);   
-      
-      if((bytesWritten == 0) || (res != FR_OK)) /*EOF or Error*/
-      {
-   //     LCD_ErrLog("> STM32.TXT CANNOT be writen.\n");
-      }
-      else
-      {
-    //    LCD_UsrLog("> 'STM32.TXT' file created\n");
-      }
-      
-      /*close file and filesystem*/
-      f_close(&file);
-      f_mount(0, NULL); 
-    }
-    
-    else
-    {
-  //    LCD_UsrLog ("> STM32.TXT created in the disk\n");
-    }
+    USB_DBG_PRINT("%s: run MSC application.\r\n", __FUNCTION__);
 
-    USBH_USR_ApplicationState = USH_USR_FS_DRAW; 
-    
- //   LCD_SetTextColor(Green);
- //   LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 42, "                                              ");
- //   LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 30, "To start Image slide show Press Key.");
- //   LCD_SetTextColor(LCD_LOG_DEFAULT_COLOR); 
-  
-    break;
-    
-  case USH_USR_FS_DRAW:
-    
-    /*Key B3 in polling*/
-//    while((HCD_IsDeviceConnected(&USB_OTG_Core)) && \
- //     (STM_EVAL_PBGetState (BUTTON_KEY) == SET))
-//    {
-//      Toggle_Leds();
-//    }
-  
-    while(HCD_IsDeviceConnected(&USB_OTG_Core))
-    {
-      if ( f_mount( 0, &fatfs ) != FR_OK ) 
-      {
-        /* fat_fs initialisation fails*/
-        return(-1);
-      }
-      return Image_Browser("0:/");
-    }
-    break;
-  default: break;
-  }
-  return(0);
-}
-
-/**
-* @brief  Explore_Disk 
-*         Displays disk content
-* @param  path: pointer to root path
-* @retval None
-*/
-static uint8_t Explore_Disk (char* path , uint8_t recu_level)
-{
-
-  FRESULT res;
-  FILINFO fno;
-  DIR dir;
-  char *fn;
-  char tmp[14];
-  
-  res = f_opendir(&dir, path);
-  if (res == FR_OK) {
-    while(HCD_IsDeviceConnected(&USB_OTG_Core)) 
-    {
-      res = f_readdir(&dir, &fno);
-      if (res != FR_OK || fno.fname[0] == 0) 
-      {
-        break;
-      }
-      if (fno.fname[0] == '.')
-      {
-        continue;
-      }
-
-      fn = fno.fname;
-      strcpy(tmp, fn); 
-
-      line_idx++;
-      if(line_idx > 9)
-      {
-        line_idx = 0;
- //       LCD_SetTextColor(Green);
- //       LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 42, "                                              ");
-//        LCD_DisplayStringLine( LCD_PIXEL_HEIGHT - 30, "Press Key to continue...");
-//        LCD_SetTextColor(LCD_LOG_DEFAULT_COLOR); 
-        
-//        /*Key B3 in polling*/
-//        while((HCD_IsDeviceConnected(&USB_OTG_Core)) && \
-//          (STM_EVAL_PBGetState (BUTTON_KEY) == SET))
-//        {
-//          Toggle_Leds();
-//          
-//        }
-      } 
-      
-      if(recu_level == 1)
-      {
-//        LCD_DbgLog("   |__");
-      }
-      else if(recu_level == 2)
-      {
- //       LCD_DbgLog("   |   |__");
-      }
-      if((fno.fattrib & AM_MASK) == AM_DIR)
-      {
-        strcat(tmp, "\n"); 
- //       LCD_UsrLog((void *)tmp);
-      }
-      else
-      {
-        strcat(tmp, "\n"); 
-  //      LCD_DbgLog((void *)tmp);
-      }
-
-      if(((fno.fattrib & AM_MASK) == AM_DIR)&&(recu_level == 1))
-      {
-        Explore_Disk(fn, 2);
-      }
-    }
-  }
-  return res;
-}
-
-static uint8_t Image_Browser (char* path)
-{
-  FRESULT res;
-  uint8_t ret = 1;
-  FILINFO fno;
-  DIR dir;
-  char *fn;
-  
-  res = f_opendir(&dir, path);
-  if (res == FR_OK) {
-    
-    for (;;) {
-      res = f_readdir(&dir, &fno);
-      if (res != FR_OK || fno.fname[0] == 0) break;
-      if (fno.fname[0] == '.') continue;
-
-      fn = fno.fname;
- 
-      if (fno.fattrib & AM_DIR) 
-      {
-        continue;
-      } 
-      else 
-      {
-        if((strstr(fn, "bmp")) || (strstr(fn, "BMP")))
-        {
-          res = f_open(&file, fn, FA_OPEN_EXISTING | FA_READ);
- //         Show_Image();
-          USB_OTG_BSP_mDelay(100);
-          ret = 0;
-//          while((HCD_IsDeviceConnected(&USB_OTG_Core)) && \
- //           (STM_EVAL_PBGetState (BUTTON_KEY) == SET))
- //         {
- //           Toggle_Leds();
- //         }
-          f_close(&file);
-          
+    switch (USBH_USR_ApplicationState) {
+    case USH_USR_FS_INIT:
+        if (f_mount(0, &fatfs) != FR_OK) {
+            USB_DBG_PRINT("> Cannot initialize File System.\r\n");
+            return -1;
         }
-      }
-    }  
-  }
-  
-//  #ifdef USE_USB_OTG_HS 
-//  LCD_LOG_SetHeader(" USB OTG HS MSC Host");
-//#else
-//  LCD_LOG_SetHeader(" USB OTG FS MSC Host");
-//#endif
-//  LCD_LOG_SetFooter ("     USB Host Library v2.1.0" );
-//  LCD_UsrLog("> Disk capacity : %d Bytes\n", USBH_MSC_Param.MSCapacity * \
-//      USBH_MSC_Param.MSPageLength); 
-  USBH_USR_ApplicationState = USH_USR_FS_READLIST;
-  return ret;
-}
+        USB_DBG_PRINT("> File System initialized.\r\n");
+        USB_DBG_PRINT("> Disk capacity : %d MBytes\r\n", 
+            (USBH_MSC_Param.MSCapacity / 1024) * (USBH_MSC_Param.MSPageLength / 1024)); 
+    
+        if (USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED) {
+            USB_DBG_PRINT("%s:%s", __FUNCTION__, MSG_WR_PROTECT);
+        }
+    
+        USBH_USR_ApplicationState = USH_USR_FS_READLIST;
+        break;
+    case USH_USR_FS_READLIST:
+        USB_DBG_PRINT("%s:%s", __FUNCTION__, MSG_ROOT_CONT);
+        Explore_Disk("0:/", 1);
+        line_idx = 0;   
+        USBH_USR_ApplicationState = USH_USR_FS_WRITEFILE;
+        break;
+    case USH_USR_FS_WRITEFILE:
+        if (!HCD_IsDeviceConnected(&USB_OTG_Core)) {
+            USB_DBG_PRINT("%s: HCD is not connected!\r\n", __FUNCTION__);
+        }
+        
+        USB_DBG_PRINT("> Writing File to disk flash ...\n");
+        
+        if (USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED) {
+            USB_DBG_PRINT( "> Disk flash is write protected \n");
+            USBH_USR_ApplicationState = USH_USR_FS_DRAW;
+            break;
+        }
+    
+        //f_mount(0, &fatfs);
+        res = f_open(&file, "0:STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE);
+        if (res == FR_OK) {
+            res = f_write(&file, writeTextBuff, sizeof(writeTextBuff), (void *)&bytesWritten);
+            if ((bytesWritten == 0) || (res != FR_OK)) {
+                USB_DBG_PRINT("> STM32.TXT CANNOT be writen! (%d), %d bytes written\r\n",
+                    res, bytesWritten);
+            } else {
+                USB_DBG_PRINT("> 'STM32.TXT' file created\n");
+            }
+            f_close(&file);
+            f_mount(0, NULL); 
+        } else {
+            USB_DBG_PRINT("> creat file fail! (%d)\r\n", res);
+        }
 
-/**
-* @brief  Show_Image 
-*         Displays BMP image
-* @param  None
-* @retval None
-*/
-//static void Show_Image(void)
-//{
-//  
-//  uint16_t i = 0;
-//  uint16_t numOfReadBytes = 0;
-//  FRESULT res; 
-////  
-////  LCD_SetDisplayWindow(239, 319, 240, 320);
-////  LCD_WriteReg(R3, 0x1008);
-////  LCD_WriteRAM_Prepare(); /* Prepare to write GRAM */
-//  
-//  /* Bypass Bitmap header */ 
-//  f_lseek (&file, 54);
-//  
-//  while (HCD_IsDeviceConnected(&USB_OTG_Core))
-//  {
-//    res = f_read(&file, Image_Buf, IMAGE_BUFFER_SIZE, (void *)&numOfReadBytes);
-//    if((numOfReadBytes == 0) || (res != FR_OK)) /*EOF or Error*/
-//    {
-//      break; 
-//    }
-//    for(i = 0 ; i < IMAGE_BUFFER_SIZE; i+= 2)
-//    {
-//      LCD_WriteRAM(Image_Buf[i+1] << 8 | Image_Buf[i]); 
-//    } 
-//  }
-//  
-//}
+        USBH_USR_ApplicationState = USH_USR_FS_DRAW;
+        break;
+    case USH_USR_FS_DRAW:
+        USB_DBG_PRINT("%s: draw\r\n", __FUNCTION__);
+        break;
+    default:
+        break;
+    }
+  
+    return 0;
+}
 
 /**
 * @brief  USBH_USR_DeInit
@@ -708,7 +486,7 @@ static uint8_t Image_Browser (char* path)
 */
 void USBH_USR_DeInit(void)
 {
-  USBH_USR_ApplicationState = USH_USR_FS_INIT;
+    USBH_USR_ApplicationState = USH_USR_FS_INIT;
 }
 
 

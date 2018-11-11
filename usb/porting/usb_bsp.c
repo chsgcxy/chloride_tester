@@ -28,11 +28,12 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "usb_bsp.h"
+#include "usb_hcd_int.h"
 
 /** @addtogroup USBH_USER
 * @{
 */
-
+extern USB_OTG_CORE_HANDLE  USB_OTG_Core;
 /** @defgroup USB_BSP
   * @brief This file is responsible to offer board support package
   * @{
@@ -41,6 +42,7 @@
 /** @defgroup USB_BSP_Private_Defines
   * @{
   */ 
+
 #define USE_ACCURATE_TIME
 #define TIM_MSEC_DELAY                     0x01
 #define TIM_USEC_DELAY                     0x02
@@ -93,7 +95,7 @@ __IO uint32_t BSP_delay = 0;
 
 static void BSP_SetTime(uint8_t Unit);
 static void BSP_Delay(uint32_t nTime,uint8_t Unit);
-static void USB_OTG_BSP_TimeInit ( void );
+static void USB_OTG_BSP_TimeInit(void);
 /**
   * @}
   */ 
@@ -111,28 +113,24 @@ static void USB_OTG_BSP_TimeInit ( void );
 
 void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
 { 
-  GPIO_InitTypeDef GPIO_InitStructure;
+    GPIO_InitTypeDef GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd( RCC_AHB1Periph_GPIOA , ENABLE);  
-  
-  /* Configure SOF VBUS ID DM DP Pins */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | //USB_DM                                
-                                GPIO_Pin_12;  //USB_DP
-  
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);  
-  
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_OTG1_FS); 
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource12, GPIO_AF_OTG1_FS);
+    RCC_AHB1PeriphClockCmd( RCC_AHB1Periph_GPIOA , ENABLE);  
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+    RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_OTG_FS, ENABLE) ; 
+    
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);  
 
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-  RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_OTG_FS, ENABLE) ; 
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_OTG1_FS); 
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource12, GPIO_AF_OTG1_FS);
 
-  /* Intialize Timer for delay function */
-  USB_OTG_BSP_TimeInit();   
+    /* Intialize Timer for delay function */
+    USB_OTG_BSP_TimeInit();   
 }
 /**
   * @brief  USB_OTG_BSP_EnableInterrupt
@@ -142,17 +140,13 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
   */
 void USB_OTG_BSP_EnableInterrupt(USB_OTG_CORE_HANDLE *pdev)
 {
-  NVIC_InitTypeDef NVIC_InitStructure; 
-  
-  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+    NVIC_InitTypeDef NVIC_InitStructure; 
 
-  NVIC_InitStructure.NVIC_IRQChannel = OTG_FS_IRQn;  
-
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);  
-
+    NVIC_InitStructure.NVIC_IRQChannel = OTG_FS_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
 }
 
 /**
@@ -175,8 +169,8 @@ void USB_OTG_BSP_DriveVBUS(USB_OTG_CORE_HANDLE *pdev, uint8_t state)
 
 void  USB_OTG_BSP_ConfigVBUS(USB_OTG_CORE_HANDLE *pdev)
 {
-  USB_OTG_BSP_mDelay(200);   /* Delay is need for stabilising the Vbus Low 
-  in Reset Condition, when Vbus=1 and Reset-button is pressed by user */ 
+    USB_OTG_BSP_mDelay(200);   /* Delay is need for stabilising the Vbus Low 
+    in Reset Condition, when Vbus=1 and Reset-button is pressed by user */ 
 }
 
 /**
@@ -185,25 +179,17 @@ void  USB_OTG_BSP_ConfigVBUS(USB_OTG_CORE_HANDLE *pdev)
   * @param  None
   * @retval None
   */
-static void USB_OTG_BSP_TimeInit ( void )
+static void USB_OTG_BSP_TimeInit(void)
 {
-  NVIC_InitTypeDef NVIC_InitStructure;
-  
-  /* Set the Vector Table base address at 0x08000000 */
-  NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x00);
-  
-  /* Configure the Priority Group to 2 bits */
-  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-  
-  /* Enable the TIM2 gloabal Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  
-  NVIC_Init(&NVIC_InitStructure);
-  
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);   
+    NVIC_InitTypeDef NVIC_InitStructure;
+    
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
 }
 
 /**
@@ -212,9 +198,9 @@ static void USB_OTG_BSP_TimeInit ( void )
   * @param  usec : Value of delay required in micro sec
   * @retval None
   */
-void USB_OTG_BSP_uDelay (const uint32_t usec)
+void USB_OTG_BSP_uDelay(const uint32_t usec)
 {
-  BSP_Delay(usec,TIM_USEC_DELAY); 
+  BSP_Delay(usec, TIM_USEC_DELAY);
 }
 
 
@@ -226,32 +212,8 @@ void USB_OTG_BSP_uDelay (const uint32_t usec)
   */
 void USB_OTG_BSP_mDelay (const uint32_t msec)
 {  
-    BSP_Delay(msec,TIM_MSEC_DELAY);      
+    BSP_Delay(msec, TIM_MSEC_DELAY);      
 }
-
-
-/**
-  * @brief  USB_OTG_BSP_TimerIRQ
-  *         Time base IRQ
-  * @param  None
-  * @retval None
-  */
-
-void USB_OTG_BSP_TimerIRQ (void)
-{
-  if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
-  {
-    TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-    if (BSP_delay > 0x00)
-    { 
-      BSP_delay--;
-    }
-    else
-    {
-      TIM_Cmd(TIM2,DISABLE);
-    }
-  }
-} 
 
 /**
   * @brief  BSP_Delay
@@ -262,11 +224,10 @@ void USB_OTG_BSP_TimerIRQ (void)
   */
 static void BSP_Delay(uint32_t nTime, uint8_t unit)
 {
-  
-  BSP_delay = nTime;
-  BSP_SetTime(unit);  
-  while(BSP_delay != 0);
-  TIM_Cmd(TIM2,DISABLE);
+    BSP_delay = nTime;
+    BSP_SetTime(unit);  
+    while(BSP_delay != 0);
+    TIM_Cmd(TIM2, DISABLE);
 }
 
 /**
@@ -277,47 +238,54 @@ static void BSP_Delay(uint32_t nTime, uint8_t unit)
   */
 static void BSP_SetTime(uint8_t unit)
 {
-  TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-  
-  TIM_Cmd(TIM2,DISABLE);
-  TIM_ITConfig(TIM2, TIM_IT_Update, DISABLE); 
-  
-  
-  if(unit == TIM_USEC_DELAY)
-  {  
-    TIM_TimeBaseStructure.TIM_Period = 11;
-  }
-  else if(unit == TIM_MSEC_DELAY)
-  {
-    TIM_TimeBaseStructure.TIM_Period = 11999;
-  }
-  TIM_TimeBaseStructure.TIM_Prescaler = 5;
-  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-  
-  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
-  TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-  
-  TIM_ARRPreloadConfig(TIM2, ENABLE);
-  
-  /* TIM IT enable */
-  TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
-  
-  /* TIM2 enable counter */ 
-  TIM_Cmd(TIM2, ENABLE);  
+    TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+
+    TIM_Cmd(TIM2, DISABLE);
+    TIM_ITConfig(TIM2, TIM_IT_Update, DISABLE); 
+
+    if (unit == TIM_USEC_DELAY) 
+        TIM_TimeBaseStructure.TIM_Period = 11;
+    else if (unit == TIM_MSEC_DELAY)
+        TIM_TimeBaseStructure.TIM_Period = 11999;
+    TIM_TimeBaseStructure.TIM_Prescaler = 5;
+    TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+
+    TIM_ClearITPendingBit(TIM2, TIM_IT_Update);  
+    TIM_ARRPreloadConfig(TIM2, ENABLE);
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+    TIM_Cmd(TIM2, ENABLE);  
 } 
 
+/**
+  * @brief  TIM2_IRQHandler
+  *         This function handles Timer2 Handler.
+  * @param  None
+  * @retval None
+  */
+void TIM2_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+        if (BSP_delay > 0x00) { 
+            BSP_delay--;
+        } else {
+        TIM_Cmd(TIM2,DISABLE);
+        }
+    }
+}
 
 /**
-* @}
-*/ 
-
-/**
-* @}
-*/ 
-
-/**
-* @}
-*/
+  * @brief  OTG_FS_IRQHandler
+  *          This function handles USB-On-The-Go FS global interrupt request.
+  *          requests.
+  * @param  None
+  * @retval None
+  */
+void OTG_FS_IRQHandler(void)
+{
+    USBH_OTG_ISR_Handler(&USB_OTG_Core);
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
