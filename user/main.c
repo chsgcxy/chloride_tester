@@ -88,8 +88,11 @@ int main(void)
 	GUI_DispString("hello world!");
 
 	touch_init();
-	touch_test();
-
+	touch_calibrate();
+	while (1)
+		touch_update();	
+//	touch_test();
+	
 	/* creat freertos task */
 	task_init();
 
