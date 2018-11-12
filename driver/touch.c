@@ -169,14 +169,14 @@ static void _touch_trans(struct touch *ptouch, struct phy *_phy)
 static void touch_trans(GUI_PID_STATE *state, struct touch *ptouch)
 {
 	_touch_trans(ptouch, &ptouch->cur_phy);
-	if (ptouch->pos_calc.x > TOUCH_X || ptouch->pos_calc.y > TOUCH_Y)
+	state->x = ptouch->pos_calc.x - ptouch->correct.x;
+	state->y = ptouch->pos_calc.y - ptouch->correct.y;
+	if (state->x > TOUCH_X || state->y > TOUCH_Y) {
+		state->x = -1;
+		state->y = -1;
 		state->Pressed = 0;
-	else {
-		//pos_calc.x = pos_calc.x;
-		state->x = ptouch->pos_calc.x - ptouch->correct.x;
-		state->y = ptouch->pos_calc.y - ptouch->correct.y;
+	} else
 		state->Pressed = 1;
-	}
 	TOUCH_DBG_PRINT("get point(%d,%d), corrected(%d,%d)\r\n",
 		ptouch->pos_calc.x, ptouch->pos_calc.y, state->x, state->y);
 }
@@ -189,12 +189,13 @@ void touch_calibrate(void)
 
 	GUI_SetBkColor(GUI_DARKGRAY);
 	GUI_SetColor(GUI_RED);
-	GUI_Clear();
+
 
 do_calc:
 	TOUCH_DBG_PRINT("do touch calibrate...\r\n");
 	
 	/* draw p1 */
+	GUI_Clear();
 	GUI_DrawCircle(ptouch->point1.pos.x, ptouch->point1.pos.y, 5);
 	TOUCH_DBG_PRINT("draw p1(%d,%d), waitting for press.\r\n",
 		ptouch->point1.pos.x, ptouch->point1.pos.y);
@@ -207,6 +208,7 @@ do_calc:
 	delay_ms(500);
 
 	/* draw p2 */
+	GUI_Clear();
 	GUI_DrawCircle(ptouch->point2.pos.x, ptouch->point2.pos.y, 5);
 	TOUCH_DBG_PRINT("draw p2(%d,%d), waitting for press.\r\n",
 		ptouch->point2.pos.x, ptouch->point2.pos.y);
@@ -228,6 +230,7 @@ do_calc:
 	ptouch->y_coe = _phy / _pos;
 	
 	/* draw point_centre */
+	GUI_Clear();
 	GUI_DrawCircle(ptouch->point_centre.pos.x, ptouch->point_centre.pos.y, 5);
 	TOUCH_DBG_PRINT("draw p3(%d,%d), waitting for press.\r\n",
 		ptouch->point_centre.pos.x, ptouch->point_centre.pos.y);
@@ -260,6 +263,7 @@ do_calc:
 		goto do_calc;
 	}
 
+	GUI_Clear();
 	TOUCH_DBG_PRINT("calibrate succeed, correct=(%d,%d)\r\n",
 		ptouch->correct.x, ptouch->correct.y);
 }

@@ -90,9 +90,10 @@ int main(void)
 	touch_init();
 	//touch_test();
 	touch_calibrate();
-	while (1)
-		touch_update();	
-//	touch_test();
+	while (1) {
+		touch_update();
+		delay_ms(700);
+	}
 	
 	/* creat freertos task */
 	task_init();
