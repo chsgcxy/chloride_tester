@@ -28,7 +28,7 @@ void delay_ms(int ms)
 		for (i = 0; i < 28000; i++);
 }
 
-static void helloworld_task(void *args)
+static void task_helloworld(void *args)
 {
 	while (1) {
 		printf("hello world!\r\n");
@@ -36,9 +36,18 @@ static void helloworld_task(void *args)
 	}
 }
 
+static void task_touch(void *args)
+{
+	while (1) {
+		touch_update();
+		vTaskDelay(10);
+	}
+}
+
 static void task_init(void)
 {
-	xTaskCreate(helloworld_task, "hello world", 64, NULL, 1, NULL);
+	xTaskCreate(task_helloworld, "hello world", 64, NULL, 1, NULL);
+	xTaskCreate(task_touch, "task", 512, NULL, 1, NULL);
 }
 
 static int g_printer_send(uint8_t *buf, int len)
@@ -81,20 +90,19 @@ int main(void)
 
 	/* GUI test */
 	GUI_Init();
+	
+#if 0
 	GUI_GotoXY(50, 50);
 	GUI_SetFont(GUI_FONT_32B_ASCII);
 	GUI_SetColor(GUI_WHITE);
 	GUI_SetBkColor(GUI_BLUE);
 	GUI_DispString("hello world!");
-
+#endif
+	
 	touch_init();
 	//touch_test();
 	touch_calibrate();
-	while (1) {
-		touch_update();
-		delay_ms(700);
-	}
-	
+
 	/* creat freertos task */
 	task_init();
 

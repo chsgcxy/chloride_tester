@@ -4,6 +4,8 @@
 #include "GUI.h"
 #include "stdlib.h"
 
+extern const GUI_FONT GUI_FontHZ_Consolas;
+
 #define CMD_RDY 0X90
 #define CMD_RDX	0XD0
 
@@ -54,6 +56,7 @@ struct touch {
 	struct point point1;
 	struct point point2;
 	struct point point_centre;
+	struct point point_adjust;
 	struct pos pos_calc;
 	
 	double x_coe;
@@ -181,44 +184,54 @@ static void touch_trans(GUI_PID_STATE *state, struct touch *ptouch)
 		ptouch->pos_calc.x, ptouch->pos_calc.y, state->x, state->y);
 }
 
+static void _disp_calibrate_fail(void)
+{
+	TOUCH_DBG_PRINT("calibrate fail, retry\r\n");
+	GUI_DispStringAt("校准失败,自动重新开始校准", 280, 240);
+	delay_ms(2000); // for Visual effects
+}
+
 void touch_calibrate(void)
 {
 	struct touch *ptouch = &g_touch;
 	double _phy, _pos;
 	int32_t _precision;
+	GUI_PID_STATE state;
 
-	GUI_SetBkColor(GUI_DARKGRAY);
-	GUI_SetColor(GUI_RED);
-
-
+	GUI_SetFont(&GUI_FontHZ_Consolas);
 do_calc:
 	TOUCH_DBG_PRINT("do touch calibrate...\r\n");
+	GUI_SetBkColor(GUI_DARKGRAY);
+	GUI_SetColor(GUI_RED);
+	GUI_Clear();
+	GUI_DispStringAt("校准触摸屏,请点击屏幕红色圆点", 250, 300);	
 	
 	/* draw p1 */
-	GUI_Clear();
-	GUI_DrawCircle(ptouch->point1.pos.x, ptouch->point1.pos.y, 5);
-	TOUCH_DBG_PRINT("draw p1(%d,%d), waitting for press.\r\n",
+	GUI_FillCircle(ptouch->point1.pos.x, ptouch->point1.pos.y, 4);
+	TOUCH_DBG_PRINT("draw point1(%d,%d), waitting for press.\r\n",
 		ptouch->point1.pos.x, ptouch->point1.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
 	touch_read_phy();
 	ptouch->point1.phy.x = ptouch->cur_phy.x;
 	ptouch->point1.phy.y = ptouch->cur_phy.y;
-	TOUCH_DBG_PRINT("get p1 adc value (%d,%d).\r\n",
+	TOUCH_DBG_PRINT("get point1 adc value (%d,%d).\r\n",
 		ptouch->point1.phy.x, ptouch->point1.phy.y);
-	delay_ms(500);
+	delay_ms(500); // for Visual effects
 
 	/* draw p2 */
-	GUI_Clear();
-	GUI_DrawCircle(ptouch->point2.pos.x, ptouch->point2.pos.y, 5);
-	TOUCH_DBG_PRINT("draw p2(%d,%d), waitting for press.\r\n",
+	GUI_SetColor(GUI_DARKGRAY);
+	GUI_FillCircle(ptouch->point1.pos.x, ptouch->point1.pos.y, 4);
+	GUI_SetColor(GUI_RED);
+	GUI_FillCircle(ptouch->point2.pos.x, ptouch->point2.pos.y, 4);
+	TOUCH_DBG_PRINT("draw point2(%d,%d), waitting for press.\r\n",
 		ptouch->point2.pos.x, ptouch->point2.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
 	touch_read_phy();
 	ptouch->point2.phy.x = ptouch->cur_phy.x;
 	ptouch->point2.phy.y = ptouch->cur_phy.y;
-	TOUCH_DBG_PRINT("get p2 adc value (%d,%d).\r\n",
+	TOUCH_DBG_PRINT("get point2 adc value (%d,%d).\r\n",
 		 ptouch->point2.phy.x, ptouch->point2.phy.y);
-	delay_ms(500);
+	delay_ms(500); // for Visual effects
 
 	/* calc coe */
 	TOUCH_DBG_PRINT("calculate coe\r\n");
@@ -230,40 +243,61 @@ do_calc:
 	ptouch->y_coe = _phy / _pos;
 	
 	/* draw point_centre */
-	GUI_Clear();
-	GUI_DrawCircle(ptouch->point_centre.pos.x, ptouch->point_centre.pos.y, 5);
-	TOUCH_DBG_PRINT("draw p3(%d,%d), waitting for press.\r\n",
+	GUI_SetColor(GUI_DARKGRAY);
+	GUI_FillCircle(ptouch->point2.pos.x, ptouch->point2.pos.y, 4);
+	GUI_SetColor(GUI_RED);
+	GUI_FillCircle(ptouch->point_centre.pos.x, ptouch->point_centre.pos.y, 4);
+	TOUCH_DBG_PRINT("draw point_centre(%d,%d), waitting for press.\r\n",
 		ptouch->point_centre.pos.x, ptouch->point_centre.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
 	touch_read_phy();
 	ptouch->point_centre.phy.x = ptouch->cur_phy.x;
 	ptouch->point_centre.phy.y = ptouch->cur_phy.y;
-	TOUCH_DBG_PRINT("get p2 adc value (%d,%d).\r\n",
+	TOUCH_DBG_PRINT("get point_centre adc value (%d,%d).\r\n",
 		 ptouch->point_centre.phy.x, ptouch->point_centre.phy.y);
 
-	/* use point_centre to verify */
-	TOUCH_DBG_PRINT("use point_centre to verify\r\n");
+	/* use point_centre to get correct value,
+	 * for the adc value of touch screen does not start from 0
+	 */
 	_touch_trans(ptouch, &ptouch->point_centre.phy);
-	TOUCH_DBG_PRINT("get point_centre(%d,%d).\r\n",
+	TOUCH_DBG_PRINT("use point_centre to verify, get point(%d,%d).\r\n",
 		ptouch->pos_calc.x, ptouch->pos_calc.y);
-
-	/* adjust */
 	ptouch->correct.x = ptouch->pos_calc.x - ptouch->point_centre.pos.x;
-	_precision = abs(ptouch->correct.x);
+	ptouch->correct.y = ptouch->pos_calc.y - ptouch->point_centre.pos.y;
+	delay_ms(500); // for Visual effects
+
+	/* use a point to adjust */
+	GUI_SetColor(GUI_DARKGRAY);
+	GUI_FillCircle(ptouch->point_centre.pos.x, ptouch->point_centre.pos.y, 4);
+	GUI_SetColor(GUI_RED);
+	GUI_FillCircle(ptouch->point_adjust.pos.x, ptouch->point_adjust.pos.y, 4);
+	TOUCH_DBG_PRINT("draw point_adjust(%d,%d), waitting for press.\r\n",
+		ptouch->point_adjust.pos.x, ptouch->point_adjust.pos.y);
+	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
+	touch_read_phy();
+	TOUCH_DBG_PRINT("get point_adjust adc value (%d,%d).\r\n",
+		 ptouch->point_adjust.phy.x, ptouch->point_adjust.phy.y);
+	touch_trans(&state, ptouch);
+	
+	delay_ms(500); // for Visual effects
+	GUI_SetColor(GUI_DARKGRAY);
+	GUI_FillCircle(ptouch->point_adjust.pos.x, ptouch->point_adjust.pos.y, 4);
+	GUI_SetColor(GUI_RED);
+
+	_precision = abs(state.x - ptouch->point_adjust.pos.x);
 	if (ptouch->precision < _precision) {
-		TOUCH_DBG_PRINT("calibrate fail, retry\r\n");
-		delay_ms(500);
+		_disp_calibrate_fail();
 		goto do_calc;
 	}
-	ptouch->correct.y = ptouch->pos_calc.y - ptouch->point_centre.pos.y;
-	_precision = abs(ptouch->correct.y);
+	
+	_precision = abs(state.y - ptouch->point_adjust.pos.y);
 	if (ptouch->precision < _precision) {
-		TOUCH_DBG_PRINT("calibrate fail, retry\r\n");
-		delay_ms(500);
+		_disp_calibrate_fail();
 		goto do_calc;
 	}
 
-	GUI_Clear();
+	GUI_DispStringAt("校准成功", 370, 240);
+	//GUI_Clear();
 	TOUCH_DBG_PRINT("calibrate succeed, correct=(%d,%d)\r\n",
 		ptouch->correct.x, ptouch->correct.y);
 }
@@ -294,12 +328,13 @@ int touch_init(void)
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 	/* irq pin */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     g_touch.filter_len = FILTER_BUF_LEN;
@@ -311,7 +346,9 @@ int touch_init(void)
 	g_touch.point2.pos.y = TOUCH_GET_Y(TOUCH_P2_X);
 	g_touch.point_centre.pos.x = TOUCH_CENTRE_X;
 	g_touch.point_centre.pos.y = TOUCH_GET_Y(TOUCH_CENTRE_X);
-	g_touch.precision = 50;
+	g_touch.point_adjust.pos.x = 650;
+	g_touch.point_adjust.pos.y = 100;
+	g_touch.precision = 10;
     return 0;
 }
 
