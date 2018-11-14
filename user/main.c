@@ -20,6 +20,9 @@ USB_OTG_CORE_HANDLE  USB_OTG_Core;
 static struct tprinter g_printer;
 static struct report report_test;
 
+extern const GUI_BITMAP bmpic_measure_72px;
+extern WM_HWIN main_menu_creat(void);
+
 void delay_ms(int ms)
 {
 	int i;
@@ -90,7 +93,7 @@ int main(void)
 
 	/* GUI test */
 	GUI_Init();
-	
+	//GUI_DrawBitmap(&bmpic_measure_72px, 100, 100);
 #if 0
 	GUI_GotoXY(50, 50);
 	GUI_SetFont(GUI_FONT_32B_ASCII);
@@ -101,8 +104,9 @@ int main(void)
 	
 	touch_init();
 	//touch_test();
-	touch_calibrate();
+	//touch_calibrate();
 
+	main_menu_creat();
 	/* creat freertos task */
 	task_init();
 

@@ -428,6 +428,31 @@
               <FileType>1</FileType>
               <FilePath>..\user\Consolas_x16.c</FilePath>
             </File>
+            <File>
+              <FileName>ui_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>pic_measure_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\pic_measure_72px.c</FilePath>
+            </File>
+            <File>
+              <FileName>pic_setting_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\pic_setting_72px.c</FilePath>
+            </File>
+            <File>
+              <FileName>pic_usb_disk_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\pic_usb_disk_72px.c</FilePath>
+            </File>
+            <File>
+              <FileName>pic_view_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\pic_view_72px.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
