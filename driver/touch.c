@@ -204,7 +204,7 @@ do_calc:
 	GUI_SetBkColor(GUI_DARKGRAY);
 	GUI_SetColor(GUI_RED);
 	GUI_Clear();
-	GUI_DispStringAt("Ð£×¼´¥ÃþÆÁ,Çëµã»÷ÆÁÄ»ºìÉ«Ô²µã", 250, 300);	
+	GUI_DispStringAt("´¥ÃþÆÁÐ£×¼£¬Çëµã»÷ÆÁÄ»ºìÉ«Ô²È¦", 250, 300);	
 	
 	/* draw p1 */
 	GUI_FillCircle(ptouch->point1.pos.x, ptouch->point1.pos.y, 4);

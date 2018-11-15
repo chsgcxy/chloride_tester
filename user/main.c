@@ -47,10 +47,16 @@ static void task_touch(void *args)
 	}
 }
 
+static void task_ui(void *args)
+{
+	main_menu_creat();
+}
+
 static void task_init(void)
 {
 	xTaskCreate(task_helloworld, "hello world", 64, NULL, 1, NULL);
-	xTaskCreate(task_touch, "task", 512, NULL, 1, NULL);
+	xTaskCreate(task_touch, "touch", 512, NULL, 2, NULL);
+	//xTaskCreate(task_ui, "ui", 0x2000, NULL, 1, NULL);
 }
 
 static int g_printer_send(uint8_t *buf, int len)
@@ -61,7 +67,7 @@ static int g_printer_send(uint8_t *buf, int len)
 int main(void)
 {
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
-	//__set_PRIMASK(1);
+	__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);
 	/* rtos will not run if I set group_2, group_4 is work */
@@ -104,9 +110,8 @@ int main(void)
 	
 	touch_init();
 	//touch_test();
-	//touch_calibrate();
+	touch_calibrate();
 
-	main_menu_creat();
 	/* creat freertos task */
 	task_init();
 

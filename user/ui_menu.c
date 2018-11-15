@@ -22,6 +22,7 @@
 // USER END
 
 #include "DIALOG.h"
+#include "stdio.h"
 
 /*********************************************************************
 *
@@ -78,67 +79,77 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *       _cbDialog
 */
 static void _cbDialog(WM_MESSAGE * pMsg) {
-  WM_HWIN      hItem;
-  // USER START (Optionally insert additional variables)
-  // USER END
+    WM_HWIN      hItem;
+    int     NCode;
+    int     Id;
 
-  switch (pMsg->MsgId) {
-  case WM_INIT_DIALOG:
-    //
-    // Initialization of 'Framewin'
-    //
-    hItem = pMsg->hWin;
-    FRAMEWIN_SetTitleHeight(hItem, 50);
-    FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-    FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Consolas);
-    FRAMEWIN_SetText(hItem, "主菜单");
-    //
-    // Initialization of 'Image'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_MEASURE);
-    IMAGE_SetBitmap(hItem, &bmpic_measure_72px);
+    switch (pMsg->MsgId) {
+    case WM_INIT_DIALOG:
+        //
+        // Initialization of 'Framewin'
+        //
+        hItem = pMsg->hWin;
+        FRAMEWIN_SetTitleHeight(hItem, 50);
+        FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Consolas);
+        FRAMEWIN_SetText(hItem, "主屏幕");
+        //
+        // Initialization of 'Image'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_MEASURE);
+        IMAGE_SetBitmap(hItem, &bmpic_measure_72px);
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MEASURE);
-    TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-    TEXT_SetText(hItem, "测量");
-    //
-    // Initialization of 'Image'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_VIEW);
-    IMAGE_SetBitmap(hItem, &bmpic_view_72px);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MEASURE);
+        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetText(hItem, "测量");
+        //
+        // Initialization of 'Image'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_VIEW);
+        IMAGE_SetBitmap(hItem, &bmpic_view_72px);
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_VIEW);
-    TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-    TEXT_SetText(hItem, "数据");
-    //
-    // Initialization of 'Image'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_USB);
-    IMAGE_SetBitmap(hItem, &bmpic_usb_disk_72px);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_VIEW);
+        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetText(hItem, "数据");
+        //
+        // Initialization of 'Image'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_USB);
+        IMAGE_SetBitmap(hItem, &bmpic_usb_disk_72px);
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_USB);
-    TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-    TEXT_SetText(hItem, "U盘");
-    //
-    // Initialization of 'Image'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_SETTING);
-    IMAGE_SetBitmap(hItem, &bmpic_setting_72px);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_USB);
+        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetText(hItem, "U盘");
+        //
+        // Initialization of 'Image'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_SETTING);
+        IMAGE_SetBitmap(hItem, &bmpic_setting_72px);
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SETTING);
-    TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-    TEXT_SetText(hItem, "设置");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SETTING);
+        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetText(hItem, "设置");
 
-
-    // USER START (Optionally insert additional code for further widget initialization)
-    // USER END
-    break;
-  // USER START (Optionally insert additional message handling)
-  // USER END
-  default:
-    WM_DefaultProc(pMsg);
-    break;
-  }
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch(Id) {
+        case ID_IMAGE_MEASURE:
+            switch(NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                printf("clicked.....\r\n");
+                break;
+            default:
+                break;
+            }
+            break;
+        default:
+            break;
+        }
+    default:
+        WM_DefaultProc(pMsg);
+        break;
+    }
 }
 
 /*********************************************************************
