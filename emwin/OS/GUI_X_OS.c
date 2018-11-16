@@ -77,12 +77,12 @@ and delay function. Default time unit (tick), normally is
 
 int GUI_X_GetTime(void)
 {
-  return ((int) xTaskGetTickCount());
+  return ((int) osKernelSysTick());
 }
 
 void GUI_X_Delay(int ms)
 {
-  vTaskDelay( ms );
+  osDelay( ms );
 }
 
 /*********************************************************************
@@ -133,11 +133,11 @@ void GUI_X_InitOS(void)
   /* Create Mutex lock */
   osMutexDef(MUTEX);
   
-  /* Create the Mutex used by the two threads */
-  osMutex = osMutexCreate(osMutex(MUTEX));
-  
   /* Create Semaphore lock */
   osSemaphoreDef(SEM);
+  
+  /* Create the Mutex used by the two threads */
+  osMutex = osMutexCreate(osMutex(MUTEX));
   
   /* Create the Semaphore used by the two threads */
   osSemaphore= osSemaphoreCreate(osSemaphore(SEM), 1);  

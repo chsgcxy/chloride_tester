@@ -138,6 +138,10 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z18 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -330,7 +334,7 @@
 
   <Group>
     <GroupName>core</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -723,7 +727,7 @@
 
   <Group>
     <GroupName>emwin</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -769,19 +773,6 @@
     <File>
       <GroupNumber>4</GroupNumber>
       <FileNumber>42</FileNumber>
-      <FileType>4</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\emwin\Lib\STemWin532_CM3_OS_Keil.lib</PathWithFileName>
-      <FilenameWithoutPath>STemWin532_CM3_OS_Keil.lib</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>4</GroupNumber>
-      <FileNumber>43</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -794,7 +785,7 @@
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
-      <FileNumber>44</FileNumber>
+      <FileNumber>43</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -802,6 +793,19 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\emwin\OS\GUI_X_OS.c</PathWithFileName>
       <FilenameWithoutPath>GUI_X_OS.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>44</FileNumber>
+      <FileType>4</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\emwin\Lib\STemWin532_CM3_OS_Keil.lib</PathWithFileName>
+      <FilenameWithoutPath>STemWin532_CM3_OS_Keil.lib</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

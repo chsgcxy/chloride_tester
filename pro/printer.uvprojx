@@ -629,11 +629,6 @@
               <FilePath>..\emwin\Config\SIMConf.c</FilePath>
             </File>
             <File>
-              <FileName>STemWin532_CM3_OS_Keil.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\emwin\Lib\STemWin532_CM3_OS_Keil.lib</FilePath>
-            </File>
-            <File>
               <FileName>LCDConf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\emwin\Config\LCDConf.c</FilePath>
@@ -642,6 +637,11 @@
               <FileName>GUI_X_OS.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\emwin\OS\GUI_X_OS.c</FilePath>
+            </File>
+            <File>
+              <FileName>STemWin532_CM3_OS_Keil.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\emwin\Lib\STemWin532_CM3_OS_Keil.lib</FilePath>
             </File>
           </Files>
         </Group>

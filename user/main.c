@@ -23,6 +23,8 @@ static struct report report_test;
 extern const GUI_BITMAP bmpic_measure_72px;
 extern WM_HWIN main_menu_creat(void);
 
+static TaskHandle_t handle_touch, handle_gui;
+
 void delay_ms(int ms)
 {
 	int i;
@@ -55,8 +57,8 @@ static void task_ui(void *args)
 static void task_init(void)
 {
 	xTaskCreate(task_helloworld, "hello world", 64, NULL, 1, NULL);
-	xTaskCreate(task_touch, "touch", 512, NULL, 2, NULL);
-	//xTaskCreate(task_ui, "ui", 0x2000, NULL, 1, NULL);
+	xTaskCreate(task_touch, "touch", 128, NULL, 2, &handle_touch);
+	xTaskCreate(task_ui, "ui", 512, NULL, 1, &handle_gui);
 }
 
 static int g_printer_send(uint8_t *buf, int len)
@@ -96,27 +98,14 @@ int main(void)
 	ad770x_init();
 	ad7705_test();
 #endif
-
-	/* GUI test */
 	GUI_Init();
-	//GUI_DrawBitmap(&bmpic_measure_72px, 100, 100);
-#if 0
-	GUI_GotoXY(50, 50);
-	GUI_SetFont(GUI_FONT_32B_ASCII);
-	GUI_SetColor(GUI_WHITE);
-	GUI_SetBkColor(GUI_BLUE);
-	GUI_DispString("hello world!");
-#endif
-	
 	touch_init();
-	//touch_test();
 	touch_calibrate();
-
+	
 	/* creat freertos task */
 	task_init();
 
-	/* test the printer, fill obj report,  then show */
-#if 0	
+	/* test the printer, fill obj report,  then show */	
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;
 	report_init(&g_printer);
@@ -140,8 +129,8 @@ int main(void)
 	report_test.day = 28;
 	report_test.hour = 14;
 	report_test.minute = 28;
-	report_show(&report_test);
-#endif
+	//report_show(&report_test);
+
 
 	/* run rtos */
 	vTaskStartScheduler();

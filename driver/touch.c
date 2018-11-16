@@ -13,7 +13,7 @@ extern const GUI_FONT GUI_FontHZ_Consolas;
 #define FILTER_WINDOW     4
 #define FILTER_BUF_LEN    (FILTER_DISCARD * 2 + FILTER_WINDOW)
 
-#define TOUCH_DBG
+//#define TOUCH_DBG
 
 #ifdef TOUCH_DBG
 	#define TOUCH_DBG_PRINT(fmt, args...)    printf(fmt, ##args)
@@ -306,6 +306,7 @@ void touch_update(void)
 {
 	GUI_PID_STATE pstate;
 
+	pstate.Layer = 0;
 	if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10)) {
         pstate.Pressed = 0;
 		goto store;
@@ -313,6 +314,7 @@ void touch_update(void)
     
     touch_read_phy();
     touch_trans(&pstate, &g_touch);
+	//printf("pressed=%d, (%d,%d)\r\n", pstate.Pressed, pstate.x, pstate.y);
 
 store:
 	GUI_PID_StoreState(&pstate);
