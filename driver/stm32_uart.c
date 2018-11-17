@@ -52,6 +52,7 @@ int uart4_init(void)
 {	
 	USART_InitTypeDef USART_InitStructure;
 	GPIO_InitTypeDef GPIO_InitStruct;
+	NVIC_InitTypeDef NVIC_InitStructure;
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
@@ -69,9 +70,16 @@ int uart4_init(void)
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
 	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-	USART_InitStructure.USART_Mode = USART_Mode_Tx;
+	USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
 	USART_Init(UART4, &USART_InitStructure);
 	USART_Cmd(UART4, ENABLE);
+
+	NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	USART_ITConfig(UART4, USART_IT_RXNE, ENABLE);
 
 	return 0;
 }
@@ -94,3 +102,17 @@ int fputc(int ch, FILE *f)
 	return ch;
 }
 
+static volatile int status = 0;
+
+int uart_get_status(void)
+{
+	int res = status;
+	status = 0;
+	return res;
+}
+
+void UART4_IRQHandler(void)
+{
+	if (USART_GetITStatus(UART4, USART_IT_RXNE) != RESET)  
+    	status = USART_ReceiveData(UART4);
+}

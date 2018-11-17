@@ -39,7 +39,7 @@
 #define GAIN_128        0x38
 
 #define UNIPOLAR        0x04
-#define BIPOLAR         0x00
+#define BIPOLAR         0x00 
 
 #define BUF_NONE        0x00
 #define BUF_IN          0x02
@@ -140,7 +140,7 @@ void AD770xIoInit(void)
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);	
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
 	/* DRDY */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
@@ -180,7 +180,7 @@ int ad770x_init(void)
 	
 	ChNum = 0;
 	
-    SetupReg = SetupReg = AUTO_CALI_MODE | GAIN_1 | UNIPOLAR | FSYNC_ON | BUF_IN;
+    SetupReg = SetupReg = AUTO_CALI_MODE | GAIN_1 | UNIPOLAR | FSYNC_ON | BUF_NONE;
 	printf("pre write clock reg\r\n");
 	AD770xWriteClockReg( CLOCK_REG_SET );
 	printf("pre change channel\r\n");
@@ -225,13 +225,13 @@ void ad7705_test(void)
 	
 	while (1) {
 		if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) == 0) {
-			AD_Rec[ ChNum ] = AD770xReadDataReg( );
+			AD_Rec[ChNum] = AD770xReadDataReg( );
 			if( ChNum ) {
 				ChNum = 0;
-				volt = (float)(data[0] * (2.5 / 65535));
-				printf("ad1 orign data = %d, volt = %.4f\r\n", data[0], volt);
-				volt = (float)(data[1] * (2.5 / 65535));
-				printf("ad2 orign data = %d, volt = %.4f\r\n", data[1], volt);
+				volt = (float)(AD_Rec[0] * (2.5 / 65535));
+				printf("ad1 orign data = %d, volt = %.4f\r\n", AD_Rec[0], volt);
+				volt = (float)(AD_Rec[1] * (2.5 / 65535));
+				printf("ad2 orign data = %d, volt = %.4f\r\n", AD_Rec[1], volt);
 			}
 			else
 				ChNum = 1;

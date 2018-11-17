@@ -62,8 +62,9 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
+	int status;
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
-	__set_PRIMASK(1);
+	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);
 	/* rtos will not run if I set group_2, group_4 is work */
@@ -79,18 +80,63 @@ int main(void)
 
 	stepmotor_init();
 
-	stepmotor_run(1, 1);
-	stepmotor_run(1, 2);
-	stepmotor_run(1, 3);
-	
-	stepmotor_run(0, 1);
-	stepmotor_run(0, 2);
-	stepmotor_run(0, 3);
+	while (1) {
+		status = uart_get_status();
+		switch (status) {
+		case 1:
+			printf("run cmd 1: motor up 0.3ml\r\n");
+			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 3);
+			printf("finished\r\n");
+			break;
+		case 2:
+			printf("run cmd 2: motor down\r\n");
+			stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML);
+			printf("finished\r\n");
+			break;
+		case 3:
+			printf("run cmd 3: switch to put\r\n");
+			relay_ctrl(MOTOR_WATER_PUT);
+			printf("finished\r\n");
+			break;
+		case 4:
+			printf("run cmd 4: switch to get\r\n");
+			relay_ctrl(MOTOR_WATER_GET);
+			printf("finished\r\n");
+			break;
+		case 5:
+			printf("run cmd 5: motor down fast\r\n");
+			stepmotor_run(MOTOR_DIR_DOWN, 8000);
+			printf("finished\r\n");
+			break;
+		case 6:
+			printf("run cmd 6: motor up fast\r\n");
+			stepmotor_run(MOTOR_DIR_UP, 8000);
+			printf("finished\r\n");
+			break;
+		case 7:
+			printf("run cmd 7: motor up 0.1ml\r\n");
+			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML);
+			printf("finished\r\n");
+			break;
+		case 8:
+			printf("run cmd 8: motor up 1ml\r\n");
+			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 10);
+			printf("finished\r\n");
+			break;
+		default:
+			break;
+		}
+	}
 
-	stepmotor_run(0, 5);
-	stepmotor_run(1, 5);
-	stepmotor_run(0, 5);
-	stepmotor_run(1, 5);
+
+	relay_ctrl(1);
+
+	while (1) {
+		stepmotor_run(1, 1000);
+		delay_ms(5000);
+	}
+	
+
 	/* USB Test */
 #if 0	
 	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host,
