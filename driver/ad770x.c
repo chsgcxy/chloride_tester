@@ -3,7 +3,7 @@
 #include "stdio.h"
 
 #define  AD7705_GLOBALS
-#define MAX_AD_TIME_OUT           ( 100 * 3 )
+#define MAX_AD_TIME_OUT           (100 * 3)
 
 #define COM_REG     0x00
 #define SETUP_REG   0x10
@@ -58,15 +58,13 @@
 
 #define AD770X_ReadRdyStu( )   GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) 
 
-int NewDataFlag;
-u8 ChNum = 0;
-u16 AD_Rec[ 2 ] = { 0, 0 };
-u8 SetupReg;
-u8 AD770xStartFlag = 0;
+#define PPPPPPPPP   0.29
 
-void AD770xDelay( u16 i )
+static uint8_t setup_reg;
+
+void AD770xDelay(u16 i)
 {
-	while( i-- );
+	while(i--);
 }
 
 uint16_t AD770xReadWriteByte(u8 data)
@@ -76,63 +74,61 @@ uint16_t AD770xReadWriteByte(u8 data)
 
 void AD770xRegRest(void)
 {
-	AD770X_ClrCs( );
-    AD770xReadWriteByte( 0xff );
-	AD770xReadWriteByte( 0xff );
-	AD770xReadWriteByte( 0xff );
-	AD770xReadWriteByte( 0xff );
-	AD770xReadWriteByte( 0xff );
-	AD770X_SetCs( );
-	AD770xDelay( 500 );
+	AD770X_ClrCs();
+    AD770xReadWriteByte(0xff);
+	AD770xReadWriteByte(0xff);
+	AD770xReadWriteByte(0xff);
+	AD770xReadWriteByte(0xff);
+	AD770xReadWriteByte(0xff);
+	AD770X_SetCs();
+	AD770xDelay(500);
 }
 
-void AD770xWriteSetupReg( u8 Data )
+void AD770xWriteSetupReg(u8 Data)
 {
-	AD770X_ClrCs( );
-	AD770xReadWriteByte( SETUP_REG + WRITE_DATA + RUN_MODE + ChNum );
-	AD770xReadWriteByte( Data );                                    
-	AD770X_SetCs( );
-	AD770xDelay( 100 );
+	AD770X_ClrCs();
+	AD770xReadWriteByte(SETUP_REG + WRITE_DATA + RUN_MODE + 0);
+	AD770xReadWriteByte(Data);                                    
+	AD770X_SetCs();
+	AD770xDelay(100);
 }
 
-void AD770xWriteClockReg( u8 Data )
+void AD770xWriteClockReg(u8 Data)
 {
-	AD770X_ClrCs( );
-	AD770xReadWriteByte( CLOCK_REG + WRITE_DATA + RUN_MODE + ChNum );
-	AD770xReadWriteByte( Data );                                    
-	AD770X_SetCs( );
-	AD770xDelay( 100 );
+	AD770X_ClrCs();
+	AD770xReadWriteByte(CLOCK_REG + WRITE_DATA + RUN_MODE + 0);
+	AD770xReadWriteByte(Data);                                    
+	AD770X_SetCs();
+	AD770xDelay(100);
 }
 
-u16 AD770xReadDataReg( void )
+u16 AD770xReadDataReg(void)
 {
 	u16 Data = 0;
 		
-	AD770X_ClrCs( );
-	AD770xReadWriteByte( DATA_REG + READ_DATA + RUN_MODE + ChNum );
-	Data = AD770xReadWriteByte( 0xff );
+	AD770X_ClrCs();
+	AD770xReadWriteByte(DATA_REG + READ_DATA + RUN_MODE + 0);
+	Data = AD770xReadWriteByte(0xff);
 	Data <<= 8;
-	Data |= AD770xReadWriteByte( 0xff );
-	AD770X_SetCs( );
+	Data |= AD770xReadWriteByte(0xff);
+	AD770X_SetCs();
 	
 	return Data;
 }
 
-void AD770xChangeChannel( u8 NewCh )
+void AD770xChangeChannel(u8 NewCh)
 {
 	NewCh &= 0x03;
-	AD770X_ClrCs( );
-	AD770xReadWriteByte( COM_REG + WRITE_DATA + RUN_MODE + NewCh );
-	AD770X_SetCs( );
-	AD770xDelay( 100 );
-	AD770xWriteSetupReg( SetupReg );
+	AD770X_ClrCs();
+	AD770xReadWriteByte(COM_REG + WRITE_DATA + RUN_MODE + NewCh);
+	AD770X_SetCs();
+	AD770xDelay(100);
+	AD770xWriteSetupReg(setup_reg);
 }
 
 void AD770xIoInit(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
- 	EXTI_InitTypeDef EXTI_InitStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;    
 	
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
     
@@ -146,99 +142,40 @@ void AD770xIoInit(void)
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	//GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_UP;  
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_Init(GPIOA, &GPIO_InitStructure); 
 
-#if 0
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource4); 
-	EXTI_InitStructure.EXTI_Line = EXTI_Line4;
-	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;  
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-	EXTI_Init(&EXTI_InitStructure);
-    EXTI_ClearITPendingBit(EXTI4_IRQn);
-#endif 
-
-	AD770X_ClrRst( );
-	AD770xDelay( 10000 );
-	AD770X_SetRst( );
-	AD770xDelay( 10000 );
+	AD770X_ClrRst();
+	AD770xDelay(10000);
+	AD770X_SetRst();
+	AD770xDelay(10000);
 }
 
 int ad770x_init(void)
 {	
-	AD770xIoInit( );
-	AD770xRegRest( );
-	
-	ChNum = 0;
-	
-    SetupReg = SetupReg = AUTO_CALI_MODE | GAIN_1 | UNIPOLAR | FSYNC_ON | BUF_NONE;
-	printf("pre write clock reg\r\n");
-	AD770xWriteClockReg( CLOCK_REG_SET );
-	printf("pre change channel\r\n");
-	AD770xChangeChannel( ChNum );
-	
-	AD770xStartFlag = 1;
+	setup_reg = AUTO_CALI_MODE | GAIN_1 | UNIPOLAR | FSYNC_ON | BUF_NONE;
+
+	AD770xIoInit();
+	AD770xRegRest();
+	AD770xWriteClockReg(CLOCK_REG_SET);
+	AD770xChangeChannel(0);
+
 	return 0;
 }
 
-int ad770x_read_val(u16 *val)
-{
-	int flag;
-
-    val[0] = AD_Rec[0];
-	val[1] = AD_Rec[1];
-	flag = NewDataFlag; 
-	NewDataFlag = 0;
-	
-	return flag;
-} 
-
-#if 0
-void EXTI4_IRQHandler( void )
-{
-	if (EXTI_GetITStatus(EXTI_Line4) != RESET) {
-		EXTI_ClearITPendingBit(EXTI_Line4);
-		AD_Rec[ ChNum ] = AD770xReadDataReg( );
-		if( ChNum )
-			ChNum = 0;
-		else
-			ChNum = 1;
-		NewDataFlag = 1;
-		AD770xWriteSetupReg( SetupReg  );
-	} 
-}
-#else 
-
 void ad7705_test(void)
 {
-	u16 data[2];
+	u16 data;
 	float volt;
 	
 	while (1) {
 		if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) == 0) {
-			AD_Rec[ChNum] = AD770xReadDataReg( );
-			if( ChNum ) {
-				ChNum = 0;
-				volt = (float)(AD_Rec[0] * (2.5 / 65535));
-				printf("ad1 orign data = %d, volt = %.4f\r\n", AD_Rec[0], volt);
-				volt = (float)(AD_Rec[1] * (2.5 / 65535));
-				printf("ad2 orign data = %d, volt = %.4f\r\n", AD_Rec[1], volt);
-			}
-			else
-				ChNum = 1;
-			NewDataFlag = 1;
-			AD770xWriteSetupReg( SetupReg  );
+			data = AD770xReadDataReg();
+			volt = (float)((float)data * (2.5 / 65535));
+			printf("ad1 orign data = %d, volt = %.4f\r\n", data, volt);
+			AD770xWriteSetupReg(setup_reg);
 		}
 	}
 }
-#endif
+
 

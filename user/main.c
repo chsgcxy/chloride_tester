@@ -78,8 +78,11 @@ int main(void)
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
 
-	stepmotor_init();
+	/* ad7705 test */
+	ad770x_init();
+	ad7705_test();
 
+	stepmotor_init();
 	while (1) {
 		status = uart_get_status();
 		switch (status) {
@@ -147,11 +150,6 @@ int main(void)
 	}
 #endif
 
-#if 0
-	/* ad7705 test */
-	ad770x_init();
-	ad7705_test();
-#endif
 	GUI_Init();
 	touch_init();
 	touch_calibrate();
