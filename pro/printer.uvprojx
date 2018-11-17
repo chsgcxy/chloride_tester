@@ -828,6 +828,16 @@
               <FileType>1</FileType>
               <FilePath>..\driver\stm32_uart.c</FilePath>
             </File>
+            <File>
+              <FileName>stepmotor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\stepmotor.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\delay.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

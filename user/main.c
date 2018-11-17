@@ -14,6 +14,8 @@
 #include "touch.h"
 #include "GUI.h"
 #include "WM.h"
+#include "stepmotor.h"
+#include "delay.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -24,14 +26,6 @@ extern const GUI_BITMAP bmpic_measure_72px;
 extern WM_HWIN main_menu_creat(void);
 
 static TaskHandle_t handle_touch, handle_gui;
-
-void delay_ms(int ms)
-{
-	int i;
-	
-	while (ms--)
-		for (i = 0; i < 28000; i++);
-}
 
 static void task_helloworld(void *args)
 {
@@ -83,6 +77,20 @@ int main(void)
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
 
+	stepmotor_init();
+
+	stepmotor_run(1, 1);
+	stepmotor_run(1, 2);
+	stepmotor_run(1, 3);
+	
+	stepmotor_run(0, 1);
+	stepmotor_run(0, 2);
+	stepmotor_run(0, 3);
+
+	stepmotor_run(0, 5);
+	stepmotor_run(1, 5);
+	stepmotor_run(0, 5);
+	stepmotor_run(1, 5);
 	/* USB Test */
 #if 0	
 	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host,

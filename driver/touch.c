@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include "GUI.h"
 #include "stdlib.h"
+#include "delay.h"
 
 extern const GUI_FONT GUI_FontHZ_Consolas;
 
@@ -27,8 +28,6 @@ extern const GUI_FONT GUI_FontHZ_Consolas;
 #define TOUCH_P1_X    (80)
 #define TOUCH_P2_X    (720)
 #define TOUCH_CENTRE_X    (TOUCH_X / 2)
-
-extern void delay_ms(int ms); 
 
 struct phy {
 	int32_t x;
