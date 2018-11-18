@@ -49,6 +49,7 @@ extern const GUI_BITMAP bmchemical_72px;
 extern const GUI_BITMAP bmpic_view_72px;
 
 extern const GUI_FONT GUI_FontHZ_Consolas;
+extern const GUI_FONT GUI_FontHZ_Arial;
 // USER END
 
 /*********************************************************************
@@ -91,7 +92,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         hItem = pMsg->hWin;
         FRAMEWIN_SetTitleHeight(hItem, 50);
         FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Consolas);
+        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Arial);
         FRAMEWIN_SetText(hItem, "全自动氯离子检测仪");
         //
         // Initialization of 'Image'

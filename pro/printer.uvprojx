@@ -424,19 +424,14 @@
               <FilePath>..\driver\touch.c</FilePath>
             </File>
             <File>
-              <FileName>Consolas_x16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\Consolas_x16.c</FilePath>
-            </File>
-            <File>
               <FileName>ui_menu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\ui_menu.c</FilePath>
             </File>
             <File>
-              <FileName>Book_72px.c</FileName>
+              <FileName>chemical_72px.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\user\Book_72px.c</FilePath>
+              <FilePath>..\user\chemical_72px.c</FilePath>
             </File>
             <File>
               <FileName>laboratory_72px.c</FileName>
@@ -444,14 +439,24 @@
               <FilePath>..\user\laboratory_72px.c</FilePath>
             </File>
             <File>
-              <FileName>mobile_data_72px.c</FileName>
+              <FileName>process_running_72px.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\user\mobile_data_72px.c</FilePath>
+              <FilePath>..\user\process_running_72px.c</FilePath>
             </File>
             <File>
-              <FileName>setting_72px.c</FileName>
+              <FileName>view_72px.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\user\setting_72px.c</FilePath>
+              <FilePath>..\user\view_72px.c</FilePath>
+            </File>
+            <File>
+              <FileName>Consolas_24.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\Consolas_24.c</FilePath>
+            </File>
+            <File>
+              <FileName>Arial_32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\Arial_32.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -6,6 +6,7 @@
 #include "delay.h"
 
 extern const GUI_FONT GUI_FontHZ_Consolas;
+extern const GUI_FONT GUI_FontHZ_Arial;
 
 #define CMD_RDY 0X90
 #define CMD_RDX	0XD0
@@ -188,7 +189,7 @@ static void touch_trans(GUI_PID_STATE *state, struct touch *ptouch)
 static void _disp_calibrate_fail(void)
 {
 	TOUCH_DBG_PRINT("calibrate fail, retry\r\n");
-	GUI_DispStringAt("校准失败,自动重新开始校准流程", 280, 240);
+	GUI_DispStringHCenterAt("校准失败,自动重新开始校准流程", 400, 240);
 	delay_ms(2000); // for Visual effects
 }
 
@@ -199,16 +200,20 @@ void touch_calibrate(void)
 	int32_t _precision;
 	GUI_PID_STATE state;
 
-	GUI_SetFont(&GUI_FontHZ_Consolas);
+	
 do_calc:
 	TOUCH_DBG_PRINT("do touch calibrate...\r\n");
 	GUI_SetBkColor(GUI_DARKGRAY);
-	GUI_SetColor(GUI_BLUE);
-	GUI_DispStringAt("校准触摸屏", 360, 5);
-	GUI_SetColor(GUI_RED);
 	GUI_Clear();
-	GUI_DispStringAt("请依次点击红色圆点", 328, 300);	
+
+	GUI_SetColor(GUI_BLUE);
+	GUI_SetFont(&GUI_FontHZ_Arial);
+	GUI_DispStringHCenterAt("校准触摸屏", 400, 10);
 	
+	GUI_SetColor(GUI_WHITE);
+	GUI_SetFont(&GUI_FontHZ_Consolas);
+	GUI_DispStringHCenterAt("请依次点击红色圆点", 400, 350);	
+	GUI_SetColor(GUI_RED);
 	/* draw p1 */
 	GUI_FillCircle(ptouch->point1.pos.x, ptouch->point1.pos.y, 4);
 	TOUCH_DBG_PRINT("draw point1(%d,%d), waitting for press.\r\n",
@@ -302,7 +307,7 @@ do_calc:
 		goto do_calc;
 	}
 
-	GUI_DispStringAt("校准成功", 370, 240);
+	GUI_DispStringHCenterAt("校准成功", 400, 240);
 	//GUI_Clear();
 	TOUCH_DBG_PRINT("calibrate succeed, correct=(%d,%d)\r\n",
 		ptouch->correct.x, ptouch->correct.y);
