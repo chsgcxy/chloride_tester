@@ -282,8 +282,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\user\pic_measure_72px.c</PathWithFileName>
-      <FilenameWithoutPath>pic_measure_72px.c</FilenameWithoutPath>
+      <PathWithFileName>..\user\Book_72px.c</PathWithFileName>
+      <FilenameWithoutPath>Book_72px.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -295,8 +295,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\user\pic_setting_72px.c</PathWithFileName>
-      <FilenameWithoutPath>pic_setting_72px.c</FilenameWithoutPath>
+      <PathWithFileName>..\user\laboratory_72px.c</PathWithFileName>
+      <FilenameWithoutPath>laboratory_72px.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -308,8 +308,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\user\pic_usb_disk_72px.c</PathWithFileName>
-      <FilenameWithoutPath>pic_usb_disk_72px.c</FilenameWithoutPath>
+      <PathWithFileName>..\user\mobile_data_72px.c</PathWithFileName>
+      <FilenameWithoutPath>mobile_data_72px.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -321,8 +321,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\user\pic_view_72px.c</PathWithFileName>
-      <FilenameWithoutPath>pic_view_72px.c</FilenameWithoutPath>
+      <PathWithFileName>..\user\setting_72px.c</PathWithFileName>
+      <FilenameWithoutPath>setting_72px.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

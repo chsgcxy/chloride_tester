@@ -43,9 +43,9 @@
 #define ID_TEXT_SETTING    (GUI_ID_USER + 0x09)
 
 // USER START (Optionally insert additional defines)
-extern const GUI_BITMAP bmpic_measure_72px;
-extern const GUI_BITMAP bmpic_setting_72px;
-extern const GUI_BITMAP bmpic_usb_disk_72px;
+extern const GUI_BITMAP bmlaboratory_72px;
+extern const GUI_BITMAP bmprocess_running_72px;
+extern const GUI_BITMAP bmchemical_72px;
 extern const GUI_BITMAP bmpic_view_72px;
 
 extern const GUI_FONT GUI_FontHZ_Consolas;
@@ -58,15 +58,15 @@ extern const GUI_FONT GUI_FontHZ_Consolas;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0 },
 
-    { IMAGE_CreateIndirect, "measure", ID_IMAGE_MEASURE, 102, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "view", ID_IMAGE_VIEW, 276, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "usb", ID_IMAGE_USB, 450, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "block", ID_IMAGE_MEASURE, 102, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "test", ID_IMAGE_VIEW, 276, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "data", ID_IMAGE_USB, 450, 140, 72, 72, 0, 0, 0 },
     { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 624, 140, 72, 72, 0, 0, 0 },
 
-    { TEXT_CreateIndirect, "measure", ID_TEXT_MEASURE, 113, 225, 45, 25, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "view", ID_TEXT_VIEW, 289, 225, 45, 25, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "usb", ID_TEXT_USB, 461, 225, 45, 25, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 635, 225, 45, 25, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "block", ID_TEXT_MEASURE, 87, 225, 100, 25, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "test", ID_TEXT_VIEW, 250, 225, 120, 25, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "data", ID_TEXT_USB, 435, 225, 100, 25, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 609, 225, 100, 25, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -92,43 +92,43 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         FRAMEWIN_SetTitleHeight(hItem, 50);
         FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
         FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Consolas);
-        FRAMEWIN_SetText(hItem, "主屏幕");
+        FRAMEWIN_SetText(hItem, "全自动氯离子检测仪");
         //
         // Initialization of 'Image'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_MEASURE);
-        IMAGE_SetBitmap(hItem, &bmpic_measure_72px);
+        IMAGE_SetBitmap(hItem, &bmchemical_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MEASURE);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetText(hItem, "测量");
+        TEXT_SetText(hItem, "空白实验");
         //
         // Initialization of 'Image'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_VIEW);
-        IMAGE_SetBitmap(hItem, &bmpic_view_72px);
+        IMAGE_SetBitmap(hItem, &bmlaboratory_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_VIEW);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetText(hItem, "数据");
+        TEXT_SetText(hItem, "氯离子检测");
         //
         // Initialization of 'Image'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_USB);
-        IMAGE_SetBitmap(hItem, &bmpic_usb_disk_72px);
+        IMAGE_SetBitmap(hItem, &bmpic_view_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_USB);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetText(hItem, "U盘");
+        TEXT_SetText(hItem, "数据处理");
         //
         // Initialization of 'Image'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_SETTING);
-        IMAGE_SetBitmap(hItem, &bmpic_setting_72px);
+        IMAGE_SetBitmap(hItem, &bmprocess_running_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SETTING);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetText(hItem, "设置");
+        TEXT_SetText(hItem, "系统设置");
 
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

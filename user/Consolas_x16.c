@@ -14,6 +14,7 @@
 #ifndef GUI_FLASH 
 	#define GUI_FLASH 
 #endif 
+extern GUI_FLASH const GUI_FONT GUI_FontHZ_Consolas;
 
 GUI_FLASH  const unsigned char acFontHZConsolas_0020[48] = {	/*   x20*/
 ________,________,
@@ -2607,33 +2608,6 @@ ________,
 ________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b0b2[72] = {	/* �� 0xb0b2*/
-________,________,________,
-________,________,________,
-________,__XXX___,________,
-________,___XXX__,________,
-____XX__,___XXX__,________,
-____XXXX,XXXXXXXX,XXXXXX__,
-___XXXXX,XXXXXXXX,XXXXXX__,
-__XXXX__,_XXX____,__XX____,
-___XX___,_XXX____,__X_____,
-________,_XX_____,____XX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_______X,XX_____X,XX______,
-_______X,X_____XX,X_______,
-______XX,X____XXX,________,
-______XX,XXXX_XXX,________,
-________,__XXXXXX,________,
-________,__XXXXXX,XXX_____,
-________,XXXXX___,XXXXX___,
-______XX,XXX_____,__XXXX__,
-_XXXXXXX,________,___XXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_b0b4[72] = {	/* �� 0xb0b4*/
 ________,________,________,
 ________,________,________,
@@ -2715,87 +2689,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b0e5[72] = {	/* �� 0xb0e5*/
-________,________,________,
-________,________,________,
-____XXX_,________,__XX____,
-____XXX_,_______X,XXXXX___,
-____XXX_,__XXXXXX,XX______,
-____XXX_,__XXX___,________,
-_XXXXXXX,XXXXX___,________,
-_XXXXXXX,XXXXX___,___XX___,
-____XXX_,__XXXXXX,XXXXXX__,
-___XXXX_,__XXXX__,__XXX___,
-___XXXXX,X_XXXXX_,_XXX____,
-___XXXXX,XXXXXXX_,_XXX____,
-__XXXXXX,XXXX_XX_,_XX_____,
-__XXXXX_,X_XX_XXX,XXX_____,
-_XXXXXX_,_XXX__XX,XX______,
-_XX_XXX_,_XXX__XX,XX______,
-XX__XXX_,_XXX__XX,XX______,
-____XXX_,XXX__XXX,XXX_____,
-____XXX_,XX_XXXX_,_XXXX___,
-____XXXX,XXXXX___,__XXXXXX,
-____XXXX,XX______,___XXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b0e8[72] = {	/* �� 0xb0e8*/
-________,________,________,
-________,________,________,
-_____XXX,______XX,X_______,
-_____XXX,______XX,X_______,
-_____XX_,_XX___XX,X_XX____,
-_____XX_,__XXX_XX,X_XXX___,
-_____XX_,XX_XXXXX,XXXX____,
-_XXXXXXX,XXXXXXXX,XXX_____,
-_____XX_,____X_XX,XX__X___,
-_____XX_,_XXXXXXX,XXXXXX__,
-_____XXX,XXXX__XX,X_______,
-_____XXX,X_____XX,X_______,
-__XXXXX_,______XX,X____X__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_XXX_XX_,XX____XX,X_______,
-_____XX_,______XX,X_______,
-_____XX_,______XX,X_______,
-_____XX_,______XX,X_______,
-_____XX_,______XX,X_______,
-__XXXXX_,______XX,X_______,
-____XX__,______XX,X_______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b0eb[72] = {	/* �� 0xb0eb*/
-________,________,________,
-________,________,________,
-________,__XXX___,________,
-________,__XXX___,_XX_____,
-____XXX_,__XXX___,XXXX____,
-_____XXX,__XXX___,XXX_____,
-______XX,X_XXX__X,XX______,
-______XX,X_XXX_XX,X_______,
-_______X,X_XXXXXX,___X____,
-__XXXXXX,XXXXXXXX,XXXXX___,
-___XX___,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,____XX__,
-________,__XXX___,___XXXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_b1a3[72] = {	/* �� 0xb1a3*/
 ________,________,________,
 ________,________,________,
@@ -2823,109 +2716,55 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b1e6[72] = {	/* �� 0xb1e6*/
+GUI_FLASH  const unsigned char acFontHZConsolas_b1a8[72] = {	/* �� 0xb1a8*/
 ________,________,________,
 ________,________,________,
-____XX__,____XXX_,XXX_____,
-____XXX_,____XX__,_XX_____,
-_____X_X,XX__XX__,_XX_XX__,
-_XXXXXXX,XXX_XXXX,XXXXXXX_,
-__XX__XX,X___XX_X,X__XX___,
-__XXX_XX,X___XX_X,XXXXX___,
-___XXXXX,__XXXX_X,XXXX____,
-___XXXXX,X_XXXX__,X_XX_X__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-____XXX_,_XXXXX__,_XXX____,
-____XXX_,___XXX__,_XXX____,
-____XXXX,X__XXX__,_XXXXX__,
-_XXXXXXX,XX_XXXXX,XXXXXXX_,
-____XXX_,___XX___,_XXX____,
-____XX__,__XXX___,_XXX____,
-___XXX__,_XXX____,_XXX____,
-__XXX___,_XX_____,_XXX____,
-__XX___X,XX______,_XXX____,
-XXX___XX,X_______,_XXX____,
+_____XXX,__XX____,__XX____,
+_____XXX,__XXXXXX,XXXXX___,
+_____XX_,__XXX___,_XXX____,
+_____XX_,__XXX___,_XXX____,
+_XXXXXXX,XXXXX___,_XXX____,
+_XXXXXXX,XXXXX_XX,XXXX____,
+_____XX_,__XXX__X,XXX_____,
+_____XX_,__XXX___,XX_X____,
+_____XXX,XXXXXXXX,XXXXXX__,
+____XXXX,X_XXXXX_,__XXX___,
+XXXXXXX_,__XXXXXX,_XXX____,
+_XXX_XX_,__XXX_XX,_XXX____,
+_____XX_,__XXX_XX,XXX_____,
+_____XX_,__XXX__X,XX______,
+_____XX_,__XXX__X,XXX_____,
+_____XX_,__XXX_XX,XXXXX___,
+_____XX_,__XXXXX_,__XXXXXX,
+_XXXXXX_,__XXXX__,____XX__,
+___XXXX_,__XXX___,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b1ed[72] = {	/* �� 0xb1ed*/
+GUI_FLASH  const unsigned char acFontHZConsolas_b1e4[72] = {	/* �� 0xb1e4*/
 ________,________,________,
 ________,________,________,
-________,__XXXX__,________,
-________,__XXX___,___X____,
-___XXXXX,XXXXXXXX,XXXXXX__,
-___XXXXX,XXXXXXXX,XXXXX___,
-________,__XXX___,_XX_____,
-____XXXX,XXXXXXXX,XXXX____,
 ________,__XXX___,________,
-________,__XXX___,___XXX__,
+________,__XXXX__,____XX__,
 _XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,_XXXX___,_XXX____,
-________,XXX_XX__,XXXXX___,
-_______X,XX__XX_X,XXX_____,
-_____XXX,X____XXX,X_______,
-____XXXX,X____XXX,________,
-__XXXXXX,X_____XX,XX______,
-XXX___XX,X___XX_X,XXX_____,
-______XX,XXXXX___,XXXXXXX_,
-______XX,XXX_____,__XXXX__,
-_______X,XX______,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b2b9[72] = {	/* �� 0xb2b9*/
-________,________,________,
-________,________,________,
-_____XX_,______XX,X_______,
-_____XXX,______XX,X_______,
-______XX,X_____XX,X_______,
-______XX,_XX___XX,X_______,
-__XXXXXX,XXXX__XX,X_______,
-________,XXX___XX,X_______,
-_______X,XX____XX,X_______,
-______XX,X_XX__XX,XXX_____,
-_____XXX,_XXX__XX,XXXXX___,
-____XXXX,XXX___XX,X_XXXX__,
-___XXXXX,XX____XX,X__XXXX_,
-__XXX_XX,XXXX__XX,X___XXX_,
-XXX___XX,_XXX__XX,X_______,
-______XX,__XX__XX,X_______,
-______XX,______XX,X_______,
-______XX,______XX,X_______,
-______XX,______XX,X_______,
-______XX,______XX,X_______,
-______XX,______XX,X_______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b2bb[72] = {	/* �� 0xb2bb*/
-________,________,________,
-________,________,________,
-________,________,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,___XXX__,________,
-________,__XXXX__,________,
-________,__XXX___,________,
-________,_XXXXX__,________,
+__XXXXXX,XXXXXXXX,XXXXXXX_,
+_____XX_,XXX__XXX,________,
+_____XXX,XXX__XXX,XXX_____,
+____XXX_,XXX__XXX,_XXXX___,
+___XXX__,XXX__XXX,___XXX__,
+__XXX___,XXX__XXX,____XXX_,
+_XXXXXXX,XXXXXXXX,XXX__XX_,
+XX__XXXX,XXXXXXXX,XXX_____,
+________,XX_____X,XX______,
+________,_XX__XXX,X_______,
+________,__XXXXXX,________,
+________,__XXXXX_,________,
 ________,_XXXXXXX,________,
-________,XXXXX__X,XX______,
-_______X,XXXXX___,XXX_____,
-______XX,X_XXX___,_XXXX___,
-_____XXX,__XXX___,__XXXX__,
-____XXX_,__XXX___,___XXXX_,
-__XXX___,__XXX___,____XXX_,
-_XXX____,__XXX___,_____X__,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
+_______X,XXXX_XXX,XX______,
+____XXXX,X______X,XXXXXXXX,
+_XXXXX__,________,__XXXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -2958,33 +2797,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b2cb[72] = {	/* �� 0xb2cb*/
-________,________,________,
-________,________,________,
-_______X,XXX__XXX,________,
-_______X,XX___XXX,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_______X,XX___XXX,________,
-_______X,XX___XXX,XXXX____,
-________,XXXXXXXX,XXXX____,
-___XXXXX,XXXXX___,_XX_____,
-____XX__,__XXX___,XXXX____,
-_____XXX,___XXX__,XXX_____,
-_____XXX,___XXX_X,XX______,
-______XX,___XXXXX,X___XX__,
-XXXXXXXX,XXXXXXXX,XXXXXXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,XXXXXXXX,________,
-_______X,XX_XX_XX,X_______,
-_____XXX,X__XX__X,XXX_____,
-____XXX_,___XX___,XXXXXXX_,
-__XXXX__,___XX___,__XXXXX_,
-_XX_____,___XX___,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_b2ce[72] = {	/* �� 0xb2ce*/
 ________,________,________,
 ________,________,________,
@@ -3012,6 +2824,33 @@ ________,________,________,
 ________,________,________,
 };
 
+GUI_FLASH  const unsigned char acFontHZConsolas_b2d9[72] = {	/* �� 0xb2d9*/
+________,________,________,
+________,________,________,
+____XXX_,__XX____,_XX_____,
+____XX__,__XXXXXX,XXXX____,
+____XX__,__XXX___,XXX_____,
+____XX__,__XXX___,XXX_____,
+_XXXXXXX,X_XXXXXX,XXX_____,
+_XXXXXXX,X_______,____X___,
+____XX__,XXXXXXXX,XXXXXX__,
+____XX__,XX__XX_X,XX_XXX__,
+____XXXX,XX__XX_X,XX_XXX__,
+__XXXXX_,XXXXXX_X,XXXXXX__,
+XXXXXX__,XX__XXXX,XX_XX___,
+_XX_XX__,_____XXX,____XX__,
+____XXXX,XXXXXXXX,XXXXXXX_,
+____XX__,___XXXXX,XX______,
+____XX__,__XXXXXX,XXX_____,
+____XX__,_XXX_XXX,_XXXX___,
+____XX__,XXX__XXX,__XXXXX_,
+_XXXXXXX,X____XXX,___XXX__,
+__XXXX__,_____XXX,________,
+________,________,________,
+________,________,________,
+________,________,________,
+};
+
 GUI_FLASH  const unsigned char acFontHZConsolas_b2e2[72] = {	/* �� 0xb2e2*/
 ________,________,________,
 ________,________,________,
@@ -3034,168 +2873,6 @@ __XXX___,XXX_XXX_,___XXX__,
 __XXX__X,XX___XXX,___XXX__,
 __XXX_XX,X____XXX,XXXXXX__,
 ____XXX_,________,__XXX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b2e5[72] = {	/* �� 0xb2e5*/
-________,________,________,
-________,________,________,
-____XXX_,________,__XX____,
-____XXX_,______XX,XXXXX___,
-____XXX_,_XXXXXXX,XX______,
-____XXX_,______XX,X_______,
-XXXXXXXX,X_____XX,X____X__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-____XXX_,______XX,X_______,
-____XXXX,XX__XXXX,X___X___,
-____XXXX,XXXXXXXX,XXXXXXX_,
-___XXXX_,_XX___XX,X__XXX__,
-_XXXXXX_,_XX___XX,X__XXX__,
-_XXXXXX_,_XX_XXXX,X__XXX__,
-_XX_XXX_,_XXXXXXX,XXXXXX__,
-____XXX_,_XX___XX,X__XXX__,
-____XXX_,_XX___XX,X__XXX__,
-____XXX_,_XX___XX,X__XXX__,
-____XXX_,_XXXXXXX,XXXXXX__,
-_XXXXXX_,_XX_____,___XXX__,
-___XXX__,_XX_____,___XX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b2ee[72] = {	/* �� 0xb2ee*/
-________,________,________,
-________,________,________,
-_____XXX,X______X,XX______,
-_______X,XX_____X,XX______,
-_______X,XX____XX,X__XX___,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-___XXXXX,XXXXXXXX,XXXXXX__,
-________,__XX____,__XX____,
-___XXXXX,XXXXXXXX,XXXXX___,
-____XX__,_XXX____,________,
-________,_XX_____,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,XX______,________,
-_______X,XX______,________,
-______XX,XXXXXXXX,XXXX____,
-_____XXX,XXXXXXXX,XXXXX___,
-____XXX_,____XXX_,________,
-___XXX__,____XXX_,________,
-_XXX____,____XXX_,____XX__,
-_XX_XXXX,XXXXXXXX,XXXXXXX_,
-_____XX_,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b2fa[72] = {	/* �� 0xb2fa*/
-________,________,________,
-________,________,________,
-________,__XXX___,________,
-________,___XXX__,________,
-________,___XXX__,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_______X,X______X,XX______,
-_______X,XX____XX,XX______,
-________,XXX___XX,X_______,
-___XX___,XXX__XXX,___XXX__,
-___XXXXX,XXXXXXXX,XXXXXXX_,
-___XXX__,________,________,
-___XXX__,________,________,
-___XXX__,________,________,
-___XXX__,________,________,
-___XXX__,________,________,
-___XX___,________,________,
-__XXX___,________,________,
-__XX____,________,________,
-_XXX____,________,________,
-_XX_____,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b3a3[72] = {	/* �� 0xb3a3*/
-________,________,________,
-________,________,________,
-_____XX_,___XXX__,XX______,
-______XX,X__XX__X,XXX_____,
-______XX,XX_XX__X,X_______,
-___XX__X,X__XX_XX,____XX__,
-__XXXXXX,XXXXXXXX,XXXXXXX_,
-__XXX___,________,___XXX__,
-_XXX__XX,XXXXXXXX,XX_XX___,
-______XX,X______X,XX______,
-______XX,X______X,XX______,
-______XX,XXXXXXXX,XX______,
-______XX,X__XX__X,X_______,
-____XXXX,XXXXXXXX,XXXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXX_,___XX___,_XXX____,
-____XXX_,___XX___,_XXX____,
-____XXX_,___XX__X,_XXX____,
-____XXX_,___XX__X,XXXX____,
-____XXX_,___XX___,XXX_____,
-________,___XX___,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b3c6[72] = {	/* �� 0xb3c6*/
-________,________,________,
-________,________,________,
-________,XX___XXX,________,
-_____XXX,XXX_XXXX,________,
-_XXXXXXX,____XXX_,________,
-_____XXX,____XXX_,____XX__,
-_____XXX,___XXXXX,XXXXXXX_,
-_____XXX,XX_XX__X,___XXX__,
-_XXXXXXX,XXXXX__X,XX_XX___,
-____XXXX,__XX___X,X_______,
-____XXXX,XXX_XX_X,X_______,
-___XXXXX,XX__XXXX,XXX_____,
-___XXXXX,XXXXXX_X,X_XX____,
-__XXXXXX,XXXXXX_X,X_XXX___,
-__XX_XXX,__XXX__X,X__XXX__,
-_XX__XXX,__XX___X,X___XXX_,
-XXX__XXX,_XXX___X,X___XXX_,
-_____XXX,XXX____X,X___XXX_,
-_____XXX,____XX_X,X_______,
-_____XXX,____XXXX,X_______,
-_____XX_,______XX,X_______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b3c8[72] = {	/* �� 0xb3c8*/
-________,________,________,
-________,________,________,
-____XXX_,_____XXX,__XX____,
-____XX__,XXXXXXXX,_XXXX___,
-____XX__,XX__XXXX,XXX_X___,
-____XX_X,XXXXXX_X,XX_XXXX_,
-_XXXXXXX,XXXXXX_X,XXXXX___,
-____XX__,_XXXX___,XXX_____,
-___XXXXX,__XX___X,XXXX____,
-___XXXXX,XXXXXXXX,XXXXXX__,
-___XXX_X,XXX_____,___XXXXX,
-__XXXX_X,XXXXXXXX,XXXXXX__,
-__XXXXXX,XXXX____,_XXX____,
-__XXXX__,_XXX____,_XXX____,
-_XX_XX__,_XXXXXXX,XXXX____,
-XXX_XX__,_XXXXXXX,XXX_____,
-____XX__,__XXX___,XXX_____,
-____XX__,___XXX__,XXX_____,
-____XXX_,___XXX_X,XX__XX__,
-____XXXX,XXXXXXXX,XXXXXXX_,
-____XXXX,X_______,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -3309,28 +2986,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b4ce[72] = {	/* �� 0xb4ce*/
+GUI_FLASH  const unsigned char acFontHZConsolas_b4a6[72] = {	/* �� 0xb4a6*/
 ________,________,________,
 ________,________,________,
-________,____XXX_,________,
-__XXX___,___XXXX_,________,
-___XXX__,___XXX__,________,
-____XXXX,X__XXX__,________,
-____XXXX,X_XXXXXX,XXXXXX__,
-_______X,X_XXXXXX,XXXXXXX_,
-______XX,_XXX_XXX,__XXX___,
-______XX,_XX__XXX,__XX____,
-_____XX_,XX___XXX,________,
-____XXXX,XX___XXX,X_______,
-____XX_X,_____XXX,X_______,
-_XXXXX__,____XXXX,X_______,
-__XXXX__,____XXXX,XX______,
-___XXX__,___XXX__,XX______,
-___XXX__,___XXX__,XXX_____,
-___XXX__,__XXX___,_XXX____,
-___XXX__,_XXX____,__XXXX__,
-___XXX_X,XX______,___XXXXX,
-_____XXX,X_______,____XX__,
+______X_,______XX,X_______,
+_____XXX,X_____XX,XX______,
+_____XXX,______XX,X_______,
+_____XXX,______XX,X_______,
+_____XX_,__XXX_XX,X_______,
+____XXXX,XXXXXXXX,X_______,
+____XXX_,__XXX_XX,XXXX____,
+____XX__,__XX__XX,X_XXXX__,
+___XXXX_,_XXX__XX,X__XXXX_,
+___XXXX_,_XXX__XX,X___XXX_,
+__XXXXXX,_XX___XX,X_______,
+__XX__XX,XXX___XX,X_______,
+_XX___XX,XXX___XX,X_______,
+_______X,XX____XX,X_______,
+______XX,XXX___XX,X_______,
+_____XXX,XXXXX_XX,________,
+____XXX_,__XXXXXX,XXXXXXXX,
+__XXXX__,____XXXX,XXXXXXX_,
+_XX_____,________,___XX___,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -3363,82 +3040,55 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b4ed[72] = {	/* �� 0xb4ed*/
+GUI_FLASH  const unsigned char acFontHZConsolas_b4f2[72] = {	/* �� 0xb4f2*/
 ________,________,________,
 ________,________,________,
-____XX__,____XXX_,_XXX____,
-____XXX_,____XXX_,_XX_____,
-___XXXX_,____XXX_,_XX_____,
-___XXXXX,XXXXXXXX,XXXXXX__,
-___XXXXX,XXXXXXXX,XXXXXX__,
-__XXX___,____XXX_,_XX_____,
-__XX___X,X___XXX_,_XX_____,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_XX_XXX_,_XXXXXXX,XXXXXXX_,
-____XXX_,___X____,___XX___,
-____XXXX,XX_XXXXX,XXXXXX__,
-_XXXXXXX,XXXXXX__,__XXX___,
-____XXX_,___XXX__,__XXX___,
-____XXX_,___XXXXX,XXXXX___,
-____XXX_,___XXX__,__XXX___,
-____XXXX,XX_XXX__,__XXX___,
-____XXXX,___XXX__,__XXX___,
-____XXX_,___XXXXX,XXXXX___,
-________,___XX___,__XXX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b4f3[72] = {	/* �� 0xb4f3*/
-________,________,________,
-________,________,________,
-________,__XXXX__,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,____XX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-__XX____,__XXX___,________,
-________,__XXX___,________,
-________,__XXXX__,________,
-________,__XXXX__,________,
-________,_XXXXXX_,________,
-________,_XXX_XXX,________,
-________,_XX___XX,________,
-________,XXX___XX,X_______,
-_______X,XX_____X,XX______,
-______XX,X_______,XXXX____,
-_____XXX,________,_XXXXX__,
-___XXX__,________,__XXXXX_,
-_XXX____,________,____X___,
+_____XXX,________,________,
+_____XXX,________,________,
+_____XXX,__XXXXXX,XXXXXXX_,
+_____XXX,__XXXXXX,XXXXXXX_,
+_XXXXXXX,XXX____X,XX______,
+__XXXXXX,XXX____X,XX______,
+_____XXX,_______X,XX______,
+_____XXX,__XX___X,XX______,
+_____XXX,XXX____X,XX______,
+____XXXX,X______X,XX______,
+_XXXXXXX,_______X,XX______,
+_XXX_XXX,_______X,XX______,
+_____XXX,_______X,XX______,
+_____XXX,_______X,XX______,
+_____XXX,_______X,XX______,
+_____XXX,_______X,XX______,
+__XX_XXX,____XXXX,XX______,
+__XXXXXX,____XXXX,XX______,
+____XXX_,______XX,X_______,
 ________,________,________,
 ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b5a5[72] = {	/* �� 0xb5a5*/
+GUI_FLASH  const unsigned char acFontHZConsolas_b5b1[72] = {	/* �� 0xb5b1*/
 ________,________,________,
 ________,________,________,
-______XX,X______X,XX______,
-_______X,XX____XX,X_______,
-________,XXX__XXX,________,
-____XX__,XXX__XX_,_XXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXX_,__XXX___,_XXX____,
-____XXX_,__XXX___,_XXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXX_,__XXX___,_XXX____,
-____XXX_,__XXX___,_XXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXX_,__XXX___,_XXX____,
-____XX__,__XXX___,____XX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-__X_____,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
+________,__XXXX__,________,
+________,__XXXX__,_XX_____,
+___XXXX_,__XXX___,XXXX____,
+_____XXX,__XXX___,XXX_____,
+______XX,X_XXX__X,XX______,
+______XX,X_XXX_XX,X_______,
+________,__XXX_XX,___XX___,
+___XXXXX,XXXXXXXX,XXXXXX__,
+________,________,___XXX__,
+________,________,___XXX__,
+________,________,___XXX__,
+________,________,___XXX__,
+____XXXX,XXXXXXXX,XXXXXX__,
+________,________,___XXX__,
+________,________,___XXX__,
+________,________,___XXX__,
+__XXXXXX,XXXXXXXX,XXXXXX__,
+__XXXXXX,XXXXXXXX,XXXXXX__,
+________,________,___XXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -3471,60 +3121,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b5c4[72] = {	/* �� 0xb5c4*/
-________,________,________,
-________,________,________,
-_____XXX,X_____XX,X_______,
-_____XXX,______XX,X_______,
-_____XXX,_____XXX,________,
-__XX_XX_,_XX__XXX,____XX__,
-__XXXXXX,XXXX_XXX,XXXXXXX_,
-__XXX___,XXX_XXX_,___XXX__,
-__XXX___,XXXXXX__,___XXX__,
-__XXX___,XXXXX___,___XXX__,
-__XXX___,XXXX_XX_,___XXX__,
-__XXXXXX,XXX__XXX,___XXX__,
-__XXXXXX,XXX___XX,X__XXX__,
-__XXX___,XXX___XX,X__XXX__,
-__XXX___,XXX___XX,___XXX__,
-__XXX___,XXX_____,___XXX__,
-__XXX___,XXX_____,___XXX__,
-__XXX___,XXX_____,___XXX__,
-__XXXXXX,XXX___XX,XXXXX___,
-__XXX___,XXX____X,XXXXX___,
-__XX____,________,_XXX____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b5cd[72] = {	/* �� 0xb5cd*/
-________,________,________,
-________,________,________,
-_____XXX,X_______,__XX____,
-_____XXX,________,XXXXX___,
-____XXX_,_X__XXXX,XXXX____,
-____XXX_,XXXXXXXX,X_______,
-___XXX__,XXX___XX,X_______,
-___XXXX_,XXX___XX,X_______,
-__XXXX__,XXX___XX,X_______,
-__XXXX__,XXX___XX,X__XXX__,
-_XX_XX__,XXXXXXXX,XXXXXXX_,
-XX__XX__,XXX___XX,X_______,
-____XX__,XXX___XX,X_______,
-____XX__,XXX____X,X_______,
-____XX__,XXX____X,XX______,
-____XX__,XXX____X,XX___XX_,
-____XX__,XXX_XXX_,XXX__XX_,
-____XX__,XXXXXX__,_XXXXXX_,
-____XX__,XXXXXXX_,_XXXXXX_,
-____XX__,_XX__XXX,__XXXXX_,
-____XX__,______XX,_____XX_,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_b5ce[72] = {	/* �� 0xb5ce*/
 ________,________,________,
 ________,________,________,
@@ -3547,6 +3143,33 @@ ___XX__X,XX_XXXXX,XX_XXX__,
 __XXXX_X,XX_XX___,X__XXX__,
 __XXXX_X,XX_____X,XXXXX___,
 _______X,XX______,__XXX___,
+________,________,________,
+________,________,________,
+________,________,________,
+};
+
+GUI_FLASH  const unsigned char acFontHZConsolas_b5da[72] = {	/* �� 0xb5da*/
+________,________,________,
+________,________,________,
+_____XXX,______XX,X_______,
+____XXXX,__XX_XXX,X___XX__,
+____XXXX,XXXXXXXX,XXXXXXX_,
+___XXXXX,X___XXXX,XX______,
+__XXX__X,XX_XXX__,XXX_____,
+_XX____X,XXXXX___,XXXX____,
+____XXXX,XXXXXXXX,XXXXX___,
+________,___XXX__,_XXX____,
+____XXX_,___XXX__,_XXX____,
+____XXXX,XXXXXXXX,XXXX____,
+____XXX_,___XXX__,__XX____,
+____XX__,___XXX__,____XX__,
+___XXXXX,XXXXXXXX,XXXXXXX_,
+____X___,_XXXXX__,___XXX__,
+_______X,XXXXXX__,___XXX__,
+______XX,XX_XXX_X,XXXXX___,
+____XXXX,___XXX__,XXXXX___,
+__XXXX__,___XXX__,_XXX____,
+XXX_____,___XXX__,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -3579,33 +3202,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b5e5[72] = {	/* �� 0xb5e5*/
-________,________,________,
-________,________,________,
-_____XXX,_______X,X_______,
-_____XXX,_______X,XX______,
-_XXXXXXX,XXX_XX__,XX___X__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_____XXX,XX_XXX__,____XX__,
-__XXXXXX,XXXXXX__,___XX___,
-_____XXX,_XX_____,___XXX__,
-XXXXXXXX,XXXXXXXX,XXXXXXX_,
-__XX____,XX______,XX______,
-__XXXXXX,XXX_XX__,XX______,
-__XXX___,XXX_XXX_,XX_XXX__,
-__XXXXXX,XXX_XXX_,XXXXXX__,
-__XXX___,XXX_XXX_,XX______,
-__XXXXXX,XXX_XX__,XX______,
-__XXXXXX,XXXXXXX_,XX______,
-__XXX___,XXXXXXXX,XX______,
-__XXXXXX,XX_XX__X,XXXX____,
-__XXX_XX,XXXX____,XXXXXXX_,
-__XX___X,XXX_____,____XX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_b5e7[72] = {	/* �� 0xb5e7*/
 ________,________,________,
 ________,________,________,
@@ -3633,33 +3229,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b5f7[72] = {	/* �� 0xb5f7*/
-________,________,________,
-________,________,________,
-___XX___,________,________,
-____XXX_,_XXXXXXX,XXXXXX__,
-____XXXX,_XXX__XX,X__XXX__,
-_____XXX,_XXX__XX,X__XXX__,
-________,_XXXXXXX,XXXXXX__,
-________,_XXXXXXX,XXXXXX__,
-_XXXXXX_,_XXX__XX,X__XXX__,
-__XXXXX_,_XXXXXXX,XXXXXX__,
-____XXX_,_XXXXXXX,XXXXXX__,
-____XXX_,_XXXXX__,_X_XXX__,
-____XXX_,_XXXXXXX,XXXXXX__,
-____XXX_,_XXXXXX_,XXXXXX__,
-____XXX_,XXXXXXX_,XXXXXX__,
-____XXXX,XXX_XXXX,XXXXXX__,
-____XXXX,_XX_XXXX,XXXXXX__,
-____XXX_,XXX_XXX_,XX_XXX__,
-____XXX_,XX______,___XXX__,
-_______X,X_______,XXXXXX__,
-______XX,X_______,___XX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_b6a8[72] = {	/* �� 0xb6a8*/
 ________,________,________,
 ________,________,________,
@@ -3682,33 +3251,6 @@ ____XX_X,XX_XX___,________,
 ___XXX__,XXXXXX__,________,
 __XXX___,__XXXXXX,XXXXXXX_,
 _XXX____,______XX,XXXXX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b6aa[72] = {	/* �� 0xb6aa*/
-________,________,________,
-________,________,________,
-________,_______X,XXX_____,
-________,XXXXXXXX,XXXX____,
-____XXXX,XXXXXX__,________,
-________,___XXX__,________,
-________,___XXX__,__X_____,
-____XXXX,XXXXXXXX,XXXXX___,
-____XXX_,___XXX__,________,
-________,___XXX__,________,
-________,___XXX__,________,
-________,___XXX__,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,__XXXX__,________,
-________,_XXX____,________,
-________,XXX_____,________,
-_______X,XX_____X,XX______,
-______XX,X_______,_XXX____,
-____XXXX,_XXXXXXX,XXXXX___,
-____XXXX,XXXXXXXX,XXXXXX__,
-____XXXX,________,___XX___,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -3768,60 +3310,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b6cf[72] = {	/* �� 0xb6cf*/
-________,________,________,
-________,________,________,
-__XX___X,XX______,___XXX__,
-__XXX__X,XX___XX_,XXXXXXX_,
-__XXXX_X,XX_XXXXX,XXX_____,
-__XXXXXX,XXXXXXXX,________,
-__XXXXXX,XXXX_XXX,________,
-__XXXXXX,XXXX_XXX,________,
-__XXX__X,XXXXXXXX,____XX__,
-__XXXXXX,XXXXXXXX,XXXXXXXX,
-__XXX_XX,XX___XXX,__XXX___,
-__XXX_XX,XXXX_XXX,__XXX___,
-__XXX_XX,XXXXXXXX,__XXX___,
-__XXXXXX,XX_XXXXX,__XXX___,
-__XXXXXX,XX_XXXXX,__XXX___,
-__XXXX_X,XX___XXX,__XXX___,
-__XXX__X,XX___XX_,__XXX___,
-__XXX__X,XXXXXXX_,__XXX___,
-_XXXXXXX,XXXXXX__,__XXX___,
-________,__XXX___,__XXX___,
-________,_XXX____,__XX____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b6e0[72] = {	/* �� 0xb6e0*/
-________,________,________,
-________,________,________,
-________,___XXX__,________,
-________,_XXXX___,________,
-________,XXXXXXXX,XXXXX___,
-_______X,XXXXXXXX,XXXXX___,
-_____XXX,XXXX___X,XXX_____,
-___XXXX_,_XXX__XX,XX______,
-__XX____,__XXXXXX,________,
-________,__XXXXX_,________,
-_______X,XXXXXX__,________,
-___XXXXX,X_XXXXX_,________,
-__XXX___,_XXXXXXX,XXXXXX__,
-________,XXXX____,__XXXX__,
-______XX,XXX_____,_XXXX___,
-____XXXX,_XXX____,XXX_____,
-___XX___,__XXX_XX,XX______,
-________,__XXXXXX,X_______,
-________,__XXXXX_,________,
-______XX,XXXX____,________,
-_XXXXXXX,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_b7b5[72] = {	/* �� 0xb7b5*/
 ________,________,________,
 ________,________,________,
@@ -3849,190 +3337,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b7b6[72] = {	/* �� 0xb7b6*/
+GUI_FLASH  const unsigned char acFontHZConsolas_b8e6[72] = {	/* �� 0xb8e6*/
 ________,________,________,
 ________,________,________,
-_______X,XXX__XXX,________,
-_______X,XX___XXX,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-__XX___X,XX___XXX,________,
-_______X,XX___XXX,________,
-____XX_X,XX____X_,________,
-____XXXX,__XXXXXX,XXXX____,
-_____XXX,XXXXXXXX,XXXX____,
-_XXX__X_,XXXXX___,_XXX____,
-__XXX__X,X_XXX___,_XXX____,
-___XXXXX,X_XXX___,_XXX____,
-____X_XX,__XXX___,_XXX____,
-_____XXX,__XXX_XX,XXXX____,
-__XXXXX_,__XXX__X,XXX_XX__,
-___XXXX_,__XXX___,XX__XX__,
-____XXX_,__XXX___,____XX__,
-____XXX_,__XXXXXX,XXXXXXX_,
-____XXX_,___XXXXX,XXXXXX__,
-____XXX_,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b7bd[72] = {	/* �� 0xb7bd*/
-________,________,________,
-________,________,________,
-________,_XXX____,________,
-________,__XXXX__,________,
 ________,___XXX__,________,
-________,___XX___,____XXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXXX,
-________,_XXX____,________,
-________,_XXX____,________,
-________,_XXX____,_XX_____,
-________,_XXXXXXX,XXXX____,
-________,_XXX____,XXX_____,
-________,XXX_____,XXX_____,
-________,XXX_____,XXX_____,
-_______X,XX______,XXX_____,
-_______X,XX______,XXX_____,
-______XX,X_______,XXX_____,
-_____XXX,_______X,XX______,
-____XXX_,__XXX__X,XX______,
-__XXXX__,____XXXX,XX______,
-_XXX____,_____XXX,X_______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b7d6[72] = {	/* �� 0xb7d6*/
-________,________,________,
-________,________,________,
-________,XX___XXX,________,
-________,XXX__XXX,________,
-_______X,XX____XX,________,
-_______X,XX____XX,________,
-______XX,X______X,X_______,
-_____XXX,_______X,XX______,
-____XXX_,________,XXX_____,
-___XXX__,________,XXXXX___,
-__XXXXXX,XXXXXXXX,XXXXXXXX,
-_XXX____,_XXX___X,XX_XXX__,
-_X______,_XXX___X,XX______,
-________,XXX____X,XX______,
-________,XXX____X,XX______,
-________,XX_____X,XX______,
-_______X,XX_____X,XX______,
-______XX,X______X,XX______,
-_____XXX,___X__XX,X_______,
-____XXX_,___XXXXX,X_______,
-__XXX___,_____XXX,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b8c7[72] = {	/* �� 0xb8c7*/
-________,________,________,
-________,________,________,
-______XX,X_____XX,X_______,
-_______X,XXX___XX,X_______,
-________,XXX__XX_,__XX____,
-___XXXXX,XXXXXXXX,XXXXX___,
-________,___XX___,________,
-________,___XX___,__XX____,
-____XXXX,XXXXXXXX,XXXXX___,
-________,___XX___,________,
-________,___XX___,___XX___,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-________,________,________,
+_____XXX,X__XXX__,________,
+_____XXX,___XXX__,________,
+_____XXX,XXXXXXXX,XXXX____,
 ____XXXX,XXXXXXXX,XXXX____,
-____XXX_,XXX__XX_,_XXX____,
-____XXX_,XXX__XX_,_XXX____,
-____XXX_,XXX__XX_,_XXX____,
-____XXX_,XXX__XX_,_XXX____,
-____XXX_,XXX__XX_,_XXX____,
+___XXX__,___XXX__,________,
+__XXX___,___XXX__,________,
+________,___XXX__,___XXX__,
 _XXXXXXX,XXXXXXXX,XXXXXXX_,
-_XX_____,________,________,
 ________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b8c9[72] = {	/* �� 0xb8c9*/
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,__XX____,
-__XXXXXX,XXXXXXXX,XXXXX___,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,____XX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXXX,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b8df[72] = {	/* �� 0xb8df*/
-________,________,________,
-________,________,________,
-________,__XXX___,________,
-________,__XXX___,_____X__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-__XXXXXX,XXXXXXXX,XXXXXXX_,
-______XX,XXXXXXXX,XX______,
-______XX,XXXXXXXX,XX______,
-______XX,X______X,XX______,
-______XX,XXXXXXXX,XX______,
-______XX,X______X,XX______,
-___XXXXX,XXXXXXXX,XXXXXX__,
-___XXXXX,XXXXXXXX,XXXXXX__,
-___XX__X,XXXXXXXX,X__XXX__,
-___XX__X,XXXXXXXX,X__XXX__,
-___XX__X,XX____XX,X__XXX__,
-___XX__X,XX____XX,X__XXX__,
-___XX__X,XXXXXXXX,X__XXX__,
-___XX__X,XX____XX,___XXX__,
-___XX___,_______X,XXXXXX__,
-___XX___,________,__XXX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b8f6[72] = {	/* �� 0xb8f6*/
-________,________,________,
-________,___X____,________,
-________,__XXXX__,________,
-________,__XXX___,________,
-________,_XXXXX__,________,
-________,XXXX_XX_,________,
-________,XXX__XXX,________,
-_______X,XX_X__XX,XX______,
-______XX,X_XXXX_X,XXX_____,
-____XXXX,__XXX___,XXXXXX__,
-___XXX__,__XXX___,__XXXXXX,
-_XXX____,__XXX___,___XXX__,
-_X______,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
+_____XX_,________,_XX_____,
+_____XXX,XXXXXXXX,XXXX____,
+_____XXX,________,XXX_____,
+_____XXX,________,XXX_____,
+_____XXX,________,XXX_____,
+_____XXX,________,XXX_____,
+_____XXX,XXXXXXXX,XXX_____,
+_____XXX,XXXXXXXX,XXX_____,
+_____XXX,________,XXX_____,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -4065,60 +3391,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_b9d8[72] = {	/* �� 0xb9d8*/
-________,________,________,
-________,________,________,
-______XX,X______X,XX______,
-_______X,XX____XX,XX______,
-________,XXX___XX,X_______,
-________,XXX__XXX,________,
-________,_XX__XX_,__XXXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,___XXXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,__XXXXX_,________,
-________,_XXX_XX_,________,
-________,XXXX__XX,________,
-________,XXX___XX,X_______,
-______XX,XX_____X,XXX_____,
-_____XXX,________,XXXXX___,
-___XXXX_,________,_XXXXXXX,
-_XXX____,________,___XXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_b9dc[72] = {	/* �� 0xb9dc*/
-________,________,________,
-________,________,________,
-____XXXX,______XX,X_______,
-____XXX_,__XX_XXX,____XX__,
-___XXXXX,XXXXXXXX,XXXXXXX_,
-___XX_XX,X___XX__,XX______,
-__XX___X,X_XXX___,XXX_____,
-_XXX___X,X__XXX__,_XX_XX__,
-__XXXXXX,XXXXXXXX,XXXXXXX_,
-__XXX___,________,___XXXX_,
-_XXX_XXX,XXXXXXXX,XX_XX___,
-_____XXX,XXXXXXXX,XX______,
-_____XXX,_______X,XX______,
-_____XXX,XXXXXXXX,XX______,
-_____XXX,_______X,XX______,
-_____XXX,________,XX______,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,________,XXX_____,
-_____XXX,________,XXX_____,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,________,XXX_____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_b9fb[72] = {	/* �� 0xb9fb*/
 ________,________,________,
 ________,________,________,
@@ -4141,60 +3413,6 @@ ____XXXX,___XXX_X,XXXX____,
 ___XXX__,___XXX__,_XXXXXX_,
 _XXXX___,___XXX__,__XXXX__,
 ________,___XX___,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_baac[72] = {	/* �� 0xbaac*/
-________,________,________,
-________,________,________,
-________,__XXXX__,________,
-________,__XXXX__,________,
-________,_XXXXXX_,________,
-_______X,XXX__XXX,________,
-______XX,XXXXX_XX,XX______,
-_____XXX,___XXX__,XXXXXXX_,
-___XXXX_,___XXX__,_XXXXXX_,
-_XXXX___,____XX_X,X___X___,
-XX___XXX,XXXXXXXX,XX______,
-________,______XX,X_______,
-________,_____XXX,________,
-________,____XXX_,XX______,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,________,XX______,
-_____XXX,________,XX______,
-_____XXX,________,XX______,
-_____XXX,XXXXXXXX,XX______,
-_____XXX,XXXXXXXX,XX______,
-_____XXX,________,XXX_____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_bac4[72] = {	/* �� 0xbac4*/
-________,________,________,
-________,________,________,
-_____XXX,________,___XX___,
-_____XXX,________,_XXXXX__,
-_____XXX,_XX___XX,XXXX____,
-_XXXXXXX,XXXXXXXX,X_______,
-_____XXX,__XX__XX,X_______,
-_____XXX,XX____XX,X__XX___,
-__XXXXXX,XXX___XX,XXXXXX__,
-_____XXX,____XXXX,XXX_____,
-_XXXXXXX,XXXXXXXX,X_______,
-_XXXXXXX,XXX___XX,X___XX__,
-____XXXX,______XX,X_XXXXX_,
-____XXXX,X___XXXX,XXXX____,
-___XXXXX,XXXXXXXX,X_______,
-___XXXXX,XXX___XX,X____X__,
-__XXXXXX,_X____XX,X___XX__,
-_XXX_XXX,______XX,X___XXX_,
-XXX__XXX,______XX,X___XXX_,
-_____XXX,______XX,XXXXXXX_,
-_____XXX,________,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -4227,82 +3445,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_baf3[72] = {	/* �� 0xbaf3*/
+GUI_FLASH  const unsigned char acFontHZConsolas_bbb7[72] = {	/* �� 0xbbb7*/
 ________,________,________,
 ________,________,________,
-________,________,__XXX___,
-________,_____XXX,XXXXXX__,
-____XXXX,XXXXXXXX,X_______,
-____XXX_,________,________,
-____XXX_,________,________,
-____XXX_,________,___XXX__,
-____XXXX,XXXXXXXX,XXXXXXX_,
-____XXX_,________,________,
-____XXX_,________,________,
-____XXX_,X_______,__XX____,
-____XXX_,XXXXXXXX,XXXXX___,
-____XXX_,XXX_____,__XX____,
-____XXX_,XXX_____,__XX____,
-____XX__,XXX_____,__XX____,
-___XXX__,XXX_____,__XX____,
-___XX___,XXX_____,__XX____,
-__XXX___,XXXXXXXX,XXXX____,
-_XXX____,XXX_____,__XX____,
-_XX_____,XX______,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_bbaf[72] = {	/* �� 0xbbaf*/
-________,________,________,
-________,________,________,
-______XX,X___XXX_,________,
-______XX,X___XXX_,________,
-_____XXX,____XXX_,________,
-_____XXX,____XXX_,________,
-____XXX_,____XXX_,__XXX___,
-____XXX_,____XXX_,_XXXX___,
-___XXXXX,____XXX_,XXXX____,
-___XXXX_,____XXXX,XXX_____,
-__XXXXX_,____XXXX,XX______,
-_XXXXXX_,____XXXX,________,
-_XX_XXX_,___XXXX_,________,
-____XXX_,__XXXXX_,________,
-____XXX_,XXXXXXX_,____XX__,
-____XXXX,XX__XXX_,____XX__,
-____XXX_,____XXX_,____XX__,
-____XXX_,____XXX_,____XXX_,
-____XXX_,____XXX_,____XXX_,
-____XXX_,_____XXX,XXXXXXX_,
-____XXX_,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_bbc6[72] = {	/* �� 0xbbc6*/
-________,________,________,
-________,________,________,
-_______X,XXX___XX,X_______,
-_______X,XX____XX,X__XX___,
-___XXXXX,XXXXXXXX,XXXXXX__,
-____X__X,XX____XX,X_______,
-_______X,XX____XX,X___XX__,
-XXXXXXXX,XXXXXXXX,XXXXXXX_,
-_XXX____,___XX___,________,
-____XXX_,___XX___,_XXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXX_,___XX___,_XXX____,
-____XXX_,___XX___,_XXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXX_,___XX___,_XXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXXX,XXXXXXXX,XXXX____,
-_______X,XXX__XXX,XX______,
-_____XXX,X_______,XXXXX___,
-___XXXX_,________,_XXXXX__,
-_XXXX___,________,___XXX__,
+________,________,____XX__,
+_______X,XXXXXXXX,XXXXXXX_,
+_XXXXXXX,XXXXXXXX,XXXXXXX_,
+____XXX_,______XX,X_______,
+____XXX_,______XX,X_______,
+____XXX_,_____XXX,________,
+____XXXX,X____XXX,X_______,
+_XXXXXXX,XX__XXXX,X_______,
+____XXX_,____XXXX,XXX_____,
+____XXX_,___XXXXX,X_XXX___,
+____XXX_,__XXX_XX,X__XXX__,
+____XXXX,XXXX__XX,X__XXXX_,
+____XXXX,XXX___XX,X___XXX_,
+_XXXXXXX,XX____XX,X___XX__,
+_XXXX___,______XX,X_______,
+_XX_____,______XX,X_______,
+________,______XX,X_______,
+________,______XX,X_______,
+________,______XX,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -4335,33 +3499,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_bbee[72] = {	/* �� 0xbbee*/
-________,________,________,
-________,________,________,
-___XX___,________,__XX____,
-___XXXX_,_______X,XXXXX___,
-____XXX_,_XXXXXXX,XXXXX___,
-_____XX_,_X___XXX,________,
-________,_____XXX,________,
-_XX____X,X____XXX,________,
-_XXXX_XX,_____XXX,____XXX_,
-__XXX_XX,XXXXXXXX,XXXXXXXX,
-___XXXXX,_____XXX,________,
-_____XX_,_____XXX,________,
-_____XX_,XXX__XXX,__XXX___,
-____XXX_,XXXXXXXX,XXXXXX__,
-_X_XXX__,_XX_____,__XXX___,
-_XXXXX__,_XX_____,__XXX___,
-___XXX__,_XX_____,__XXX___,
-___XXX__,_XX_____,__XXX___,
-__XXXX__,_XXXXXXX,XXXXX___,
-__XXXX__,XXX_____,__XXX___,
-________,XXX_____,__XXX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_bbf7[72] = {	/* �� 0xbbf7*/
 ________,________,________,
 ________,________,________,
@@ -4384,33 +3521,6 @@ ____XX__,__XXX___,_XXX____,
 ___XXXXX,XXXXXXXX,XXXX____,
 ____XX__,________,_XXX____,
 ________,________,_XXX____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_bbfa[72] = {	/* �� 0xbbfa*/
-________,________,________,
-_____X__,________,________,
-____XXXX,________,________,
-____XXX_,___XX___,_XX_____,
-____XXX_,___XXXXX,XXXX____,
-____XXX_,___XXX__,XXX_____,
-____XXXX,XX_XXX__,XXX_____,
-_XXXXXXX,XXXXXX__,XXX_____,
-____XXX_,___XXX__,XXX_____,
-____XXX_,___XXX__,XXX_____,
-___XXXXX,XX_XXX__,XXX_____,
-___XXXXX,XXXXXX__,XXX_____,
-___XXXX_,XXXXX___,XXX_____,
-__XXXXX_,___XX___,XXX_____,
-__XXXXX_,__XXX___,XXX_____,
-_XX_XXX_,__XXX___,XXX__XX_,
-XXX_XXX_,__XX____,XXX__XX_,
-____XXX_,_XXX____,XXX__XX_,
-____XXX_,_XX_____,XXX_XXXX,
-____XXX_,XX______,_XXXXXX_,
-____XXXX,X_______,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -4443,33 +3553,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_bcbc[72] = {	/* �� 0xbcbc*/
-________,________,________,
-________,________,________,
-_____XXX,______XX,XX______,
-_____XXX,______XX,X_______,
-_____XXX,______XX,X_______,
-_____XXX,XX____XX,X___XX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_____XXX,______XX,X_______,
-_____XXX,______XX,X_______,
-_____XXX,______XX,X_______,
-_____XXX,XXXXXXXX,XXXXX___,
-___XXXXX,X__XXX__,__XXX___,
-_XXXXXXX,____XX__,__XX____,
-_XXX_XXX,____XX__,_XXX____,
-_____XXX,_____XX_,XXX_____,
-_____XXX,_____XXX,XXX_____,
-_____XXX,______XX,XX______,
-_____XXX,_____XXX,XX______,
-__X__XXX,___XXXX_,XXXX____,
-__XXXXX_,_XXXX___,_XXXXXXX,
-____XXXX,XXX_____,___XXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_bcc6[72] = {	/* �� 0xbcc6*/
 ________,________,________,
 ________,________,________,
@@ -4497,109 +3580,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_bccc[72] = {	/* �� 0xbccc*/
+GUI_FLASH  const unsigned char acFontHZConsolas_bcec[72] = {	/* �� 0xbcec*/
 ________,________,________,
 ________,________,________,
-_____XX_,_______X,XX______,
-____XXXX,_XXXX__X,XX______,
-____XXX_,_XXX___X,XX_XX___,
-___XXX__,_XXXXX_X,XX_XXX__,
-___XX__X,XXXXXXXX,XXXXX___,
-__XXX__X,XXXX_XXX,XXXX____,
-__XX__XX,XXXX_XXX,XXX_____,
-_XXXXXXX,_XXXXXXX,XXXXXX__,
-_XXX_XXX,_XXXXXXX,XXXXXXX_,
-____XXX_,_XXX__XX,XX______,
-___XXX__,_XXX__XX,XXXX____,
-__XXXXXX,XXXX_XXX,XXXXX___,
-__XXXXX_,_XXX_XXX,XX_XXX__,
-__XX____,_XXXXX_X,XX_XXX__,
-________,XXXXX__X,XX______,
-____XXXX,XXXX___X,XX______,
-_XXXXXX_,_XXX___X,XX__XX__,
-__XX____,_XXXXXXX,XXXXXXX_,
-________,_XX_____,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_bcd3[72] = {	/* �� 0xbcd3*/
-________,________,________,
-________,________,________,
-_____XXX,________,________,
-_____XXX,________,________,
-_____XXX,________,________,
-_____XXX,_____XX_,____XX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_____XXX,__XX_XXX,___XXX__,
-_____XXX,__XX_XXX,___XXX__,
-_____XXX,__XX_XXX,___XXX__,
-_____XX_,__XX_XXX,___XXX__,
-_____XX_,__XX_XXX,___XXX__,
-____XXX_,_XXX_XXX,___XXX__,
-____XXX_,_XXX_XXX,___XXX__,
-____XXX_,_XXX_XXX,___XXX__,
-____XX__,_XXX_XXX,___XXX__,
-___XXX__,_XXX_XXX,___XXX__,
-___XX___,_XXX_XXX,XXXXXX__,
-__XX_XXX,XXX__XXX,___XXX__,
-_XX____X,XX___XXX,___XXX__,
-XX______,_____XX_,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_bcfe[72] = {	/* �� 0xbcfe*/
-________,________,________,
-________,________,________,
-______XX,X_____XX,XX______,
-______XX,X_____XX,X_______,
-_____XXX,__XXX_XX,X_______,
-_____XXX,__XXX_XX,X_______,
-____XXX_,_XXX__XX,X__XX___,
-____XXX_,_XXXXXXX,XXXXXX__,
-___XXXX_,_XX___XX,X_______,
-__XXXXX_,XXX___XX,X_______,
-__XXXXX_,XX____XX,X_______,
-_XX_XXXX,X_____XX,X____X__,
-XX__XXXX,XXXXXXXX,XXXXXXX_,
-____XXX_,XX____XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_bdc1[72] = {	/* �� 0xbdc1*/
-________,________,________,
-________,________,________,
-____XXX_,_____XX_,__XXX___,
-____XXX_,__XXX_XX,__XXXX__,
-____XXX_,__XXX_XX,X_XX____,
-____XXX_,___XXXXX,XXXX____,
-_XXXXXXX,XXX_____,_XX_XXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-____XXX_,XXX_____,___XXX__,
-____XXX_,XXXXXXXX,XXXXX___,
-____XXXX,X_XX____,__XXX___,
-____XXXX,__XX_XXX,X_XX____,
-_XXXXXX_,__XX_XXX,__XX____,
-XXXXXXX_,__XX_XXX,__XX____,
-_XX_XXX_,__XX_XXX,X_XX____,
-____XXX_,__XX_XXX,XXXX____,
-____XXX_,____XXXX,XX___XX_,
-____XXX_,____XXXX,XX___XX_,
-____XXX_,___XXX_X,XX__XXX_,
-_XXXXXX_,_XXXX__X,XXXXXXX_,
-___XXX_X,XXX_____,XXXXXX__,
+____XXXX,_____XXX,X_______,
+____XXX_,_____XXX,________,
+____XXX_,____XXXX,X_______,
+____XXX_,____XXXX,XX______,
+_XXXXXXX,XX_XXX__,XXX_____,
+_XXXXXXX,XXXXX___,_XXXX___,
+____XXX_,_XXX____,__XXXXXX,
+___XXXXX,XXXXXXXX,XXXXXX__,
+___XXXXX,X_XXXXXX,XXXX____,
+___XXXXX,XX___X__,__XXX___,
+__XXXXXX,XX___XX_,__XXX___,
+__XXXXX_,_XXX_XXX,_XXX____,
+_XX_XXX_,__XX__XX,XXXX____,
+_XX_XXX_,__XXX_XX,XXXX____,
+____XXX_,__XXX_XX,_XX_____,
+____XXX_,__XXX___,XXX_____,
+____XXX_,________,XX__XX__,
+____XXXX,XXXXXXXX,XXXXXXX_,
+____XXX_,________,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -4627,33 +3629,6 @@ ____XXXX,X__XX___,___XX___,
 _XXXXXX_,___XXXXX,XXXXX___,
 _XXX____,___XX___,___XX___,
 ________,___XX___,___XX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_bead[72] = {	/* �� 0xbead*/
-________,________,________,
-________,________,________,
-_____XXX,________,________,
-_____XXX,_XXXXXXX,XXXX____,
-____XXX_,__X_____,XXX_____,
-____XX__,_______X,XX______,
-___XXX__,XXX____X,XX______,
-__XXX__X,XXX___XX,X_______,
-_XXX__XX,XX__XXXX,XXXX____,
-_XXXXXXX,X__XXX__,__XXXX__,
-_XX__XXX,_XXXX___,___XXXX_,
-____XXX_,XXX_____,____XX__,
-___XXX__,________,__XXX___,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-_XXXXXX_,______XX,X_______,
-__XX____,______XX,X_______,
-________,XXX___XX,X_______,
-___XXXXX,X_____XX,X_______,
-_XXXXX__,______XX,X___XXX_,
-_XXX___X,XXXXXXXX,XXXXXXX_,
-________,________,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -4713,33 +3688,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_bfc6[72] = {	/* �� 0xbfc6*/
-________,________,________,
-________,________,________,
-________,XXX_____,_XXXX___,
-_____XXX,XXXX____,_XXX____,
-_XXXXXXX,____XX__,_XXX____,
-______XX,____XXXX,_XXX____,
-______XX,_____XXX,_XXX____,
-______XX,_XX___XX,_XXX____,
-_XXXXXXX,XXXX____,_XXX____,
-_____XXX,____XX__,_XXX____,
-_____XXX,____XXX_,_XXX____,
-____XXXX,XXX__XXX,_XXX____,
-____XXXX,XXX__XXX,_XXXXXX_,
-___XXXXX,_XX_____,_XXXXXXX,
-__XXX_XX,___XXXXX,XXXX____,
-_XXX__XX,_XXXX___,_XXX____,
-XXX___XX,________,_XXX____,
-_____XXX,________,_XXX____,
-_____XXX,________,_XXX____,
-_____XXX,________,_XXX____,
-_____XXX,________,_XXX____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_bfd5[72] = {	/* �� 0xbfd5*/
 ________,________,________,
 ________,________,________,
@@ -4767,28 +3715,55 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_c0b6[72] = {	/* �� 0xc0b6*/
+GUI_FLASH  const unsigned char acFontHZConsolas_bfec[72] = {	/* �� 0xbfec*/
 ________,________,________,
 ________,________,________,
-_______X,XX____XX,X_______,
-_______X,XX____XX,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_______X,XX____XX,________,
-_______X,X___XXXX,________,
-___XX__X,XX__XXXX,__XX____,
-___XXXXX,XX__XXXX,XXXXX___,
-___XXX_X,XX_XXX__,________,
-___XXX_X,XX_XX_XX,XX______,
-___XXX_X,XXXXX__X,XXX_____,
-___XXX_X,XXXX____,_XXX____,
-____X__X,X_______,_XX_____,
+____XXX_,____XXXX,________,
+____XXX_,____XXX_,________,
+____XXX_,____XXX_,________,
+____XXX_,XXXXXXXX,XXXXX___,
+____XXX_,XXXXXXXX,XXXXX___,
+__XXXXXX,X___XXX_,__XXX___,
+__XXXXXX,XX__XXX_,__XXX___,
+_XXXXXXX,XX__XXX_,__XXX___,
+_XXXXXX_,____XXX_,__XXX___,
+_XX_XXX_,____XXX_,__XXXXX_,
+____XXXX,XXXXXXXX,XXXXXXXX,
+____XXX_,____XXXX,________,
+____XXX_,___XXX_X,X_______,
+____XXX_,___XXX_X,XX______,
+____XXX_,__XXX___,XX______,
+____XXX_,__XX____,XXXX____,
+____XXX_,_XXX____,_XXXX___,
+____XXXX,XX______,__XXXXXX,
+____XXXX,X_______,___XXX__,
+________,________,________,
+________,________,________,
+________,________,________,
+};
+
+GUI_FLASH  const unsigned char acFontHZConsolas_c0db[72] = {	/* �� 0xc0db*/
+________,________,________,
+________,________,________,
+____XX__,________,__XX____,
+____XXXX,XXXXXXXX,XXXXX___,
+____XXX_,___XXX__,__XX____,
 ____XXXX,XXXXXXXX,XXXX____,
-____XXX_,XXX_XXX_,XXX_____,
-____XXX_,XXX_XXX_,XXX_____,
-____XXX_,XXX_XXX_,XXX_____,
-____XXX_,XXX_XXX_,XXX_XX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,________,________,
+____XXX_,___XXX__,__XX____,
+____XXX_,___XXX__,__XX____,
+____XXXX,XXXXXXXX,XXXXX___,
+____XXX_,_XXXXX__,________,
+_______X,XXX___XX,X_______,
+____XXXX,XXXXXXXX,X_______,
+_____XXX,XXXXXX__,XX______,
+_______X,XXXX____,XXXX____,
+____XXXX,XXXXXXXX,XXXXX___,
+____XXXX,XXXXXX__,__XXX___,
+_______X,XX_XXX_X,XX_X____,
+______XX,XX_XXX__,XXXXX___,
+____XXXX,XXXXXX__,__XXXX__,
+__XXXX__,_XXXXX__,___XXX__,
+_XX_____,__XXX___,____X___,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -4821,28 +3796,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_c1aa[72] = {	/* �� 0xc1aa*/
+GUI_FLASH  const unsigned char acFontHZConsolas_c0ed[72] = {	/* �� 0xc0ed*/
 ________,________,________,
 ________,________,________,
-________,____XX__,__XXX___,
-_XXXXXXX,XXXXXXX_,_XXXX___,
-_XXXXXXX,XXXXXXXX,_XXX____,
-__XXX__X,XX___XXX,_XX_____,
-__XXX__X,XX___XX_,XX_XXX__,
-__XXX__X,XXXXXXXX,XXXXXXX_,
-__XXXXXX,XX____XX,X_______,
-__XXX__X,XX____XX,X_______,
-__XXX__X,XX____XX,X_______,
-__XXX__X,XX____XX,X___XXX_,
-__XXXXXX,XXXXXXXX,XXXXXXX_,
-__XXX__X,XX____XX,XX______,
-__XXX__X,XXXX__XX,XX______,
-__XXX_XX,XXX___XX,_XX_____,
-_XXXXXXX,XX___XXX,_XXX____,
-_XXXX__X,XX__XXX_,__XXX___,
-__X____X,XX_XXX__,__XXXX__,
-_______X,XXXXX___,___XXXXX,
-_______X,XXXX____,____XX__,
+________,________,________,
+________,__XXXXXX,XXXXXX__,
+_XXXXXXX,XXXXXXXX,XXXXXX__,
+_XXXXXXX,XXXX__XX,X__XXX__,
+____XXX_,__XX__XX,X__XXX__,
+____XXX_,__XXXXXX,XXXXXX__,
+____XXX_,__XX__XX,X__XXX__,
+____XXXX,XXXX__XX,X__XXX__,
+_XXXXXXX,XXXX__XX,X__XXX__,
+____XXX_,__XXXXXX,XXXXXX__,
+____XXX_,__XX__XX,X__XX___,
+____XXX_,______XX,X_______,
+____XXX_,_XX___XX,X__XX___,
+____XXXX,XXXXXXXX,XXXXXX__,
+__XXXXXX,______XX,X_______,
+_XXXX___,______XX,X_______,
+__X_____,______XX,X___XXX_,
+_______X,XXXXXXXX,XXXXXXXX,
+________,________,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -4875,163 +3850,55 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_c1d0[72] = {	/* �� 0xc1d0*/
+GUI_FLASH  const unsigned char acFontHZConsolas_c2c8[72] = {	/* �� 0xc2c8*/
 ________,________,________,
-________,________,________,
-________,________,___XXX__,
-________,____XXX_,___XXX__,
-__XXXXXX,XXXXXXX_,___XXX__,
-______XX,X______X,X__XXX__,
-______XX,X______X,XX_XXX__,
-_____XXX,___XX__X,X__XXX__,
-_____XXX,XXXXXX_X,X__XXX__,
-____XXX_,__XXX__X,X__XXX__,
-____XXX_,__XXX__X,X__XXX__,
-___XXXXX,_XXX___X,X__XXX__,
-__XXX_XX,XXXX___X,X__XXX__,
-__XX__XX,XXX____X,X__XXX__,
-_XX____X,XXX____X,X__XXX__,
-_______X,XX_____X,X__XXX__,
-______XX,X______X,X__XXX__,
-_____XXX,________,___XXX__,
-____XXX_,_______X,XXXXXX__,
-__XXX___,________,XXXXXX__,
-_XX_____,________,__XXX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c1e3[72] = {	/* �� 0xc1e3*/
-________,________,________,
-________,________,________,
-________,________,_XXX____,
-____XXXX,XXXXXXXX,XXXX____,
-___XX___,___XX___,____XX__,
-___XXXXX,XXXXXXXX,XXXXXXX_,
-__XXX___,___XX___,___XXX__,
-_XXXXXXX,XX_XXXXX,XXXXX___,
-________,___XX___,________,
-____XXXX,XXXXXXXX,XXXX____,
-________,_XXXX___,________,
-________,XXXXXXX_,________,
-______XX,XXXXXXXX,XX______,
-___XXXXX,___XXX_X,XXXXXXXX,
-XXXXX___,___XXX__,XXXXXX__,
-____XXXX,XXXXXXXX,XXX_____,
-________,_____XXX,X_______,
-_______X,XXX_XXX_,________,
-________,_XXXXX__,________,
-________,___XXXXX,________,
-________,_____XXX,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c1f3[72] = {	/* �� 0xc1f3*/
-________,________,________,
-________,________,________,
-____XXX_,______XX,X_______,
-___XXXX_,____XXXX,X____X__,
-___XXX__,_XXXXXXX,XXXXXXX_,
-___XXX__,XXXX____,XXX_XXX_,
-__XXXXXX,XXXXXXX_,XXX_XXX_,
-__XXX__X,XXXX_XXX,XXX_XXX_,
-_XXX__XX,_XXXXXXX,XX__XXX_,
-_XX_XXX_,_XXXX_XX,XXXXXXX_,
-XXX_XX__,__XX__XX,X_XXXX__,
-____XX__,_____XXX,___XX___,
-____XX__,__XXXXXX,XXXXXXX_,
-____XX__,__XXX__X,X__XXX__,
-____XX__,__XXX__X,X__XXX__,
-____XX_X,XXXXXXXX,XXXXXX__,
-____XXXX,X_XXXXXX,XXXXXX__,
-____XXXX,__XXX__X,X__XXX__,
-___XXXX_,__XXXXXX,XXXXXX__,
-____XX__,__XXXXXX,XXXXXX__,
-________,__XXX___,___XXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c2ca[72] = {	/* �� 0xc2ca*/
-________,________,________,
-________,________,________,
-________,__XXX___,________,
-________,___XXX__,___XX___,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-___XX___,_XXX__X_,__XX____,
-___XXXX_,XXX__XXX,_XXXX___,
+_____XX_,________,________,
+_____XXX,X_______,________,
+_____XXX,________,__XXXX__,
+____XXXX,XXXXXXXX,XXXXXX__,
+___XXXXX,XXXXXXXX,XXXX____,
+___XX__X,XXXXXXXX,XXXX____,
+__XXXXXX,XXXXXXXX,XXX_____,
+_XX__XX_,____XX__,XXX_____,
 ____XXXX,XXXXXXX_,XXX_____,
-_____XXX,XXXXXX_X,XX______,
-______XX,__XXX___,XX______,
-____XXXX,_XXX_XXX,XXXXX___,
-__XXXX_X,XXXXXXXX,X_XXX___,
-__XXX__X,XXXXX_XX,X__XX___,
-________,__XXX___,________,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
+________,___XXX__,XXX_____,
+____XXXX,XXXXXX__,XXX_____,
+________,___XXXXX,XXX_____,
+_XXXXXXX,XXXXXXXX,XXX_____,
+___XXX__,XXX___XX,XXX_____,
+____XXXX,XXX_XXXX,_XX_____,
+_____XXX,XXXXXX__,_XXX_XX_,
+____XXXX,XXXXXXXX,_XXX_XX_,
+__XXXX__,XXX__XXX,__XXXXX_,
+__XXXXXX,XXX___XX,___XXXX_,
+________,XX______,____XXXX,
 ________,________,________,
 ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_c2cc[72] = {	/* �� 0xc2cc*/
+GUI_FLASH  const unsigned char acFontHZConsolas_c2fd[72] = {	/* �� 0xc2fd*/
 ________,________,________,
 ________,________,________,
-_____XXX,________,__XX____,
-____XXXX,__XXXXXX,XXXXX___,
-____XXX_,________,__XX____,
-___XXX__,X_______,__XX____,
-__XXX__X,XXXXXXXX,XXXX____,
-__XX__XX,X_______,__XX____,
-_XXXXXXX,X_______,__XX_X__,
-_XXX_XXX,XXXXXXXX,XXXXXXX_,
-____XXX_,XXXXXXXX,XXXXXXX_,
-___XXX__,_XXX__XX,X__XX___,
-__XXX__X,X_XXX_XX,X_XXXX__,
-_XXXXXXX,X__XX_XX,XXXX____,
-__XXX___,___XXXXX,XX______,
-_______X,X__XXXXX,XXX_____,
-____XXXX,_XXX__XX,XXXX____,
-_XXXXX_X,XXX___XX,X_XXXX__,
-_XXX___X,X_____XX,X__XXXXX,
-________,___XXXXX,____XX__,
-________,_____XXX,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c3fb[72] = {	/* �� 0xc3fb*/
-________,________,________,
-________,________,________,
-________,_XXX____,________,
-________,XXXX____,________,
-________,XXX_____,_XXX____,
-_______X,XXXXXXXX,XXXXX___,
-______XX,X_______,XXX_____,
-______XX,X______X,XXX_____,
-_____XXX,XXX___XX,XX______,
-___XXX__,XXXX_XXX,X_______,
-__XXX___,_XX_XXX_,________,
-________,__XXXX__,________,
-________,XXXXX___,___X____,
-_______X,XXXXXXXX,XXXXX___,
-_____XXX,XX______,__XXX___,
-___XXXXX,XX______,__XXX___,
-_XXX___X,XX______,__XXX___,
-_______X,XX______,__XXX___,
-_______X,XXXXXXXX,XXXXX___,
-_______X,XXXXXXXX,XXXXX___,
-_______X,XX______,__XX____,
+____XXX_,_XXXXXXX,XXXX____,
+____XX__,_XXXXXXX,XXXXX___,
+____XX__,_XXXXXXX,XXXX____,
+____XXXX,_XXXXXXX,XXXX____,
+__XXXXXX,XXXX____,__XX____,
+__XXXX_X,XXXXXXXX,XXXXX___,
+_XXXXX_X,X_X_____,____XX__,
+_XXXXX_X,XXXXXXXX,XXXXXXX_,
+_XX_XX_X,XX__XX__,XX__XXX_,
+____XX_X,XX__XX__,XX__XXX_,
+____XX_X,XXXXXXXX,XXXXXXX_,
+____XX_X,XX______,__XXXX__,
+____XX__,XXXXXXXX,XXXXX___,
+____XX__,___XX___,_XXX____,
+____XX__,____XX__,XXX_____,
+____XX__,_____XXX,XX______,
+____XX__,_____XXX,XX______,
+____XX__,__XXXXXX,XXXXXXXX,
+___XXXXX,XXXX____,__XXXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -5086,33 +3953,6 @@ ______XX,__XXX___,XX______,
 ______XX,__XXXXXX,XX______,
 ______XX,__XXX_XX,XX______,
 ________,__XXX___,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c4dc[72] = {	/* �� 0xc4dc*/
-________,________,________,
-________,________,________,
-______XX,X____XXX,________,
-_____XXX,_____XXX,___X____,
-____XXX_,XXX__XXX,__XXX___,
-___XXX__,_XXX_XXX,XXXX____,
-_XXXXXXX,XXXXXXXX,XX__XX__,
-__XXXXXX,XXXXXXXX,____XX__,
-________,_XXX_XXX,____XX__,
-__XXXXXX,XXXX_XXX,XXXXXXX_,
-__XXX___,_XX___XX,XXXXXX__,
-__XXX___,_XX__XX_,________,
-__XXXXXX,XXX__XXX,__XXX___,
-__XXX___,_XX__XXX,_XXXXX__,
-__XXXXXX,XXX__XXX,XXXX____,
-__XXXXXX,XXX__XXX,X_______,
-__XXX___,_XX__XXX,____XX__,
-__XXX___,_XX__XXX,____XX__,
-__XXX___,_XX__XXX,____XXX_,
-__XXX_XX,XXX__XXX,XXXXXXX_,
-__XXX___,XXX___XX,XXXXXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -5253,60 +4093,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_c6b7[72] = {	/* Ʒ 0xc6b7*/
-________,________,________,
-________,________,________,
-______XX,_______X,XX______,
-______XX,XXXXXXXX,XX______,
-______XX,X______X,XX______,
-______XX,X______X,XX______,
-______XX,X______X,XX______,
-______XX,X______X,XX______,
-______XX,XXXXXXXX,XX______,
-______XX,XXXXXXXX,XX______,
-______XX,X______X,X_______,
-__XX____,_XX_XXX_,___XX___,
-__XXXXXX,XXXX_XXX,XXXXXX__,
-__XXX___,XXX__XX_,___XXX__,
-__XXX___,XXX__XX_,___XXX__,
-__XXX___,XXX__XX_,___XXX__,
-__XXX___,XXX__XX_,___XXX__,
-__XXXXXX,XXX__XXX,XXXXXX__,
-__XXXXXX,XXX__XXX,XXXXXX__,
-__XXX___,XXX__XX_,___XXX__,
-__XXX___,_____X__,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c6bf[72] = {	/* ƿ 0xc6bf*/
-________,________,________,
-________,________,________,
-__XXX___,XXX_____,________,
-___XXX__,XXX_____,____XX__,
-___XXX_X,XXXXXXXX,XXXXXXX_,
-____XX_X,X_XX_XXX,________,
-_XXXXXXX,XXXXXXXX,________,
-____XXXX,XX___XXX,________,
-____XXXX,XX___XXX,XXXXX___,
-____XXXX,XX___XX_,__XXX___,
-____XXXX,XX___XX_,__XX____,
-_XXXXXXX,XXXXXXXX,X_XX____,
-_XXXXXXX,XXXXXXXX,XXXX____,
-____XX_X,XX__XXXX,XXXX____,
-____XX_X,XX__XXXX,XXXX____,
-___XXX_X,XX__XXX_,_XXX____,
-___XXX_X,XX__XX__,_XXX_XX_,
-___XX__X,XX__XXXX,XXXX_XX_,
-__XXX__X,XX_XXXXX,_XXX_XX_,
-_XXX___X,XX_XXX__,_XXXXXXX,
-_XX____X,XX______,___XXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_c6c1[72] = {	/* �� 0xc6c1*/
 ________,________,________,
 ________,________,________,
@@ -5329,60 +4115,6 @@ __XX____,_XXX___X,XX______,
 _XXX____,XXX____X,XX______,
 _XX____X,XX_____X,XX______,
 _X___XXX,_______X,XX______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c6f3[72] = {	/* �� 0xc6f3*/
-________,________,________,
-________,________,________,
-________,___XXX__,________,
-________,__XXXX__,________,
-________,_XXXXX__,________,
-________,_XXX_XX_,________,
-________,XXX___XX,X_______,
-_______X,XX_____X,XX______,
-______XX,X__XXX__,XXXX____,
-_____XXX,___XXX__,_XXXXXX_,
-___XXX__,___XXX__,__XXXXX_,
-_XXXX_XX,X__XXX__,____XX__,
-_XX___XX,XX_XXX__,XXX_____,
-______XX,X__XXXXX,XXXX____,
-______XX,X__XXX__,________,
-______XX,X__XXX__,________,
-______XX,X__XXX__,________,
-______XX,X__XXX__,________,
-______XX,X__XXX__,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c6f4[72] = {	/* �� 0xc6f4*/
-________,________,________,
-________,________,________,
-________,__XXXX__,________,
-________,___XXX__,________,
-____XXX_,___XXX__,__XXX___,
-____XXXX,XXXXXXXX,XXXXX___,
-____XXX_,________,__XXX___,
-____XXX_,________,__XXX___,
-____XXX_,________,__XXX___,
-____XXXX,XXXXXXXX,XXXXX___,
-____XXX_,________,__XX____,
-____XXX_,________,________,
-____XXXX,XXXXXXXX,XXXXX___,
-____XXXX,XXXXXXXX,XXXXX___,
-____XXXX,XX______,__XX____,
-____XX_X,XX______,__XX____,
-___XXX_X,XX______,__XX____,
-___XX__X,XX______,__XX____,
-__XXX__X,XXXXXXXX,XXXX____,
-__XX___X,XX______,__XX____,
-_XX____X,XX______,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -5523,82 +4255,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_c8be[72] = {	/* Ⱦ 0xc8be*/
+GUI_FLASH  const unsigned char acFontHZConsolas_c8ab[72] = {	/* ȫ 0xc8ab*/
 ________,________,________,
 ________,________,________,
-____XXX_,___XXXX_,________,
-_____XXX,___XXX__,________,
-______XX,X__XXX__,XX______,
-__XXX__X,XXXXXXXX,XXX_____,
-___XXXXX,___XXX__,XX______,
-____X_XX,___XXX__,XX______,
-_____XX_,__XXX___,XX___XX_,
-__XXXXX_,__XXX___,XX___XX_,
-____XXX_,_XXX____,XXX_XXXX,
-____XXX_,XXXXXX__,XXXXXXX_,
-___XXX_X,XX_XXX__,________,
-____XXXX,___XXX__,___XXX__,
+________,__XXX___,________,
+________,_XXXX___,________,
+________,_XXXXX__,________,
+________,XXX_XXX_,________,
+_______X,XX___XXX,________,
+______XX,X_____XX,XX______,
+_____XXX,_______X,XXXX____,
+____XXXX,XXXXXXXX,XXXXXXX_,
+__XXXXXX,XXXXXXXX,XXXXXXX_,
+_XXX____,__XXX___,________,
+________,__XXX___,________,
+________,__XXX___,_XX_____,
+____XXXX,XXXXXXXX,XXXX____,
+________,__XXX___,________,
+________,__XXX___,________,
+________,__XXX___,________,
+________,__XXX___,___XX___,
 _XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,XXXXXXXX,________,
-_______X,XXXXXXXX,X_______,
-______XX,X__XXX_X,XXX_____,
-____XXXX,___XXX__,XXXXXXX_,
-__XXXX__,___XXX__,__XXXX__,
-_XXX____,___XXX__,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c8c5[72] = {	/* �� 0xc8c5*/
-________,________,________,
-________,________,________,
-____XXXX,____XXXX,________,
-____XXX_,____XXX_,XXX_____,
-____XXX_,____XXX_,_XXXX___,
-____XXX_,____XXX_,__XXX___,
-_XXXXXXX,XXX_XXX_,__XXX___,
-__XXXXXX,XX__XXX_,___XXX__,
-____XXX_,_XXXXXXX,XXXXXXX_,
-____XXX_,____XXXX,XX______,
-____XXXX,XX__XXXX,XX______,
-___XXXXX,____XXXX,XX______,
-XXXXXXX_,____XXXX,XX______,
-_XXXXXX_,____XX_X,XX______,
-____XXX_,___XXX_X,XX______,
-____XXX_,___XXX_X,XX___XX_,
-____XXX_,__XXX__X,XX___XX_,
-____XXX_,__XX___X,XX__XXX_,
-_XX_XXX_,_XX____X,XX__XXX_,
-__XXXXXX,XX_____X,XXXXXXX_,
-___XXXXX,X_______,_XXXXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_c8c8[72] = {	/* �� 0xc8c8*/
-________,________,________,
-________,________,________,
-______XX,X____XXX,________,
-______XX,_____XXX,________,
-______XX,_____XXX,________,
-______XX,_XX__XXX,_XXX____,
-__XXXXXX,XXXXXXXX,XXXX____,
-______XX,_____XXX,_XXX____,
-______XX,__X__XXX,_XX_____,
-______XX,XXXXXXX_,_XX_____,
-__XXXXXX,____XXX_,_XX_____,
-_XXXX_XX,____XXXX,XXXX_XX_,
-__X___XX,___XXXXX,XXXXXXX_,
-______XX,__XXX__X,X_XXXXX_,
-___XXXXX,_XXX____,___XXXX_,
-_____XXX,XXX_____,____XXX_,
-____XX__,XX__XXX_,_XXX____,
-___XXX__,XXX__XXX,__XXX___,
-___XXX__,XXX__XXX,___XXX__,
-__XXX___,XXX___XX,___XXX__,
-__XX____,_X______,____X___,
+__X_____,________,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -5712,33 +4390,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_c9d9[72] = {	/* �� 0xc9d9*/
-________,________,________,
-________,________,________,
-________,__XXXX__,________,
-________,__XXXX__,________,
-________,__XXX___,________,
-________,__XXX___,________,
-______XX,X_XXX_XX,X_______,
-_____XXX,XXXXX__X,XXX_____,
-_____XXX,__XXX___,_XXXX___,
-____XXXX,__XXX___,__XXXX__,
-____XXX_,__XXX___,___XXXX_,
-___XXX__,__XXX___,_XX_XX__,
-__XXX___,__XXX___,XXXX____,
-_XXX____,__XXX__X,XXXX____,
-_XX_____,__XXX_XX,XXX_____,
-________,_____XXX,X_______,
-________,___XXXXX,________,
-________,_XXXXX__,________,
-_______X,XXXX____,________,
-____XXXX,X_______,________,
-XXXXXX__,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_c9e8[72] = {	/* �� 0xc9e8*/
 ________,________,________,
 ________,________,________,
@@ -5761,6 +4412,33 @@ ____XXXX,____XXXX,XX______,
 ____XXX_,___XXXX_,XXXXX___,
 ________,XXXXX___,_XXXXXX_,
 _____XXX,XX______,___XXX__,
+________,________,________,
+________,________,________,
+________,________,________,
+};
+
+GUI_FLASH  const unsigned char acFontHZConsolas_caa3[72] = {	/* ʣ 0xcaa3*/
+________,________,________,
+________,________,________,
+________,___XXX__,___XXXX_,
+____XXXX,XXXXXXX_,___XXX__,
+__XXXXXX,XX______,___XXX__,
+_______X,XX___XX_,XXXXXX__,
+_XXXXXXX,XXXXXXXX,XXXXXX__,
+____XX_X,XXXX____,XXXXXX__,
+____XXXX,XXXXXXXX,XXXXXX__,
+_XXXXXXX,XXXXXXXX,XXXXXX__,
+_XXXXXXX,XXXXXXXX,XXXXXX__,
+____XXXX,XXXXX_XX,XXXXXX__,
+__XXXXXX,XXXXXXXX,XXXXXX__,
+XXXXXXXX,XXXXXXXX,XXXXXX__,
+_X____XX,XXX_____,XXXXXX__,
+_____XXX,XXXXX___,XXXXXX__,
+____XXXX,XX_XXXX_,XX_XXX__,
+___XXX_X,XX__XXX_,___XXX__,
+__XXX__X,XX___XX_,___XXX__,
+_XX____X,XX______,XXXXXX__,
+_______X,XX______,__XXXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -5793,33 +4471,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_cab1[72] = {	/* ʱ 0xcab1*/
-________,________,________,
-________,________,________,
-________,________,XXX_____,
-________,________,XXX_____,
-_XXXXXXX,X_______,XXX_____,
-_XXXXXXX,XX______,XXX_____,
-_XXX___X,X_______,XXX_XX__,
-_XXX___X,XXXXXXXX,XXXXXXX_,
-_XXX___X,X_______,XXX_____,
-_XXX___X,X_______,XXX_____,
-_XXXXXXX,X_XXX___,XXX_____,
-_XXX___X,X__XXX__,XXX_____,
-_XXX___X,X__XXXX_,XXX_____,
-_XXX___X,X___XX__,XXX_____,
-_XXX___X,X_______,XXX_____,
-_XXX___X,X_______,XXX_____,
-_XXXXXXX,X_______,XXX_____,
-_XXX___X,X_______,XXX_____,
-_XXX____,____XXX_,XXX_____,
-________,_____XXX,XXX_____,
-________,_______X,XX______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_cab5[72] = {	/* ʵ 0xcab5*/
 ________,________,________,
 ________,__X_____,________,
@@ -5842,33 +4493,6 @@ ________,_XXXX_XX,XXX_____,
 _______X,XXXX____,XXXXX___,
 _____XXX,XX______,_XXXX___,
 _XXXXXX_,________,___XX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cab9[72] = {	/* ʹ 0xcab9*/
-________,________,________,
-________,________,________,
-______XX,X_____XX,X_______,
-_____XXX,X_____XX,________,
-_____XXX,______XX,____XX__,
-_____XXX,XXXXXXXX,XXXXXXX_,
-____XXX_,______XX,________,
-____XXX_,_XX___XX,___XX___,
-___XXXX_,_XXXXXXX,XXXXXX__,
-__XXXXX_,_XXX__XX,___XX___,
-__XXXXX_,_XXX__XX,___XX___,
-_XX_XXX_,_XXX__XX,___XX___,
-XX__XXX_,_XXXXXXX,XXXXX___,
-____XXX_,_XXX__XX,___XX___,
-____XXX_,__XXXXXX,________,
-____XXX_,___XXXXX,________,
-____XXX_,____XXXX,________,
-____XXX_,____XXXX,________,
-____XXX_,___XXXXX,XXX_____,
-____XXX_,_XXXX___,XXXXXXXX,
-____XXXX,XX______,__XXXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -5901,82 +4525,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_cabd[72] = {	/* ʽ 0xcabd*/
+GUI_FLASH  const unsigned char acFontHZConsolas_cabe[72] = {	/* ʾ 0xcabe*/
 ________,________,________,
 ________,________,________,
-________,____XXXX,X_______,
-________,____XXX_,XXXX____,
-________,____XXX_,_XXXX___,
-________,____XXX_,__XXXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-__XXXXXX,XXXXXXXX,XXXXXXX_,
-________,_____XXX,________,
-________,__XX_XXX,________,
-__XXXXXX,XXXXXXXX,________,
-__XXXXXX,XXXXXXXX,________,
-______XX,X____XXX,________,
-______XX,X_____XX,X_______,
-______XX,X_____XX,X_______,
-______XX,X_____XX,XX___XX_,
-______XX,XXXXXX_X,XX___XX_,
-____XXXX,XXX_____,XXX_XXX_,
-_XXXXXXX,________,_XXXXXX_,
-__XXX___,________,__XXXXX_,
+________,________,__XX____,
+___XXXXX,XXXXXXXX,XXXXX___,
+____XXXX,XXXXXXXX,XXXXX___,
+________,________,________,
+________,________,________,
+________,________,________,
 ________,________,___XXXX_,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cad4[72] = {	/* �� 0xcad4*/
-________,________,________,
-________,________,________,
-________,_______X,XXX_____,
-___XX___,_______X,XXXXX___,
-___XXX__,_______X,XX_XXX__,
-____XXX_,_______X,XX_XXX__,
-____XXX_,_______X,XX__XXX_,
-_______X,XXXXXXXX,XXXXXXXX,
-________,_______X,XX______,
-____XXX_,_______X,XX______,
-_XXXXXX_,XXXXXXXX,XX______,
-____XXX_,XXXXXXXX,XX______,
-____XXX_,___XXX__,XX______,
-____XXX_,___XXX__,XXX_____,
-____XXX_,___XXX__,XXX_____,
-____XXX_,XX_XXX__,_XXX_XX_,
-____XXXX,X__XXXXX,XXXX_XX_,
-____XXXX,_XXXXXX_,__XXXXX_,
-____XXXX,XXXX____,__XXXXX_,
-____XXX_,XX______,___XXXX_,
-________,________,_____XXX,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cae4[72] = {	/* �� 0xcae4*/
-________,________,________,
-________,________,________,
-____XXX_,______XX,X_______,
-____XXX_,_____XXX,X_______,
-___XXX__,X___XXXX,XX______,
-XXXXXXXX,XX__XXX_,XXX_____,
-_XXXX___,___XXX__,_XXX____,
-__XXXXX_,__XXXXXX,XXXXXXX_,
-__XX_XXX,XXX___XX,XXXXXXX_,
-_XXX_XXX,XXX___X_,___XX___,
-XXXXXXXX,XXXXXXXX,XX_XXX__,
-_XXXXXXX,XXXX_XXX,XXXXXX__,
-_____XXX,_XXXXXXX,XXXXXX__,
-_____XXX,_XXXXXXX,XXXXXX__,
-_____XXX,XXXX_XXX,XXXXXX__,
-XXXXXXXX,_XXXXXXX,XXXXXX__,
-_XXX_XXX,_XXX_XXX,XXXXXX__,
-_____XXX,_XXX_XXX,XXXXXX__,
-_____XXX,_XXX_XXX,___XXX__,
-_____XXX,_XXXXXXX,XXXXXX__,
-_____XXX,_XXXXXX_,__XXX___,
+_XXXXXXX,XXXXXXXX,XXXXXXX_,
+________,___XXX__,________,
+______XX,X__XXX_X,________,
+______XX,XX_XXX_X,XX______,
+_____XXX,___XXX__,XXX_____,
+____XXX_,___XXX__,_XXX____,
+____XXX_,___XXX__,__XXXX__,
+___XXX__,___XXX__,___XXX__,
+__XX____,___XXX__,___XXX__,
+_XX___XX,XXXXXX__,____XX__,
+________,XXXXX___,________,
+________,_XXXX___,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -6063,136 +4633,109 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_cbd9[72] = {	/* �� 0xcbd9*/
+GUI_FLASH  const unsigned char acFontHZConsolas_cbb3[72] = {	/* ˳ 0xcbb3*/
 ________,________,________,
 ________,________,________,
-________,_____XXX,________,
-__XXX___,_____XXX,________,
-___XXX__,_____XXX,___XXX__,
-___XXXXX,XXXXXXXX,XXXXXXX_,
-____XX__,_____XXX,________,
-________,_XXXXXXX,XXXXX___,
-________,_XXXXXXX,XXXXX___,
-_XXXXXX_,_XX__XXX,__XXX___,
-_XXXXXX_,_XX__XXX,__XXX___,
-____XXX_,_XXXXXXX,XXXXX___,
-____XXX_,_XX_XXXX,__XX____,
-____XXX_,___XXXXX,XX______,
-____XXX_,__XXXXXX,XXXXX___,
-____XXX_,_XXX_XXX,__XXXX__,
-____XXXX,XX___XXX,___XXX__,
-__XXXXXX,X____XXX,________,
-_XXX__XX,XX___XXX,________,
-_XX_____,XXXXXXXX,XXXXXXX_,
-________,__XXXXXX,XXXXXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cbe1[72] = {	/* �� 0xcbe1*/
-________,________,________,
-________,________,________,
-________,_______X,XX______,
-_XXXXXXX,XXXX__XX,XX______,
-_XXXXXXX,XXXX_XXX,___XX___,
-____XXXX,X___XXX_,___XXXX_,
-__X_XXXX,XXXXXXXX,XXXXXXX_,
-__XXXXXX,XXXXXXXX,_XX__XX_,
-__XXXXXX,XXX__XXX,X_XXXX__,
-__XXXXXX,XXX_XXXX,___XXXX_,
-__XXXXXX,XXXXXXXX,X___XXX_,
-__XXXXXX,XXXX__XX,X__XXXX_,
-__XXXX_X,XXX__XXX,XXXXXX__,
-__XXX___,_XX_XXX_,__XXX___,
-__XX____,_XX_XXXX,__XX____,
-__XXXXXX,XXXXX_XX,_XXX____,
-__XX____,_XX____X,XXX_____,
-__XX____,_XX____X,XXX_____,
-__XXXXXX,XXX__XXX,XXXX____,
-__XX____,_XX_XXX_,__XXXXXX,
-__XX____,_XXXX___,___XXX__,
+________,XX______,____XX__,
+__XXXX__,XXXXXXXX,XXXXXXX_,
+__XXX___,XXX____X,XX______,
+__XXXXXX,XXX____X,X_______,
+__XXXXXX,XXXXXXXX,XXXXXX__,
+__XXXXXX,XXXXXXXX,XXXXXX__,
+__XXXXXX,XXXXXX__,X__XXX__,
+__XXXXXX,XXXXXX_X,XXXXXX__,
+__XXXXXX,XXXXXX_X,XX_XXX__,
+__XXXXXX,XXXXXX_X,XX_XXX__,
+__XXXXXX,XXXXXX_X,XX_XXX__,
+__XXXXXX,XXXXXX_X,XX_XXX__,
+__XXXXXX,XXXXXX_X,XX_XXX__,
+__XXXXXX,XXXXXX_X,XX_XXX__,
+__XX_XXX,XXXXX__X,XXXX____,
+__XX____,XXX___XX,X_XXXX__,
+_XX_____,XXX__XXX,___XXXX_,
+_XX_____,XXXXXXX_,____XXX_,
+________,_XXXX___,_____XX_,
 ________,________,________,
 ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_cbe3[72] = {	/* �� 0xcbe3*/
+GUI_FLASH  const unsigned char acFontHZConsolas_cdb3[72] = {	/* ͳ 0xcdb3*/
 ________,________,________,
-_____XX_,________,________,
+________,________,________,
+_____XXX,_____XXX,________,
 _____XXX,______XX,X_______,
-____XXX_,__XX_XXX,____XX__,
-____XXXX,XXXXXXXX,XXXXXXX_,
-___XXX_X,XX__XXX_,_XXX____,
-__XXXX__,XX_XXX__,_XXXX___,
-_XXX_XXX,XXXXXXXX,XXXX____,
-_XX__XXX,________,XXX_____,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,________,XXX_____,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,________,XXX_____,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,XXX___XX,XXX_____,
-________,XXX___XX,____XX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-__X____X,XX____XX,________,
-______XX,XX____XX,________,
-_____XXX,X_____XX,________,
-__XXXX__,______XX,________,
+____XXX_,_______X,X___XX__,
+____XX__,_XXXXXXX,XXXXXXX_,
+___XXX_X,XXX__XXX,X_______,
+__XXX__X,XX___XXX,________,
+_XXXXXXX,X___XXX_,_XXX____,
+_XXX_XXX,___XXX__,__XXXX__,
+____XXX_,__XXXXXX,XXXXXX__,
+___XXX__,__XXXXXX,XXX_XX__,
+__XXXXXX,XXX_XXX_,XXX_____,
+_XXXXXXX,____XXX_,XXX_____,
+__XXX___,____XXX_,XXX_____,
+________,____XXX_,XXX_____,
+____XXXX,XX__XXX_,XXX__XX_,
+_XXXXXX_,___XXX__,XXX__XX_,
+_XXX____,__XXX___,XXX_XXX_,
+________,_XXX____,XXXXXXXX,
+_______X,XX______,_XXXXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_cda3[72] = {	/* ͣ 0xcda3*/
+GUI_FLASH  const unsigned char acFontHZConsolas_cdcb[72] = {	/* �� 0xcdcb*/
 ________,________,________,
 ________,________,________,
-_____XXX,____XXX_,________,
-____XXXX,_____XXX,________,
-____XXXX,XXXXXXXX,XXXXXX__,
-____XXX_,XXXXXXXX,XXXXXX__,
+________,________,________,
 ___XXX__,_XXXXXXX,XXXX____,
 ___XXXX_,_XXXXXXX,XXXX____,
-__XXXX__,_XXX____,_XXX____,
-__XXXX__,_XXXXXXX,XXXX____,
-_XXXXX_X,X_X_____,____XX__,
-_XXXXX_X,XXXXXXXX,XXXXXXX_,
-___XXXXX,X_______,___XXX__,
-___XXXXX,X_______,__XXX___,
-___XXX__,XXXXXXXX,XXXXX___,
-___XXX__,______XX,________,
-___XXX__,______XX,________,
-___XXX__,______XX,________,
-___XXX__,______XX,________,
-___XXX__,__XXXXXX,________,
-___XXX__,____XXXX,________,
+____XXX_,_XXX____,_XXX____,
+____XX__,_XXXXXXX,XXXX____,
+________,_XXXXXXX,XXXX____,
+____XX__,_XXX____,_XXX____,
+_XXXXXX_,_XXX____,_XXX____,
+____XXX_,_XXXXXXX,XXXXX___,
+____XXX_,_XXX____,__XXXX__,
+____XXX_,_XXXXXXX,_XXX____,
+____XXX_,_XXX__XX,XX______,
+____XXX_,_XXX__XX,XXXX____,
+____XXX_,_XXXXXX_,_XXXX___,
+___XXXX_,_XXXXX__,___XXX__,
+_XXXX_XX,X_XX____,____X___,
+_XXX___X,XXXXXXXX,XXXXXXXX,
+________,XXXXXXXX,XXXXXXX_,
+________,______XX,XXXXX___,
 ________,________,________,
 ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_cea7[72] = {	/* Χ 0xcea7*/
+GUI_FLASH  const unsigned char acFontHZConsolas_cdea[72] = {	/* �� 0xcdea*/
 ________,________,________,
 ________,________,________,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-__XXX___,__XXXX__,___XXX__,
-__XXX___,__XXX___,XX_XXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-__XXX___,__XXX___,___XXX__,
-__XXX___,__XXX__X,X__XXX__,
-__XXX_XX,XXXXXXXX,XX_XXX__,
-__XXX___,__XXX___,___XXX__,
-__XXX___,__XXX___,_X_XXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-__XXX___,__XXX___,XXXXXX__,
-__XXX___,__XXX___,XXXXXX__,
-__XXX___,__XXXXXX,XX_XXX__,
-__XXX___,__XXX__X,XX_XXX__,
-__XXX___,__XXX___,___XXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
+________,__XXX___,________,
+________,__XXXX__,________,
+___XX___,___XXX__,____X___,
+___XXXXX,XXXXXXXX,XXXXXXX_,
 __XXX___,________,___XXX__,
+__XXX___,________,X_XXX___,
+____XXXX,XXXXXXXX,XX______,
+_____XX_,________,________,
+________,________,________,
+________,________,__XXX___,
+__XXXXXX,XXXXXXXX,XXXXXX__,
+_______X,XX__XXX_,________,
+_______X,XX__XXX_,________,
+_______X,XX__XXX_,____XX__,
+_______X,XX__XXX_,____XX__,
+______XX,X___XXX_,____XX__,
+_____XXX,____XXX_,____XXX_,
+___XXXX_,_____XXX,XXXXXXX_,
+_XXXX___,______XX,XXXXX___,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -6247,114 +4790,6 @@ ___XX__X,XX_XX__X,X_XXX___,
 __XXX__X,XX_XX__X,X_XXXX__,
 __XXXXXX,XXXXXXXX,XXXXXXX_,
 ____XXX_,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cec4[72] = {	/* �� 0xcec4*/
-________,________,________,
-________,________,________,
-________,__XX____,________,
-________,__XXX___,________,
-________,___XXX__,________,
-________,___XX___,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_______X,X_____XX,X_______,
-_______X,X_____XX,X_______,
-_______X,XX____XX,X_______,
-________,XX____XX,________,
-________,XX___XXX,________,
-________,_XX__XXX,________,
-________,_XXXXXX_,________,
-________,__XXXX__,________,
-________,__XXXX__,________,
-________,_XXXXXX_,________,
-________,XXX_XXXX,X_______,
-______XX,XX____XX,XXXXXX__,
-___XXXXX,________,XXXXXXX_,
-_XXXX___,________,___XX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cec8[72] = {	/* �� 0xcec8*/
-________,________,________,
-________,________,________,
-_______X,XX___XXX,________,
-____XXXX,XX__XXXX,________,
-_XXXXXXX,____XXXX,XXXX____,
-_____XXX,___XXX__,XXXX____,
-_____XXX,__XXX___,XX______,
-_____XXX,XXX____X,X__XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXX__,
-____XXXX,________,___XXX__,
-____XXXX,X__XXXXX,XXXXXX__,
-____XXXX,XX______,___XXX__,
-___XXXXX,XXXXXXXX,XXXXXX__,
-___XXXXX,XXXXXXXX,XXXXXX__,
-__XXXXXX,______XX,X_______,
-_XXX_XXX,___XXX_X,XX______,
-_XX__XXX,_XXXXX_X,X_XXXX__,
-_____XXX,_XX_XX__,__XXXXX_,
-_____XXX,XXX_XX__,__XX_XX_,
-_____XXX,XX__XXXX,XXXXXXX_,
-_____XXX,_____XXX,XXX_____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cedb[72] = {	/* �� 0xcedb*/
-________,________,________,
-________,________,________,
-___XX___,________,________,
-___XXXX_,_XXXXXXX,XXXXX___,
-____XXX_,_XXXXXXX,XXXXX___,
-_____XXX,X_______,________,
-_______X,X_______,________,
-_XX___XX,________,____XX__,
-_XXXX_XX,XXXXXXXX,XXXXXXX_,
-__XXX_XX,___XXX__,________,
-___XXXXX,___XXX__,________,
-_____XX_,___XXX__,___XX___,
-____XXX_,__XXXXXX,XXXXXX__,
-____XXX_,___XX___,__XXX___,
-_XXXXX__,________,__XXX___,
-_XXXXX__,________,__XXX___,
-___XXX__,________,__XXX___,
-___XXX__,________,_XXX____,
-__XXXX__,____XXXX,XXXX____,
-__XXXX__,_____XXX,XXX_____,
-____X___,_______X,XX______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cef3[72] = {	/* �� 0xcef3*/
-________,________,________,
-________,________,________,
-________,__X_____,__XX____,
-___XXX__,__XXXXXX,XXXXX___,
-____XXX_,__XX____,__XXX___,
-____XXX_,__XX____,__XXX___,
-_____XX_,__XX____,__XXX___,
-________,__XXXXXX,XXXXX___,
-_____X__,__XX____,__XX____,
-_XXXXXX_,________,___XXX__,
-____XXX_,_XXXXXXX,XXXXXX__,
-____XXX_,_____XXX,________,
-____XXX_,_____XXX,____XX__,
-____XXXX,XXXXXXXX,XXXXXXX_,
-____XXX_,XX___XXX,X_______,
-____XXXX,XX___XXX,XX______,
-____XXXX,X___XXX_,XX______,
-____XXXX,___XXX__,_XXX____,
-____XXX_,__XXX___,_XXXX___,
-_____X__,XXXX____,__XXXXX_,
-_______X,XX______,____XX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -6468,109 +4903,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_cfdf[72] = {	/* �� 0xcfdf*/
+GUI_FLASH  const unsigned char acFontHZConsolas_cfd4[72] = {	/* �� 0xcfd4*/
 ________,________,________,
 ________,________,________,
-_____XXX,____XXXX,________,
-____XXXX,____XXX_,XXXX____,
-____XXX_,____XXX_,_XXX____,
-____XX__,XX__XXX_,__XX____,
-___XXX_X,XXX__XX_,__XXXX__,
-__XXX__X,XXXXXXXX,XXXXXX__,
-_XXXXXXX,XXX__XX_,________,
-_XXXXXXX,_____XX_,___XXX__,
-__X__XX_,_____XXX,XXXXXXX_,
-____XXX_,XXXXXXXX,X_______,
-___XXX__,_____XXX,__XXX___,
-_XXXXXXX,XX___XXX,_XXXX___,
-__XXXX__,_____XXX,XXXX____,
-__XX____,______XX,XX___XX_,
-_______X,XXX__XXX,X____XX_,
-_XXXXXXX,X___XXXX,XX__XXX_,
-_XXXX___,__XXXX__,XXXXXXX_,
-_______X,XXX_____,_XXXXXX_,
-________,________,___XXXX_,
+_____XX_,________,_XX_____,
+_____XXX,XXXXXXXX,XXXX____,
+_____XXX,________,XXX_____,
+_____XXX,________,XXX_____,
+_____XXX,XXXXXXXX,XXX_____,
+_____XXX,________,XXX_____,
+_____XXX,________,XXX_____,
+_____XXX,XXXXXXXX,XXX_____,
+_____XXX,________,XXX_____,
+________,XXX__XXX,________,
+__XX____,XXX__XXX,___XXX__,
+___XXX__,XXX__XXX,__XXXX__,
+___XXXX_,XXX__XXX,_XXX____,
+____XXXX,XXX__XXX,XXX_____,
+_____XXX,XXX__XXX,XX______,
+_____XX_,XXX__XXX,X___X___,
+_XXXXXXX,XXXXXXXX,XXXXXX__,
+_XXXXXXX,XXXXXXXX,XXXXXXX_,
 ________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cff5[72] = {	/* �� 0xcff5*/
-________,________,________,
-________,________,________,
-________,_______X,XX______,
-________,___XX__X,XX_XXX__,
-__XXXXXX,XXXXXX_X,XX_XXX__,
-__XXXXXX,XXX_XXXX,XXXXX___,
-____XXX_,____XXXX,XXXX____,
-____XXX_,___XXX_X,XXX_XX__,
-____XXX_,___XXXXX,XXXXXXX_,
-___XXXXX,XX_XX___,___XXX__,
-___XXXXX,XX_XX___,___XXX__,
-___XXX_X,XX_XXXXX,XXXXXX__,
-__XXXX_X,XX_XX___,___XXX__,
-__XXXX_X,XX_XX___,___XXX__,
-_XXXXX_X,XX_XXXXX,XXXXXX__,
-XX_XXX_X,XX_XX___,___XXX__,
-___XXX_X,XX_XX___,___XXX__,
-___XXXXX,XX_XX___,___XXX__,
-___XXX_X,XX_XX___,XXXXXX__,
-___XXX__,___XX___,_XXXXX__,
-___XXX__,___XX___,___XX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_cffb[72] = {	/* �� 0xcffb*/
-________,________,________,
-________,________,________,
-________,______XX,X_______,
-___XXXX_,_XXX__XX,X__XXX__,
-____XXXX,__XXX_XX,X_XXXX__,
-_____XXX,__XXXXXX,XXXX____,
-_____XX_,XX_XX_XX,XXX_____,
-_XX_____,XXXX__XX,XX_XX___,
-_XXXX__X,XXXXXXXX,XXXXXX__,
-__XXXX_X,XXXX____,__XXX___,
-___XX_XX,XXXX____,__XXX___,
-______XX,_XXXXXXX,XXXXX___,
-_____XXX,_XXX____,__XXX___,
-_____XX_,_XXX____,__XXX___,
-____XXX_,_XXXXXXX,XXXXX___,
-_XXXXXX_,_XXX____,__XXX___,
-____XXX_,_XXX____,__XXX___,
-____XX__,_XXX____,__XXX___,
-___XXX__,_XXX____,__XXX___,
-___XXXX_,_XXX___X,XXXXX___,
-____XX__,_XXX____,_XXX____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d0a1[72] = {	/* С 0xd0a1*/
-________,________,________,
-________,________,________,
-________,___XXX__,________,
-________,___XXX__,________,
-________,___XXX__,________,
-________,___XXX__,________,
-________,___XXX__,________,
-______XX,X__XXX_X,________,
-______XX,XX_XXX_X,XX______,
-_____XXX,X__XXX__,XXX_____,
-_____XXX,___XXX__,_XXX____,
-____XXX_,___XXX__,__XXX___,
-____XX__,___XXX__,__XXXX__,
-___XXX__,___XXX__,___XXXX_,
-__XXX___,___XXX__,____XXX_,
-_XX_____,___XXX__,____XX__,
-________,___XXX__,________,
-________,___XXX__,________,
-_______X,XXXXXX__,________,
-________,XXXXX___,________,
-________,__XX____,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -6630,28 +4984,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d0d4[72] = {	/* �� 0xd0d4*/
+GUI_FLASH  const unsigned char acFontHZConsolas_d0f2[72] = {	/* �� 0xd0f2*/
 ________,________,________,
 ________,________,________,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,__XXX_XX,X_______,
-____XXX_,__XXX_XX,X_______,
-____XXXX,__XX__XX,X__XX___,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-_XXXXXX_,_XX___XX,X_______,
-_XXXXXX_,XXX___XX,X_______,
-__X_XXX_,XX____XX,X__XX___,
-____XXX_,XXXXXXXX,XXXXXX__,
-____XXX_,__XXXXXX,XXXXXX__,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X__XXXX_,
-____XXXX,XXXXXXXX,XXXXXXXX,
-____XXX_,________,________,
+________,___XXX__,________,
+________,____XXX_,___XX___,
+___XXXXX,XXXXXXXX,XXXXXX__,
+___XXXXX,XXXXXXXX,XXXXXX__,
+___XXX_X,XXXXXXXX,XXXX____,
+___XXX_X,XXXXXXXX,XXXXX___,
+___XXX__,___X___X,XXX_____,
+___XXX__,___XXXXX,X_______,
+___XXX__,____XXXX,________,
+___XXXXX,XXXXXXXX,XXXXXX__,
+___XXXXX,XXXXXXXX,XXXXXXX_,
+___XXX__,_____XX_,___XX___,
+___XX___,_____XX_,__XX____,
+__XXX___,_____XX_,________,
+__XXX___,_____XX_,________,
+__XX____,_____XX_,________,
+_XXX____,_____XX_,________,
+_XX_____,_XXXXXX_,________,
+XX______,____XX__,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -6684,28 +5038,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d1b9[72] = {	/* ѹ 0xd1b9*/
+GUI_FLASH  const unsigned char acFontHZConsolas_d1ad[72] = {	/* ѭ 0xd1ad*/
 ________,________,________,
 ________,________,________,
-____X___,________,___XX___,
-____XXXX,XXXXXXXX,XXXXXX__,
-____XX__,________,________,
-____XX__,____XXX_,________,
-____XX__,____XX__,________,
-____XX__,____XX__,________,
-____XX__,____XX__,________,
-____XX__,____XX__,__XX____,
-____XXXX,XXXXXXXX,XXXXX___,
-____XX_X,XXXXXXXX,XXXXX___,
-____XX__,____XX_X,X_______,
-___XXX__,____XX_X,XX______,
-___XXX__,____XX__,XXX_____,
-___XXX__,____XX__,_XXX____,
-___XX___,____XX__,_XXX____,
-__XXX___,____XX__,__XX____,
-__XXXXXX,XXXXXXXX,XXXXXXX_,
-_XX_XXXX,XXXXXXXX,XXXXXXX_,
-XX______,________,________,
+_____XXX,________,_XXXX___,
+_____XXX,_XX__XXX,XXXXXX__,
+____XXX_,_XXXXXXX,X_______,
+___XXX__,_XXX___X,XX______,
+__XXX_XX,XXXX___X,XX__XX__,
+_XX___XX,XXXXXXXX,XXXXXXX_,
+_____XXX,_XXX___X,XX______,
+____XXX_,_XXX___X,XX______,
+___XXX__,_XXXXXXX,XXXXXX__,
+___XXX__,_XX_XX__,___XXX__,
+__XXXX__,_XX_XX__,___XXX__,
+_XX_XX__,XXX_XXXX,XXXXXX__,
+____XX__,XXX_XX__,___XXX__,
+____XX__,XXX_XX__,___XXX__,
+____XX__,XXX_XXXX,XXXXXX__,
+____XX__,XX__XX__,___XXX__,
+____XX_X,XX__XX__,___XXX__,
+____XX_X,X___XXXX,XXXXXX__,
+____XXXX,____XX__,___XXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -6738,33 +5092,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d1f9[72] = {	/* �� 0xd1f9*/
-________,________,________,
-________,________,________,
-____XXX_,__XX____,_XXXX___,
-____XXX_,___XXX__,_XXX____,
-____XXX_,___XXXX_,XXX_____,
-____XXX_,____XXX_,XX______,
-_XXXXXXX,XXXXXXXX,XXXXXX__,
-_XXXXXXX,XXXXXXXX,XXXXXX__,
-____XXX_,______XX,X_______,
-___XXXXX,______XX,X__XX___,
-___XXXXX,X_XXXXXX,XXXXXX__,
-___XXXXX,XX____XX,X_______,
-__XXXXXX,XX____XX,X_______,
-__XXXXX_,______XX,X___XX__,
-_XXXXXX_,XXXXXXXX,XXXXXXX_,
-_XX_XXX_,______XX,X_______,
-XX__XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-____XXX_,______XX,X_______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_d2b3[72] = {	/* ҳ 0xd2b3*/
 ________,________,________,
 ________,________,________,
@@ -6787,33 +5114,6 @@ ________,XXX____X,XXXX____,
 ______XX,XX______,_XXXX___,
 ____XXXX,________,__XXXX__,
 _XXXX___,________,___XX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d2b5[72] = {	/* ҵ 0xd2b5*/
-________,________,________,
-________,________,________,
-________,XX___XXX,________,
-________,XXX__XXX,X_______,
-________,XXX__XXX,________,
-________,XXX__XXX,________,
-________,XXX__XXX,___XX___,
-__XX____,XXX__XXX,___XXXX_,
-__XXX___,XXX__XXX,___XXX__,
-___XX___,XXX__XXX,__XXX___,
-___XXX__,XXX__XXX,__XXX___,
-____XXX_,XXX__XXX,_XXX____,
-____XXX_,XXX__XXX,_XX_____,
-____XXXX,XXX__XXX,XXX_____,
-_____XXX,XXX__XXX,XX______,
-_____XX_,XXX__XXX,X_______,
-________,XXX__XXX,________,
-________,XXX__XXX,____XX__,
-________,XXX__XXX,___XXXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXXX,
-________,________,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -6846,33 +5146,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d2bb[72] = {	/* һ 0xd2bb*/
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_d2c7[72] = {	/* �� 0xd2c7*/
 ________,________,________,
 ________,________,________,
@@ -6900,109 +5173,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d2d1[72] = {	/* �� 0xd2d1*/
-________,________,________,
-________,________,________,
-________,________,________,
-___XXXXX,XXXXXXXX,XXXX____,
-____XXXX,XXXXXXXX,XXXX____,
-________,________,_XXX____,
-________,________,_XXX____,
-________,________,_XXX____,
-___XXXX_,________,_XXX____,
-___XXXXX,XXXXXXXX,XXXX____,
-___XXXXX,XXXXXXXX,XXXX____,
-___XXX__,________,_X______,
-___XXX__,________,________,
-___XXX__,________,________,
-___XXX__,________,____XX__,
-___XXX__,________,____XX__,
-___XXX__,________,____XX__,
-___XXX__,________,___XXX__,
-____XXXX,XXXXXXXX,XXXXXXX_,
-____XXXX,XXXXXXXX,XXXXXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d2e5[72] = {	/* �� 0xd2e5*/
+GUI_FLASH  const unsigned char acFontHZConsolas_d3a1[72] = {	/* ӡ 0xd3a1*/
 ________,________,________,
 ________,________,________,
 ________,_XXX____,________,
-________,__XXX___,XXX_____,
-________,__XXXX__,XXXX____,
-_____XX_,___XXX__,XXX_____,
-______XX,___XX__X,XXX_____,
-______XX,_______X,XX______,
-_______X,X______X,XX______,
-_______X,XX____XX,X_______,
-________,XX____XX,X_______,
-________,XXX__XXX,________,
-________,_XXX_XXX,________,
-________,__XXXXX_,________,
-________,___XXX__,________,
-________,__XXXXX_,________,
-________,_XXXXXXX,X_______,
-_______X,XXX___XX,XX______,
-______XX,X______X,XXXXX___,
-___XXXX_,________,XXXXXXX_,
-_XXXX___,________,__XXXX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d2ec[72] = {	/* �� 0xd2ec*/
-________,________,________,
-________,________,________,
-____XXX_,________,XXX_____,
-____XXXX,XXXXXXXX,XXX_____,
-____XXX_,________,XXX_____,
-____XXX_,________,XXX_____,
-____XXXX,XXXXXXXX,XXXXX___,
-____XXX_,________,XXXXX___,
-____XXX_,________,___XX___,
-____XXXX,XXXXXXXX,XXXXXX__,
-_____XXX,XXXXXXXX,XXXXX___,
-_______X,XXX___XX,X_______,
-_______X,XX____XX,X_______,
-_______X,XX____XX,X__XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_______X,XX____XX,X_______,
-______XX,X_____XX,X_______,
-______XX,X_____XX,X_______,
-_____XXX,______XX,X_______,
-___XXXX_,______XX,X_______,
-_XXXX___,______XX,X_______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d2f8[72] = {	/* �� 0xd2f8*/
-________,________,________,
-________,________,________,
-____XXX_,________,___X____,
-____XXX_,__XXXXXX,XXXXXX__,
-____XX__,__XXX___,__XXX___,
-___XXXXX,XXXXX___,__XXX___,
-___XXXXX,XXXXX___,__XXX___,
-__XXX___,__XXXXXX,XXXXX___,
-__XX___X,XXXXX___,__XXX___,
-_XXXXXXX,XXXXX___,__XXX___,
-_XX_XXX_,__XXXXXX,XXXXX___,
-____XXX_,__XXXXXX,XXXXX___,
-_XXXXXXX,XXXXX_XX,____XX__,
-_XXXXXXX,XXXXX_XX,__XXXXX_,
-____XXX_,__XXX_XX,XXXX____,
-____XXX_,__XXX__X,XX______,
-____XXX_,XXXXX__X,XXX_____,
-____XXXX,X_XXX_XX,XXXX____,
-____XXXX,__XXXXX_,_XXXXXX_,
-____XXX_,__XXXX__,___XXXXX,
-________,___XX___,____XX__,
+_______X,XXXXX___,________,
+__XXXXXX,____XXXX,XXXXXX__,
+__XXX___,____XXXX,XXXXXX__,
+__XXX___,____XXX_,___XXX__,
+__XXX___,____XXX_,___XXX__,
+__XXX___,____XXX_,___XXX__,
+__XXXXXX,XXXXXXX_,___XXX__,
+__XXXXXX,XXX_XXX_,___XXX__,
+__XXX___,____XXX_,___XXX__,
+__XXX___,____XXX_,___XXX__,
+__XXX___,____XXX_,___XXX__,
+__XXX___,XXXXXXX_,___XXX__,
+__XXXXXX,XX__XXX_,XXXXXX__,
+__XXXXX_,____XXX_,__XXX___,
+___XX___,____XXX_,________,
+________,____XXX_,________,
+________,____XXX_,________,
+________,____XXX_,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -7062,28 +5254,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d4a4[72] = {	/* Ԥ 0xd4a4*/
+GUI_FLASH  const unsigned char acFontHZConsolas_d3e0[72] = {	/* �� 0xd3e0*/
 ________,________,________,
 ________,________,________,
-________,XX______,____XXX_,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-_______X,XX_____X,XX______,
-___XXXXX,X______X,X_______,
-____XXXX,___XXXXX,XXXXXX__,
-_____XXX,___XXXXX,XXXXXX__,
-______XX,_XX_XX_X,X__XXX__,
-_XXXXXXX,XXXXXX_X,XXXXXX__,
-_____XXX,XXX_XX_X,XX_XXX__,
-_____XXX,XX__XX_X,XX_XXX__,
-_____XXX,____XX_X,XX_XXX__,
-_____XXX,____XX_X,XX_XXX__,
-_____XXX,____XX_X,XX_XXX__,
-_____XXX,___XXX_X,XX_XXX__,
-_____XXX,____X_XX,XXXX____,
-_____XXX,______XX,X_XXXX__,
-__XXXXXX,____XXXX,___XXXX_,
-___XXXXX,___XXXX_,____XXX_,
-____XXX_,_XXX____,_____XX_,
+________,__XXXX__,________,
+________,__XXX___,________,
+________,_XXXXX__,________,
+________,XXX__XXX,________,
+_______X,XX____XX,X_______,
+______XX,X______X,XXX_____,
+_____XXX,_______X,XXXXX___,
+____XXXX,XXXXXXXX,XXXXXXXX,
+__XXX___,__XXX___,___XXX__,
+_XX_____,__XXX___,__X_____,
+___XXXXX,XXXXXXXX,XXXXX___,
+____XX__,__XXX___,________,
+_______X,X_XXXXX_,________,
+______XX,XXXXX_XX,XX______,
+_____XXX,__XXX__X,XXXX____,
+____XXX_,__XXX___,_XXXX___,
+___XXX__,__XXX___,__XXX___,
+_XXX___X,XXXXX___,___XX___,
+_X______,_XXXX___,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -7116,82 +5308,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d4b4[72] = {	/* Դ 0xd4b4*/
+GUI_FLASH  const unsigned char acFontHZConsolas_d4bd[72] = {	/* Խ 0xd4bd*/
 ________,________,________,
 ________,________,________,
-__XX____,________,____XX__,
-___XXX__,XXXXXXXX,XXXXXXX_,
-____XXX_,XXX____X,XX______,
-____XXXX,XXX____X,XX______,
-______XX,XXXXXXXX,___XXX__,
-XXX___XX,XXXXXXXX,XXXXXX__,
-_XXX__XX,XXXXXX__,___XXX__,
-__XXXXX_,XXXXXXXX,XXXXXX__,
-__XXXXX_,XXXXXXXX,XXXXXX__,
-____XXX_,XXXXXX__,___XXX__,
-____XX__,XXXXXXXX,XXXXXX__,
-____XX__,XX_XXXXX,XXXXXX__,
-XXXXXX_X,XX_____X,XX______,
-_XXXXX_X,XX_XXXXX,XXXX____,
-___XX__X,X__XXX_X,XXXXXX__,
-__XXX_XX,X_XXX__X,XX_XXXX_,
-__XXXXXX,_XXX___X,XX__XXX_,
-__XXXXX_,XX___XXX,XX__XXX_,
-____XX__,______XX,X_______,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d4bc[72] = {	/* Լ 0xd4bc*/
-________,________,________,
-________,________,________,
-_____XX_,_____XXX,________,
-____XXXX,_____XXX,________,
-____XXX_,____XXXX,________,
-____XX__,_X__XXX_,________,
-___XXX__,XXXXXXXX,XXXXXX__,
-___XX__X,XXXXXXXX,XXXXXX__,
-__XX___X,XX_XX___,___XXX__,
-_XXXXXXX,X_XX____,___XXX__,
-_XXXXXXX,_XX_XX__,___XXX__,
-_____XX_,_X___XXX,___XXX__,
-____XX__,_____XXX,___XXX__,
-___XX__X,XXX___XX,X__XXX__,
-_XXXXXXX,______XX,___XXX__,
-_XXXX___,________,___XXX__,
-________,_XXX____,___XXX__,
-_____XXX,XX______,___XXX__,
-_XXXXXX_,______XX,XXXXX___,
-__XXX___,________,XXXXX___,
-________,________,_XX_____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d4d9[72] = {	/* �� 0xd4d9*/
-________,________,________,
-________,________,________,
-________,________,__XXX___,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-________,__XXX___,________,
-________,__XXX___,________,
-____XXXX,XXXXXXXX,XXXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXX_,__XXX___,_XXX____,
-____XXX_,__XXX___,_XXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXX_,__XXX___,_XXX____,
-____XXX_,__XXX___,_XXX____,
-____XXX_,__XXX___,_XXXXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-__X_XXX_,________,_XXX____,
-____XXX_,________,_XXX____,
-____XXX_,________,_XXX____,
-____XXX_,________,_XXX____,
-____XXX_,_____XXX,XXX_____,
-____XXX_,_______X,XXX_____,
+_____XXX,_______X,XX______,
+_____XXX,_______X,XXXXX___,
+_____XXX,_XX____X,XXXXXX__,
+_XXXXXXX,XXXX___X,XX_XXX__,
+_____XXX,___XXXXX,XXXXXXX_,
+_____XXX,___XXXXX,XXXXXXX_,
+_____XXX,_XXXXX_X,XX_XX___,
+XXXXXXXX,XXXXXX_X,XX_XXX__,
+______XX,X___XX_X,XXXXX___,
+___XXXXX,____XX__,XXXXX___,
+__XXX_XX,_XX_XX__,XXXX____,
+__XXX_XX,XXXXXXXX,XXXX_XX_,
+__XXX_XX,___XXXX_,XXXX_XX_,
+__XXX_XX,____XX_X,XXXXXXX_,
+__XXXXXX,______XX,X__XXXX_,
+__XXXXXX,____XXX_,____XXX_,
+_XXX__XX,XXXXXX__,________,
+_XX_____,XXXXXXXX,XXXXXXX_,
+XX______,____XXXX,XXXXXX__,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -7224,33 +5362,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d5be[72] = {	/* վ 0xd5be*/
-________,________,________,
-________,________,________,
-____X___,______XX,X_______,
-____XXX_,______XX,XX______,
-____XXXX,______XX,X_______,
-_____XXX,_______X,X_______,
-_____XX_,_XX____X,X___XX__,
-_XXXXXXX,XXXX___X,XXXXXXX_,
-________,_______X,X_______,
-__XX___X,XXX____X,X_______,
-__XXX__X,XX_____X,X_______,
-___XX__X,XX_XX__X,X__XX___,
-___XXX_X,X__XXXXX,XXXXXX__,
-___XXXXX,X__XXX__,___XX___,
-___XXXXX,X__XXX__,___XX___,
-___XXXXX,___XXX__,___XX___,
-______XX,XXXXXX__,___XX___,
-_XXXXXXX,___XXX__,___XX___,
-_XXXX___,___XXXXX,XXXXXX__,
-________,___XXX__,___XXX__,
-________,___XXX__,___X____,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_d5d5[72] = {	/* �� 0xd5d5*/
 ________,________,________,
 ________,________,________,
@@ -7273,87 +5384,6 @@ ___XX___,XXX__XXX,___XXX__,
 __XXX___,XXX__XXX,X__XXXX_,
 _XXXX___,XXX___XX,____XXX_,
 __XX____,________,____XX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d5f4[72] = {	/* �� 0xd5f4*/
-________,________,________,
-________,________,________,
-________,XXX__XXX,X_______,
-________,XX___XXX,___XX___,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-________,XX___XXX,________,
-________,XX___XXX,XX______,
-____XXXX,XXXXXXXX,XXX_____,
-________,_____XXX,X__X____,
-__XXXXXX,XX_XXXX_,_XXXX___,
-__XXXXXX,XX_XXXXX,XXXX____,
-______XX,X__XX_XX,X_______,
-_____XXX,___XX__X,XXX_____,
-____XXX_,XXXXX___,XXXXX___,
-___XXX__,_XXXX___,__XXXXX_,
-_XXXXXXX,XXXXXXXX,XXX_X___,
-_X__XXXX,XXXXXXXX,XXXX____,
-____XX_X,XX__XXX_,__XXX___,
-___XXX__,XXX__XXX,___XXX__,
-__XXX___,XXX___XX,X__XXX__,
-_XXXX___,XXX___XX,____XX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d6a4[72] = {	/* ֤ 0xd6a4*/
-________,________,________,
-________,________,________,
-________,________,________,
-__XXX___,________,___XXX__,
-___XXX__,XXXXXXXX,XXXXXXX_,
-____XXX_,______XX,X_______,
-____XX__,______XX,X_______,
-________,______XX,X_______,
-____XX__,_XXX__XX,X_______,
-_XXXXXX_,_XXXX_XX,X_______,
-____XX__,_XXX__XX,X__XXX__,
-____XX__,_XXX__XX,XXXXXX__,
-____XX__,_XXX__XX,X_______,
-____XX__,_XXX__XX,X_______,
-____XX__,_XXX__XX,X_______,
-____XX_X,XXXX__XX,X_______,
-____XXXX,_XXX__XX,X_______,
-____XXXX,_XXX__XX,X_______,
-___XXXX_,_XXX__XX,X___XXX_,
-____XXXX,XXXXXXXX,XXXXXXX_,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d6b5[72] = {	/* ֵ 0xd6b5*/
-________,________,________,
-________,________,________,
-_____XXX,_____XXX,________,
-_____XXX,_____XX_,________,
-_____XXX,_____XX_,___XXX__,
-____XXXX,XXXXXXXX,XXXXXX__,
-____XXX_,_____XX_,________,
-___XXX__,_XX_XXX_,_XXX____,
-___XXXX_,_XXXXXXX,XXXX____,
-__XXXX__,_XXX____,_XXX____,
-__XXXX__,_XXXXXXX,XXXX____,
-_XX_XX__,_XXXXXXX,XXXX____,
-XX__XX__,_XXX____,_XXX____,
-____XX__,_XXXXXXX,XXXX____,
-____XX__,_XXXXXXX,XXXX____,
-____XX__,_XXX____,_XXX____,
-____XX__,_XXXXXXX,XXXX____,
-____XX__,_XXXXXXX,XXXX____,
-____XX__,_XXX____,_XXX_X__,
-____XXXX,XXXXXXXX,XXXXXXX_,
-____XXXX,XXXXXXXX,XXXXXXX_,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -7386,33 +5416,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d6c6[72] = {	/* �� 0xd6c6*/
-________,________,________,
-________,________,________,
-______XX,XX______,___XXX__,
-___XX_XX,X_______,___XXX__,
-___XXXXX,X_______,___XXX__,
-__XXX_XX,X_XXX__X,XX_XXX__,
-__XXXXXX,XXXXXX_X,XX_XXX__,
-__XX__XX,X______X,XX_XXX__,
-_XX___XX,X___XX_X,XX_XXX__,
-_XXXXXXX,XXXXXXXX,XX_XXX__,
-______XX,X______X,XX_XXX__,
-__XXXXXX,XXXXXX_X,XX_XXX__,
-__XXXXXX,XXXXXX_X,XX_XXX__,
-__XXX_XX,X__XXX_X,XX_XXX__,
-__XXX_XX,X__XXX_X,XX_XXX__,
-__XXX_XX,X__XXX_X,XX_XXX__,
-__XXX_XX,XX_XXX__,___XXX__,
-__XXX_XX,XXXXX___,___XXX__,
-__XX__XX,X_XX____,___XXX__,
-______XX,X_______,XXXXXX__,
-______XX,X_______,__XXX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_d6ca[72] = {	/* �� 0xd6ca*/
 ________,________,________,
 ________,________,________,
@@ -7435,33 +5438,6 @@ __XX____,__XXX_XX,XXX_____,
 _XXX____,_XXX____,XXXXX___,
 _XX____X,XXX_____,__XXXX__,
 XX__XXXX,________,___XX___,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d6d0[72] = {	/* �� 0xd6d0*/
-________,________,________,
-________,________,________,
-________,__XXXX__,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,___XX___,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-__XXXXXX,XXXXXXXX,XXXXX___,
-___XX___,__XXX___,__XXX___,
-___XX___,__XXX___,__XXX___,
-___XX___,__XXX___,__XXX___,
-___XX___,__XXX___,__XXX___,
-___XXXXX,XXXXXXXX,XXXXX___,
-__XXX___,__XXX___,__XXX___,
-__XXX___,__XXX___,___XX___,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -7494,82 +5470,28 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d6f7[72] = {	/* �� 0xd6f7*/
+GUI_FLASH  const unsigned char acFontHZConsolas_d6e8[72] = {	/* �� 0xd6e8*/
 ________,________,________,
 ________,________,________,
-________,XXX_____,________,
-________,_XXXX___,________,
-________,__XXXX__,________,
-________,___XXX__,________,
-________,___XX___,__XXXX__,
-__XXXXXX,XXXXXXXX,XXXXXX__,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,__X_____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXXX,XXXXXXXX,XXXX____,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,________,
-________,__XXX___,___XXX__,
+_______X,_______X,XX______,
 _XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d7a2[72] = {	/* ע 0xd7a2*/
-________,________,________,
-________,________,________,
-________,___XXX__,________,
-___XXX__,____XXXX,________,
-____XXX_,_____XXX,________,
-____XXXX,X____XXX,____X___,
-_____X_X,XXXXXXXX,XXXXXX__,
-_______X,XXXXXXXX,XXXXXXX_,
-_XXX__XX,_____XXX,________,
-__XXX_XX,_____XXX,________,
-__XXXXXX,_____XXX,________,
-___X_XX_,_____XXX,___XX___,
-____XXX_,XXXXXXXX,XXXXXX__,
-____XXX_,_X___XXX,________,
-___XXX__,_____XXX,________,
-XXXXXX__,_____XXX,________,
-__XXXX__,_____XXX,________,
-__XXX___,_____XXX,________,
-__XXX___,_____XXX,___XXXX_,
-__XXX_XX,XXXXXXXX,XXXXXXX_,
-___XX___,________,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d7b0[72] = {	/* װ 0xd7b0*/
-________,________,________,
-________,________,________,
-______XX,XX____XX,X_______,
-__XX__XX,X_____XX,X_______,
-__XXXXXX,X_____XX,X_______,
-___XXXXX,XXXXXXXX,XXXXXX__,
-____XXXX,XXXXXXXX,XXXXXXX_,
-_____XXX,X_____XX,X_______,
-___XXXXX,X_____XX,X_______,
-_XXXX_XX,X_XXXXXX,XXXXX___,
-_XXX__XX,XXXXXXXX,XXXXX___,
-______XX,X_XXX___,________,
-_______X,___XXX__,___XXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-________,XXXXXX__,_XXXX___,
-_______X,XX__XXX_,XXXX____,
-_____XXX,XX___XXX,XX______,
-___XXXXX,XX____XX,XX______,
-XXXX___X,XXXXXX_X,XXXXX___,
-_______X,XXXX____,_XXXXXXX,
-_______X,XX______,___XXX__,
+______XX,X_XXX_XX,XXXXXXX_,
+___XX_XX,X_XXXXXX,XX_XXX__,
+__XXXXXX,X_XXX_XX,_XXXX___,
+__XXX_XX,X_XXXXXX,__XXXX__,
+__XXX_XX,__XXX_XX,XXXXXXX_,
+__XXX_XX,__XXXXXX,XXX__XX_,
+__XXX_XX,_XXXX_XX,X__XX___,
+__XXXXXX,XX____XX,XXXXXX__,
+__XXXXXX,XXXXXXXX,XX______,
+_______X,XX__XX_X,XX__XXX_,
+____XXXX,XX_XXXXX,XXXXXX__,
+XXXXX__X,X_XXX__X,XXX_____,
+_XXX___X,XXX_XXXX,XXXX____,
+______XX,X__XXXXX,X_XXXX__,
+__XXXXXX,X_XXX__X,X__XXXX_,
+____XXXX,XXXX___X,X___XX__,
+_____XX_,_______X,X_______,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -7597,33 +5519,6 @@ __XXX___,_XXX___X,X___XX__,
 __XXX___,_XXXXXXX,XXXXXXX_,
 ___XX___,_XXXXXXX,XXXXXXX_,
 ________,_XXX____,________,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
-GUI_FLASH  const unsigned char acFontHZConsolas_d7cf[72] = {	/* �� 0xd7cf*/
-________,________,________,
-________,________,________,
-_______X,XX___XXX,________,
-_______X,X____XXX,__XXX___,
-___XXX_X,X_XX_XXX,XXXXX___,
-___XXX_X,XXXXXXXX,XX______,
-___XXX_X,X____XXX,____XX__,
-___XXX_X,X____XXX,____XX__,
-___XXXXX,XXXXXXXX,____XXX_,
-_XXXXXXX,XXXXX_XX,XXXXXXX_,
-__XXX___,XXXX__XX,X_______,
-_____XXX,X___XXXX,X_______,
-_____XXX,XXXXXXX_,________,
-________,_XXXX_XX,XX______,
-______XX,XXX_____,XXXX____,
-____XXXX,XXXXXXXX,XXXX____,
-____XXXX,X__XX___,__XX____,
-______XX,XX_XX_XX,XX______,
-____XXXX,X__XX___,XXXXX___,
-___XXX__,XXXXX___,_XXXX___,
-_XXX____,__XXX___,___XX___,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -7683,33 +5578,6 @@ ________,________,________,
 ________,________,________,
 };
 
-GUI_FLASH  const unsigned char acFontHZConsolas_d7ee[72] = {	/* �� 0xd7ee*/
-________,________,________,
-________,________,________,
-_____XXX,XXXXXXXX,XXXX____,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,________,XXX_____,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,________,XXX_____,
-_____XXX,XXXXXXXX,XXX_____,
-_____XXX,________,XXXXXX__,
-_XXXXXXX,XXXXXXXX,XXXXXXX_,
-__X_XXX_,_XXX____,________,
-____XXXX,XXXXXXXX,XXXXXX__,
-____XXXX,XXXX_XX_,__XXX___,
-____XXX_,_XXX_XXX,__XXX___,
-____XXXX,XXXX__XX,_XXX____,
-____XXX_,_XXX__XX,XXX_____,
-____XXX_,XXXXXXXX,XXX_____,
-__XXXXXX,XXXX___X,XXX_____,
-_XXXXXX_,_XXX__XX,XXXXX___,
-__X_____,_XXXXXX_,__XXXXXX,
-________,_XXXXX__,____XX__,
-________,________,________,
-________,________,________,
-________,________,________,
-};
-
 GUI_FLASH  const unsigned char acFontHZConsolas_d7f3[72] = {	/* �� 0xd7f3*/
 ________,________,________,
 ________,________,________,
@@ -7732,6 +5600,33 @@ __XX____,____XXX_,________,
 _XX_____,____XXX_,___XXX__,
 ____XXXX,XXXXXXXX,XXXXXXX_,
 ________,________,________,
+________,________,________,
+________,________,________,
+________,________,________,
+};
+
+GUI_FLASH  const unsigned char acFontHZConsolas_d7f7[72] = {	/* �� 0xd7f7*/
+________,________,________,
+________,________,________,
+______XX,X__XXXX_,________,
+_____XXX,X__XXX__,________,
+_____XXX,___XXX__,________,
+_____XX_,__XXX___,___XXX__,
+____XXX_,__XXXXXX,XXXXXXX_,
+____XX__,_XXXXXX_,________,
+___XXXX_,XXX_XXX_,________,
+__XXXXX_,XX__XXX_,________,
+__XXXXXX,X___XXXX,XXXXX___,
+_XX_XXX_,____XXXX,XXXXXX__,
+XX__XXX_,____XXX_,________,
+____XXX_,____XXX_,________,
+____XXX_,____XXX_,___XX___,
+____XXX_,____XXXX,XXXXXXX_,
+____XXX_,____XXX_,________,
+____XXX_,____XXX_,________,
+____XXX_,____XXX_,________,
+____XXX_,____XXX_,________,
+____XXX_,____XXX_,________,
 ________,________,________,
 ________,________,________,
 ________,________,________,
@@ -7834,1479 +5729,890 @@ GUI_FLASH const GUI_CHARINFO GUI_FontHZConsolas_CharInfo[] = {
 { 12, 12, 2, (void GUI_FLASH *)&acFontHZConsolas_007d},/* } 93 */
 { 12, 12, 2, (void GUI_FLASH *)&acFontHZConsolas_007e},/* ~ 94 */
 { 5, 5, 1, (void GUI_FLASH *)&acFontHZConsolas_007f},/*  95 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0b2},/* �� 96 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0b4},/* �� 97 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0d7},/* �� 98 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0dc},/* �� 99 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0e5},/* �� 100 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0e8},/* �� 101 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0eb},/* �� 102 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b1a3},/* �� 103 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b1e6},/* �� 104 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b1ed},/* �� 105 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2b9},/* �� 106 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2bb},/* �� 107 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2bd},/* �� 108 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2cb},/* �� 109 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2ce},/* �� 110 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2e2},/* �� 111 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2e5},/* �� 112 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2ee},/* �� 113 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2fa},/* �� 114 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b3a3},/* �� 115 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b3c6},/* �� 116 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b3c8},/* �� 117 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b3c9},/* �� 118 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b3f6},/* �� 119 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4a2},/* �� 120 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4a5},/* �� 121 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4ce},/* �� 122 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4e6},/* �� 123 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4ed},/* �� 124 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4f3},/* �� 125 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5a5},/* �� 126 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5bc},/* �� 127 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5c4},/* �� 128 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5cd},/* �� 129 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5ce},/* �� 130 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5e3},/* �� 131 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5e5},/* �� 132 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5e7},/* �� 133 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5f7},/* �� 134 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6a8},/* �� 135 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6aa},/* �� 136 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6af},/* �� 137 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6c8},/* �� 138 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6cf},/* �� 139 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6e0},/* �� 140 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b7b5},/* �� 141 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b7b6},/* �� 142 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b7bd},/* �� 143 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b7d6},/* �� 144 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b8c7},/* �� 145 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b8c9},/* �� 146 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b8df},/* �� 147 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b8f6},/* �� 148 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b9a6},/* �� 149 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b9d8},/* �� 150 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b9dc},/* �� 151 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b9fb},/* �� 152 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_baac},/* �� 153 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bac4},/* �� 154 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_baec},/* �� 155 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_baf3},/* �� 156 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbaf},/* �� 157 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbc6},/* �� 158 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbd8},/* �� 159 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbee},/* �� 160 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbf7},/* �� 161 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbfa},/* �� 162 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bcab},/* �� 163 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bcbc},/* �� 164 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bcc6},/* �� 165 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bccc},/* �� 166 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bcd3},/* �� 167 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bcfe},/* �� 168 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bdc1},/* �� 169 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bde1},/* �� 170 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bead},/* �� 171 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bedd},/* �� 172 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bfaa},/* �� 173 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bfc6},/* �� 174 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bfd5},/* �� 175 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c0b6},/* �� 176 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c0eb},/* �� 177 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c1aa},/* �� 178 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c1bf},/* �� 179 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c1d0},/* �� 180 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c1e3},/* �� 181 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c1f3},/* �� 182 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c2ca},/* �� 183 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c2cc},/* �� 184 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c3fb},/* �� 185 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c3fe},/* �� 186 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c4bb},/* Ļ 187 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c4dc},/* �� 188 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c4e0},/* �� 189 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c5a8},/* Ũ 190 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c5c5},/* �� 191 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c5cc},/* �� 192 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c5e4},/* �� 193 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c6b7},/* Ʒ 194 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c6bf},/* ƿ 195 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c6c1},/* �� 196 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c6f3},/* �� 197 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c6f4},/* �� 198 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c6f7},/* �� 199 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c7b0},/* ǰ 200 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c7e5},/* �� 201 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c7eb},/* �� 202 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8a6},/* Ȧ 203 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8be},/* Ⱦ 204 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8c5},/* �� 205 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8c8},/* �� 206 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8dc},/* �� 207 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8eb},/* �� 208 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c9ab},/* ɫ 209 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c9cf},/* �� 210 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c9d9},/* �� 211 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c9e8},/* �� 212 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_caa7},/* ʧ 213 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cab1},/* ʱ 214 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cab5},/* ʵ 215 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cab9},/* ʹ 216 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cabc},/* ʼ 217 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cabd},/* ʽ 218 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cad4},/* �� 219 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cae4},/* �� 220 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_caf8},/* �� 221 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cafd},/* �� 222 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cbae},/* ˮ 223 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cbd9},/* �� 224 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cbe1},/* �� 225 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cbe3},/* �� 226 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cda3},/* ͣ 227 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cea7},/* Χ 228 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cebb},/* λ 229 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cec2},/* �� 230 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cec4},/* �� 231 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cec8},/* �� 232 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cedb},/* �� 233 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cef3},/* �� 234 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cefc},/* �� 235 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cfb4},/* ϴ 236 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cfb5},/* ϵ 237 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cfc2},/* �� 238 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cfdf},/* �� 239 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cff5},/* �� 240 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cffb},/* �� 241 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d0a1},/* С 242 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d0a3},/* У 243 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d0c2},/* �� 244 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d0d4},/* �� 245 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d1a1},/* ѡ 246 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d1b9},/* ѹ 247 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d1e9},/* �� 248 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d1f9},/* �� 249 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2b3},/* ҳ 250 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2b5},/* ҵ 251 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2ba},/* Һ 252 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2bb},/* һ 253 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2c7},/* �� 254 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2d1},/* �� 255 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2e5},/* �� 256 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2ec},/* �� 257 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2f8},/* �� 258 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d3c3},/* �� 259 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d3d2},/* �� 260 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4a4},/* Ԥ 261 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4b2},/* Բ 262 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4b4},/* Դ 263 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4bc},/* Լ 264 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4d9},/* �� 265 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4f1},/* �� 266 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d5be},/* վ 267 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d5d5},/* �� 268 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d5f4},/* �� 269 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6a4},/* ֤ 270 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6b5},/* ֵ 271 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6c3},/* �� 272 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6c6},/* �� 273 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6ca},/* �� 274 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6d0},/* �� 275 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6d8},/* �� 276 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6f7},/* �� 277 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7a2},/* ע 278 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7b0},/* װ 279 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7bc},/* ׼ 280 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7cf},/* �� 281 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7d3},/* �� 282 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7d4},/* �� 283 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7ee},/* �� 284 */
-{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7f3},/* �� 285 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0b4},/* �� 96 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0d7},/* �� 97 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b0dc},/* �� 98 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b1a3},/* �� 99 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b1a8},/* �� 100 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b1e4},/* �� 101 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2bd},/* �� 102 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2ce},/* �� 103 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2d9},/* �� 104 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b2e2},/* �� 105 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b3c9},/* �� 106 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b3f6},/* �� 107 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4a2},/* �� 108 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4a5},/* �� 109 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4a6},/* �� 110 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4e6},/* �� 111 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b4f2},/* �� 112 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5b1},/* �� 113 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5bc},/* �� 114 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5ce},/* �� 115 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5da},/* �� 116 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5e3},/* �� 117 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b5e7},/* �� 118 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6a8},/* �� 119 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6af},/* �� 120 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b6c8},/* �� 121 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b7b5},/* �� 122 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b8e6},/* �� 123 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b9a6},/* �� 124 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_b9fb},/* �� 125 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_baec},/* �� 126 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbb7},/* �� 127 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbd8},/* �� 128 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bbf7},/* �� 129 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bcab},/* �� 130 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bcc6},/* �� 131 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bcec},/* �� 132 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bde1},/* �� 133 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bedd},/* �� 134 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bfaa},/* �� 135 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bfd5},/* �� 136 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_bfec},/* �� 137 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c0db},/* �� 138 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c0eb},/* �� 139 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c0ed},/* �� 140 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c1bf},/* �� 141 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c2c8},/* �� 142 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c2fd},/* �� 143 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c3fe},/* �� 144 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c4bb},/* Ļ 145 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c4e0},/* �� 146 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c5a8},/* Ũ 147 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c5c5},/* �� 148 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c5cc},/* �� 149 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c5e4},/* �� 150 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c6c1},/* �� 151 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c6f7},/* �� 152 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c7b0},/* ǰ 153 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c7e5},/* �� 154 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c7eb},/* �� 155 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8a6},/* Ȧ 156 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8ab},/* ȫ 157 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8dc},/* �� 158 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c8eb},/* �� 159 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c9ab},/* ɫ 160 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c9cf},/* �� 161 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_c9e8},/* �� 162 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_caa3},/* ʣ 163 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_caa7},/* ʧ 164 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cab5},/* ʵ 165 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cabc},/* ʼ 166 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cabe},/* ʾ 167 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_caf8},/* �� 168 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cafd},/* �� 169 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cbae},/* ˮ 170 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cbb3},/* ˳ 171 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cdb3},/* ͳ 172 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cdcb},/* �� 173 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cdea},/* �� 174 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cebb},/* λ 175 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cec2},/* �� 176 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cefc},/* �� 177 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cfb4},/* ϴ 178 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cfb5},/* ϵ 179 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cfc2},/* �� 180 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_cfd4},/* �� 181 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d0a3},/* У 182 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d0c2},/* �� 183 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d0f2},/* �� 184 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d1a1},/* ѡ 185 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d1ad},/* ѭ 186 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d1e9},/* �� 187 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2b3},/* ҳ 188 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2ba},/* Һ 189 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d2c7},/* �� 190 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d3a1},/* ӡ 191 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d3c3},/* �� 192 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d3d2},/* �� 193 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d3e0},/* �� 194 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4b2},/* Բ 195 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4bd},/* Խ 196 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d4f1},/* �� 197 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d5d5},/* �� 198 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6c3},/* �� 199 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6ca},/* �� 200 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6d8},/* �� 201 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d6e8},/* �� 202 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7bc},/* ׼ 203 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7d3},/* �� 204 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7d4},/* �� 205 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7f3},/* �� 206 */
+{ 24, 24, 3, (void GUI_FLASH *)&acFontHZConsolas_d7f7},/* �� 207 */
 };
 
 /*��--��*/
 
-GUI_FLASH const GUI_FONT_PROP GUI_FontHZConsolas_Propd7f3= {
-      0xd7f3,
-      0xd7f3,
-      &GUI_FontHZConsolas_CharInfo[285],
+GUI_FLASH const GUI_FONT_PROP GUI_FontHZConsolas_Propd7f7= {
+      0xd7f7,
+      0xd7f7,
+      &GUI_FontHZConsolas_CharInfo[207],
       (void *)0 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd7ee= {
-      0xd7ee,
-      0xd7ee,
-      &GUI_FontHZConsolas_CharInfo[284],
-      (void *)&GUI_FontHZConsolas_Propd7f3 
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd7f3= {
+      0xd7f3,
+      0xd7f3,
+      &GUI_FontHZConsolas_CharInfo[206],
+      (void *)&GUI_FontHZConsolas_Propd7f7 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd7d3= {
       0xd7d3,
       0xd7d4,
-      &GUI_FontHZConsolas_CharInfo[282],
-      (void *)&GUI_FontHZConsolas_Propd7ee 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd7cf= {
-      0xd7cf,
-      0xd7cf,
-      &GUI_FontHZConsolas_CharInfo[281],
-      (void *)&GUI_FontHZConsolas_Propd7d3 
+      &GUI_FontHZConsolas_CharInfo[204],
+      (void *)&GUI_FontHZConsolas_Propd7f3 
 };
 /*׼--׼*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd7bc= {
       0xd7bc,
       0xd7bc,
-      &GUI_FontHZConsolas_CharInfo[280],
-      (void *)&GUI_FontHZConsolas_Propd7cf 
-};
-/*װ--װ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd7b0= {
-      0xd7b0,
-      0xd7b0,
-      &GUI_FontHZConsolas_CharInfo[279],
-      (void *)&GUI_FontHZConsolas_Propd7bc 
-};
-/*ע--ע*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd7a2= {
-      0xd7a2,
-      0xd7a2,
-      &GUI_FontHZConsolas_CharInfo[278],
-      (void *)&GUI_FontHZConsolas_Propd7b0 
+      &GUI_FontHZConsolas_CharInfo[203],
+      (void *)&GUI_FontHZConsolas_Propd7d3 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6f7= {
-      0xd6f7,
-      0xd6f7,
-      &GUI_FontHZConsolas_CharInfo[277],
-      (void *)&GUI_FontHZConsolas_Propd7a2 
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6e8= {
+      0xd6e8,
+      0xd6e8,
+      &GUI_FontHZConsolas_CharInfo[202],
+      (void *)&GUI_FontHZConsolas_Propd7bc 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6d8= {
       0xd6d8,
       0xd6d8,
-      &GUI_FontHZConsolas_CharInfo[276],
-      (void *)&GUI_FontHZConsolas_Propd6f7 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6d0= {
-      0xd6d0,
-      0xd6d0,
-      &GUI_FontHZConsolas_CharInfo[275],
-      (void *)&GUI_FontHZConsolas_Propd6d8 
+      &GUI_FontHZConsolas_CharInfo[201],
+      (void *)&GUI_FontHZConsolas_Propd6e8 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6ca= {
       0xd6ca,
       0xd6ca,
-      &GUI_FontHZConsolas_CharInfo[274],
-      (void *)&GUI_FontHZConsolas_Propd6d0 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6c6= {
-      0xd6c6,
-      0xd6c6,
-      &GUI_FontHZConsolas_CharInfo[273],
-      (void *)&GUI_FontHZConsolas_Propd6ca 
+      &GUI_FontHZConsolas_CharInfo[200],
+      (void *)&GUI_FontHZConsolas_Propd6d8 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6c3= {
       0xd6c3,
       0xd6c3,
-      &GUI_FontHZConsolas_CharInfo[272],
-      (void *)&GUI_FontHZConsolas_Propd6c6 
-};
-/*ֵ--ֵ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6b5= {
-      0xd6b5,
-      0xd6b5,
-      &GUI_FontHZConsolas_CharInfo[271],
-      (void *)&GUI_FontHZConsolas_Propd6c3 
-};
-/*֤--֤*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd6a4= {
-      0xd6a4,
-      0xd6a4,
-      &GUI_FontHZConsolas_CharInfo[270],
-      (void *)&GUI_FontHZConsolas_Propd6b5 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd5f4= {
-      0xd5f4,
-      0xd5f4,
-      &GUI_FontHZConsolas_CharInfo[269],
-      (void *)&GUI_FontHZConsolas_Propd6a4 
+      &GUI_FontHZConsolas_CharInfo[199],
+      (void *)&GUI_FontHZConsolas_Propd6ca 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd5d5= {
       0xd5d5,
       0xd5d5,
-      &GUI_FontHZConsolas_CharInfo[268],
-      (void *)&GUI_FontHZConsolas_Propd5f4 
-};
-/*վ--վ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd5be= {
-      0xd5be,
-      0xd5be,
-      &GUI_FontHZConsolas_CharInfo[267],
-      (void *)&GUI_FontHZConsolas_Propd5d5 
+      &GUI_FontHZConsolas_CharInfo[198],
+      (void *)&GUI_FontHZConsolas_Propd6c3 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd4f1= {
       0xd4f1,
       0xd4f1,
-      &GUI_FontHZConsolas_CharInfo[266],
-      (void *)&GUI_FontHZConsolas_Propd5be 
+      &GUI_FontHZConsolas_CharInfo[197],
+      (void *)&GUI_FontHZConsolas_Propd5d5 
 };
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd4d9= {
-      0xd4d9,
-      0xd4d9,
-      &GUI_FontHZConsolas_CharInfo[265],
+/*Խ--Խ*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd4bd= {
+      0xd4bd,
+      0xd4bd,
+      &GUI_FontHZConsolas_CharInfo[196],
       (void *)&GUI_FontHZConsolas_Propd4f1 
-};
-/*Լ--Լ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd4bc= {
-      0xd4bc,
-      0xd4bc,
-      &GUI_FontHZConsolas_CharInfo[264],
-      (void *)&GUI_FontHZConsolas_Propd4d9 
-};
-/*Դ--Դ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd4b4= {
-      0xd4b4,
-      0xd4b4,
-      &GUI_FontHZConsolas_CharInfo[263],
-      (void *)&GUI_FontHZConsolas_Propd4bc 
 };
 /*Բ--Բ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd4b2= {
       0xd4b2,
       0xd4b2,
-      &GUI_FontHZConsolas_CharInfo[262],
-      (void *)&GUI_FontHZConsolas_Propd4b4 
+      &GUI_FontHZConsolas_CharInfo[195],
+      (void *)&GUI_FontHZConsolas_Propd4bd 
 };
-/*Ԥ--Ԥ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd4a4= {
-      0xd4a4,
-      0xd4a4,
-      &GUI_FontHZConsolas_CharInfo[261],
+/*��--��*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd3e0= {
+      0xd3e0,
+      0xd3e0,
+      &GUI_FontHZConsolas_CharInfo[194],
       (void *)&GUI_FontHZConsolas_Propd4b2 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd3d2= {
       0xd3d2,
       0xd3d2,
-      &GUI_FontHZConsolas_CharInfo[260],
-      (void *)&GUI_FontHZConsolas_Propd4a4 
+      &GUI_FontHZConsolas_CharInfo[193],
+      (void *)&GUI_FontHZConsolas_Propd3e0 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd3c3= {
       0xd3c3,
       0xd3c3,
-      &GUI_FontHZConsolas_CharInfo[259],
+      &GUI_FontHZConsolas_CharInfo[192],
       (void *)&GUI_FontHZConsolas_Propd3d2 
 };
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd2f8= {
-      0xd2f8,
-      0xd2f8,
-      &GUI_FontHZConsolas_CharInfo[258],
+/*ӡ--ӡ*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd3a1= {
+      0xd3a1,
+      0xd3a1,
+      &GUI_FontHZConsolas_CharInfo[191],
       (void *)&GUI_FontHZConsolas_Propd3c3 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd2ec= {
-      0xd2ec,
-      0xd2ec,
-      &GUI_FontHZConsolas_CharInfo[257],
-      (void *)&GUI_FontHZConsolas_Propd2f8 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd2e5= {
-      0xd2e5,
-      0xd2e5,
-      &GUI_FontHZConsolas_CharInfo[256],
-      (void *)&GUI_FontHZConsolas_Propd2ec 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd2d1= {
-      0xd2d1,
-      0xd2d1,
-      &GUI_FontHZConsolas_CharInfo[255],
-      (void *)&GUI_FontHZConsolas_Propd2e5 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd2c7= {
       0xd2c7,
       0xd2c7,
-      &GUI_FontHZConsolas_CharInfo[254],
-      (void *)&GUI_FontHZConsolas_Propd2d1 
+      &GUI_FontHZConsolas_CharInfo[190],
+      (void *)&GUI_FontHZConsolas_Propd3a1 
 };
-/*Һ--һ*/
+/*Һ--Һ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd2ba= {
       0xd2ba,
-      0xd2bb,
-      &GUI_FontHZConsolas_CharInfo[252],
+      0xd2ba,
+      &GUI_FontHZConsolas_CharInfo[189],
       (void *)&GUI_FontHZConsolas_Propd2c7 
-};
-/*ҵ--ҵ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd2b5= {
-      0xd2b5,
-      0xd2b5,
-      &GUI_FontHZConsolas_CharInfo[251],
-      (void *)&GUI_FontHZConsolas_Propd2ba 
 };
 /*ҳ--ҳ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd2b3= {
       0xd2b3,
       0xd2b3,
-      &GUI_FontHZConsolas_CharInfo[250],
-      (void *)&GUI_FontHZConsolas_Propd2b5 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd1f9= {
-      0xd1f9,
-      0xd1f9,
-      &GUI_FontHZConsolas_CharInfo[249],
-      (void *)&GUI_FontHZConsolas_Propd2b3 
+      &GUI_FontHZConsolas_CharInfo[188],
+      (void *)&GUI_FontHZConsolas_Propd2ba 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd1e9= {
       0xd1e9,
       0xd1e9,
-      &GUI_FontHZConsolas_CharInfo[248],
-      (void *)&GUI_FontHZConsolas_Propd1f9 
+      &GUI_FontHZConsolas_CharInfo[187],
+      (void *)&GUI_FontHZConsolas_Propd2b3 
 };
-/*ѹ--ѹ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd1b9= {
-      0xd1b9,
-      0xd1b9,
-      &GUI_FontHZConsolas_CharInfo[247],
+/*ѭ--ѭ*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd1ad= {
+      0xd1ad,
+      0xd1ad,
+      &GUI_FontHZConsolas_CharInfo[186],
       (void *)&GUI_FontHZConsolas_Propd1e9 
 };
 /*ѡ--ѡ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd1a1= {
       0xd1a1,
       0xd1a1,
-      &GUI_FontHZConsolas_CharInfo[246],
-      (void *)&GUI_FontHZConsolas_Propd1b9 
+      &GUI_FontHZConsolas_CharInfo[185],
+      (void *)&GUI_FontHZConsolas_Propd1ad 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd0d4= {
-      0xd0d4,
-      0xd0d4,
-      &GUI_FontHZConsolas_CharInfo[245],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd0f2= {
+      0xd0f2,
+      0xd0f2,
+      &GUI_FontHZConsolas_CharInfo[184],
       (void *)&GUI_FontHZConsolas_Propd1a1 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd0c2= {
       0xd0c2,
       0xd0c2,
-      &GUI_FontHZConsolas_CharInfo[244],
-      (void *)&GUI_FontHZConsolas_Propd0d4 
+      &GUI_FontHZConsolas_CharInfo[183],
+      (void *)&GUI_FontHZConsolas_Propd0f2 
 };
 /*У--У*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd0a3= {
       0xd0a3,
       0xd0a3,
-      &GUI_FontHZConsolas_CharInfo[243],
+      &GUI_FontHZConsolas_CharInfo[182],
       (void *)&GUI_FontHZConsolas_Propd0c2 
 };
-/*С--С*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propd0a1= {
-      0xd0a1,
-      0xd0a1,
-      &GUI_FontHZConsolas_CharInfo[242],
+/*��--��*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcfd4= {
+      0xcfd4,
+      0xcfd4,
+      &GUI_FontHZConsolas_CharInfo[181],
       (void *)&GUI_FontHZConsolas_Propd0a3 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcffb= {
-      0xcffb,
-      0xcffb,
-      &GUI_FontHZConsolas_CharInfo[241],
-      (void *)&GUI_FontHZConsolas_Propd0a1 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcff5= {
-      0xcff5,
-      0xcff5,
-      &GUI_FontHZConsolas_CharInfo[240],
-      (void *)&GUI_FontHZConsolas_Propcffb 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcfdf= {
-      0xcfdf,
-      0xcfdf,
-      &GUI_FontHZConsolas_CharInfo[239],
-      (void *)&GUI_FontHZConsolas_Propcff5 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcfc2= {
       0xcfc2,
       0xcfc2,
-      &GUI_FontHZConsolas_CharInfo[238],
-      (void *)&GUI_FontHZConsolas_Propcfdf 
+      &GUI_FontHZConsolas_CharInfo[180],
+      (void *)&GUI_FontHZConsolas_Propcfd4 
 };
 /*ϴ--ϵ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcfb4= {
       0xcfb4,
       0xcfb5,
-      &GUI_FontHZConsolas_CharInfo[236],
+      &GUI_FontHZConsolas_CharInfo[178],
       (void *)&GUI_FontHZConsolas_Propcfc2 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcefc= {
       0xcefc,
       0xcefc,
-      &GUI_FontHZConsolas_CharInfo[235],
+      &GUI_FontHZConsolas_CharInfo[177],
       (void *)&GUI_FontHZConsolas_Propcfb4 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcef3= {
-      0xcef3,
-      0xcef3,
-      &GUI_FontHZConsolas_CharInfo[234],
-      (void *)&GUI_FontHZConsolas_Propcefc 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcedb= {
-      0xcedb,
-      0xcedb,
-      &GUI_FontHZConsolas_CharInfo[233],
-      (void *)&GUI_FontHZConsolas_Propcef3 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcec8= {
-      0xcec8,
-      0xcec8,
-      &GUI_FontHZConsolas_CharInfo[232],
-      (void *)&GUI_FontHZConsolas_Propcedb 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcec4= {
-      0xcec4,
-      0xcec4,
-      &GUI_FontHZConsolas_CharInfo[231],
-      (void *)&GUI_FontHZConsolas_Propcec8 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcec2= {
       0xcec2,
       0xcec2,
-      &GUI_FontHZConsolas_CharInfo[230],
-      (void *)&GUI_FontHZConsolas_Propcec4 
+      &GUI_FontHZConsolas_CharInfo[176],
+      (void *)&GUI_FontHZConsolas_Propcefc 
 };
 /*λ--λ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcebb= {
       0xcebb,
       0xcebb,
-      &GUI_FontHZConsolas_CharInfo[229],
+      &GUI_FontHZConsolas_CharInfo[175],
       (void *)&GUI_FontHZConsolas_Propcec2 
 };
-/*Χ--Χ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcea7= {
-      0xcea7,
-      0xcea7,
-      &GUI_FontHZConsolas_CharInfo[228],
+/*��--��*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcdea= {
+      0xcdea,
+      0xcdea,
+      &GUI_FontHZConsolas_CharInfo[174],
       (void *)&GUI_FontHZConsolas_Propcebb 
 };
-/*ͣ--ͣ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcda3= {
-      0xcda3,
-      0xcda3,
-      &GUI_FontHZConsolas_CharInfo[227],
-      (void *)&GUI_FontHZConsolas_Propcea7 
-};
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcbe3= {
-      0xcbe3,
-      0xcbe3,
-      &GUI_FontHZConsolas_CharInfo[226],
-      (void *)&GUI_FontHZConsolas_Propcda3 
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcdcb= {
+      0xcdcb,
+      0xcdcb,
+      &GUI_FontHZConsolas_CharInfo[173],
+      (void *)&GUI_FontHZConsolas_Propcdea 
 };
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcbe1= {
-      0xcbe1,
-      0xcbe1,
-      &GUI_FontHZConsolas_CharInfo[225],
-      (void *)&GUI_FontHZConsolas_Propcbe3 
+/*ͳ--ͳ*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcdb3= {
+      0xcdb3,
+      0xcdb3,
+      &GUI_FontHZConsolas_CharInfo[172],
+      (void *)&GUI_FontHZConsolas_Propcdcb 
 };
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcbd9= {
-      0xcbd9,
-      0xcbd9,
-      &GUI_FontHZConsolas_CharInfo[224],
-      (void *)&GUI_FontHZConsolas_Propcbe1 
+/*˳--˳*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcbb3= {
+      0xcbb3,
+      0xcbb3,
+      &GUI_FontHZConsolas_CharInfo[171],
+      (void *)&GUI_FontHZConsolas_Propcdb3 
 };
 /*ˮ--ˮ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcbae= {
       0xcbae,
       0xcbae,
-      &GUI_FontHZConsolas_CharInfo[223],
-      (void *)&GUI_FontHZConsolas_Propcbd9 
+      &GUI_FontHZConsolas_CharInfo[170],
+      (void *)&GUI_FontHZConsolas_Propcbb3 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcafd= {
       0xcafd,
       0xcafd,
-      &GUI_FontHZConsolas_CharInfo[222],
+      &GUI_FontHZConsolas_CharInfo[169],
       (void *)&GUI_FontHZConsolas_Propcbae 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcaf8= {
       0xcaf8,
       0xcaf8,
-      &GUI_FontHZConsolas_CharInfo[221],
+      &GUI_FontHZConsolas_CharInfo[168],
       (void *)&GUI_FontHZConsolas_Propcafd 
 };
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcae4= {
-      0xcae4,
-      0xcae4,
-      &GUI_FontHZConsolas_CharInfo[220],
+/*ʾ--ʾ*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcabe= {
+      0xcabe,
+      0xcabe,
+      &GUI_FontHZConsolas_CharInfo[167],
       (void *)&GUI_FontHZConsolas_Propcaf8 
 };
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcad4= {
-      0xcad4,
-      0xcad4,
-      &GUI_FontHZConsolas_CharInfo[219],
-      (void *)&GUI_FontHZConsolas_Propcae4 
-};
-/*ʼ--ʽ*/
+/*ʼ--ʼ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcabc= {
       0xcabc,
-      0xcabd,
-      &GUI_FontHZConsolas_CharInfo[217],
-      (void *)&GUI_FontHZConsolas_Propcad4 
-};
-/*ʹ--ʹ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcab9= {
-      0xcab9,
-      0xcab9,
-      &GUI_FontHZConsolas_CharInfo[216],
-      (void *)&GUI_FontHZConsolas_Propcabc 
+      0xcabc,
+      &GUI_FontHZConsolas_CharInfo[166],
+      (void *)&GUI_FontHZConsolas_Propcabe 
 };
 /*ʵ--ʵ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcab5= {
       0xcab5,
       0xcab5,
-      &GUI_FontHZConsolas_CharInfo[215],
-      (void *)&GUI_FontHZConsolas_Propcab9 
-};
-/*ʱ--ʱ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcab1= {
-      0xcab1,
-      0xcab1,
-      &GUI_FontHZConsolas_CharInfo[214],
-      (void *)&GUI_FontHZConsolas_Propcab5 
+      &GUI_FontHZConsolas_CharInfo[165],
+      (void *)&GUI_FontHZConsolas_Propcabc 
 };
 /*ʧ--ʧ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcaa7= {
       0xcaa7,
       0xcaa7,
-      &GUI_FontHZConsolas_CharInfo[213],
-      (void *)&GUI_FontHZConsolas_Propcab1 
+      &GUI_FontHZConsolas_CharInfo[164],
+      (void *)&GUI_FontHZConsolas_Propcab5 
+};
+/*ʣ--ʣ*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propcaa3= {
+      0xcaa3,
+      0xcaa3,
+      &GUI_FontHZConsolas_CharInfo[163],
+      (void *)&GUI_FontHZConsolas_Propcaa7 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc9e8= {
       0xc9e8,
       0xc9e8,
-      &GUI_FontHZConsolas_CharInfo[212],
-      (void *)&GUI_FontHZConsolas_Propcaa7 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc9d9= {
-      0xc9d9,
-      0xc9d9,
-      &GUI_FontHZConsolas_CharInfo[211],
-      (void *)&GUI_FontHZConsolas_Propc9e8 
+      &GUI_FontHZConsolas_CharInfo[162],
+      (void *)&GUI_FontHZConsolas_Propcaa3 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc9cf= {
       0xc9cf,
       0xc9cf,
-      &GUI_FontHZConsolas_CharInfo[210],
-      (void *)&GUI_FontHZConsolas_Propc9d9 
+      &GUI_FontHZConsolas_CharInfo[161],
+      (void *)&GUI_FontHZConsolas_Propc9e8 
 };
 /*ɫ--ɫ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc9ab= {
       0xc9ab,
       0xc9ab,
-      &GUI_FontHZConsolas_CharInfo[209],
+      &GUI_FontHZConsolas_CharInfo[160],
       (void *)&GUI_FontHZConsolas_Propc9cf 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc8eb= {
       0xc8eb,
       0xc8eb,
-      &GUI_FontHZConsolas_CharInfo[208],
+      &GUI_FontHZConsolas_CharInfo[159],
       (void *)&GUI_FontHZConsolas_Propc9ab 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc8dc= {
       0xc8dc,
       0xc8dc,
-      &GUI_FontHZConsolas_CharInfo[207],
+      &GUI_FontHZConsolas_CharInfo[158],
       (void *)&GUI_FontHZConsolas_Propc8eb 
 };
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc8c8= {
-      0xc8c8,
-      0xc8c8,
-      &GUI_FontHZConsolas_CharInfo[206],
+/*ȫ--ȫ*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc8ab= {
+      0xc8ab,
+      0xc8ab,
+      &GUI_FontHZConsolas_CharInfo[157],
       (void *)&GUI_FontHZConsolas_Propc8dc 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc8c5= {
-      0xc8c5,
-      0xc8c5,
-      &GUI_FontHZConsolas_CharInfo[205],
-      (void *)&GUI_FontHZConsolas_Propc8c8 
-};
-/*Ⱦ--Ⱦ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc8be= {
-      0xc8be,
-      0xc8be,
-      &GUI_FontHZConsolas_CharInfo[204],
-      (void *)&GUI_FontHZConsolas_Propc8c5 
 };
 /*Ȧ--Ȧ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc8a6= {
       0xc8a6,
       0xc8a6,
-      &GUI_FontHZConsolas_CharInfo[203],
-      (void *)&GUI_FontHZConsolas_Propc8be 
+      &GUI_FontHZConsolas_CharInfo[156],
+      (void *)&GUI_FontHZConsolas_Propc8ab 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc7eb= {
       0xc7eb,
       0xc7eb,
-      &GUI_FontHZConsolas_CharInfo[202],
+      &GUI_FontHZConsolas_CharInfo[155],
       (void *)&GUI_FontHZConsolas_Propc8a6 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc7e5= {
       0xc7e5,
       0xc7e5,
-      &GUI_FontHZConsolas_CharInfo[201],
+      &GUI_FontHZConsolas_CharInfo[154],
       (void *)&GUI_FontHZConsolas_Propc7eb 
 };
 /*ǰ--ǰ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc7b0= {
       0xc7b0,
       0xc7b0,
-      &GUI_FontHZConsolas_CharInfo[200],
+      &GUI_FontHZConsolas_CharInfo[153],
       (void *)&GUI_FontHZConsolas_Propc7e5 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc6f7= {
       0xc6f7,
       0xc6f7,
-      &GUI_FontHZConsolas_CharInfo[199],
+      &GUI_FontHZConsolas_CharInfo[152],
       (void *)&GUI_FontHZConsolas_Propc7b0 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc6f3= {
-      0xc6f3,
-      0xc6f4,
-      &GUI_FontHZConsolas_CharInfo[197],
-      (void *)&GUI_FontHZConsolas_Propc6f7 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc6c1= {
       0xc6c1,
       0xc6c1,
-      &GUI_FontHZConsolas_CharInfo[196],
-      (void *)&GUI_FontHZConsolas_Propc6f3 
-};
-/*ƿ--ƿ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc6bf= {
-      0xc6bf,
-      0xc6bf,
-      &GUI_FontHZConsolas_CharInfo[195],
-      (void *)&GUI_FontHZConsolas_Propc6c1 
-};
-/*Ʒ--Ʒ*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc6b7= {
-      0xc6b7,
-      0xc6b7,
-      &GUI_FontHZConsolas_CharInfo[194],
-      (void *)&GUI_FontHZConsolas_Propc6bf 
+      &GUI_FontHZConsolas_CharInfo[151],
+      (void *)&GUI_FontHZConsolas_Propc6f7 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc5e4= {
       0xc5e4,
       0xc5e4,
-      &GUI_FontHZConsolas_CharInfo[193],
-      (void *)&GUI_FontHZConsolas_Propc6b7 
+      &GUI_FontHZConsolas_CharInfo[150],
+      (void *)&GUI_FontHZConsolas_Propc6c1 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc5cc= {
       0xc5cc,
       0xc5cc,
-      &GUI_FontHZConsolas_CharInfo[192],
+      &GUI_FontHZConsolas_CharInfo[149],
       (void *)&GUI_FontHZConsolas_Propc5e4 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc5c5= {
       0xc5c5,
       0xc5c5,
-      &GUI_FontHZConsolas_CharInfo[191],
+      &GUI_FontHZConsolas_CharInfo[148],
       (void *)&GUI_FontHZConsolas_Propc5cc 
 };
 /*Ũ--Ũ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc5a8= {
       0xc5a8,
       0xc5a8,
-      &GUI_FontHZConsolas_CharInfo[190],
+      &GUI_FontHZConsolas_CharInfo[147],
       (void *)&GUI_FontHZConsolas_Propc5c5 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc4e0= {
       0xc4e0,
       0xc4e0,
-      &GUI_FontHZConsolas_CharInfo[189],
+      &GUI_FontHZConsolas_CharInfo[146],
       (void *)&GUI_FontHZConsolas_Propc5a8 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc4dc= {
-      0xc4dc,
-      0xc4dc,
-      &GUI_FontHZConsolas_CharInfo[188],
-      (void *)&GUI_FontHZConsolas_Propc4e0 
 };
 /*Ļ--Ļ*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc4bb= {
       0xc4bb,
       0xc4bb,
-      &GUI_FontHZConsolas_CharInfo[187],
-      (void *)&GUI_FontHZConsolas_Propc4dc 
+      &GUI_FontHZConsolas_CharInfo[145],
+      (void *)&GUI_FontHZConsolas_Propc4e0 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc3fe= {
       0xc3fe,
       0xc3fe,
-      &GUI_FontHZConsolas_CharInfo[186],
+      &GUI_FontHZConsolas_CharInfo[144],
       (void *)&GUI_FontHZConsolas_Propc4bb 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc3fb= {
-      0xc3fb,
-      0xc3fb,
-      &GUI_FontHZConsolas_CharInfo[185],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc2fd= {
+      0xc2fd,
+      0xc2fd,
+      &GUI_FontHZConsolas_CharInfo[143],
       (void *)&GUI_FontHZConsolas_Propc3fe 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc2cc= {
-      0xc2cc,
-      0xc2cc,
-      &GUI_FontHZConsolas_CharInfo[184],
-      (void *)&GUI_FontHZConsolas_Propc3fb 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc2ca= {
-      0xc2ca,
-      0xc2ca,
-      &GUI_FontHZConsolas_CharInfo[183],
-      (void *)&GUI_FontHZConsolas_Propc2cc 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc1f3= {
-      0xc1f3,
-      0xc1f3,
-      &GUI_FontHZConsolas_CharInfo[182],
-      (void *)&GUI_FontHZConsolas_Propc2ca 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc1e3= {
-      0xc1e3,
-      0xc1e3,
-      &GUI_FontHZConsolas_CharInfo[181],
-      (void *)&GUI_FontHZConsolas_Propc1f3 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc1d0= {
-      0xc1d0,
-      0xc1d0,
-      &GUI_FontHZConsolas_CharInfo[180],
-      (void *)&GUI_FontHZConsolas_Propc1e3 
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc2c8= {
+      0xc2c8,
+      0xc2c8,
+      &GUI_FontHZConsolas_CharInfo[142],
+      (void *)&GUI_FontHZConsolas_Propc2fd 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc1bf= {
       0xc1bf,
       0xc1bf,
-      &GUI_FontHZConsolas_CharInfo[179],
-      (void *)&GUI_FontHZConsolas_Propc1d0 
+      &GUI_FontHZConsolas_CharInfo[141],
+      (void *)&GUI_FontHZConsolas_Propc2c8 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc1aa= {
-      0xc1aa,
-      0xc1aa,
-      &GUI_FontHZConsolas_CharInfo[178],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc0ed= {
+      0xc0ed,
+      0xc0ed,
+      &GUI_FontHZConsolas_CharInfo[140],
       (void *)&GUI_FontHZConsolas_Propc1bf 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc0eb= {
       0xc0eb,
       0xc0eb,
-      &GUI_FontHZConsolas_CharInfo[177],
-      (void *)&GUI_FontHZConsolas_Propc1aa 
+      &GUI_FontHZConsolas_CharInfo[139],
+      (void *)&GUI_FontHZConsolas_Propc0ed 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc0b6= {
-      0xc0b6,
-      0xc0b6,
-      &GUI_FontHZConsolas_CharInfo[176],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propc0db= {
+      0xc0db,
+      0xc0db,
+      &GUI_FontHZConsolas_CharInfo[138],
       (void *)&GUI_FontHZConsolas_Propc0eb 
+};
+/*��--��*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbfec= {
+      0xbfec,
+      0xbfec,
+      &GUI_FontHZConsolas_CharInfo[137],
+      (void *)&GUI_FontHZConsolas_Propc0db 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbfd5= {
       0xbfd5,
       0xbfd5,
-      &GUI_FontHZConsolas_CharInfo[175],
-      (void *)&GUI_FontHZConsolas_Propc0b6 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbfc6= {
-      0xbfc6,
-      0xbfc6,
-      &GUI_FontHZConsolas_CharInfo[174],
-      (void *)&GUI_FontHZConsolas_Propbfd5 
+      &GUI_FontHZConsolas_CharInfo[136],
+      (void *)&GUI_FontHZConsolas_Propbfec 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbfaa= {
       0xbfaa,
       0xbfaa,
-      &GUI_FontHZConsolas_CharInfo[173],
-      (void *)&GUI_FontHZConsolas_Propbfc6 
+      &GUI_FontHZConsolas_CharInfo[135],
+      (void *)&GUI_FontHZConsolas_Propbfd5 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbedd= {
       0xbedd,
       0xbedd,
-      &GUI_FontHZConsolas_CharInfo[172],
+      &GUI_FontHZConsolas_CharInfo[134],
       (void *)&GUI_FontHZConsolas_Propbfaa 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbead= {
-      0xbead,
-      0xbead,
-      &GUI_FontHZConsolas_CharInfo[171],
-      (void *)&GUI_FontHZConsolas_Propbedd 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbde1= {
       0xbde1,
       0xbde1,
-      &GUI_FontHZConsolas_CharInfo[170],
-      (void *)&GUI_FontHZConsolas_Propbead 
+      &GUI_FontHZConsolas_CharInfo[133],
+      (void *)&GUI_FontHZConsolas_Propbedd 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbdc1= {
-      0xbdc1,
-      0xbdc1,
-      &GUI_FontHZConsolas_CharInfo[169],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbcec= {
+      0xbcec,
+      0xbcec,
+      &GUI_FontHZConsolas_CharInfo[132],
       (void *)&GUI_FontHZConsolas_Propbde1 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbcfe= {
-      0xbcfe,
-      0xbcfe,
-      &GUI_FontHZConsolas_CharInfo[168],
-      (void *)&GUI_FontHZConsolas_Propbdc1 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbcd3= {
-      0xbcd3,
-      0xbcd3,
-      &GUI_FontHZConsolas_CharInfo[167],
-      (void *)&GUI_FontHZConsolas_Propbcfe 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbccc= {
-      0xbccc,
-      0xbccc,
-      &GUI_FontHZConsolas_CharInfo[166],
-      (void *)&GUI_FontHZConsolas_Propbcd3 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbcc6= {
       0xbcc6,
       0xbcc6,
-      &GUI_FontHZConsolas_CharInfo[165],
-      (void *)&GUI_FontHZConsolas_Propbccc 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbcbc= {
-      0xbcbc,
-      0xbcbc,
-      &GUI_FontHZConsolas_CharInfo[164],
-      (void *)&GUI_FontHZConsolas_Propbcc6 
+      &GUI_FontHZConsolas_CharInfo[131],
+      (void *)&GUI_FontHZConsolas_Propbcec 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbcab= {
       0xbcab,
       0xbcab,
-      &GUI_FontHZConsolas_CharInfo[163],
-      (void *)&GUI_FontHZConsolas_Propbcbc 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbbfa= {
-      0xbbfa,
-      0xbbfa,
-      &GUI_FontHZConsolas_CharInfo[162],
-      (void *)&GUI_FontHZConsolas_Propbcab 
+      &GUI_FontHZConsolas_CharInfo[130],
+      (void *)&GUI_FontHZConsolas_Propbcc6 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbbf7= {
       0xbbf7,
       0xbbf7,
-      &GUI_FontHZConsolas_CharInfo[161],
-      (void *)&GUI_FontHZConsolas_Propbbfa 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbbee= {
-      0xbbee,
-      0xbbee,
-      &GUI_FontHZConsolas_CharInfo[160],
-      (void *)&GUI_FontHZConsolas_Propbbf7 
+      &GUI_FontHZConsolas_CharInfo[129],
+      (void *)&GUI_FontHZConsolas_Propbcab 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbbd8= {
       0xbbd8,
       0xbbd8,
-      &GUI_FontHZConsolas_CharInfo[159],
-      (void *)&GUI_FontHZConsolas_Propbbee 
+      &GUI_FontHZConsolas_CharInfo[128],
+      (void *)&GUI_FontHZConsolas_Propbbf7 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbbc6= {
-      0xbbc6,
-      0xbbc6,
-      &GUI_FontHZConsolas_CharInfo[158],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbbb7= {
+      0xbbb7,
+      0xbbb7,
+      &GUI_FontHZConsolas_CharInfo[127],
       (void *)&GUI_FontHZConsolas_Propbbd8 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbbaf= {
-      0xbbaf,
-      0xbbaf,
-      &GUI_FontHZConsolas_CharInfo[157],
-      (void *)&GUI_FontHZConsolas_Propbbc6 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbaf3= {
-      0xbaf3,
-      0xbaf3,
-      &GUI_FontHZConsolas_CharInfo[156],
-      (void *)&GUI_FontHZConsolas_Propbbaf 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbaec= {
       0xbaec,
       0xbaec,
-      &GUI_FontHZConsolas_CharInfo[155],
-      (void *)&GUI_FontHZConsolas_Propbaf3 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbac4= {
-      0xbac4,
-      0xbac4,
-      &GUI_FontHZConsolas_CharInfo[154],
-      (void *)&GUI_FontHZConsolas_Propbaec 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propbaac= {
-      0xbaac,
-      0xbaac,
-      &GUI_FontHZConsolas_CharInfo[153],
-      (void *)&GUI_FontHZConsolas_Propbac4 
+      &GUI_FontHZConsolas_CharInfo[126],
+      (void *)&GUI_FontHZConsolas_Propbbb7 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb9fb= {
       0xb9fb,
       0xb9fb,
-      &GUI_FontHZConsolas_CharInfo[152],
-      (void *)&GUI_FontHZConsolas_Propbaac 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb9dc= {
-      0xb9dc,
-      0xb9dc,
-      &GUI_FontHZConsolas_CharInfo[151],
-      (void *)&GUI_FontHZConsolas_Propb9fb 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb9d8= {
-      0xb9d8,
-      0xb9d8,
-      &GUI_FontHZConsolas_CharInfo[150],
-      (void *)&GUI_FontHZConsolas_Propb9dc 
+      &GUI_FontHZConsolas_CharInfo[125],
+      (void *)&GUI_FontHZConsolas_Propbaec 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb9a6= {
       0xb9a6,
       0xb9a6,
-      &GUI_FontHZConsolas_CharInfo[149],
-      (void *)&GUI_FontHZConsolas_Propb9d8 
+      &GUI_FontHZConsolas_CharInfo[124],
+      (void *)&GUI_FontHZConsolas_Propb9fb 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb8f6= {
-      0xb8f6,
-      0xb8f6,
-      &GUI_FontHZConsolas_CharInfo[148],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb8e6= {
+      0xb8e6,
+      0xb8e6,
+      &GUI_FontHZConsolas_CharInfo[123],
       (void *)&GUI_FontHZConsolas_Propb9a6 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb8df= {
-      0xb8df,
-      0xb8df,
-      &GUI_FontHZConsolas_CharInfo[147],
-      (void *)&GUI_FontHZConsolas_Propb8f6 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb8c9= {
-      0xb8c9,
-      0xb8c9,
-      &GUI_FontHZConsolas_CharInfo[146],
-      (void *)&GUI_FontHZConsolas_Propb8df 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb8c7= {
-      0xb8c7,
-      0xb8c7,
-      &GUI_FontHZConsolas_CharInfo[145],
-      (void *)&GUI_FontHZConsolas_Propb8c9 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb7d6= {
-      0xb7d6,
-      0xb7d6,
-      &GUI_FontHZConsolas_CharInfo[144],
-      (void *)&GUI_FontHZConsolas_Propb8c7 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb7bd= {
-      0xb7bd,
-      0xb7bd,
-      &GUI_FontHZConsolas_CharInfo[143],
-      (void *)&GUI_FontHZConsolas_Propb7d6 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb7b5= {
       0xb7b5,
-      0xb7b6,
-      &GUI_FontHZConsolas_CharInfo[141],
-      (void *)&GUI_FontHZConsolas_Propb7bd 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb6e0= {
-      0xb6e0,
-      0xb6e0,
-      &GUI_FontHZConsolas_CharInfo[140],
-      (void *)&GUI_FontHZConsolas_Propb7b5 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb6cf= {
-      0xb6cf,
-      0xb6cf,
-      &GUI_FontHZConsolas_CharInfo[139],
-      (void *)&GUI_FontHZConsolas_Propb6e0 
+      0xb7b5,
+      &GUI_FontHZConsolas_CharInfo[122],
+      (void *)&GUI_FontHZConsolas_Propb8e6 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb6c8= {
       0xb6c8,
       0xb6c8,
-      &GUI_FontHZConsolas_CharInfo[138],
-      (void *)&GUI_FontHZConsolas_Propb6cf 
+      &GUI_FontHZConsolas_CharInfo[121],
+      (void *)&GUI_FontHZConsolas_Propb7b5 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb6af= {
       0xb6af,
       0xb6af,
-      &GUI_FontHZConsolas_CharInfo[137],
+      &GUI_FontHZConsolas_CharInfo[120],
       (void *)&GUI_FontHZConsolas_Propb6c8 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb6aa= {
-      0xb6aa,
-      0xb6aa,
-      &GUI_FontHZConsolas_CharInfo[136],
-      (void *)&GUI_FontHZConsolas_Propb6af 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb6a8= {
       0xb6a8,
       0xb6a8,
-      &GUI_FontHZConsolas_CharInfo[135],
-      (void *)&GUI_FontHZConsolas_Propb6aa 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5f7= {
-      0xb5f7,
-      0xb5f7,
-      &GUI_FontHZConsolas_CharInfo[134],
-      (void *)&GUI_FontHZConsolas_Propb6a8 
+      &GUI_FontHZConsolas_CharInfo[119],
+      (void *)&GUI_FontHZConsolas_Propb6af 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5e7= {
       0xb5e7,
       0xb5e7,
-      &GUI_FontHZConsolas_CharInfo[133],
-      (void *)&GUI_FontHZConsolas_Propb5f7 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5e5= {
-      0xb5e5,
-      0xb5e5,
-      &GUI_FontHZConsolas_CharInfo[132],
-      (void *)&GUI_FontHZConsolas_Propb5e7 
+      &GUI_FontHZConsolas_CharInfo[118],
+      (void *)&GUI_FontHZConsolas_Propb6a8 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5e3= {
       0xb5e3,
       0xb5e3,
-      &GUI_FontHZConsolas_CharInfo[131],
-      (void *)&GUI_FontHZConsolas_Propb5e5 
+      &GUI_FontHZConsolas_CharInfo[117],
+      (void *)&GUI_FontHZConsolas_Propb5e7 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5cd= {
-      0xb5cd,
-      0xb5ce,
-      &GUI_FontHZConsolas_CharInfo[129],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5da= {
+      0xb5da,
+      0xb5da,
+      &GUI_FontHZConsolas_CharInfo[116],
       (void *)&GUI_FontHZConsolas_Propb5e3 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5c4= {
-      0xb5c4,
-      0xb5c4,
-      &GUI_FontHZConsolas_CharInfo[128],
-      (void *)&GUI_FontHZConsolas_Propb5cd 
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5ce= {
+      0xb5ce,
+      0xb5ce,
+      &GUI_FontHZConsolas_CharInfo[115],
+      (void *)&GUI_FontHZConsolas_Propb5da 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5bc= {
       0xb5bc,
       0xb5bc,
-      &GUI_FontHZConsolas_CharInfo[127],
-      (void *)&GUI_FontHZConsolas_Propb5c4 
+      &GUI_FontHZConsolas_CharInfo[114],
+      (void *)&GUI_FontHZConsolas_Propb5ce 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5a5= {
-      0xb5a5,
-      0xb5a5,
-      &GUI_FontHZConsolas_CharInfo[126],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb5b1= {
+      0xb5b1,
+      0xb5b1,
+      &GUI_FontHZConsolas_CharInfo[113],
       (void *)&GUI_FontHZConsolas_Propb5bc 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb4f3= {
-      0xb4f3,
-      0xb4f3,
-      &GUI_FontHZConsolas_CharInfo[125],
-      (void *)&GUI_FontHZConsolas_Propb5a5 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb4ed= {
-      0xb4ed,
-      0xb4ed,
-      &GUI_FontHZConsolas_CharInfo[124],
-      (void *)&GUI_FontHZConsolas_Propb4f3 
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb4f2= {
+      0xb4f2,
+      0xb4f2,
+      &GUI_FontHZConsolas_CharInfo[112],
+      (void *)&GUI_FontHZConsolas_Propb5b1 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb4e6= {
       0xb4e6,
       0xb4e6,
-      &GUI_FontHZConsolas_CharInfo[123],
-      (void *)&GUI_FontHZConsolas_Propb4ed 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb4ce= {
-      0xb4ce,
-      0xb4ce,
-      &GUI_FontHZConsolas_CharInfo[122],
-      (void *)&GUI_FontHZConsolas_Propb4e6 
+      &GUI_FontHZConsolas_CharInfo[111],
+      (void *)&GUI_FontHZConsolas_Propb4f2 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb4a5= {
       0xb4a5,
-      0xb4a5,
-      &GUI_FontHZConsolas_CharInfo[121],
-      (void *)&GUI_FontHZConsolas_Propb4ce 
+      0xb4a6,
+      &GUI_FontHZConsolas_CharInfo[109],
+      (void *)&GUI_FontHZConsolas_Propb4e6 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb4a2= {
       0xb4a2,
       0xb4a2,
-      &GUI_FontHZConsolas_CharInfo[120],
+      &GUI_FontHZConsolas_CharInfo[108],
       (void *)&GUI_FontHZConsolas_Propb4a5 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb3f6= {
       0xb3f6,
       0xb3f6,
-      &GUI_FontHZConsolas_CharInfo[119],
+      &GUI_FontHZConsolas_CharInfo[107],
       (void *)&GUI_FontHZConsolas_Propb4a2 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb3c8= {
-      0xb3c8,
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb3c9= {
       0xb3c9,
-      &GUI_FontHZConsolas_CharInfo[117],
+      0xb3c9,
+      &GUI_FontHZConsolas_CharInfo[106],
       (void *)&GUI_FontHZConsolas_Propb3f6 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb3c6= {
-      0xb3c6,
-      0xb3c6,
-      &GUI_FontHZConsolas_CharInfo[116],
-      (void *)&GUI_FontHZConsolas_Propb3c8 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb3a3= {
-      0xb3a3,
-      0xb3a3,
-      &GUI_FontHZConsolas_CharInfo[115],
-      (void *)&GUI_FontHZConsolas_Propb3c6 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2fa= {
-      0xb2fa,
-      0xb2fa,
-      &GUI_FontHZConsolas_CharInfo[114],
-      (void *)&GUI_FontHZConsolas_Propb3a3 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2ee= {
-      0xb2ee,
-      0xb2ee,
-      &GUI_FontHZConsolas_CharInfo[113],
-      (void *)&GUI_FontHZConsolas_Propb2fa 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2e5= {
-      0xb2e5,
-      0xb2e5,
-      &GUI_FontHZConsolas_CharInfo[112],
-      (void *)&GUI_FontHZConsolas_Propb2ee 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2e2= {
       0xb2e2,
       0xb2e2,
-      &GUI_FontHZConsolas_CharInfo[111],
-      (void *)&GUI_FontHZConsolas_Propb2e5 
+      &GUI_FontHZConsolas_CharInfo[105],
+      (void *)&GUI_FontHZConsolas_Propb3c9 
+};
+/*��--��*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2d9= {
+      0xb2d9,
+      0xb2d9,
+      &GUI_FontHZConsolas_CharInfo[104],
+      (void *)&GUI_FontHZConsolas_Propb2e2 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2ce= {
       0xb2ce,
       0xb2ce,
-      &GUI_FontHZConsolas_CharInfo[110],
-      (void *)&GUI_FontHZConsolas_Propb2e2 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2cb= {
-      0xb2cb,
-      0xb2cb,
-      &GUI_FontHZConsolas_CharInfo[109],
-      (void *)&GUI_FontHZConsolas_Propb2ce 
+      &GUI_FontHZConsolas_CharInfo[103],
+      (void *)&GUI_FontHZConsolas_Propb2d9 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2bd= {
       0xb2bd,
       0xb2bd,
-      &GUI_FontHZConsolas_CharInfo[108],
-      (void *)&GUI_FontHZConsolas_Propb2cb 
+      &GUI_FontHZConsolas_CharInfo[102],
+      (void *)&GUI_FontHZConsolas_Propb2ce 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2bb= {
-      0xb2bb,
-      0xb2bb,
-      &GUI_FontHZConsolas_CharInfo[107],
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb1e4= {
+      0xb1e4,
+      0xb1e4,
+      &GUI_FontHZConsolas_CharInfo[101],
       (void *)&GUI_FontHZConsolas_Propb2bd 
 };
 /*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb2b9= {
-      0xb2b9,
-      0xb2b9,
-      &GUI_FontHZConsolas_CharInfo[106],
-      (void *)&GUI_FontHZConsolas_Propb2bb 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb1ed= {
-      0xb1ed,
-      0xb1ed,
-      &GUI_FontHZConsolas_CharInfo[105],
-      (void *)&GUI_FontHZConsolas_Propb2b9 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb1e6= {
-      0xb1e6,
-      0xb1e6,
-      &GUI_FontHZConsolas_CharInfo[104],
-      (void *)&GUI_FontHZConsolas_Propb1ed 
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb1a8= {
+      0xb1a8,
+      0xb1a8,
+      &GUI_FontHZConsolas_CharInfo[100],
+      (void *)&GUI_FontHZConsolas_Propb1e4 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb1a3= {
       0xb1a3,
       0xb1a3,
-      &GUI_FontHZConsolas_CharInfo[103],
-      (void *)&GUI_FontHZConsolas_Propb1e6 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb0eb= {
-      0xb0eb,
-      0xb0eb,
-      &GUI_FontHZConsolas_CharInfo[102],
-      (void *)&GUI_FontHZConsolas_Propb1a3 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb0e8= {
-      0xb0e8,
-      0xb0e8,
-      &GUI_FontHZConsolas_CharInfo[101],
-      (void *)&GUI_FontHZConsolas_Propb0eb 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb0e5= {
-      0xb0e5,
-      0xb0e5,
-      &GUI_FontHZConsolas_CharInfo[100],
-      (void *)&GUI_FontHZConsolas_Propb0e8 
+      &GUI_FontHZConsolas_CharInfo[99],
+      (void *)&GUI_FontHZConsolas_Propb1a8 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb0dc= {
       0xb0dc,
       0xb0dc,
-      &GUI_FontHZConsolas_CharInfo[99],
-      (void *)&GUI_FontHZConsolas_Propb0e5 
+      &GUI_FontHZConsolas_CharInfo[98],
+      (void *)&GUI_FontHZConsolas_Propb1a3 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb0d7= {
       0xb0d7,
       0xb0d7,
-      &GUI_FontHZConsolas_CharInfo[98],
+      &GUI_FontHZConsolas_CharInfo[97],
       (void *)&GUI_FontHZConsolas_Propb0dc 
 };
 /*��--��*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb0b4= {
       0xb0b4,
       0xb0b4,
-      &GUI_FontHZConsolas_CharInfo[97],
-      (void *)&GUI_FontHZConsolas_Propb0d7 
-};
-/*��--��*/
-GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Propb0b2= {
-      0xb0b2,
-      0xb0b2,
       &GUI_FontHZConsolas_CharInfo[96],
-      (void *)&GUI_FontHZConsolas_Propb0b4 
+      (void *)&GUI_FontHZConsolas_Propb0d7 
 };
 /* --*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZConsolas_Prop0020= {
       0x0020,
       0x007f,
       &GUI_FontHZConsolas_CharInfo[0],
-      (void *)&GUI_FontHZConsolas_Propb0b2 
+      (void *)&GUI_FontHZConsolas_Propb0b4 
 };
 GUI_FLASH const GUI_FONT GUI_FontHZ_Consolas = {
       GUI_FONTTYPE_PROP_SJIS, 

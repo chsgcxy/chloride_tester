@@ -80,8 +80,8 @@ int main(void)
 
 	/* ad7705 test */
 	ad770x_init();
-	ad7705_test();
-
+	///ad7705_test();
+#if 0
 	stepmotor_init();
 	while (1) {
 		status = uart_get_status();
@@ -130,15 +130,7 @@ int main(void)
 			break;
 		}
 	}
-
-
-	relay_ctrl(1);
-
-	while (1) {
-		stepmotor_run(1, 1000);
-		delay_ms(5000);
-	}
-	
+#endif
 
 	/* USB Test */
 #if 0	
