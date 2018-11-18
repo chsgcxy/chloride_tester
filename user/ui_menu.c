@@ -93,6 +93,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         FRAMEWIN_SetTitleHeight(hItem, 50);
         FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
         FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Arial);
+        FRAMEWIN_SetTextColor(hItem, GUI_BLUE);
+        FRAMEWIN_SetClientColor(hItem, GUI_GRAY);
         FRAMEWIN_SetText(hItem, "全自动氯离子检测仪");
         //
         // Initialization of 'Image'
@@ -102,6 +104,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MEASURE);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "空白实验");
         //
         // Initialization of 'Image'
@@ -111,6 +114,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_VIEW);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "氯离子检测");
         //
         // Initialization of 'Image'
@@ -120,6 +124,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_USB);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "数据处理");
         //
         // Initialization of 'Image'
@@ -129,6 +134,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SETTING);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "系统设置");
 
     case WM_NOTIFY_PARENT:

@@ -86,7 +86,7 @@
 */
 
 
-#define	_USE_LFN	0	/* 0, 1 or 2 */
+#define	_USE_LFN	1	/* 0, 1 or 2 */
 #define	_MAX_LFN	255		/* Maximum LFN length to handle (12 to 255) */
 /* The _USE_LFN option switches the LFN support.
 /
@@ -105,7 +105,7 @@
 */
 
 
-#define _FS_RPATH	0	/* 0 or 1 */
+#define _FS_RPATH	1	/* 0 or 1 */
 /* When _FS_RPATH is set to 1, relative path feature is enabled and f_chdir,
 /  f_chdrive function are available.
 /  Note that output of the f_readdir function is affected by this option. */
@@ -128,7 +128,7 @@
 /  to the disk_ioctl function. */
 
 
-#define	_MULTI_PARTITION	0	/* 0 or 1 */
+#define	_MULTI_PARTITION	1	/* 0 or 1 */
 /* When _MULTI_PARTITION is set to 0, each volume is bound to the same physical
 / drive number and can mount only first primary partition. When it is set to 1,
 / each volume is tied to the partitions listed in Drives[]. */

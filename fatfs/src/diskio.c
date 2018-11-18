@@ -6,33 +6,45 @@
 /*-----------------------------------------------------------------------*/
 
 #include "diskio.h"
-
+#include "usb_conf.h"
+#include "usbh_msc_core.h"
 /*-----------------------------------------------------------------------*/
 /* Correspondence between physical drive number and physical drive.      */
 
 #define ATA		0
 #define MMC		1
 #define USB		2
+#define SPI     3
 
+static volatile DSTATUS ata_stat = STA_NOINIT;	/* Disk status */
+static volatile DSTATUS mmc_stat = STA_NOINIT;	/* Disk status */
+static volatile DSTATUS usb_stat = STA_NOINIT;	/* Disk status */
+static volatile DSTATUS spi_stat = STA_NOINIT;	/* Disk status */
 
+extern USB_OTG_CORE_HANDLE          USB_OTG_Core;
+extern USBH_HOST                     USB_Host;
 
 /*-----------------------------------------------------------------------*/
 /* Inicializes a Drive                                                    */
 
 DSTATUS disk_initialize (BYTE drv)    /* Physical drive nmuber (0..) */
 {
-  DSTATUS stat = STA_NOINIT;
-  
-  if(HCD_IsDeviceConnected(&USB_OTG_Core_dev))
-  {  
-    stat &= ~STA_NOINIT;
-  }
-  
-  return stat;
-  
+	switch (drv) {
+	case ATA:
+		return ata_stat;
+	case MMC:
+		return mmc_stat;
+	case USB:
+		if (HCD_IsDeviceConnected(&USB_OTG_Core))  
+			usb_stat &= ~STA_NOINIT;
+		return usb_stat;
+	case SPI:
+		return spi_stat;
+		break;
+	default:
+		break;
+	}
 }
-
-
 
 /*-----------------------------------------------------------------------*/
 /* Return Disk Status                                                    */
@@ -41,28 +53,19 @@ DSTATUS disk_status (
 	BYTE drv		/* Physical drive nmuber (0..) */
 )
 {
-	DSTATUS stat;
-	int result;
-
 	switch (drv) {
-	case ATA :
-		result = ATA_disk_status();
-		// translate the reslut code here
-
-		return stat;
-
-	case MMC :
-		result = MMC_disk_status();
-		// translate the reslut code here
-
-		return stat;
-
-	case USB :
-		result = USB_disk_status();
-		// translate the reslut code here
-
-		return stat;
+	case ATA:
+		return ata_stat;
+	case MMC:
+		return mmc_stat;
+	case USB:
+		return usb_stat;
+	case SPI:
+		return spi_stat;
+	default:
+		break;
 	}
+	
 	return STA_NOINIT;
 }
 

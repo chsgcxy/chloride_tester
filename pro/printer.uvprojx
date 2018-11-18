@@ -843,6 +843,11 @@
               <FileType>1</FileType>
               <FilePath>..\driver\delay.c</FilePath>
             </File>
+            <File>
+              <FileName>w25xxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\w25xxx.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

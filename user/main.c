@@ -73,11 +73,13 @@ int main(void)
 	/* console and uart init, depent on config.h */
 	uart1_init();
 	uart4_init();
-	spi1_init();
-	spi3_init();
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
-
+    printf("sizeof(double) = %d\r\n", sizeof(double));
+	spi1_init();
+	spi2_init();
+	spi3_init();
+	
 	/* ad7705 test */
 	ad770x_init();
 	///ad7705_test();
@@ -144,7 +146,7 @@ int main(void)
 
 	GUI_Init();
 	touch_init();
-	touch_calibrate();
+	//touch_calibrate();
 	
 	/* creat freertos task */
 	task_init();

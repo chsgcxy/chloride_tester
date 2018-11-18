@@ -4,7 +4,9 @@
 #include "stm32f2xx.h"
 
 extern int spi1_init(void);
+extern int spi2_init(void);
 extern int spi3_init(void);
+
 
 #define SPI_MODE_REG    0
 #define SPI_MODE_LIB    1
