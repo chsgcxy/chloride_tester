@@ -69,7 +69,43 @@ DSTATUS disk_status (
 	return STA_NOINIT;
 }
 
+static DRESULT ATA_disk_read(BYTE *buff, DWORD sector, BYTE count)
+{
+	return RES_ERROR;
+}
 
+static DRESULT MMC_disk_read(BYTE *buff, DWORD sector, BYTE count)
+{
+	return RES_ERROR;
+}
+
+static DRESULT USB_disk_read(BYTE *buff, DWORD sector, BYTE count)
+{
+	BYTE status = USBH_MSC_OK;
+
+	if (!count)
+  		return RES_PARERR;
+  	if (usb_stat & STA_NOINIT)
+		return RES_NOTRDY;
+  
+	if (HCD_IsDeviceConnected(&USB_OTG_Core)) {  
+    	do {
+			status = USBH_MSC_Read10(&USB_OTG_Core, buff, sector, 512 * count);
+			USBH_MSC_HandleBOTXfer(&USB_OTG_Core, &USB_Host);
+      		if (!HCD_IsDeviceConnected(&USB_OTG_Core))
+        		return RES_ERROR;
+    	} while (status == USBH_MSC_BUSY);
+	}
+  
+	if(status == USBH_MSC_OK)
+    	return RES_OK;
+	return RES_ERROR;
+}
+
+static DRESULT SPI_disk_read(BYTE *buff, DWORD sector, BYTE count)
+{
+	return RES_PARERR;
+}
 
 /*-----------------------------------------------------------------------*/
 /* Read Sector(s)                                                        */
@@ -81,32 +117,59 @@ DRESULT disk_read (
 	BYTE count		/* Number of sectors to read (1..255) */
 )
 {
-	DRESULT res;
-	int result;
-
 	switch (drv) {
-	case ATA :
-		result = ATA_disk_read(buff, sector, count);
-		// translate the reslut code here
-
-		return res;
-
-	case MMC :
-		result = MMC_disk_read(buff, sector, count);
-		// translate the reslut code here
-
-		return res;
-
-	case USB :
-		result = USB_disk_read(buff, sector, count);
-		// translate the reslut code here
-
-		return res;
+	case ATA:
+		return ATA_disk_read(buff, sector, count);
+	case MMC:
+		return MMC_disk_read(buff, sector, count);
+	case USB:
+		return USB_disk_read(buff, sector, count);
+	case SPI:
+		return SPI_disk_read(buff, sector, count);
+	default:
+		return RES_PARERR;	
 	}
+}
+
+static DRESULT ATA_disk_write(BYTE *buff, DWORD sector, BYTE count)
+{
 	return RES_PARERR;
 }
 
+static DRESULT MMC_disk_write(BYTE *buff, DWORD sector, BYTE count)
+{
+	return RES_PARERR;
+}
 
+static DRESULT USB_disk_write(BYTE *buff, DWORD sector, BYTE count)
+{
+	BYTE status = USBH_MSC_OK;
+
+	if (!count)
+		return RES_PARERR;
+	if (Stat & STA_NOINIT)
+		return RES_NOTRDY;
+	if (Stat & STA_PROTECT)
+		return RES_WRPRT;
+
+	if (HCD_IsDeviceConnected(&USB_OTG_Core)) {  
+		do {
+			status = USBH_MSC_Write10(&USB_OTG_Core, (BYTE*)buff, sector, 512 * count);
+			USBH_MSC_HandleBOTXfer(&USB_OTG_Core, &USB_Host);
+			if (!HCD_IsDeviceConnected(&USB_OTG_Core))
+				return RES_ERROR;
+		} while (status == USBH_MSC_BUSY);
+	}
+
+	if (status == USBH_MSC_OK)
+		return RES_OK;
+	return RES_ERROR;
+}
+
+static DRESULT SPI_disk_write(BYTE *buff, DWORD sector, BYTE count)
+{
+	return RES_PARERR;
+}
 
 /*-----------------------------------------------------------------------*/
 /* Write Sector(s)                                                       */
@@ -119,33 +182,92 @@ DRESULT disk_write (
 	BYTE count			/* Number of sectors to write (1..255) */
 )
 {
-	DRESULT res;
-	int result;
-
 	switch (drv) {
-	case ATA :
-		result = ATA_disk_write(buff, sector, count);
-		// translate the reslut code here
-
-		return res;
-
-	case MMC :
-		result = MMC_disk_write(buff, sector, count);
-		// translate the reslut code here
-
-		return res;
-
-	case USB :
-		result = USB_disk_write(buff, sector, count);
-		// translate the reslut code here
-
-		return res;
+	case ATA:
+		return ATA_disk_write(buff, sector, count);
+	case MMC:
+		return MMC_disk_write(buff, sector, count);
+	case USB:
+		return USB_disk_write(buff, sector, count);
+	case SPI:
+		return SPI_disk_write(buff, sector, count);
+	defalut:
+		return RES_PARERR;
 	}
-	return RES_PARERR;
 }
 #endif /* _READONLY */
 
 
+static DRESULT ATA_disk_ioctl(BYTE ctrl, void *buff)
+{
+	return RES_PARERR;
+}
+
+static DRESULT MMC_disk_ioctl(BYTE ctrl, void *buff)
+{
+	return RES_PARERR;
+}
+
+static DRESULT USB_disk_ioctl(BYTE ctrl, void *buff)
+{
+	DRESULT res = RES_OK;
+
+	if (usb_stat & STA_NOINIT)
+		return RES_NOTRDY;
+
+	switch (ctrl) {
+	/* Make sure that no pending write process */
+	case CTRL_SYNC:
+		break;
+	/* Get number of sectors on the disk (DWORD) */
+	case GET_SECTOR_COUNT:
+		*(DWORD*)buff = (DWORD)USBH_MSC_Param.MSCapacity;
+		break;
+	/* Get R/W sector size (WORD) */
+	case GET_SECTOR_SIZE:
+		*(WORD*)buff = 512;
+		break;
+	/* Get erase block size in unit of sector (DWORD) */
+	case GET_BLOCK_SIZE:
+		*(DWORD*)buff = 512;
+		break;
+	default:
+		res = RES_PARERR;
+	}
+
+	return res;
+}
+
+/* 256KB spi-flash w25x20 */
+static DRESULT SPI_disk_ioctl(BYTE ctrl, void *buff)
+{
+	DRESULT res = RES_OK;
+
+	if (spi_stat & STA_NOINIT)
+		return RES_NOTRDY;
+
+	switch (ctrl) {
+	/* Make sure that no pending write process */
+	case CTRL_SYNC:
+		break;
+	/* Get number of sectors on the disk (DWORD) */
+	case GET_SECTOR_COUNT:
+		*(DWORD*)buff = (DWORD)1024;
+		break;
+	/* Get R/W sector size (WORD) */
+	case GET_SECTOR_SIZE:
+		*(WORD*)buff = 256;
+		break;
+	/* Get erase block size in unit of sector (DWORD) */
+	case GET_BLOCK_SIZE:
+		*(DWORD*)buff = 8;
+		break;
+	default:
+		res = RES_PARERR;
+	}
+
+	return res;
+}
 
 /*-----------------------------------------------------------------------*/
 /* Miscellaneous Functions                                               */
@@ -156,34 +278,17 @@ DRESULT disk_ioctl (
 	void *buff		/* Buffer to send/receive control data */
 )
 {
-	DRESULT res;
-	int result;
-
 	switch (drv) {
-	case ATA :
-		// pre-process here
-
-		result = ATA_disk_ioctl(ctrl, buff);
-		// post-process here
-
-		return res;
-
-	case MMC :
-		// pre-process here
-
-		result = MMC_disk_ioctl(ctrl, buff);
-		// post-process here
-
-		return res;
-
-	case USB :
-		// pre-process here
-
-		result = USB_disk_ioctl(ctrl, buff);
-		// post-process here
-
-		return res;
+	case ATA:
+		return ATA_disk_ioctl(ctrl, buff);
+	case MMC:
+		return MMC_disk_ioctl(ctrl, buff);
+	case USB:
+		return USB_disk_ioctl(ctrl, buff);
+	case SPI:
+		return SPI_disk_ioctl(ctrl, buff);
+	default:
+		return RES_PARERR;
 	}
-	return RES_PARERR;
 }
 
