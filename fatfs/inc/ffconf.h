@@ -53,7 +53,7 @@
 / Locale and Namespace Configurations
 /----------------------------------------------------------------------------*/
 
-#define _CODE_PAGE	1252
+#define _CODE_PAGE	936
 /* The _CODE_PAGE specifies the OEM code page to be used on the target system.
 /  Incorrect setting of the code page can cause a file open failure.
 /
@@ -86,7 +86,7 @@
 */
 
 
-#define	_USE_LFN	1	/* 0, 1 or 2 */
+#define	_USE_LFN	0	/* 0, 1 or 2 */
 #define	_MAX_LFN	255		/* Maximum LFN length to handle (12 to 255) */
 /* The _USE_LFN option switches the LFN support.
 /
@@ -128,7 +128,7 @@
 /  to the disk_ioctl function. */
 
 
-#define	_MULTI_PARTITION	1	/* 0 or 1 */
+#define	_MULTI_PARTITION	0	/* 0 or 1 */
 /* When _MULTI_PARTITION is set to 0, each volume is bound to the same physical
 / drive number and can mount only first primary partition. When it is set to 1,
 / each volume is tied to the partitions listed in Drives[]. */

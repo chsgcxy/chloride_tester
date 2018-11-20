@@ -40,9 +40,8 @@ DSTATUS disk_initialize (BYTE drv)    /* Physical drive nmuber (0..) */
 		return usb_stat;
 	case SPI:
 		return spi_stat;
-		break;
 	default:
-		break;
+		return STA_NODISK;
 	}
 }
 
@@ -63,20 +62,18 @@ DSTATUS disk_status (
 	case SPI:
 		return spi_stat;
 	default:
-		break;
+		return STA_NODISK;
 	}
-	
-	return STA_NOINIT;
 }
 
 static DRESULT ATA_disk_read(BYTE *buff, DWORD sector, BYTE count)
 {
-	return RES_ERROR;
+	return RES_PARERR;
 }
 
 static DRESULT MMC_disk_read(BYTE *buff, DWORD sector, BYTE count)
 {
-	return RES_ERROR;
+	return RES_PARERR;
 }
 
 static DRESULT USB_disk_read(BYTE *buff, DWORD sector, BYTE count)
@@ -147,9 +144,9 @@ static DRESULT USB_disk_write(BYTE *buff, DWORD sector, BYTE count)
 
 	if (!count)
 		return RES_PARERR;
-	if (Stat & STA_NOINIT)
+	if (usb_stat & STA_NOINIT)
 		return RES_NOTRDY;
-	if (Stat & STA_PROTECT)
+	if (usb_stat & STA_PROTECT)
 		return RES_WRPRT;
 
 	if (HCD_IsDeviceConnected(&USB_OTG_Core)) {  
@@ -184,14 +181,14 @@ DRESULT disk_write (
 {
 	switch (drv) {
 	case ATA:
-		return ATA_disk_write(buff, sector, count);
+		return ATA_disk_write((BYTE *)buff, sector, count);
 	case MMC:
-		return MMC_disk_write(buff, sector, count);
+		return MMC_disk_write((BYTE *)buff, sector, count);
 	case USB:
-		return USB_disk_write(buff, sector, count);
+		return USB_disk_write((BYTE *)buff, sector, count);
 	case SPI:
-		return SPI_disk_write(buff, sector, count);
-	defalut:
+		return SPI_disk_write((BYTE *)buff, sector, count);
+	default:
 		return RES_PARERR;
 	}
 }

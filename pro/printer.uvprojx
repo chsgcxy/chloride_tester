@@ -754,11 +754,6 @@
               <FilePath>..\usb\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_core.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_msc_fatfs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usb\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_fatfs.c</FilePath>
-            </File>
-            <File>
               <FileName>usbh_msc_scsi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\usb\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_scsi.c</FilePath>
@@ -807,6 +802,11 @@
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fatfs\src\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fatfs\src\diskio.c</FilePath>
             </File>
           </Files>
         </Group>
