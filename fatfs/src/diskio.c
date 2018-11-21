@@ -8,6 +8,7 @@
 #include "diskio.h"
 #include "usb_conf.h"
 #include "usbh_msc_core.h"
+#include "w25xxx.h"
 /*-----------------------------------------------------------------------*/
 /* Correspondence between physical drive number and physical drive.      */
 
@@ -101,7 +102,9 @@ static DRESULT USB_disk_read(BYTE *buff, DWORD sector, BYTE count)
 
 static DRESULT SPI_disk_read(BYTE *buff, DWORD sector, BYTE count)
 {
-	return RES_PARERR;
+	while (count--)
+		w25xxx_read_sector(buff, sector++);
+	return RES_OK;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -165,7 +168,9 @@ static DRESULT USB_disk_write(BYTE *buff, DWORD sector, BYTE count)
 
 static DRESULT SPI_disk_write(BYTE *buff, DWORD sector, BYTE count)
 {
-	return RES_PARERR;
+	while (count--)
+		w25xxx_write(buff, sector++);
+	return RES_OK;
 }
 
 /*-----------------------------------------------------------------------*/

@@ -16,6 +16,7 @@
 #include "WM.h"
 #include "stepmotor.h"
 #include "delay.h"
+#include "w25xxx.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -63,6 +64,7 @@ static int g_printer_send(uint8_t *buf, int len)
 int main(void)
 {
 	int status;
+	uint8_t vid, pid;
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
@@ -75,11 +77,11 @@ int main(void)
 	uart4_init();
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
-    printf("sizeof(double) = %d\r\n", sizeof(double));
 	spi1_init();
 	spi2_init();
 	spi3_init();
-	
+	w25xxx_init();
+
 	/* ad7705 test */
 	ad770x_init();
 	///ad7705_test();
@@ -143,6 +145,9 @@ int main(void)
 		USBH_Process(&USB_OTG_Core, &USB_Host);
 	}
 #endif
+
+	w25xxx_read_id(&vid, &pid);
+	printf("w25x20 read id %02x %02x\r\n", vid, pid);
 
 	GUI_Init();
 	touch_init();
