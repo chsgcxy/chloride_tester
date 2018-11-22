@@ -128,14 +128,11 @@ void w25xxx_write(uint8_t *buf, u32 sector)
 
     sector_align = (sector / W25X20_SECTOR_PER_BLOCK) * W25X20_SECTOR_PER_BLOCK;
     block_addr = sector_align * W25X20_SECTOR_SIZE;
-    printf("%s: sector_align = %d, block_addr = 0x%04x\r\n",
-        __FUNCTION__, sector_align, block_addr);
 
     w25xxx_read_sector(p, sector);
     for (i = 0; i < W25X20_SECTOR_SIZE; i++) {
         if ((p[i] != buf[i]) && (p[i] != 0xFF)) {
             erase_flag = 1;
-            printf("%s: need erase\r\n", __FUNCTION__);
             break;
         }
     }

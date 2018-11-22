@@ -32,6 +32,7 @@
 #include "usbh_msc_core.h"
 #include "usbh_msc_scsi.h"
 #include "usbh_msc_bot.h"
+#include "diskio.h"
 
 /** @addtogroup USBH_USER
 * @{
@@ -417,7 +418,7 @@ int USBH_USR_MSC_Application(void)
 
     switch (USBH_USR_ApplicationState) {
     case USH_USR_FS_INIT:
-        if (f_mount(0, &fatfs) != FR_OK) {
+        if (f_mount(USB, &fatfs) != FR_OK) {
             USB_DBG_PRINT("> Cannot initialize File System.\r\n");
             return -1;
         }
@@ -461,7 +462,7 @@ int USBH_USR_MSC_Application(void)
                 USB_DBG_PRINT("> 'STM32.TXT' file created\n");
             }
             f_close(&file);
-            f_mount(0, NULL); 
+            f_mount(USB, NULL); 
         } else {
             USB_DBG_PRINT("> creat file fail! (%d)\r\n", res);
         }

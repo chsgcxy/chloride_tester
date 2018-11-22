@@ -5,7 +5,7 @@
 
 #define W25X20_SECTOR_COUNT          (1024)
 #define W25X20_SECTOR_SIZE           (256)
-#define W25X20_SECTOR_PER_BLOCK      (8)
+#define W25X20_SECTOR_PER_BLOCK      (16)
 #define W25X20_BLOCK_SIZE            (W25X20_SECTOR_PER_BLOCK * W25X20_SECTOR_SIZE)
 
 

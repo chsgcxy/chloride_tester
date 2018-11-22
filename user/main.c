@@ -17,16 +17,18 @@
 #include "stepmotor.h"
 #include "delay.h"
 #include "w25xxx.h"
+#include "ff.h"
+#include "diskio.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
 static struct tprinter g_printer;
 static struct report report_test;
-
-extern const GUI_BITMAP bmpic_measure_72px;
+static TaskHandle_t handle_touch, handle_gui;
 extern WM_HWIN main_menu_creat(void);
 
-static TaskHandle_t handle_touch, handle_gui;
+
+static FATFS spiflash_fs;
 
 static void task_helloworld(void *args)
 {
@@ -61,10 +63,14 @@ static int g_printer_send(uint8_t *buf, int len)
 	return uart_send_buf(PRINTER_PORT, buf, len);
 }
 
+static FIL gfp;
+static UINT gbw;
+static char buffer[32];
+
 int main(void)
 {
 	int status;
-	uint8_t vid, pid;
+	FRESULT res;
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
@@ -85,7 +91,7 @@ int main(void)
 	/* ad7705 test */
 	ad770x_init();
 	///ad7705_test();
-#if 0
+#if 1
 	stepmotor_init();
 	while (1) {
 		status = uart_get_status();
@@ -130,6 +136,64 @@ int main(void)
 			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 10);
 			printf("finished\r\n");
 			break;
+		case 9:
+			res = f_mount(SPI, &spiflash_fs);
+			if (res) {
+				printf("remount fatfs fail, res = %d\r\n", res);
+				break;
+			}
+			
+			res = f_open(&gfp, "1:/hello.txt", FA_CREATE_NEW | FA_WRITE);
+			if (res == FR_NO_FILESYSTEM) {
+				printf("f_open fail, no filesystem\r\n");
+				printf("mk a fatfs\r\n");
+				printf("prepare to erase chip\r\n");
+				w25xxx_erase_chip();
+            	printf("chip erased!\r\n");
+				res = f_mkfs(SPI, 0, W25X20_BLOCK_SIZE);
+				if (res) {
+					printf("mkfs fail, res = %d\r\n", res);
+					break;
+				}
+			}
+			res = f_open(&gfp, "1:/hello.txt", FA_CREATE_NEW | FA_WRITE);
+			if (res) {
+				printf("file open error, res = %d\r\n", res);
+				break;
+			}
+
+			res = f_write(&gfp, "Hello, World!\r\n", 15, &gbw);
+			if (gbw != 15) {
+				printf("write file fail, res = %d, gbw = %d\r\n", res, gbw);
+				break;
+			}
+
+			f_close(&gfp);
+			f_mount(SPI, NULL);
+			break;
+		case 0x0B:
+			printf("read test\r\n");
+			res = f_mount(SPI, &spiflash_fs);
+			if (res) {
+				printf("mount fatfs fail, res = %d\r\n", res);
+				break;
+			}
+			
+			res = f_open(&gfp, "1:/hello.txt", FA_READ);
+			if (res) {
+				printf("f_open error res = %d\r\n", res);
+				break;
+			}
+
+			res = f_read(&gfp, buffer, 15, &gbw);
+			if (res) {
+				printf("f_read error res = %d\r\n", res);
+				break;
+			}
+			printf("result: %s", buffer);
+			f_close(&gfp);
+			f_mount(SPI, NULL);
+			break;
 		default:
 			break;
 		}
@@ -145,9 +209,6 @@ int main(void)
 		USBH_Process(&USB_OTG_Core, &USB_Host);
 	}
 #endif
-
-	w25xxx_read_id(&vid, &pid);
-	printf("w25x20 read id %02x %02x\r\n", vid, pid);
 
 	GUI_Init();
 	touch_init();
