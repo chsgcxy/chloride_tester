@@ -150,12 +150,16 @@ int main(void)
 				printf("prepare to erase chip\r\n");
 				w25xxx_erase_chip();
             	printf("chip erased!\r\n");
-				res = f_mkfs(SPI, 0, W25X20_BLOCK_SIZE);
+				res = f_mkfs(SPI, 1, W25X20_BLOCK_SIZE);
 				if (res) {
 					printf("mkfs fail, res = %d\r\n", res);
 					break;
 				}
+			} else if (res) {
+				printf("f_open fail, res=%d\r\n", res);
+				break;
 			}
+
 			res = f_open(&gfp, "1:/hello.txt", FA_CREATE_NEW | FA_WRITE);
 			if (res) {
 				printf("file open error, res = %d\r\n", res);
@@ -193,6 +197,13 @@ int main(void)
 			printf("result: %s", buffer);
 			f_close(&gfp);
 			f_mount(SPI, NULL);
+			break;
+		case 0x0C:
+			w25xxx_test();
+			break;
+		case 0x0D:
+			printf("chip erase\r\n");
+			w25xxx_erase_chip();
 			break;
 		default:
 			break;

@@ -9,6 +9,11 @@
 
 #include "integer.h"
 
+#define USB     0
+#define SPI     1
+#define ATA     2
+#define MMC     3
+
 /* Status of Disk Functions */
 typedef BYTE	DSTATUS;
 

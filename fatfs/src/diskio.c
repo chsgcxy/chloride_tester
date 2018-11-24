@@ -12,11 +12,6 @@
 /*-----------------------------------------------------------------------*/
 /* Correspondence between physical drive number and physical drive.      */
 
-#define ATA		0
-#define MMC		1
-#define USB		2
-#define SPI     3
-
 static volatile DSTATUS ata_stat = STA_NOINIT;	/* Disk status */
 static volatile DSTATUS mmc_stat = STA_NOINIT;	/* Disk status */
 static volatile DSTATUS usb_stat = STA_NOINIT;	/* Disk status */
@@ -30,6 +25,8 @@ extern USBH_HOST                     USB_Host;
 
 DSTATUS disk_initialize (BYTE drv)    /* Physical drive nmuber (0..) */
 {
+	uint8_t vid, pid;
+
 	switch (drv) {
 	case ATA:
 		return ata_stat;
@@ -40,6 +37,9 @@ DSTATUS disk_initialize (BYTE drv)    /* Physical drive nmuber (0..) */
 			usb_stat &= ~STA_NOINIT;
 		return usb_stat;
 	case SPI:
+		w25xxx_read_id(&vid, &pid);
+		if (vid == 0xEF && pid == 0x11)
+			spi_stat &= ~STA_NOINIT;
 		return spi_stat;
 	default:
 		return STA_NODISK;
@@ -254,15 +254,15 @@ static DRESULT SPI_disk_ioctl(BYTE ctrl, void *buff)
 		break;
 	/* Get number of sectors on the disk (DWORD) */
 	case GET_SECTOR_COUNT:
-		*(DWORD*)buff = (DWORD)1024;
+		*(DWORD*)buff = (DWORD)W25X20_SECTOR_COUNT;
 		break;
 	/* Get R/W sector size (WORD) */
 	case GET_SECTOR_SIZE:
-		*(WORD*)buff = 256;
+		*(WORD*)buff = W25X20_SECTOR_SIZE;
 		break;
 	/* Get erase block size in unit of sector (DWORD) */
 	case GET_BLOCK_SIZE:
-		*(DWORD*)buff = 8;
+		*(DWORD*)buff = W25X20_SECTOR_PER_BLOCK;
 		break;
 	default:
 		res = RES_PARERR;
