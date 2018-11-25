@@ -458,6 +458,31 @@
               <FileType>1</FileType>
               <FilePath>..\user\Arial_32.c</FilePath>
             </File>
+            <File>
+              <FileName>ui_blocktest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_blocktest.c</FilePath>
+            </File>
+            <File>
+              <FileName>experiment.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\experiment.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_setting.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_setting.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_data.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

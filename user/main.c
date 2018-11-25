@@ -19,22 +19,28 @@
 #include "w25xxx.h"
 #include "ff.h"
 #include "diskio.h"
+#include "main.h"
+#include "experiment.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
+struct ui_msg g_ui_msg;
+
 static struct tprinter g_printer;
 static struct report report_test;
 static TaskHandle_t handle_touch, handle_gui;
+
 extern WM_HWIN main_menu_creat(void);
-
-
-static FATFS spiflash_fs;
+extern WM_HWIN ui_blocktest_creat(void);
+extern WM_HWIN ui_setting_creat(void);
+extern WM_HWIN ui_test_creat(void);
+extern WM_HWIN ui_data_creat(void);
 
 static void task_helloworld(void *args)
 {
 	while (1) {
 		printf("hello world!\r\n");
-		vTaskDelay(2000);
+		vTaskDelay(10000);
 	}
 }
 
@@ -48,7 +54,28 @@ static void task_touch(void *args)
 
 static void task_ui(void *args)
 {
-	main_menu_creat();
+	g_ui_msg.msg = MSG_LOAD_UI_MENU;
+	while (1) {
+		switch (g_ui_msg.msg) {
+		case MSG_LOAD_UI_MENU:
+			main_menu_creat();
+			break;
+		case MSG_LOAD_UI_BLOCKTEST:
+			ui_blocktest_creat();
+			break;
+		case MSG_LOAD_UI_TEST:
+			ui_test_creat();
+			break;
+		case MSG_LOAD_UI_SETTING:
+			ui_setting_creat();
+			break;
+		case MSG_LOAD_UI_DATA:
+			ui_data_creat();
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 static void task_init(void)
@@ -56,6 +83,7 @@ static void task_init(void)
 	xTaskCreate(task_helloworld, "hello world", 64, NULL, 1, NULL);
 	xTaskCreate(task_touch, "touch", 128, NULL, 2, &handle_touch);
 	xTaskCreate(task_ui, "ui", 512, NULL, 1, &handle_gui);
+	xTaskCreate(exper_task, "exper", 128, NULL, 1, NULL);
 }
 
 static int g_printer_send(uint8_t *buf, int len)
@@ -63,14 +91,8 @@ static int g_printer_send(uint8_t *buf, int len)
 	return uart_send_buf(PRINTER_PORT, buf, len);
 }
 
-static FIL gfp;
-static UINT gbw;
-static char buffer[32];
-
 int main(void)
 {
-	int status;
-	FRESULT res;
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
@@ -91,7 +113,7 @@ int main(void)
 	/* ad7705 test */
 	ad770x_init();
 	///ad7705_test();
-#if 1
+#if 0
 	stepmotor_init();
 	while (1) {
 		status = uart_get_status();
@@ -223,7 +245,7 @@ int main(void)
 
 	GUI_Init();
 	touch_init();
-	//touch_calibrate();
+	touch_calibrate();
 	
 	/* creat freertos task */
 	task_init();

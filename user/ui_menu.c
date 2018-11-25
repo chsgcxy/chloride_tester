@@ -23,6 +23,7 @@
 
 #include "DIALOG.h"
 #include "stdio.h"
+#include "main.h"
 
 /*********************************************************************
 *
@@ -32,15 +33,15 @@
 */
 #define ID_FRAMEWIN_0   (GUI_ID_USER + 0x00)
 
-#define ID_IMAGE_MEASURE   (GUI_ID_USER + 0x02)
-#define ID_IMAGE_VIEW      (GUI_ID_USER + 0x03)
-#define ID_IMAGE_USB       (GUI_ID_USER + 0x04)
-#define ID_IMAGE_SETTING   (GUI_ID_USER + 0x05)
+#define ID_IMAGE_BLOCKTEST   (GUI_ID_USER + 0x02)
+#define ID_IMAGE_TEST        (GUI_ID_USER + 0x03)
+#define ID_IMAGE_DATA        (GUI_ID_USER + 0x04)
+#define ID_IMAGE_SETTING     (GUI_ID_USER + 0x05)
 
-#define ID_TEXT_MEASURE    (GUI_ID_USER + 0x06)
-#define ID_TEXT_VIEW       (GUI_ID_USER + 0x07)
-#define ID_TEXT_USB        (GUI_ID_USER + 0x08)
-#define ID_TEXT_SETTING    (GUI_ID_USER + 0x09)
+#define ID_TEXT_BLOCKTEST    (GUI_ID_USER + 0x06)
+#define ID_TEXT_TEST         (GUI_ID_USER + 0x07)
+#define ID_TEXT_DATA         (GUI_ID_USER + 0x08)
+#define ID_TEXT_SETTING      (GUI_ID_USER + 0x09)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_BITMAP bmlaboratory_72px;
@@ -59,14 +60,14 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0 },
 
-    { IMAGE_CreateIndirect, "block", ID_IMAGE_MEASURE, 102, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "test", ID_IMAGE_VIEW, 276, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "data", ID_IMAGE_USB, 450, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "block", ID_IMAGE_BLOCKTEST, 102, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "test", ID_IMAGE_TEST, 276, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "data", ID_IMAGE_DATA, 450, 140, 72, 72, 0, 0, 0 },
     { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 624, 140, 72, 72, 0, 0, 0 },
 
-    { TEXT_CreateIndirect, "block", ID_TEXT_MEASURE, 87, 225, 100, 25, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "test", ID_TEXT_VIEW, 250, 225, 120, 25, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "data", ID_TEXT_USB, 435, 225, 100, 25, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 87, 225, 100, 25, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "test", ID_TEXT_TEST, 250, 225, 120, 25, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 435, 225, 100, 25, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 609, 225, 100, 25, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
     // USER END
@@ -99,30 +100,30 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         //
         // Initialization of 'Image'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_MEASURE);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_BLOCKTEST);
         IMAGE_SetBitmap(hItem, &bmchemical_72px);
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MEASURE);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_BLOCKTEST);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "空白实验");
         //
         // Initialization of 'Image'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_VIEW);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_TEST);
         IMAGE_SetBitmap(hItem, &bmlaboratory_72px);
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_VIEW);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEST);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "氯离子检测");
         //
         // Initialization of 'Image'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_USB);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_DATA);
         IMAGE_SetBitmap(hItem, &bmpic_view_72px);
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_USB);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DATA);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "数据处理");
@@ -141,10 +142,45 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch(Id) {
-        case ID_IMAGE_MEASURE:
+        case ID_IMAGE_BLOCKTEST:
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
-                printf("clicked.....\r\n");
+                printf("run block test\r\n");
+                g_ui_msg.msg = MSG_LOAD_UI_BLOCKTEST;
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_IMAGE_TEST:
+            switch(NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                printf("run test\r\n");
+                g_ui_msg.msg = MSG_LOAD_UI_TEST;
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_IMAGE_DATA:
+            switch(NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                printf("run data\r\n");
+                g_ui_msg.msg = MSG_LOAD_UI_DATA;
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_IMAGE_SETTING:
+            switch(NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                printf("run setting\r\n");
+                g_ui_msg.msg = MSG_LOAD_UI_SETTING;
+                GUI_EndDialog(pMsg->hWin, 0);
                 break;
             default:
                 break;
@@ -169,11 +205,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 *
 *       CreateFramewin
 */
-WM_HWIN main_menu_creat(void) {
-  WM_HWIN hWin;
-
-  hWin = GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-  return hWin;
+WM_HWIN main_menu_creat(void)
+{
+    g_ui_msg.hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    GUI_ExecCreatedDialog(g_ui_msg.hWin);
+    return g_ui_msg.hWin;
 }
 
 // USER START (Optionally insert additional public code)
