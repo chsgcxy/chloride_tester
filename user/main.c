@@ -21,6 +21,7 @@
 #include "diskio.h"
 #include "main.h"
 #include "experiment.h"
+#include "sysconf.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -109,6 +110,7 @@ int main(void)
 	spi2_init();
 	spi3_init();
 	w25xxx_init();
+	sysconf_load();
 
 	/* ad7705 test */
 	ad770x_init();

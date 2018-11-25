@@ -42,10 +42,10 @@
 #define ID_TEXT_6 (GUI_ID_USER + 0x07)
 #define ID_TEXT_7 (GUI_ID_USER + 0x08)
 
-#define ID_BUTTON_GET (GUI_ID_USER + 0x08)
-#define ID_BUTTON_PUT (GUI_ID_USER + 0x09)
-#define ID_BUTTON_RETURN (GUI_ID_USER + 0x0A)
-#define ID_PROGBAR_0 (GUI_ID_USER + 0x0B)
+#define ID_BUTTON_GET (GUI_ID_USER + 0x09)
+#define ID_BUTTON_PUT (GUI_ID_USER + 0x0A)
+#define ID_BUTTON_RETURN (GUI_ID_USER + 0x0B)
+#define ID_PROGBAR_0 (GUI_ID_USER + 0x0C)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_Consolas;

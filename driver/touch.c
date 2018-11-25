@@ -15,7 +15,7 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 #define FILTER_WINDOW     4
 #define FILTER_BUF_LEN    (FILTER_DISCARD * 2 + FILTER_WINDOW)
 
-//#define TOUCH_DBG
+#define TOUCH_DBG
 
 #ifdef TOUCH_DBG
 	#define TOUCH_DBG_PRINT(fmt, args...)    printf(fmt, ##args)
@@ -196,11 +196,21 @@ static void _disp_calibrate_fail(void)
 void touch_calibrate(void)
 {
 	struct touch *ptouch = &g_touch;
+	struct sysconf *conf = sysconf_get();
 	double _phy, _pos;
 	int32_t _precision;
 	GUI_PID_STATE state;
 
-	
+	if (sysconf_is_valid()) {
+		printf("get touch config, x_coe=%lf, y_coe=%lf, x_cor=%d, y_cor=%d\r\n",
+			conf->x_coe, conf->y_coe, conf->x_correct, conf->y_correct);
+		ptouch->x_coe = conf->x_coe;
+		ptouch->y_coe = conf->y_coe;
+		ptouch->correct.x = conf->x_correct;
+		ptouch->correct.y = conf->y_correct;
+		return;
+	}
+
 do_calc:
 	TOUCH_DBG_PRINT("do touch calibrate...\r\n");
 	GUI_SetBkColor(GUI_DARKGRAY);
@@ -311,6 +321,14 @@ do_calc:
 	//GUI_Clear();
 	TOUCH_DBG_PRINT("calibrate succeed, correct=(%d,%d)\r\n",
 		ptouch->correct.x, ptouch->correct.y);
+
+	conf->x_coe = ptouch->x_coe;
+	conf->y_coe = ptouch->y_coe;
+	conf->x_correct = ptouch->correct.x;
+	conf->y_correct = ptouch->correct.y;
+	printf("touch calc x_coe=%lf, y_coe=%lf, x_cor=%d, y_cor=%d\r\n",
+		conf->x_coe, conf->y_coe, conf->x_correct, conf->y_correct);
+	sysconf_save();
 }
 
 void touch_update(void)

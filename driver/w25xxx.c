@@ -39,15 +39,17 @@ void w25xxx_write_disable(void)
 
 static void w25xxx_wait(void)
 {
-    u8 stat;
+    u8 stat = 0;
 
     W25_CS_LOW();
     w25xxx_send_byte(W25_RD_STAT);
 
-    do {
+    while (1) {
         stat = w25xxx_send_byte(0xff);
-    } while (stat & 0x01);
-    printf("stat = 0x%02x\r\n", stat);
+        if ((stat & 0x01) == 0x0)
+            break;
+    }
+        
     W25_CS_HIGH();
 }
 

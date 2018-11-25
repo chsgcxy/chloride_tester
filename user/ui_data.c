@@ -286,7 +286,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
 WM_HWIN ui_data_creat(void)
 {
-    g_ui_msg.hWin = GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    g_ui_msg.hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     GUI_ExecCreatedDialog(g_ui_msg.hWin);
     return g_ui_msg.hWin;
 }

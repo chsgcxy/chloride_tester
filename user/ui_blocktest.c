@@ -273,6 +273,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START);
+                BUTTON_SetText(hItem, "Í£Ö¹ÊµÑé");
                 msg.msg = EXPER_MSG_START;
                 exper_msg_set(&msg);
                 // USER END
@@ -315,7 +317,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 WM_HWIN ui_blocktest_creat(void)
 {
     g_ui_msg.hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    printf("block hwin %d\r\n", g_ui_msg.hWin);
     GUI_ExecCreatedDialog(g_ui_msg.hWin);
     return g_ui_msg.hWin;
 }
