@@ -84,7 +84,7 @@ static void task_init(void)
 	xTaskCreate(task_helloworld, "hello world", 64, NULL, 1, NULL);
 	xTaskCreate(task_touch, "touch", 128, NULL, 2, &handle_touch);
 	xTaskCreate(task_ui, "ui", 512, NULL, 1, &handle_gui);
-	xTaskCreate(exper_task, "exper", 128, NULL, 1, NULL);
+	xTaskCreate(exper_task, "exper", 256, NULL, 1, NULL);
 }
 
 static int g_printer_send(uint8_t *buf, int len)

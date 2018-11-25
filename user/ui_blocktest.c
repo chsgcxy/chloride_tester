@@ -47,6 +47,7 @@
 #define ID_TEXT_4 (GUI_ID_USER + 0x0B)
 #define ID_TEXT_5 (GUI_ID_USER + 0x0E)
 #define ID_PROGBAR_TEST (GUI_ID_USER + 0x0F)
+#define ID_GRAPH_0   (GUI_ID_USER + 0x10)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_Consolas;
@@ -74,14 +75,15 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_PUT, 638, 189, 140, 40, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 632, 370, 140, 40, 0, 0x0, 0},
     {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 640, 17, 140, 40, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_0, 30, 30, 160, 35, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 30, 90, 160, 35, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 30, 150, 160, 35, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_3, 30, 210, 160, 35, 0, 0x64, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_START, 20, 350, 200, 60, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_0, 5, 5, 160, 35, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 5, 45, 160, 35, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 5, 85, 160, 35, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_3, 5, 125, 130, 35, 0, 0x64, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_START, 5, 350, 215, 60, 0, 0x0, 0},
     {TEXT_CreateIndirect, "Text", ID_TEXT_4, 530, 25, 130, 35, 0, 0x64, 0},
     {TEXT_CreateIndirect, "Text", ID_TEXT_5, 240, 380, 130, 35, 0, 0x0, 0},
     {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_TEST, 340, 378, 200, 30, 0, 0x0, 0},
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 5, 160, 540, 180, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -95,6 +97,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 static struct exper_msg msg;
 
 // USER START (Optionally insert additional static code)
+GRAPH_SCALE_Handle hScaleV, hScaleH;
+GRAPH_DATA_Handle pdataGRP;
 // USER END
 
 /*********************************************************************
@@ -107,7 +111,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int NCode;
     int Id, i;
     struct exper_msg *priv;
-
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -204,7 +207,25 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         PROGBAR_SetFont(hItem, GUI_FONT_24B_ASCII);
         PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
         PROGBAR_SetMinMax(hItem, 0, 100);
-        // USER START (Optionally insert additional code for further widget initialization)
+        
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_0);
+        GRAPH_SetBorder(hItem, 40, 3, 3, 30);
+        GRAPH_SetGridVis(hItem, 1);
+        GRAPH_SetGridFixedX(hItem, 1);
+        GRAPH_SetGridDistY(hItem, 25);
+        GRAPH_SetGridDistX(hItem, 50);
+        hScaleV = GRAPH_SCALE_Create(3, GUI_TA_LEFT, GRAPH_SCALE_CF_VERTICAL, 25);
+        GRAPH_SCALE_SetTextColor(hScaleV, GUI_RED);
+        GRAPH_AttachScale(hItem, hScaleV);
+        hScaleH = GRAPH_SCALE_Create(160, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
+        GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
+        GRAPH_AttachScale(hItem, hScaleH);
+        pdataGRP = GRAPH_DATA_YT_Create(GUI_GREEN, 500, 0, 0);
+        GRAPH_AttachData(hItem, pdataGRP);
+        GRAPH_DATA_YT_SetOffY(pdataGRP, 20);
+        GRAPH_DATA_YT_SetAlign(pdataGRP, GRAPH_ALIGN_LEFT);
+        GRAPH_DATA_YT_Clear(pdataGRP);
         // USER END
         break;
     case WM_NOTIFY_PARENT:
@@ -295,6 +316,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         priv = (struct exper_msg *)pMsg->Data.p;
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_TEST);
         PROGBAR_SetValue(hItem, priv->progress);
+        GRAPH_DATA_YT_AddValue(pdataGRP, (I16)(priv->progress & 0xffff));
         WM_Exec();
         break;
     default:
