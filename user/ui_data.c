@@ -188,6 +188,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                printf("run data detail\r\n");
+                g_ui_msg.msg = MSG_LOAD_UI_DETAIL;
+                GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:

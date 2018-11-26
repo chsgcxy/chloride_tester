@@ -36,6 +36,7 @@ extern WM_HWIN ui_blocktest_creat(void);
 extern WM_HWIN ui_setting_creat(void);
 extern WM_HWIN ui_test_creat(void);
 extern WM_HWIN ui_data_creat(void);
+extern WM_HWIN data_detail_creat(void);
 
 static void task_helloworld(void *args)
 {
@@ -72,6 +73,9 @@ static void task_ui(void *args)
 			break;
 		case MSG_LOAD_UI_DATA:
 			ui_data_creat();
+			break;
+		case MSG_LOAD_UI_DETAIL:
+			data_detail_creat();
 			break;
 		default:
 			break;
