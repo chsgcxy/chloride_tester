@@ -41,12 +41,10 @@
 #define ID_TEXT_0 (GUI_ID_USER + 0x06)
 #define ID_TEXT_1 (GUI_ID_USER + 0x07)
 #define ID_TEXT_2 (GUI_ID_USER + 0x08)
-#define ID_TEXT_3 (GUI_ID_USER + 0x09)
-#define ID_TEXT_4 (GUI_ID_USER + 0x0A)
-#define ID_TEXT_5 (GUI_ID_USER + 0x0C)
-#define ID_TEXT_6 (GUI_ID_USER + 0x0D)
-#define ID_TEXT_7 (GUI_ID_USER + 0x0F)
-#define ID_TEXT_8 (GUI_ID_USER + 0x10)
+#define ID_TEXT_5 (GUI_ID_USER + 0x09)
+#define ID_TEXT_6 (GUI_ID_USER + 0x0A)
+#define ID_TEXT_7 (GUI_ID_USER + 0x0B)
+#define ID_TEXT_8 (GUI_ID_USER + 0x0C)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_Consolas;
@@ -69,19 +67,17 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
-    {LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 10, 120, 630, 290, 0, 0x0, 0},
+    {LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 10, 96, 630, 319, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 660, 370, 120, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 660, 210, 120, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PRINT, 660, 120, 120, 40, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 660, 200, 120, 40, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PRINT, 660, 96, 120, 40, 0, 0x0, 0},
     {TEXT_CreateIndirect, "Text", ID_TEXT_0, 10, 5, 60, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 70, 5, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 100, 5, 80, 25, 0, 0x64, 0},
     {TEXT_CreateIndirect, "Text", ID_TEXT_2, 260, 5, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_3, 10, 35, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_4, 260, 35, 80, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_5, 10, 65, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_6, 260, 65, 81, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_7, 10, 95, 250, 20, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_8, 260, 94, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_5, 10, 35, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_6, 260, 35, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_7, 10, 65, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_8, 260, 65, 81, 25, 0, 0x64, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -126,7 +122,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Listview'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-        LISTVIEW_SetRowHeight(hItem, 26);
+        LISTVIEW_SetRowHeight(hItem, 29);
         LISTVIEW_SetBkColor(hItem, 0, GUI_GRAY);
         LISTVIEW_SetGridVis(hItem, 1);
         LISTVIEW_AddRow(hItem, NULL);
@@ -144,7 +140,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hHeader = LISTVIEW_GetHeader(hItem);
         HEADER_SetFont(hHeader, GUI_FONT_24_ASCII);
         HEADER_SetTextColor(hHeader, GUI_BLUE);
-        HEADER_SetHeight(hHeader, 30);
+        HEADER_SetHeight(hHeader, 29);
         HEADER_SetBkColor(hHeader, GUI_GRAY);
         LISTVIEW_AddColumn(hItem, 105, "AgNO3", GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(hItem, 105, "E/Mv", GUI_TA_HCENTER | GUI_TA_VCENTER);
@@ -206,20 +202,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "2018-11-23  19:23");
-        //
-        // Initialization of 'Text'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_3);
-        TEXT_SetFont(hItem,  &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "ÊÔÑù¼ì²âµçÑ¹");
-        //
-        // Initialization of 'Text'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_4);
-        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "0.01mV");
         //
         // Initialization of 'Text'
         //

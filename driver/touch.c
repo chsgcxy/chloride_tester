@@ -15,7 +15,7 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 #define FILTER_WINDOW     4
 #define FILTER_BUF_LEN    (FILTER_DISCARD * 2 + FILTER_WINDOW)
 
-#define TOUCH_DBG
+//#define TOUCH_DBG
 
 #ifdef TOUCH_DBG
 	#define TOUCH_DBG_PRINT(fmt, args...)    printf(fmt, ##args)

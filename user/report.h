@@ -7,7 +7,7 @@
 struct report {
     float data[30];
     uint8_t data_num;
-
+    // AgNO3 used
     float nitrate_dosage;
     float percentage;
 
