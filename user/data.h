@@ -14,7 +14,7 @@ struct item {
 };
 
 struct data {
-    uint16_t idx;
+    uint16_t magic;
     uint8_t crc8;
     uint8_t year;
     uint8_t month;

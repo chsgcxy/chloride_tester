@@ -7,13 +7,11 @@
 #define SYSCONF_MAGIC     0xA55A0005
 
 static struct sysconf g_cfg;
-static uint8_t buf[W25X20_SECTOR_SIZE];
 static int valid_flag;
 
 int sysconf_load(void)
 {
-    w25xxx_read_sector(buf, SYSCONF_SECTOR);
-    memcpy(&g_cfg, buf, sizeof(struct sysconf));
+    w25xxx_read_sector((uint8_t *)&g_cfg, SYSCONF_SECTOR, sizeof(struct sysconf));
     if (g_cfg.magic == SYSCONF_MAGIC)
         valid_flag = 1;
     else
@@ -24,8 +22,7 @@ int sysconf_load(void)
 int sysconf_save(void)
 {
     g_cfg.magic = SYSCONF_MAGIC;
-    memcpy(buf, &g_cfg, sizeof(struct sysconf));
-    w25xxx_write(buf, SYSCONF_SECTOR);
+    w25xxx_write_sector((uint8_t *)&g_cfg, SYSCONF_SECTOR, sizeof(struct sysconf));
     return 0;
 }
 

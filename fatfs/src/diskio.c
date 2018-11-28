@@ -103,7 +103,7 @@ static DRESULT USB_disk_read(BYTE *buff, DWORD sector, BYTE count)
 static DRESULT SPI_disk_read(BYTE *buff, DWORD sector, BYTE count)
 {
 	while (count--)
-		w25xxx_read_sector(buff, sector++);
+		w25xxx_read_sector(buff, sector++, W25X20_SECTOR_SIZE);
 	return RES_OK;
 }
 
@@ -169,7 +169,7 @@ static DRESULT USB_disk_write(BYTE *buff, DWORD sector, BYTE count)
 static DRESULT SPI_disk_write(BYTE *buff, DWORD sector, BYTE count)
 {
 	while (count--)
-		w25xxx_write(buff, sector++);
+		w25xxx_write_sector(buff, sector++, W25X20_SECTOR_SIZE);
 	return RES_OK;
 }
 

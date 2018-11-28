@@ -53,17 +53,16 @@ static void w25xxx_wait(void)
     W25_CS_HIGH();
 }
 
-void w25xxx_read_sector(uint8_t *buf, u32 sector)
+void w25xxx_read_sector(uint8_t *buf, u32 sector, int len)
 {
     u32 offset = sector * W25X20_SECTOR_SIZE;
-    int count = W25X20_SECTOR_SIZE;
 
     W25_CS_LOW();
     w25xxx_send_byte(W25_RD_DATA);
     w25xxx_send_byte((offset & 0xFF0000) >> 16);
     w25xxx_send_byte((offset & 0xFF00) >> 8);
     w25xxx_send_byte(offset & 0xFF);
-    while (count--)
+    while (len--)
         *buf++ = w25xxx_send_byte(0xff);
     W25_CS_HIGH();
 }
@@ -102,10 +101,9 @@ void w25xxx_read_id(uint8_t *fid, uint8_t *did)
     W25_CS_HIGH();
 }
 
-static void w25xxx_write_sector(uint8_t *buf, u32 sector)
+static void _w25xxx_write_sector(uint8_t *buf, u32 sector, int len)
 {
     u32 offset = sector * W25X20_SECTOR_SIZE;
-    int count = W25X20_SECTOR_SIZE;
     
     w25xxx_write_enable();
     W25_CS_LOW();
@@ -114,14 +112,14 @@ static void w25xxx_write_sector(uint8_t *buf, u32 sector)
     w25xxx_send_byte((offset & 0xFF00) >> 8);
     w25xxx_send_byte(offset & 0xFF);
 
-    while (count--)
+    while (len--)
         w25xxx_send_byte(*buf++);
 
     W25_CS_HIGH();
     w25xxx_wait();
 }
 
-void w25xxx_write(uint8_t *buf, u32 sector)
+void w25xxx_write_sector(uint8_t *buf, u32 sector, int len)
 { 
     u32 sector_align, block_addr;
     int i;
@@ -131,8 +129,8 @@ void w25xxx_write(uint8_t *buf, u32 sector)
     sector_align = (sector / W25X20_SECTOR_PER_BLOCK) * W25X20_SECTOR_PER_BLOCK;
     block_addr = sector_align * W25X20_SECTOR_SIZE;
 
-    w25xxx_read_sector(p, sector);
-    for (i = 0; i < W25X20_SECTOR_SIZE; i++) {
+    w25xxx_read_sector(p, sector, len);
+    for (i = 0; i < len; i++) {
         if ((p[i] != buf[i]) && (p[i] != 0xFF)) {
             erase_flag = 1;
             break;
@@ -142,18 +140,17 @@ void w25xxx_write(uint8_t *buf, u32 sector)
     if (erase_flag) {
         for (i = 0; i < W25X20_SECTOR_PER_BLOCK; i++, p += W25X20_SECTOR_SIZE) {
             if ((sector_align + i) == sector)
-                memcpy(p, buf, W25X20_SECTOR_SIZE);
-            else
-                w25xxx_read_sector(p, sector_align + i);
+                memcpy(p, buf, len);
+            w25xxx_read_sector(p, sector_align + i, W25X20_SECTOR_SIZE);
         }
             
         w25xxx_erase_block(block_addr);
 
         p = block_buf;
         for (i = 0; i < W25X20_SECTOR_PER_BLOCK; i++, p += W25X20_SECTOR_SIZE)
-            w25xxx_write_sector(p, sector_align + i);
+            _w25xxx_write_sector(p, sector_align + i, W25X20_SECTOR_SIZE);
     } else
-        w25xxx_write_sector(buf, sector);
+        _w25xxx_write_sector(buf, sector, len);
 }
 
 int w25xxx_init(void)
