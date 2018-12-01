@@ -163,7 +163,7 @@ int ad770x_init(void)
 	return 0;
 }
 
-void ad7705_test(void)
+void ad7705_read(void)
 {
 	u16 data;
 	float volt;
@@ -174,6 +174,7 @@ void ad7705_test(void)
 			volt = (float)((float)data * (2.5 / 65535));
 			printf("ad1 orign data = %d, volt = %.4f\r\n", data, volt);
 			AD770xWriteSetupReg(setup_reg);
+			return;
 		}
 	}
 }
