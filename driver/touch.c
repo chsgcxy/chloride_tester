@@ -15,7 +15,7 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 #define FILTER_WINDOW     4
 #define FILTER_BUF_LEN    (FILTER_DISCARD * 2 + FILTER_WINDOW)
 
-//#define TOUCH_DBG
+#define TOUCH_DBG
 
 #ifdef TOUCH_DBG
 	#define TOUCH_DBG_PRINT(fmt, args...)    printf(fmt, ##args)
@@ -200,6 +200,10 @@ void touch_calibrate(void)
 	double _phy, _pos;
 	int32_t _precision;
 	GUI_PID_STATE state;
+
+	/* to enable ADS7843 irq */
+	_read_phy(CMD_RDX);
+	_read_phy(CMD_RDY);
 
 	if (sysconf_is_valid()) {
 		printf("get touch config, x_coe=%lf, y_coe=%lf, x_cor=%d, y_cor=%d\r\n",
