@@ -39,12 +39,14 @@
 #define ID_BUTTON_PUT (GUI_ID_USER + 0x02)
 #define ID_BUTTON_RETURN (GUI_ID_USER + 0x03)
 #define ID_PROGBAR_0 (GUI_ID_USER + 0x04)
-#define ID_TEXT_0 (GUI_ID_USER + 0x05)
-#define ID_TEXT_1 (GUI_ID_USER + 0x06)
-#define ID_TEXT_2 (GUI_ID_USER + 0x07)
-#define ID_TEXT_3 (GUI_ID_USER + 0x08)
-#define ID_BUTTON_START (GUI_ID_USER + 0x0A)
-#define ID_TEXT_4 (GUI_ID_USER + 0x0B)
+#define ID_BUTTON_START_NO3 (GUI_ID_USER + 0x05)
+#define ID_TEXT_NO3ND (GUI_ID_USER + 0x06)
+#define ID_TEXT_NO3YL (GUI_ID_USER + 0x07)
+#define ID_TEXT_DJDW (GUI_ID_USER + 0x08)
+#define ID_BUTTON_START_TEST (GUI_ID_USER + 0x09)
+#define ID_BUTTON_START_BLOCK (GUI_ID_USER + 0x0A)
+#define ID_TEXT_RYCL (GUI_ID_USER + 0x0B)
+#define ID_BUTTON_CLEAR (GUI_ID_USER + 0x0C)
 #define ID_TEXT_5 (GUI_ID_USER + 0x0E)
 #define ID_PROGBAR_TEST (GUI_ID_USER + 0x0F)
 #define ID_GRAPH_0   (GUI_ID_USER + 0x10)
@@ -70,20 +72,21 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-    { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_GET, 639, 103, 140, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PUT, 638, 189, 140, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 632, 370, 140, 40, 0, 0x0, 0},
-    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 640, 17, 140, 40, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_0, 5, 5, 160, 35, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 5, 45, 160, 35, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 5, 85, 160, 35, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_3, 5, 125, 130, 35, 0, 0x64, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_START, 5, 350, 215, 60, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_4, 530, 25, 130, 35, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_5, 240, 380, 130, 35, 0, 0x0, 0},
-    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_TEST, 340, 378, 200, 30, 0, 0x0, 0},
-    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 5, 160, 540, 180, 0, 0x0, 0 },
+    {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
+    {BUTTON_CreateIndirect, "吸液", ID_BUTTON_GET, 180, 425, 100, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "排液", ID_BUTTON_PUT, 330, 425, 100, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "清洗", ID_BUTTON_CLEAR, 480, 425, 100, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "菜单", ID_BUTTON_RETURN, 585, 5, 210, 50, 0, 0x0, 0},
+    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 5, 450, 150, 25, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 5, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "AgNO3用量", ID_TEXT_NO3YL, 5, 45, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 5, 85, 130, 32, 0, 0x64, 0},
+    {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 585, 240, 210, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "AgNO3检测", ID_BUTTON_START_NO3, 585, 130, 210, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "氯离子检测", ID_BUTTON_START_TEST, 585, 350, 210, 60, 0, 0x0, 0},
+    
+    {TEXT_CreateIndirect, "溶液存量", ID_TEXT_RYCL, 20, 415, 120, 35, 0, 0x64, 0},
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 5, 130, 575, 280, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -95,7 +98,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 **********************************************************************
 */
 static struct exper_msg msg;
-
+static uint8_t put_func = 0;
 // USER START (Optionally insert additional static code)
 GRAPH_SCALE_Handle hScaleV, hScaleH;
 GRAPH_DATA_Handle pdataGRP;
@@ -128,77 +131,62 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
         BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "吸液");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
         BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "排液");
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
         BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "返回");
+        BUTTON_SetTextColor(hItem, 0, GUI_RED);
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
         BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "开始实验");
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "NaCL浓度");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "AgNO3浓度");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "AgNO3用量");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_3);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_RYCL);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "电极电位");
-        //
-        // Initialization of 'Text'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_4);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "溶液存量");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-        PROGBAR_SetFont(hItem, GUI_FONT_24B_ASCII);
-        PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
-        PROGBAR_SetMinMax(hItem, 0, 100);
-        //
-        // Initialization of 'Text'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_5);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "实验进度");
-
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_TEST);
         PROGBAR_SetFont(hItem, GUI_FONT_24B_ASCII);
         PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
         PROGBAR_SetMinMax(hItem, 0, 100);
@@ -206,14 +194,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_0);
         GRAPH_SetBorder(hItem, 40, 3, 3, 30);
-        GRAPH_SetGridVis(hItem, 1);
-        GRAPH_SetGridFixedX(hItem, 1);
-        GRAPH_SetGridDistY(hItem, 25);
+        GRAPH_SetGridVis(hItem, 2);
+        GRAPH_SetGridFixedX(hItem, 2);
+        GRAPH_SetGridDistY(hItem, 20);
         GRAPH_SetGridDistX(hItem, 50);
         hScaleV = GRAPH_SCALE_Create(3, GUI_TA_LEFT, GRAPH_SCALE_CF_VERTICAL, 25);
         GRAPH_SCALE_SetTextColor(hScaleV, GUI_RED);
         GRAPH_AttachScale(hItem, hScaleV);
-        hScaleH = GRAPH_SCALE_Create(160, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
+        hScaleH = GRAPH_SCALE_Create(260, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
         pdataGRP = GRAPH_DATA_YT_Create(GUI_GREEN, 500, 0, 0);
@@ -251,11 +239,22 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-                for (i = 100; i >= 0; i--) {
-                    PROGBAR_SetValue(hItem, i);
-                    WM_Exec();
-                    vTaskDelay(50);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
+                if (put_func) {    
+                    BUTTON_SetText(hItem, "排液");
+                    BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    put_func = 0;
+                } else {
+                    BUTTON_SetText(hItem, "停止");
+                    BUTTON_SetTextColor(hItem, 0, GUI_RED);
+                    
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
+                    for (i = 100; i >= 0; i--) {
+                        PROGBAR_SetValue(hItem, i);
+                        WM_Exec();
+                        vTaskDelay(50);
+                    }
+                    put_func = 1;
                 }
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -284,12 +283,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_START: // Notifications sent by 'Button'
+        case ID_BUTTON_START_BLOCK: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                 BUTTON_SetText(hItem, "停止实验");
                 msg.msg = EXPER_MSG_START;
                 exper_msg_set(&msg);

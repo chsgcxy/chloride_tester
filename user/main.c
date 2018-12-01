@@ -96,7 +96,7 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
-	int status;
+	//int status;
 
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
@@ -116,12 +116,13 @@ int main(void)
 	ad770x_init();
 	beep_init();
 	w25xxx_init();
+	//w25xxx_erase_chip();
 	sysconf_load();
 	GUI_Init();
 	touch_init();
 	touch_calibrate();
 
-#if 1
+#if 0
 	stepmotor_init();
 	while (1) {
 		status = uart_get_status();
