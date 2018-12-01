@@ -34,17 +34,17 @@
 #define ID_FRAMEWIN_0   (GUI_ID_USER + 0x00)
 
 #define ID_IMAGE_BLOCKTEST   (GUI_ID_USER + 0x02)
-#define ID_IMAGE_TEST        (GUI_ID_USER + 0x03)
+//#define ID_IMAGE_TEST        (GUI_ID_USER + 0x03)
 #define ID_IMAGE_DATA        (GUI_ID_USER + 0x04)
 #define ID_IMAGE_SETTING     (GUI_ID_USER + 0x05)
 
 #define ID_TEXT_BLOCKTEST    (GUI_ID_USER + 0x06)
-#define ID_TEXT_TEST         (GUI_ID_USER + 0x07)
+//#define ID_TEXT_TEST         (GUI_ID_USER + 0x07)
 #define ID_TEXT_DATA         (GUI_ID_USER + 0x08)
 #define ID_TEXT_SETTING      (GUI_ID_USER + 0x09)
 
 // USER START (Optionally insert additional defines)
-extern const GUI_BITMAP bmlaboratory_72px;
+//extern const GUI_BITMAP bmlaboratory_72px;
 extern const GUI_BITMAP bmprocess_running_72px;
 extern const GUI_BITMAP bmchemical_72px;
 extern const GUI_BITMAP bmpic_view_72px;
@@ -60,15 +60,13 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0 },
 
-    { IMAGE_CreateIndirect, "block", ID_IMAGE_BLOCKTEST, 102, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "test", ID_IMAGE_TEST, 276, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "data", ID_IMAGE_DATA, 450, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 624, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "block", ID_IMAGE_BLOCKTEST, 146, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "data", ID_IMAGE_DATA, 364, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 582, 140, 72, 72, 0, 0, 0 },
 
-    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 87, 225, 100, 25, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "test", ID_TEXT_TEST, 250, 225, 120, 25, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 435, 225, 100, 25, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 609, 225, 100, 25, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 110, 225, 150, 32, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 345, 225, 120, 32, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 564, 225, 120, 32, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -94,7 +92,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         FRAMEWIN_SetTitleHeight(hItem, 50);
         FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
         FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Arial);
-        FRAMEWIN_SetTextColor(hItem, GUI_BLUE);
+        FRAMEWIN_SetTextColor(hItem, GUI_BLACK);
         FRAMEWIN_SetClientColor(hItem, GUI_GRAY);
         FRAMEWIN_SetText(hItem, "全自动氯离子检测仪");
         //
@@ -105,18 +103,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_BLOCKTEST);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "空白实验");
-        //
-        // Initialization of 'Image'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_TEST);
-        IMAGE_SetBitmap(hItem, &bmlaboratory_72px);
-
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEST);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "氯离子检测");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        TEXT_SetText(hItem, "氯离子检测");  
         //
         // Initialization of 'Image'
         //
@@ -125,7 +113,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DATA);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "数据处理");
         //
         // Initialization of 'Image'
@@ -135,7 +123,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SETTING);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "系统设置");
 
     case WM_NOTIFY_PARENT:
@@ -147,17 +135,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 printf("run block test\r\n");
                 g_ui_msg.msg = MSG_LOAD_UI_BLOCKTEST;
-                GUI_EndDialog(pMsg->hWin, 0);
-                break;
-            default:
-                break;
-            }
-            break;
-        case ID_IMAGE_TEST:
-            switch(NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                printf("run test\r\n");
-                g_ui_msg.msg = MSG_LOAD_UI_TEST;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
             default:

@@ -65,9 +65,6 @@ static void task_ui(void *args)
 		case MSG_LOAD_UI_BLOCKTEST:
 			ui_blocktest_creat();
 			break;
-		case MSG_LOAD_UI_TEST:
-			ui_test_creat();
-			break;
 		case MSG_LOAD_UI_SETTING:
 			ui_setting_creat();
 			break;
