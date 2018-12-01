@@ -22,6 +22,7 @@
 #include "main.h"
 #include "experiment.h"
 #include "sysconf.h"
+#include "beep.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -95,6 +96,8 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
+	int status;
+
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
@@ -110,44 +113,38 @@ int main(void)
 	spi1_init();
 	spi2_init();
 	spi3_init();
+	ad770x_init();
+	beep_init();
 	w25xxx_init();
 	sysconf_load();
+	GUI_Init();
+	touch_init();
+	touch_calibrate();
 
-	/* ad7705 test */
-	ad770x_init();
-	///ad7705_test();
-#if 0
+#if 1
 	stepmotor_init();
 	while (1) {
 		status = uart_get_status();
 		switch (status) {
-		case 1:
+		case 0x11:
 			printf("run cmd 1: motor up 0.3ml\r\n");
 			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 3);
 			printf("finished\r\n");
 			break;
-		case 2:
+		case 0x12:
 			printf("run cmd 2: motor down\r\n");
 			stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML);
 			printf("finished\r\n");
 			break;
-		case 3:
-			printf("run cmd 3: switch to put\r\n");
-			relay_ctrl(MOTOR_WATER_PUT);
-			printf("finished\r\n");
-			break;
-		case 4:
-			printf("run cmd 4: switch to get\r\n");
+		case 0x01:
+			printf("run cmd 5: motor down fast, change dir to get water\r\n");
 			relay_ctrl(MOTOR_WATER_GET);
-			printf("finished\r\n");
-			break;
-		case 5:
-			printf("run cmd 5: motor down fast\r\n");
 			stepmotor_run(MOTOR_DIR_DOWN, 8000);
 			printf("finished\r\n");
 			break;
-		case 6:
-			printf("run cmd 6: motor up fast\r\n");
+		case 0x02:
+			printf("run cmd 6: motor up fast, change dir to put water\r\n");
+			relay_ctrl(MOTOR_WATER_PUT);
 			stepmotor_run(MOTOR_DIR_UP, 8000);
 			printf("finished\r\n");
 			break;
@@ -161,74 +158,19 @@ int main(void)
 			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 10);
 			printf("finished\r\n");
 			break;
-		case 9:
-			res = f_mount(SPI, &spiflash_fs);
-			if (res) {
-				printf("remount fatfs fail, res = %d\r\n", res);
-				break;
-			}
-			
-			res = f_open(&gfp, "1:/hello.txt", FA_CREATE_NEW | FA_WRITE);
-			if (res == FR_NO_FILESYSTEM) {
-				printf("f_open fail, no filesystem\r\n");
-				printf("mk a fatfs\r\n");
-				printf("prepare to erase chip\r\n");
-				w25xxx_erase_chip();
-            	printf("chip erased!\r\n");
-				res = f_mkfs(SPI, 1, W25X20_BLOCK_SIZE);
-				if (res) {
-					printf("mkfs fail, res = %d\r\n", res);
-					break;
-				}
-			} else if (res) {
-				printf("f_open fail, res=%d\r\n", res);
-				break;
-			}
-
-			res = f_open(&gfp, "1:/hello.txt", FA_CREATE_NEW | FA_WRITE);
-			if (res) {
-				printf("file open error, res = %d\r\n", res);
-				break;
-			}
-
-			res = f_write(&gfp, "Hello, World!\r\n", 15, &gbw);
-			if (gbw != 15) {
-				printf("write file fail, res = %d, gbw = %d\r\n", res, gbw);
-				break;
-			}
-
-			f_close(&gfp);
-			f_mount(SPI, NULL);
+		case 0x03:
+			printf("beep work 100ms\r\n");
+			beep_work(100);
+			printf("finished\r\n");
 			break;
-		case 0x0B:
-			printf("read test\r\n");
-			res = f_mount(SPI, &spiflash_fs);
-			if (res) {
-				printf("mount fatfs fail, res = %d\r\n", res);
-				break;
-			}
-			
-			res = f_open(&gfp, "1:/hello.txt", FA_READ);
-			if (res) {
-				printf("f_open error res = %d\r\n", res);
-				break;
-			}
-
-			res = f_read(&gfp, buffer, 15, &gbw);
-			if (res) {
-				printf("f_read error res = %d\r\n", res);
-				break;
-			}
-			printf("result: %s", buffer);
-			f_close(&gfp);
-			f_mount(SPI, NULL);
+		case 0x04:
+			printf("ad7705 read\r\n");
+			ad7705_read();
+			printf("finished\r\n");
 			break;
 		case 0x0C:
-			w25xxx_test();
 			break;
 		case 0x0D:
-			printf("chip erase\r\n");
-			w25xxx_erase_chip();
 			break;
 		default:
 			break;
@@ -246,10 +188,6 @@ int main(void)
 	}
 #endif
 
-	GUI_Init();
-	touch_init();
-	touch_calibrate();
-	
 	/* creat freertos task */
 	task_init();
 

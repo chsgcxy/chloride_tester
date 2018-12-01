@@ -34,7 +34,7 @@
 *
 **********************************************************************
 */
-#define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)
+#define ID_WINDOW_0   (GUI_ID_USER + 0x00)
 #define ID_BUTTON_GET (GUI_ID_USER + 0x01)
 #define ID_BUTTON_PUT (GUI_ID_USER + 0x02)
 #define ID_BUTTON_RETURN (GUI_ID_USER + 0x03)
@@ -70,7 +70,7 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-    {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
+    { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_GET, 639, 103, 140, 40, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_PUT, 638, 189, 140, 40, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 632, 370, 140, 40, 0, 0x0, 0},
@@ -121,12 +121,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Framewin'
         //
         hItem = pMsg->hWin;
-        FRAMEWIN_SetTitleHeight(hItem, 50);
-        FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Arial);
-        FRAMEWIN_SetTextColor(hItem, GUI_BLUE);
-        FRAMEWIN_SetClientColor(hItem, GUI_GRAY);
-        FRAMEWIN_SetText(hItem, "¿Õ°×ÊµÑé(AgNO3Å¨¶È¼ì²â)");
+        WINDOW_SetBkColor(hItem, GUI_GRAY);
         //
         // Initialization of 'Button'
         //

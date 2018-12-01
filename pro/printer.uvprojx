@@ -888,6 +888,11 @@
               <FileType>1</FileType>
               <FilePath>..\driver\w25xxx.c</FilePath>
             </File>
+            <File>
+              <FileName>beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\beep.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
