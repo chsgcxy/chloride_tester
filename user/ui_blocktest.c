@@ -27,7 +27,7 @@
 #include "stdio.h"
 #include "FreeRTOS.h"
 #include "task.h"
-
+#include "beep.h"
 /*********************************************************************
 *
 *       Defines
@@ -38,18 +38,25 @@
 #define ID_BUTTON_GET (GUI_ID_USER + 0x01)
 #define ID_BUTTON_PUT (GUI_ID_USER + 0x02)
 #define ID_BUTTON_RETURN (GUI_ID_USER + 0x03)
-#define ID_PROGBAR_0 (GUI_ID_USER + 0x04)
-#define ID_BUTTON_START_NO3 (GUI_ID_USER + 0x05)
-#define ID_TEXT_NO3ND (GUI_ID_USER + 0x06)
-#define ID_TEXT_NO3YL (GUI_ID_USER + 0x07)
-#define ID_TEXT_DJDW (GUI_ID_USER + 0x08)
-#define ID_BUTTON_START_TEST (GUI_ID_USER + 0x09)
-#define ID_BUTTON_START_BLOCK (GUI_ID_USER + 0x0A)
+#define ID_BUTTON_START_NO3 (GUI_ID_USER + 0x04)
+#define ID_BUTTON_START_TEST (GUI_ID_USER + 0x05)
+#define ID_BUTTON_START_BLOCK (GUI_ID_USER + 0x06)
+#define ID_BUTTON_CLEAR (GUI_ID_USER + 0x07)
+
+#define ID_TEXT_NO3ND (GUI_ID_USER + 0x08)
+#define ID_TEXT_NO3YL (GUI_ID_USER + 0x09)
+#define ID_TEXT_DJDW (GUI_ID_USER + 0x0A)
 #define ID_TEXT_RYCL (GUI_ID_USER + 0x0B)
-#define ID_BUTTON_CLEAR (GUI_ID_USER + 0x0C)
-#define ID_TEXT_5 (GUI_ID_USER + 0x0E)
-#define ID_PROGBAR_TEST (GUI_ID_USER + 0x0F)
-#define ID_GRAPH_0   (GUI_ID_USER + 0x10)
+#define ID_TEXT_NACLND (GUI_ID_USER + 0x0C)
+#define ID_TEXT_5 (GUI_ID_USER + 0x0D)
+
+#define ID_PROGBAR_0 (GUI_ID_USER + 0x0E)
+#define ID_GRAPH_0   (GUI_ID_USER + 0x0F)
+
+#define ID_TEXT_NACLND_VALUE  (GUI_ID_USER + 0x10)
+#define ID_TEXT_NO3ND_VALUE   (GUI_ID_USER + 0x11)
+#define ID_TEXT_NO3YL_VALUE   (GUI_ID_USER + 0x12)
+#define ID_TEXT_DJDW_VALUE    (GUI_ID_USER + 0x13)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_Consolas;
@@ -73,22 +80,31 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
+    
+    {TEXT_CreateIndirect, "»‹“∫¥Ê¡ø", ID_TEXT_RYCL, 20, 415, 120, 35, 0, 0x64, 0},
+    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 5, 450, 150, 25, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Œ¸“∫", ID_BUTTON_GET, 180, 425, 100, 50, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "≈≈“∫", ID_BUTTON_PUT, 330, 425, 100, 50, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "«Âœ¥", ID_BUTTON_CLEAR, 480, 425, 100, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "≤Àµ•", ID_BUTTON_RETURN, 585, 5, 210, 50, 0, 0x0, 0},
-    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 5, 450, 150, 25, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "AgNO3≈®∂»", ID_TEXT_NO3ND, 5, 5, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "AgNO3”√¡ø", ID_TEXT_NO3YL, 5, 45, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "µÁº´µÁŒª", ID_TEXT_DJDW, 5, 85, 130, 32, 0, 0x64, 0},
-    {BUTTON_CreateIndirect, "ø’∞◊ µ—È", ID_BUTTON_START_BLOCK, 585, 240, 210, 60, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "AgNO3ºÏ≤‚", ID_BUTTON_START_NO3, 585, 130, 210, 60, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "¬»¿Î◊”ºÏ≤‚", ID_BUTTON_START_TEST, 585, 350, 210, 60, 0, 0x0, 0},
     
-    {TEXT_CreateIndirect, "»‹“∫¥Ê¡ø", ID_TEXT_RYCL, 20, 415, 120, 35, 0, 0x64, 0},
-    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 5, 130, 575, 280, 0, 0x0, 0 },
-    // USER START (Optionally insert additional widgets)
-    // USER END
+    {TEXT_CreateIndirect, "¬»¿Î◊”≈®∂»", ID_TEXT_NACLND, 5, 5, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_NACLND_VALUE, 5, 40, 160, 32, 0, 0x64, 0},
+
+    {TEXT_CreateIndirect, "AgNO3≈®∂»", ID_TEXT_NO3ND, 5, 75, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "-- mol/L", ID_TEXT_NO3ND_VALUE, 5, 110, 160, 32, 0, 0x64, 0},
+    
+    {TEXT_CreateIndirect, "AgNO3”√¡ø", ID_TEXT_NO3YL, 5, 145, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 5, 180, 160, 32, 0, 0x64, 0},
+
+    {TEXT_CreateIndirect, "µÁº´µÁŒª", ID_TEXT_DJDW, 5, 215, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0V", ID_TEXT_DJDW_VALUE, 5, 250, 160, 32, 0, 0x64, 0},
+
+    {BUTTON_CreateIndirect, "≤Àµ•", ID_BUTTON_RETURN, 600, 5, 180, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "ø’∞◊ µ—È", ID_BUTTON_START_BLOCK, 600, 240, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "AgNO3ºÏ≤‚", ID_BUTTON_START_NO3, 600, 130, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "¬»¿Î◊”ºÏ≤‚", ID_BUTTON_START_TEST, 600, 350, 180, 60, 0, 0x0, 0},
+    
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 180, 5, 400, 405, 0, 0x0, 0 },
 };
 
 /*********************************************************************
@@ -104,6 +120,20 @@ GRAPH_SCALE_Handle hScaleV, hScaleH;
 GRAPH_DATA_Handle pdataGRP;
 // USER END
 
+static void ctrl_all_btn(WM_HWIN hWin, int enable)
+{
+    WM_HWIN hItem;
+    int id;
+
+    for (id = ID_BUTTON_GET; id <= ID_BUTTON_CLEAR; id++) {
+        hItem = WM_GetDialogItem(hWin, id);
+        if (enable)
+            WM_EnableWindow(hItem);
+        else
+            WM_DisableWindow(hItem);
+    }
+}
+
 /*********************************************************************
 *
 *       _cbDialog
@@ -112,8 +142,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 {
     WM_HWIN hItem;
     int NCode;
-    int Id, i;
-    struct exper_msg *priv;
+    int Id;
+    struct exper_stat *stat;
+    char buf[16];
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -130,7 +161,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
         BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        BUTTON_SetTextColor(hItem, BUTTON_CI_UNPRESSED, GUI_BLUE);
         //
         // Initialization of 'Button'
         //
@@ -140,7 +171,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
         BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        BUTTON_SetTextColor(hItem, BUTTON_CI_UNPRESSED, GUI_BLUE);
         //
         // Initialization of 'Button'
         //
@@ -167,18 +198,38 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
         TEXT_SetTextColor(hItem, GUI_BLACK);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
+        TEXT_SetTextColor(hItem, GUI_RED);
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
         TEXT_SetTextColor(hItem, GUI_BLACK);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
+        TEXT_SetTextColor(hItem, GUI_RED);
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW);
         TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
         TEXT_SetTextColor(hItem, GUI_BLACK);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
+        TEXT_SetTextColor(hItem, GUI_RED);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND);
+        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
+        TEXT_SetTextColor(hItem, GUI_RED);
         //
         // Initialization of 'Text'
         //
@@ -193,76 +244,97 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_0);
-        GRAPH_SetBorder(hItem, 40, 3, 3, 30);
+        GRAPH_SetBorder(hItem, 40, 3, 3, 15);
         GRAPH_SetGridVis(hItem, 2);
         GRAPH_SetGridFixedX(hItem, 2);
         GRAPH_SetGridDistY(hItem, 20);
-        GRAPH_SetGridDistX(hItem, 50);
-        hScaleV = GRAPH_SCALE_Create(3, GUI_TA_LEFT, GRAPH_SCALE_CF_VERTICAL, 25);
+        GRAPH_SetGridDistX(hItem, 40);
+        
+        hScaleV = GRAPH_SCALE_Create(3, GUI_TA_LEFT, GRAPH_SCALE_CF_VERTICAL, 20);
+        //GRAPH_SCALE_SetNumDecs(hScaleV, 2);
+        //GRAPH_SCALE_SetFactor(hScaleV, 2.0);
         GRAPH_SCALE_SetTextColor(hScaleV, GUI_RED);
         GRAPH_AttachScale(hItem, hScaleV);
-        hScaleH = GRAPH_SCALE_Create(260, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
+        
+        hScaleH = GRAPH_SCALE_Create(395, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 40);
+        //GRAPH_SCALE_SetFactor(hScaleH, 0.01);
+        //GRAPH_SCALE_SetNumDecs(hScaleH, 2);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
-        pdataGRP = GRAPH_DATA_YT_Create(GUI_GREEN, 500, 0, 0);
+        pdataGRP = GRAPH_DATA_XY_Create(GUI_GREEN, 500, 0, 0);
         GRAPH_AttachData(hItem, pdataGRP);
-        GRAPH_DATA_YT_SetOffY(pdataGRP, 20);
-        GRAPH_DATA_YT_SetAlign(pdataGRP, GRAPH_ALIGN_LEFT);
-        GRAPH_DATA_YT_Clear(pdataGRP);
+        GRAPH_DATA_XY_Clear(pdataGRP);
         // USER END
         break;
     case WM_NOTIFY_PARENT:
         Id = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
-        switch (Id)
-        {
+        switch (Id) {
         case ID_BUTTON_GET: // Notifications sent by 'Button'
-            switch (NCode)
-            {
+            switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-                for (i = 0; i <= 100; i++) {
-                    PROGBAR_SetValue(hItem, i);
-                    WM_Exec();
-                    vTaskDelay(50);
-                }
+                beep_work(50, 0);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_GREEN);
+                BUTTON_SetText(hItem, "Œ¸“∫÷–");
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
+                ctrl_all_btn(pMsg->hWin, 0);
+                msg.msg = EXPER_MSG_OIL_GET;
+                msg.stop = 0;
+                exper_msg_set(&msg);
                 break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
+            default:
                 break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
             }
             break;
         case ID_BUTTON_PUT: // Notifications sent by 'Button'
-            switch (NCode)
-            {
+            switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
+                beep_work(100, 100);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
+                msg.msg = EXPER_MSG_OIL_PUT;
+                printf("put clicked\r\n");
                 if (put_func) {    
                     BUTTON_SetText(hItem, "≈≈“∫");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    ctrl_all_btn(pMsg->hWin, 1);                    
                     put_func = 0;
+                    msg.stop = 1;
                 } else {
                     BUTTON_SetText(hItem, "Õ£÷π");
                     BUTTON_SetTextColor(hItem, 0, GUI_RED);
-                    
-                    hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-                    for (i = 100; i >= 0; i--) {
-                        PROGBAR_SetValue(hItem, i);
-                        WM_Exec();
-                        vTaskDelay(50);
-                    }
+                    ctrl_all_btn(pMsg->hWin, 0);
+                    WM_EnableWindow(hItem);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
+                    BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
+                    BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);         
                     put_func = 1;
+                    msg.stop = 0;
                 }
+                exper_msg_set(&msg);
                 break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
+            default:
                 break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
+            }
+            break;
+        case ID_BUTTON_CLEAR: // Notifications sent by 'Button'
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                beep_work(100, 0);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
+                BUTTON_SetText(hItem, "«Âœ¥÷–");
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_GREEN);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
+                ctrl_all_btn(pMsg->hWin, 0);
+                msg.msg = EXPER_MSG_OIL_CLEAR;
+                msg.stop = 0;
+                exper_msg_set(&msg);
+                break;
+            default:
+                break;
             }
             break;
         case ID_BUTTON_RETURN: // Notifications sent by 'Button'
@@ -284,34 +356,138 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             }
             break;
         case ID_BUTTON_START_BLOCK: // Notifications sent by 'Button'
-            switch (NCode)
-            {
+            switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                 BUTTON_SetText(hItem, "Õ£÷π µ—È");
-                msg.msg = EXPER_MSG_START;
+                BUTTON_SetTextColor(hItem, 0, GUI_RED);
+                ctrl_all_btn(pMsg->hWin, 0);
+                WM_EnableWindow(hItem);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
+
+                msg.msg = EXPER_MSG_BLOCK_START;
+                msg.stop = 0;
                 exper_msg_set(&msg);
-                // USER END
                 break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
+            default:
                 break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
             }
             break;
-            // USER START (Optionally insert additional code for further Ids)
-            // USER END
+        case ID_BUTTON_START_NO3:
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+                BUTTON_SetText(hItem, "Õ£÷πºÏ≤‚");
+                BUTTON_SetTextColor(hItem, 0, GUI_RED);
+                ctrl_all_btn(pMsg->hWin, 0);
+                WM_EnableWindow(hItem);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);    
+                
+                msg.msg = EXPER_MSG_AGNO3_START;
+                msg.stop = 0;
+                exper_msg_set(&msg);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_BUTTON_START_TEST:
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+                BUTTON_SetText(hItem, "Õ£÷πºÏ≤‚");
+                BUTTON_SetTextColor(hItem, 0, GUI_RED);
+                ctrl_all_btn(pMsg->hWin, 0);
+                WM_EnableWindow(hItem);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
+                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
+
+                msg.msg = EXPER_MSG_CL_START;
+                msg.stop = 0;
+                exper_msg_set(&msg);
+                break;
+            default:
+                break;
+            }
+            break;
         }
         break;
     case WM_USER:
-        priv = (struct exper_msg *)pMsg->Data.p;
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_TEST);
-        PROGBAR_SetValue(hItem, priv->progress);
-        GRAPH_DATA_YT_AddValue(pdataGRP, (I16)(priv->progress & 0xffff));
-        WM_Exec();
+        stat = (struct exper_stat *)pMsg->Data.p;
+        switch (stat->stat) {
+            case EXPER_STAT_ERR_MOTOR:
+                break;
+            case EXPER_STAT_UPDATE_PROGRESS:
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
+                PROGBAR_SetValue(hItem, stat->oil_stock);
+                break;
+            case EXPER_STAT_UPDATE_GRAPH:
+                GRAPH_DATA_XY_AddPoint(pdataGRP, &stat->graph_pos);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
+                sprintf(buf, "%.1fmV", stat->volt);
+                TEXT_SetText(hItem, buf);
+                
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
+                sprintf(buf, "%.1fmL", stat->agno3_used);
+                TEXT_SetText(hItem, buf);
+                break;
+            case EXPER_STAT_OIL_GET_FINISHED:
+                beep_finished();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
+                BUTTON_SetText(hItem, "Œ¸“∫");
+                ctrl_all_btn(pMsg->hWin, 1);
+                break;
+            case EXPER_STAT_OIL_PUT_FINISHED:
+                beep_finished();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);   
+                BUTTON_SetText(hItem, "≈≈“∫");
+                BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                ctrl_all_btn(pMsg->hWin, 1);
+                put_func = 0;
+                break;
+            case EXPER_STAT_OIL_CLEAR_FINISHED:
+                beep_finished();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
+                BUTTON_SetText(hItem, "«Âœ¥");
+                ctrl_all_btn(pMsg->hWin, 1);
+                break;
+            case EXPER_STAT_AGNO3_FINISHED:
+                beep_finished();
+                
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
+                sprintf(buf, "%.2fmol/L", stat->agno3_consistence);
+                TEXT_SetText(hItem, buf);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+                BUTTON_SetText(hItem, "AgNO3ºÏ≤‚");
+                ctrl_all_btn(pMsg->hWin, 1);
+                break;
+            case EXPER_STAT_BLOCK_FINISHED:
+                beep_finished();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
+                BUTTON_SetText(hItem, "ø’∞◊ µ—È");
+                ctrl_all_btn(pMsg->hWin, 1);
+                break;
+            case EXPER_STAT_CL_FINISHED:
+                beep_finished();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+                BUTTON_SetText(hItem, "¬»¿Î◊”ºÏ≤‚");
+                ctrl_all_btn(pMsg->hWin, 1);
+                break;
+            default:
+                break;
+        }
         break;
     default:
         WM_DefaultProc(pMsg);

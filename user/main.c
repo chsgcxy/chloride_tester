@@ -51,7 +51,7 @@ static void task_touch(void *args)
 {
 	while (1) {
 		touch_update();
-		vTaskDelay(10);
+		vTaskDelay(20);
 	}
 }
 
@@ -83,10 +83,10 @@ static void task_ui(void *args)
 
 static void task_init(void)
 {
-	xTaskCreate(task_helloworld, "hello world", 64, NULL, 1, NULL);
+	//xTaskCreate(task_helloworld, "hello world", 64, NULL, 1, NULL);
 	xTaskCreate(task_touch, "touch", 128, NULL, 2, &handle_touch);
 	xTaskCreate(task_ui, "ui", 512, NULL, 1, &handle_gui);
-	xTaskCreate(exper_task, "exper", 256, NULL, 1, NULL);
+	xTaskCreate(exper_task, "exper", 512, NULL, 1, NULL);
 }
 
 static int g_printer_send(uint8_t *buf, int len)
@@ -96,7 +96,7 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
-	//int status;
+	int status;
 
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
@@ -117,13 +117,13 @@ int main(void)
 	beep_init();
 	w25xxx_init();
 	//w25xxx_erase_chip();
+	stepmotor_init();
 	sysconf_load();
 	GUI_Init();
 	touch_init();
 	touch_calibrate();
 
 #if 0
-	stepmotor_init();
 	while (1) {
 		status = uart_get_status();
 		switch (status) {

@@ -11,11 +11,11 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 #define CMD_RDY 0X90
 #define CMD_RDX	0XD0
 
-#define FILTER_DISCARD    13
-#define FILTER_WINDOW     4
+#define FILTER_DISCARD    20
+#define FILTER_WINDOW     5
 #define FILTER_BUF_LEN    (FILTER_DISCARD * 2 + FILTER_WINDOW)
 
-#define TOUCH_DBG
+//#define TOUCH_DBG
 
 #ifdef TOUCH_DBG
 	#define TOUCH_DBG_PRINT(fmt, args...)    printf(fmt, ##args)
@@ -86,7 +86,7 @@ static void _do_filter(struct touch *ptouch)
 #if 1
     /* sort */
 	for (i = 0; i < ptouch->filter_len; i++) {
-		for (j = ptouch->filter_len; j > i; j--) {
+		for (j = ptouch->filter_len - 1; j > i; j--) {
 			if (ptouch->buf[j].x < ptouch->buf[j - 1].x)
 				phy_swap(&ptouch->buf[j], &ptouch->buf[j - 1]);
         }

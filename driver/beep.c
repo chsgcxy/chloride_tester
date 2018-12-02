@@ -2,11 +2,25 @@
 #include "stm32f2xx.h"
 #include "delay.h"
 
-void beep_work(int ms)
+void beep_work(int work, int idol)
 {
     GPIO_ResetBits(GPIOA, GPIO_Pin_1);
-    delay_ms(ms);
+    vTaskDelay(work);
     GPIO_SetBits(GPIOA, GPIO_Pin_1);
+	vTaskDelay(idol);
+}
+
+void beep_finished(void)
+{
+	beep_work(500, 0);
+}
+    
+void beep_warning(void)
+{
+	beep_work(500, 50);
+	beep_work(500, 50);
+	beep_work(500, 50);
+	beep_work(500, 0);
 }
 
 int beep_init(void)

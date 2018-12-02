@@ -4504,6 +4504,39 @@ ________,________,________,________,
 ________,________,________,________,
 };
 
+GUI_FLASH  const unsigned char acFontHZkaiti_baf3[120] = {	/* 后 0xbaf3*/
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,XXX_____,________,
+________,_______X,XXXX____,________,
+________,_____XXX,XXXXX___,________,
+_______X,X__XXXXX,X_______,________,
+_______X,XXXXXX__,________,________,
+_______X,XX______,________,________,
+_______X,XX______,________,________,
+_______X,XX______,__XXXXXX,X_______,
+_______X,XX_XXXXX,XXXXXXXX,X_______,
+_______X,XXXXXXXX,XXX_____,________,
+_______X,XXX_____,________,________,
+_______X,XX______,________,________,
+______XX,X_______,________,________,
+______XX,XXXXXXXX,XXXXXXX_,________,
+______XX,XXXX____,___XXXX_,________,
+_____XXX,_XXX____,___XXX__,________,
+_____XXX,_XXX____,__XXX___,________,
+____XXX_,__XX____,__XXX___,________,
+___XXX__,__XXXXXX,XXXXXX__,________,
+__XXX___,__XXXXXX,XXXXX___,________,
+_XXX____,__XX____,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+};
+
 GUI_FLASH  const unsigned char acFontHZkaiti_bbb7[120] = {	/* 环 0xbbb7*/
 ________,________,________,________,
 ________,________,________,________,
@@ -5692,6 +5725,39 @@ ________,________,________,________,
 ________,________,________,________,
 };
 
+GUI_FLASH  const unsigned char acFontHZkaiti_c8a1[120] = {	/* 取 0xc8a1*/
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,____XXX_,________,________,
+________,XXXXXXXX,________,________,
+___XXXXX,XXXXXX__,________,________,
+____XXXX,__XXX___,________,________,
+_____XXX,__XXX___,__XXXXX_,________,
+_____XXX,__XXX__X,XXXXXXX_,________,
+_____XXX,XXXXXXXX,XX_XXX__,________,
+_____XXX,XXXXXXXX,___XXX__,________,
+_____XXX,__XXX_XX,X__XXX__,________,
+_____XXX,__XXX__X,XXXXX___,________,
+_____XXX,XXXXX___,XXXXX___,________,
+_____XXX,XXXXX___,XXXXX___,________,
+_____XXX,__XXXXX_,_XXX____,________,
+_____XXX,__XXXX__,_XXXX___,________,
+_____XXX,XXXXX___,XXXXXX__,________,
+____XXXX,XXXXX__X,XX_XXXXX,________,
+_XXXXXXX,__XXXXXX,X___XXXX,XX______,
+__XXXX__,__XXXXX_,_____XXX,XXX_____,
+________,__XXX___,_______X,________,
+________,__XXX___,________,________,
+________,__XXX___,________,________,
+________,__XXX___,________,________,
+________,__XX____,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+};
+
 GUI_FLASH  const unsigned char acFontHZkaiti_c8a6[120] = {	/* 圈 0xc8a6*/
 ________,________,________,________,
 ________,________,________,________,
@@ -5753,6 +5819,39 @@ ________,___XXXXX,XXXXXXX_,________,
 ____XXXX,XXXXXXXX,XXXXXXXX,________,
 _____XXX,XX______,________,________,
 ________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+};
+
+GUI_FLASH  const unsigned char acFontHZkaiti_c8b7[120] = {	/* 确 0xc8b7*/
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,_______X,XX______,________,
+________,_______X,XXX_____,________,
+________,_______X,XXX_____,________,
+________,_______X,XX_XXX__,________,
+________,XXXXXXXX,XXXXXXX_,________,
+____XXXX,XXXXX_XX,XXXXXX__,________,
+____XXXX,XX___XXX,__XXX___,________,
+_______X,XX___XX_,__XX____,________,
+______XX,X___XX__,_XXXXXXX,________,
+______XX,X___XXXX,XXX__XXX,X_______,
+____XXXX,XXXXXXX_,_XXX_XXX,________,
+____XXXX,_XXXXXX_,_XXXXXXX,________,
+____XXXX,_XXXXXXX,XXXXXXXX,________,
+___XXXXX,XXX_XXXX,XXX__XXX,________,
+__XXXXXX,XXXXXXX_,_XX__XXX,________,
+_XXX_XXX,XX__XXXX,XXXXXXXX,________,
+XXX__XX_,____XXXX,XXX__XXX,________,
+_____XX_,____XX__,_XX__XXX,________,
+________,___XXX__,_XX__XXX,X_______,
+________,___XXX__,_XX__XXX,X_______,
+________,__XXX___,_XXXXXXX,________,
+________,_XXX____,_X__XXXX,________,
+________,XXX_____,_____XXX,________,
+________,________,______X_,________,
 ________,________,________,________,
 ________,________,________,________,
 ________,________,________,________,
@@ -6616,6 +6715,39 @@ ________,________,________,________,
 ________,________,________,________,
 };
 
+GUI_FLASH  const unsigned char acFontHZkaiti_cfa2[120] = {	/* 息 0xcfa2*/
+________,________,________,________,
+________,________,________,________,
+________,___XX___,________,________,
+________,___XXXX_,________,________,
+________,___XXX__,________,________,
+________,__XXX___,________,________,
+________,__XX__XX,XXX_____,________,
+________,_XXXXXX_,XXXX____,________,
+_______X,XXX_____,XXX_____,________,
+________,XXXXXXXX,XXX_____,________,
+________,XXXXXX__,XXX_____,________,
+________,XXX_____,XXX_____,________,
+________,XXXXXXXX,XXX_____,________,
+________,XXXXXXX_,XXX_____,________,
+________,XXX_____,XXX_____,________,
+________,XXX____X,XX______,________,
+________,XXXXXXXX,XX__XXX_,________,
+________,_XX____X,XX_XXXXX,X_______,
+____XXXX,X___XXX_,_____XXX,X_______,
+____XXXX,XX__XXXX,_______X,X_______,
+____XXX_,XX___XXX,__XX____,________,
+___XXXX_,XXX___XX,___XXX__,________,
+___XXX__,_XXX____,___XXXX_,________,
+___XXX__,_XXXXX__,__XXXXXX,________,
+________,__XXXXXX,XXXXXXXX,________,
+________,____XXXX,XXXXXX__,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+};
+
 GUI_FLASH  const unsigned char acFontHZkaiti_cfb4[120] = {	/* 洗 0xcfb4*/
 ________,________,________,________,
 ________,________,________,________,
@@ -6776,6 +6908,39 @@ ________,_____XXX,__XXXXXX,________,
 ________,________,___XXXX_,________,
 ________,________,____XXX_,________,
 ________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+};
+
+GUI_FLASH  const unsigned char acFontHZkaiti_cffb[120] = {	/* 消 0xcffb*/
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,______XX,X_______,________,
+________,______XX,XX______,________,
+______XX,X______X,XX___XX_,________,
+______XX,XX_____X,XX__XXXX,X_______,
+_______X,XX_____X,XX__XXXX,X_______,
+________,XXXXX__X,XXXXXX__,________,
+________,__XXXX_X,XXXX____,________,
+________,___XXX_X,XX______,________,
+___XXXX_,_______X,XXXXXX__,________,
+____XXXX,___XXXXX,X__XXXX_,________,
+_____XXX,____XX__,___XXX__,________,
+________,XX__XX__,___XXX__,________,
+_______X,XX__XXXX,XXXXXX__,________,
+_______X,X___XX__,___XXX__,________,
+______XX,X___XX__,___XXX__,________,
+_____XXX,____XXXX,XXXXXX__,________,
+_____XXX,____XXXX,XX_XXX__,________,
+___XXXXX,___XXX__,___XXXX_,________,
+___XXXX_,___XXX__,___XXXX_,________,
+____XXX_,___XXX__,___XXXX_,________,
+____XXX_,__XXXX__,XXXXXXX_,________,
+________,___XX___,_XXXXX__,________,
+________,___XX___,__XXXX__,________,
+________,________,___XXX__,________,
 ________,________,________,________,
 ________,________,________,________,
 ________,________,________,________,
@@ -7606,6 +7771,39 @@ ________,________,________,________,
 ________,________,________,________,
 };
 
+GUI_FLASH  const unsigned char acFontHZkaiti_d6d0[120] = {	/* 中 0xd6d0*/
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,___XXXX_,________,________,
+________,___XXXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXXX,XXXXXXX_,________,
+________,_XXXXXXX,XX_XXXXX,________,
+____XXXX,XXX_XXX_,___XXXXX,________,
+_____XXX,____XXX_,___XXXX_,________,
+_____XXX,X___XXX_,___XXX__,________,
+______XX,X___XXX_,__XXX___,________,
+______XX,X___XXXX,XXXXX___,________,
+______XX,XXXXXXXX,XXXXX___,________,
+______XX,XXXXXXX_,________,________,
+______XX,X___XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XX__,________,________,
+________,________,________,________,
+________,________,________,________,
+};
+
 GUI_FLASH  const unsigned char acFontHZkaiti_d6d8[120] = {	/* 重 0xd6d8*/
 ________,________,________,________,
 ________,________,________,________,
@@ -7667,6 +7865,39 @@ ________,XXXXXX__,XXX__XXX,XXX_____,
 ________,XXX_____,XXX_____,________,
 ________,XX______,XXX_____,________,
 ________,________,XX______,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+};
+
+GUI_FLASH  const unsigned char acFontHZkaiti_d6f7[120] = {	/* 主 0xd6f7*/
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,________,________,________,
+________,___XXXX_,________,________,
+________,____XXXX,X_______,________,
+________,_____XXX,X_______,________,
+________,______XX,X_______,________,
+________,________,________,________,
+________,________,_XXXX___,________,
+________,____XXXX,XXXXX___,________,
+_______X,XXXXXXXX,XXX_____,________,
+_______X,XXXXXXX_,________,________,
+________,____XXXX,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXXX,XXXX____,________,
+_______X,XXXXXXXX,X_______,________,
+________,_XX_XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXX_,________,________,
+________,____XXXX,XXXXXXXX,XX______,
+______XX,XXXXXXXX,XXXXXXXX,XX______,
+__XXXXXX,XXX_____,________,________,
+________,________,________,________,
+________,________,________,________,
 ________,________,________,________,
 ________,________,________,________,
 ________,________,________,________,
@@ -7974,107 +8205,114 @@ GUI_FLASH const GUI_CHARINFO GUI_FontHZkaiti_CharInfo[] = {
 { 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_baac},/* 含 133 */
 { 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bac5},/* 号 134 */
 { 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_baec},/* 红 135 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bbb7},/* 环 136 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bbd8},/* 回 137 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bbf7},/* 击 138 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bcab},/* 极 139 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bcc6},/* 计 140 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bcec},/* 检 141 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bde1},/* 结 142 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bdf8},/* 进 143 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bedd},/* 据 144 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfaa},/* 开 145 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfb4},/* 看 146 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfcb},/* 克 147 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfd5},/* 空 148 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfec},/* 快 149 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c0db},/* 累 150 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c0eb},/* 离 151 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c0ed},/* 理 152 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c1bf},/* 量 153 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c2c8},/* 氯 154 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c2fd},/* 慢 155 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c3bf},/* 每 156 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c3eb},/* 秒 157 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c3fe},/* 摸 158 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c4bb},/* 幕 159 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c4e0},/* 泥 160 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c4ea},/* 年 161 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c5a8},/* 浓 162 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c5c5},/* 排 163 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c5cc},/* 盘 164 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c5e4},/* 配 165 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c6c1},/* 屏 166 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c6da},/* 期 167 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c6f7},/* 器 168 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c7b0},/* 前 169 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c7e5},/* 清 170 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c7eb},/* 请 171 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8a6},/* 圈 172 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8ab},/* 全 173 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8d5},/* 日 174 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8dc},/* 溶 175 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8eb},/* 入 176 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c9ab},/* 色 177 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c9be},/* 删 178 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c9cf},/* 上 179 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c9e8},/* 设 180 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_caa3},/* 剩 181 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_caa7},/* 失 182 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cab1},/* 时 183 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cab5},/* 实 184 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cabc},/* 始 185 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cabe},/* 示 186 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cad4},/* 试 187 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_caf8},/* 束 188 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cafd},/* 数 189 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cbae},/* 水 190 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cbb3},/* 顺 191 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cbe1},/* 酸 192 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cda3},/* 停 193 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cdb3},/* 统 194 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cdcb},/* 退 195 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cdea},/* 完 196 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cebb},/* 位 197 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cec2},/* 温 198 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cefc},/* 吸 199 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfb4},/* 洗 200 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfb5},/* 系 201 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfc2},/* 下 202 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfd4},/* 显 203 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cff5},/* 硝 204 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d0a3},/* 校 205 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d0c2},/* 新 206 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d0f2},/* 序 207 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1a1},/* 选 208 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1ad},/* 循 209 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1b9},/* 压 210 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1e9},/* 验 211 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1f9},/* 样 212 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2b3},/* 页 213 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2ba},/* 液 214 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2c0},/* 依 215 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2c7},/* 仪 216 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2f8},/* 银 217 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d3a1},/* 印 218 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d3c3},/* 用 219 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d3d2},/* 右 220 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d3e0},/* 余 221 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d4b2},/* 圆 222 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d4bd},/* 越 223 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d4c2},/* 月 224 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d4f1},/* 择 225 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d5d5},/* 照 226 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6b9},/* 止 227 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6c3},/* 置 228 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6ca},/* 质 229 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6d8},/* 重 230 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6e8},/* 骤 231 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7bc},/* 准 232 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7d3},/* 子 233 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7d4},/* 自 234 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7f3},/* 左 235 */
-{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7f7},/* 作 236 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_baf3},/* 后 136 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bbb7},/* 环 137 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bbd8},/* 回 138 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bbf7},/* 击 139 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bcab},/* 极 140 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bcc6},/* 计 141 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bcec},/* 检 142 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bde1},/* 结 143 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bdf8},/* 进 144 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bedd},/* 据 145 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfaa},/* 开 146 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfb4},/* 看 147 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfcb},/* 克 148 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfd5},/* 空 149 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_bfec},/* 快 150 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c0db},/* 累 151 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c0eb},/* 离 152 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c0ed},/* 理 153 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c1bf},/* 量 154 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c2c8},/* 氯 155 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c2fd},/* 慢 156 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c3bf},/* 每 157 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c3eb},/* 秒 158 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c3fe},/* 摸 159 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c4bb},/* 幕 160 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c4e0},/* 泥 161 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c4ea},/* 年 162 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c5a8},/* 浓 163 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c5c5},/* 排 164 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c5cc},/* 盘 165 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c5e4},/* 配 166 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c6c1},/* 屏 167 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c6da},/* 期 168 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c6f7},/* 器 169 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c7b0},/* 前 170 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c7e5},/* 清 171 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c7eb},/* 请 172 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8a1},/* 取 173 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8a6},/* 圈 174 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8ab},/* 全 175 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8b7},/* 确 176 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8d5},/* 日 177 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8dc},/* 溶 178 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c8eb},/* 入 179 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c9ab},/* 色 180 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c9be},/* 删 181 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c9cf},/* 上 182 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_c9e8},/* 设 183 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_caa3},/* 剩 184 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_caa7},/* 失 185 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cab1},/* 时 186 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cab5},/* 实 187 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cabc},/* 始 188 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cabe},/* 示 189 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cad4},/* 试 190 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_caf8},/* 束 191 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cafd},/* 数 192 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cbae},/* 水 193 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cbb3},/* 顺 194 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cbe1},/* 酸 195 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cda3},/* 停 196 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cdb3},/* 统 197 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cdcb},/* 退 198 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cdea},/* 完 199 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cebb},/* 位 200 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cec2},/* 温 201 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cefc},/* 吸 202 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfa2},/* 息 203 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfb4},/* 洗 204 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfb5},/* 系 205 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfc2},/* 下 206 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cfd4},/* 显 207 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cff5},/* 硝 208 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_cffb},/* 消 209 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d0a3},/* 校 210 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d0c2},/* 新 211 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d0f2},/* 序 212 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1a1},/* 选 213 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1ad},/* 循 214 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1b9},/* 压 215 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1e9},/* 验 216 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d1f9},/* 样 217 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2b3},/* 页 218 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2ba},/* 液 219 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2c0},/* 依 220 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2c7},/* 仪 221 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d2f8},/* 银 222 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d3a1},/* 印 223 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d3c3},/* 用 224 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d3d2},/* 右 225 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d3e0},/* 余 226 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d4b2},/* 圆 227 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d4bd},/* 越 228 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d4c2},/* 月 229 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d4f1},/* 择 230 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d5d5},/* 照 231 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6b9},/* 止 232 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6c3},/* 置 233 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6ca},/* 质 234 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6d0},/* 中 235 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6d8},/* 重 236 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6e8},/* 骤 237 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d6f7},/* 主 238 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7bc},/* 准 239 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7d3},/* 子 240 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7d4},/* 自 241 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7f3},/* 左 242 */
+{ 27, 27, 4, (void GUI_FLASH *)&acFontHZkaiti_d7f7},/* 作 243 */
 };
 
 /*作--作*/
@@ -8082,701 +8320,750 @@ GUI_FLASH const GUI_CHARINFO GUI_FontHZkaiti_CharInfo[] = {
 GUI_FLASH const GUI_FONT_PROP GUI_FontHZkaiti_Propd7f7= {
       0xd7f7,
       0xd7f7,
-      &GUI_FontHZkaiti_CharInfo[236],
+      &GUI_FontHZkaiti_CharInfo[243],
       (void *)0 
 };
 /*左--左*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd7f3= {
       0xd7f3,
       0xd7f3,
-      &GUI_FontHZkaiti_CharInfo[235],
+      &GUI_FontHZkaiti_CharInfo[242],
       (void *)&GUI_FontHZkaiti_Propd7f7 
 };
 /*子--自*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd7d3= {
       0xd7d3,
       0xd7d4,
-      &GUI_FontHZkaiti_CharInfo[233],
+      &GUI_FontHZkaiti_CharInfo[240],
       (void *)&GUI_FontHZkaiti_Propd7f3 
 };
 /*准--准*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd7bc= {
       0xd7bc,
       0xd7bc,
-      &GUI_FontHZkaiti_CharInfo[232],
+      &GUI_FontHZkaiti_CharInfo[239],
       (void *)&GUI_FontHZkaiti_Propd7d3 
+};
+/*主--主*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd6f7= {
+      0xd6f7,
+      0xd6f7,
+      &GUI_FontHZkaiti_CharInfo[238],
+      (void *)&GUI_FontHZkaiti_Propd7bc 
 };
 /*骤--骤*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd6e8= {
       0xd6e8,
       0xd6e8,
-      &GUI_FontHZkaiti_CharInfo[231],
-      (void *)&GUI_FontHZkaiti_Propd7bc 
+      &GUI_FontHZkaiti_CharInfo[237],
+      (void *)&GUI_FontHZkaiti_Propd6f7 
 };
 /*重--重*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd6d8= {
       0xd6d8,
       0xd6d8,
-      &GUI_FontHZkaiti_CharInfo[230],
+      &GUI_FontHZkaiti_CharInfo[236],
       (void *)&GUI_FontHZkaiti_Propd6e8 
+};
+/*中--中*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd6d0= {
+      0xd6d0,
+      0xd6d0,
+      &GUI_FontHZkaiti_CharInfo[235],
+      (void *)&GUI_FontHZkaiti_Propd6d8 
 };
 /*质--质*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd6ca= {
       0xd6ca,
       0xd6ca,
-      &GUI_FontHZkaiti_CharInfo[229],
-      (void *)&GUI_FontHZkaiti_Propd6d8 
+      &GUI_FontHZkaiti_CharInfo[234],
+      (void *)&GUI_FontHZkaiti_Propd6d0 
 };
 /*置--置*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd6c3= {
       0xd6c3,
       0xd6c3,
-      &GUI_FontHZkaiti_CharInfo[228],
+      &GUI_FontHZkaiti_CharInfo[233],
       (void *)&GUI_FontHZkaiti_Propd6ca 
 };
 /*止--止*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd6b9= {
       0xd6b9,
       0xd6b9,
-      &GUI_FontHZkaiti_CharInfo[227],
+      &GUI_FontHZkaiti_CharInfo[232],
       (void *)&GUI_FontHZkaiti_Propd6c3 
 };
 /*照--照*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd5d5= {
       0xd5d5,
       0xd5d5,
-      &GUI_FontHZkaiti_CharInfo[226],
+      &GUI_FontHZkaiti_CharInfo[231],
       (void *)&GUI_FontHZkaiti_Propd6b9 
 };
 /*择--择*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd4f1= {
       0xd4f1,
       0xd4f1,
-      &GUI_FontHZkaiti_CharInfo[225],
+      &GUI_FontHZkaiti_CharInfo[230],
       (void *)&GUI_FontHZkaiti_Propd5d5 
 };
 /*月--月*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd4c2= {
       0xd4c2,
       0xd4c2,
-      &GUI_FontHZkaiti_CharInfo[224],
+      &GUI_FontHZkaiti_CharInfo[229],
       (void *)&GUI_FontHZkaiti_Propd4f1 
 };
 /*越--越*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd4bd= {
       0xd4bd,
       0xd4bd,
-      &GUI_FontHZkaiti_CharInfo[223],
+      &GUI_FontHZkaiti_CharInfo[228],
       (void *)&GUI_FontHZkaiti_Propd4c2 
 };
 /*圆--圆*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd4b2= {
       0xd4b2,
       0xd4b2,
-      &GUI_FontHZkaiti_CharInfo[222],
+      &GUI_FontHZkaiti_CharInfo[227],
       (void *)&GUI_FontHZkaiti_Propd4bd 
 };
 /*余--余*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd3e0= {
       0xd3e0,
       0xd3e0,
-      &GUI_FontHZkaiti_CharInfo[221],
+      &GUI_FontHZkaiti_CharInfo[226],
       (void *)&GUI_FontHZkaiti_Propd4b2 
 };
 /*右--右*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd3d2= {
       0xd3d2,
       0xd3d2,
-      &GUI_FontHZkaiti_CharInfo[220],
+      &GUI_FontHZkaiti_CharInfo[225],
       (void *)&GUI_FontHZkaiti_Propd3e0 
 };
 /*用--用*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd3c3= {
       0xd3c3,
       0xd3c3,
-      &GUI_FontHZkaiti_CharInfo[219],
+      &GUI_FontHZkaiti_CharInfo[224],
       (void *)&GUI_FontHZkaiti_Propd3d2 
 };
 /*印--印*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd3a1= {
       0xd3a1,
       0xd3a1,
-      &GUI_FontHZkaiti_CharInfo[218],
+      &GUI_FontHZkaiti_CharInfo[223],
       (void *)&GUI_FontHZkaiti_Propd3c3 
 };
 /*银--银*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd2f8= {
       0xd2f8,
       0xd2f8,
-      &GUI_FontHZkaiti_CharInfo[217],
+      &GUI_FontHZkaiti_CharInfo[222],
       (void *)&GUI_FontHZkaiti_Propd3a1 
 };
 /*仪--仪*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd2c7= {
       0xd2c7,
       0xd2c7,
-      &GUI_FontHZkaiti_CharInfo[216],
+      &GUI_FontHZkaiti_CharInfo[221],
       (void *)&GUI_FontHZkaiti_Propd2f8 
 };
 /*依--依*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd2c0= {
       0xd2c0,
       0xd2c0,
-      &GUI_FontHZkaiti_CharInfo[215],
+      &GUI_FontHZkaiti_CharInfo[220],
       (void *)&GUI_FontHZkaiti_Propd2c7 
 };
 /*液--液*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd2ba= {
       0xd2ba,
       0xd2ba,
-      &GUI_FontHZkaiti_CharInfo[214],
+      &GUI_FontHZkaiti_CharInfo[219],
       (void *)&GUI_FontHZkaiti_Propd2c0 
 };
 /*页--页*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd2b3= {
       0xd2b3,
       0xd2b3,
-      &GUI_FontHZkaiti_CharInfo[213],
+      &GUI_FontHZkaiti_CharInfo[218],
       (void *)&GUI_FontHZkaiti_Propd2ba 
 };
 /*样--样*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd1f9= {
       0xd1f9,
       0xd1f9,
-      &GUI_FontHZkaiti_CharInfo[212],
+      &GUI_FontHZkaiti_CharInfo[217],
       (void *)&GUI_FontHZkaiti_Propd2b3 
 };
 /*验--验*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd1e9= {
       0xd1e9,
       0xd1e9,
-      &GUI_FontHZkaiti_CharInfo[211],
+      &GUI_FontHZkaiti_CharInfo[216],
       (void *)&GUI_FontHZkaiti_Propd1f9 
 };
 /*压--压*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd1b9= {
       0xd1b9,
       0xd1b9,
-      &GUI_FontHZkaiti_CharInfo[210],
+      &GUI_FontHZkaiti_CharInfo[215],
       (void *)&GUI_FontHZkaiti_Propd1e9 
 };
 /*循--循*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd1ad= {
       0xd1ad,
       0xd1ad,
-      &GUI_FontHZkaiti_CharInfo[209],
+      &GUI_FontHZkaiti_CharInfo[214],
       (void *)&GUI_FontHZkaiti_Propd1b9 
 };
 /*选--选*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd1a1= {
       0xd1a1,
       0xd1a1,
-      &GUI_FontHZkaiti_CharInfo[208],
+      &GUI_FontHZkaiti_CharInfo[213],
       (void *)&GUI_FontHZkaiti_Propd1ad 
 };
 /*序--序*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd0f2= {
       0xd0f2,
       0xd0f2,
-      &GUI_FontHZkaiti_CharInfo[207],
+      &GUI_FontHZkaiti_CharInfo[212],
       (void *)&GUI_FontHZkaiti_Propd1a1 
 };
 /*新--新*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd0c2= {
       0xd0c2,
       0xd0c2,
-      &GUI_FontHZkaiti_CharInfo[206],
+      &GUI_FontHZkaiti_CharInfo[211],
       (void *)&GUI_FontHZkaiti_Propd0f2 
 };
 /*校--校*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propd0a3= {
       0xd0a3,
       0xd0a3,
-      &GUI_FontHZkaiti_CharInfo[205],
+      &GUI_FontHZkaiti_CharInfo[210],
       (void *)&GUI_FontHZkaiti_Propd0c2 
+};
+/*消--消*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcffb= {
+      0xcffb,
+      0xcffb,
+      &GUI_FontHZkaiti_CharInfo[209],
+      (void *)&GUI_FontHZkaiti_Propd0a3 
 };
 /*硝--硝*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcff5= {
       0xcff5,
       0xcff5,
-      &GUI_FontHZkaiti_CharInfo[204],
-      (void *)&GUI_FontHZkaiti_Propd0a3 
+      &GUI_FontHZkaiti_CharInfo[208],
+      (void *)&GUI_FontHZkaiti_Propcffb 
 };
 /*显--显*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcfd4= {
       0xcfd4,
       0xcfd4,
-      &GUI_FontHZkaiti_CharInfo[203],
+      &GUI_FontHZkaiti_CharInfo[207],
       (void *)&GUI_FontHZkaiti_Propcff5 
 };
 /*下--下*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcfc2= {
       0xcfc2,
       0xcfc2,
-      &GUI_FontHZkaiti_CharInfo[202],
+      &GUI_FontHZkaiti_CharInfo[206],
       (void *)&GUI_FontHZkaiti_Propcfd4 
 };
 /*洗--系*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcfb4= {
       0xcfb4,
       0xcfb5,
-      &GUI_FontHZkaiti_CharInfo[200],
+      &GUI_FontHZkaiti_CharInfo[204],
       (void *)&GUI_FontHZkaiti_Propcfc2 
+};
+/*息--息*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcfa2= {
+      0xcfa2,
+      0xcfa2,
+      &GUI_FontHZkaiti_CharInfo[203],
+      (void *)&GUI_FontHZkaiti_Propcfb4 
 };
 /*吸--吸*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcefc= {
       0xcefc,
       0xcefc,
-      &GUI_FontHZkaiti_CharInfo[199],
-      (void *)&GUI_FontHZkaiti_Propcfb4 
+      &GUI_FontHZkaiti_CharInfo[202],
+      (void *)&GUI_FontHZkaiti_Propcfa2 
 };
 /*温--温*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcec2= {
       0xcec2,
       0xcec2,
-      &GUI_FontHZkaiti_CharInfo[198],
+      &GUI_FontHZkaiti_CharInfo[201],
       (void *)&GUI_FontHZkaiti_Propcefc 
 };
 /*位--位*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcebb= {
       0xcebb,
       0xcebb,
-      &GUI_FontHZkaiti_CharInfo[197],
+      &GUI_FontHZkaiti_CharInfo[200],
       (void *)&GUI_FontHZkaiti_Propcec2 
 };
 /*完--完*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcdea= {
       0xcdea,
       0xcdea,
-      &GUI_FontHZkaiti_CharInfo[196],
+      &GUI_FontHZkaiti_CharInfo[199],
       (void *)&GUI_FontHZkaiti_Propcebb 
 };
 /*退--退*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcdcb= {
       0xcdcb,
       0xcdcb,
-      &GUI_FontHZkaiti_CharInfo[195],
+      &GUI_FontHZkaiti_CharInfo[198],
       (void *)&GUI_FontHZkaiti_Propcdea 
 };
 /*统--统*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcdb3= {
       0xcdb3,
       0xcdb3,
-      &GUI_FontHZkaiti_CharInfo[194],
+      &GUI_FontHZkaiti_CharInfo[197],
       (void *)&GUI_FontHZkaiti_Propcdcb 
 };
 /*停--停*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcda3= {
       0xcda3,
       0xcda3,
-      &GUI_FontHZkaiti_CharInfo[193],
+      &GUI_FontHZkaiti_CharInfo[196],
       (void *)&GUI_FontHZkaiti_Propcdb3 
 };
 /*酸--酸*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcbe1= {
       0xcbe1,
       0xcbe1,
-      &GUI_FontHZkaiti_CharInfo[192],
+      &GUI_FontHZkaiti_CharInfo[195],
       (void *)&GUI_FontHZkaiti_Propcda3 
 };
 /*顺--顺*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcbb3= {
       0xcbb3,
       0xcbb3,
-      &GUI_FontHZkaiti_CharInfo[191],
+      &GUI_FontHZkaiti_CharInfo[194],
       (void *)&GUI_FontHZkaiti_Propcbe1 
 };
 /*水--水*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcbae= {
       0xcbae,
       0xcbae,
-      &GUI_FontHZkaiti_CharInfo[190],
+      &GUI_FontHZkaiti_CharInfo[193],
       (void *)&GUI_FontHZkaiti_Propcbb3 
 };
 /*数--数*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcafd= {
       0xcafd,
       0xcafd,
-      &GUI_FontHZkaiti_CharInfo[189],
+      &GUI_FontHZkaiti_CharInfo[192],
       (void *)&GUI_FontHZkaiti_Propcbae 
 };
 /*束--束*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcaf8= {
       0xcaf8,
       0xcaf8,
-      &GUI_FontHZkaiti_CharInfo[188],
+      &GUI_FontHZkaiti_CharInfo[191],
       (void *)&GUI_FontHZkaiti_Propcafd 
 };
 /*试--试*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcad4= {
       0xcad4,
       0xcad4,
-      &GUI_FontHZkaiti_CharInfo[187],
+      &GUI_FontHZkaiti_CharInfo[190],
       (void *)&GUI_FontHZkaiti_Propcaf8 
 };
 /*示--示*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcabe= {
       0xcabe,
       0xcabe,
-      &GUI_FontHZkaiti_CharInfo[186],
+      &GUI_FontHZkaiti_CharInfo[189],
       (void *)&GUI_FontHZkaiti_Propcad4 
 };
 /*始--始*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcabc= {
       0xcabc,
       0xcabc,
-      &GUI_FontHZkaiti_CharInfo[185],
+      &GUI_FontHZkaiti_CharInfo[188],
       (void *)&GUI_FontHZkaiti_Propcabe 
 };
 /*实--实*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcab5= {
       0xcab5,
       0xcab5,
-      &GUI_FontHZkaiti_CharInfo[184],
+      &GUI_FontHZkaiti_CharInfo[187],
       (void *)&GUI_FontHZkaiti_Propcabc 
 };
 /*时--时*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcab1= {
       0xcab1,
       0xcab1,
-      &GUI_FontHZkaiti_CharInfo[183],
+      &GUI_FontHZkaiti_CharInfo[186],
       (void *)&GUI_FontHZkaiti_Propcab5 
 };
 /*失--失*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcaa7= {
       0xcaa7,
       0xcaa7,
-      &GUI_FontHZkaiti_CharInfo[182],
+      &GUI_FontHZkaiti_CharInfo[185],
       (void *)&GUI_FontHZkaiti_Propcab1 
 };
 /*剩--剩*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propcaa3= {
       0xcaa3,
       0xcaa3,
-      &GUI_FontHZkaiti_CharInfo[181],
+      &GUI_FontHZkaiti_CharInfo[184],
       (void *)&GUI_FontHZkaiti_Propcaa7 
 };
 /*设--设*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc9e8= {
       0xc9e8,
       0xc9e8,
-      &GUI_FontHZkaiti_CharInfo[180],
+      &GUI_FontHZkaiti_CharInfo[183],
       (void *)&GUI_FontHZkaiti_Propcaa3 
 };
 /*上--上*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc9cf= {
       0xc9cf,
       0xc9cf,
-      &GUI_FontHZkaiti_CharInfo[179],
+      &GUI_FontHZkaiti_CharInfo[182],
       (void *)&GUI_FontHZkaiti_Propc9e8 
 };
 /*删--删*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc9be= {
       0xc9be,
       0xc9be,
-      &GUI_FontHZkaiti_CharInfo[178],
+      &GUI_FontHZkaiti_CharInfo[181],
       (void *)&GUI_FontHZkaiti_Propc9cf 
 };
 /*色--色*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc9ab= {
       0xc9ab,
       0xc9ab,
-      &GUI_FontHZkaiti_CharInfo[177],
+      &GUI_FontHZkaiti_CharInfo[180],
       (void *)&GUI_FontHZkaiti_Propc9be 
 };
 /*入--入*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc8eb= {
       0xc8eb,
       0xc8eb,
-      &GUI_FontHZkaiti_CharInfo[176],
+      &GUI_FontHZkaiti_CharInfo[179],
       (void *)&GUI_FontHZkaiti_Propc9ab 
 };
 /*溶--溶*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc8dc= {
       0xc8dc,
       0xc8dc,
-      &GUI_FontHZkaiti_CharInfo[175],
+      &GUI_FontHZkaiti_CharInfo[178],
       (void *)&GUI_FontHZkaiti_Propc8eb 
 };
 /*日--日*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc8d5= {
       0xc8d5,
       0xc8d5,
-      &GUI_FontHZkaiti_CharInfo[174],
+      &GUI_FontHZkaiti_CharInfo[177],
       (void *)&GUI_FontHZkaiti_Propc8dc 
+};
+/*确--确*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc8b7= {
+      0xc8b7,
+      0xc8b7,
+      &GUI_FontHZkaiti_CharInfo[176],
+      (void *)&GUI_FontHZkaiti_Propc8d5 
 };
 /*全--全*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc8ab= {
       0xc8ab,
       0xc8ab,
-      &GUI_FontHZkaiti_CharInfo[173],
-      (void *)&GUI_FontHZkaiti_Propc8d5 
+      &GUI_FontHZkaiti_CharInfo[175],
+      (void *)&GUI_FontHZkaiti_Propc8b7 
 };
 /*圈--圈*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc8a6= {
       0xc8a6,
       0xc8a6,
-      &GUI_FontHZkaiti_CharInfo[172],
+      &GUI_FontHZkaiti_CharInfo[174],
       (void *)&GUI_FontHZkaiti_Propc8ab 
+};
+/*取--取*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc8a1= {
+      0xc8a1,
+      0xc8a1,
+      &GUI_FontHZkaiti_CharInfo[173],
+      (void *)&GUI_FontHZkaiti_Propc8a6 
 };
 /*请--请*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc7eb= {
       0xc7eb,
       0xc7eb,
-      &GUI_FontHZkaiti_CharInfo[171],
-      (void *)&GUI_FontHZkaiti_Propc8a6 
+      &GUI_FontHZkaiti_CharInfo[172],
+      (void *)&GUI_FontHZkaiti_Propc8a1 
 };
 /*清--清*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc7e5= {
       0xc7e5,
       0xc7e5,
-      &GUI_FontHZkaiti_CharInfo[170],
+      &GUI_FontHZkaiti_CharInfo[171],
       (void *)&GUI_FontHZkaiti_Propc7eb 
 };
 /*前--前*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc7b0= {
       0xc7b0,
       0xc7b0,
-      &GUI_FontHZkaiti_CharInfo[169],
+      &GUI_FontHZkaiti_CharInfo[170],
       (void *)&GUI_FontHZkaiti_Propc7e5 
 };
 /*器--器*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc6f7= {
       0xc6f7,
       0xc6f7,
-      &GUI_FontHZkaiti_CharInfo[168],
+      &GUI_FontHZkaiti_CharInfo[169],
       (void *)&GUI_FontHZkaiti_Propc7b0 
 };
 /*期--期*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc6da= {
       0xc6da,
       0xc6da,
-      &GUI_FontHZkaiti_CharInfo[167],
+      &GUI_FontHZkaiti_CharInfo[168],
       (void *)&GUI_FontHZkaiti_Propc6f7 
 };
 /*屏--屏*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc6c1= {
       0xc6c1,
       0xc6c1,
-      &GUI_FontHZkaiti_CharInfo[166],
+      &GUI_FontHZkaiti_CharInfo[167],
       (void *)&GUI_FontHZkaiti_Propc6da 
 };
 /*配--配*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc5e4= {
       0xc5e4,
       0xc5e4,
-      &GUI_FontHZkaiti_CharInfo[165],
+      &GUI_FontHZkaiti_CharInfo[166],
       (void *)&GUI_FontHZkaiti_Propc6c1 
 };
 /*盘--盘*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc5cc= {
       0xc5cc,
       0xc5cc,
-      &GUI_FontHZkaiti_CharInfo[164],
+      &GUI_FontHZkaiti_CharInfo[165],
       (void *)&GUI_FontHZkaiti_Propc5e4 
 };
 /*排--排*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc5c5= {
       0xc5c5,
       0xc5c5,
-      &GUI_FontHZkaiti_CharInfo[163],
+      &GUI_FontHZkaiti_CharInfo[164],
       (void *)&GUI_FontHZkaiti_Propc5cc 
 };
 /*浓--浓*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc5a8= {
       0xc5a8,
       0xc5a8,
-      &GUI_FontHZkaiti_CharInfo[162],
+      &GUI_FontHZkaiti_CharInfo[163],
       (void *)&GUI_FontHZkaiti_Propc5c5 
 };
 /*年--年*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc4ea= {
       0xc4ea,
       0xc4ea,
-      &GUI_FontHZkaiti_CharInfo[161],
+      &GUI_FontHZkaiti_CharInfo[162],
       (void *)&GUI_FontHZkaiti_Propc5a8 
 };
 /*泥--泥*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc4e0= {
       0xc4e0,
       0xc4e0,
-      &GUI_FontHZkaiti_CharInfo[160],
+      &GUI_FontHZkaiti_CharInfo[161],
       (void *)&GUI_FontHZkaiti_Propc4ea 
 };
 /*幕--幕*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc4bb= {
       0xc4bb,
       0xc4bb,
-      &GUI_FontHZkaiti_CharInfo[159],
+      &GUI_FontHZkaiti_CharInfo[160],
       (void *)&GUI_FontHZkaiti_Propc4e0 
 };
 /*摸--摸*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc3fe= {
       0xc3fe,
       0xc3fe,
-      &GUI_FontHZkaiti_CharInfo[158],
+      &GUI_FontHZkaiti_CharInfo[159],
       (void *)&GUI_FontHZkaiti_Propc4bb 
 };
 /*秒--秒*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc3eb= {
       0xc3eb,
       0xc3eb,
-      &GUI_FontHZkaiti_CharInfo[157],
+      &GUI_FontHZkaiti_CharInfo[158],
       (void *)&GUI_FontHZkaiti_Propc3fe 
 };
 /*每--每*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc3bf= {
       0xc3bf,
       0xc3bf,
-      &GUI_FontHZkaiti_CharInfo[156],
+      &GUI_FontHZkaiti_CharInfo[157],
       (void *)&GUI_FontHZkaiti_Propc3eb 
 };
 /*慢--慢*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc2fd= {
       0xc2fd,
       0xc2fd,
-      &GUI_FontHZkaiti_CharInfo[155],
+      &GUI_FontHZkaiti_CharInfo[156],
       (void *)&GUI_FontHZkaiti_Propc3bf 
 };
 /*氯--氯*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc2c8= {
       0xc2c8,
       0xc2c8,
-      &GUI_FontHZkaiti_CharInfo[154],
+      &GUI_FontHZkaiti_CharInfo[155],
       (void *)&GUI_FontHZkaiti_Propc2fd 
 };
 /*量--量*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc1bf= {
       0xc1bf,
       0xc1bf,
-      &GUI_FontHZkaiti_CharInfo[153],
+      &GUI_FontHZkaiti_CharInfo[154],
       (void *)&GUI_FontHZkaiti_Propc2c8 
 };
 /*理--理*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc0ed= {
       0xc0ed,
       0xc0ed,
-      &GUI_FontHZkaiti_CharInfo[152],
+      &GUI_FontHZkaiti_CharInfo[153],
       (void *)&GUI_FontHZkaiti_Propc1bf 
 };
 /*离--离*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc0eb= {
       0xc0eb,
       0xc0eb,
-      &GUI_FontHZkaiti_CharInfo[151],
+      &GUI_FontHZkaiti_CharInfo[152],
       (void *)&GUI_FontHZkaiti_Propc0ed 
 };
 /*累--累*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propc0db= {
       0xc0db,
       0xc0db,
-      &GUI_FontHZkaiti_CharInfo[150],
+      &GUI_FontHZkaiti_CharInfo[151],
       (void *)&GUI_FontHZkaiti_Propc0eb 
 };
 /*快--快*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbfec= {
       0xbfec,
       0xbfec,
-      &GUI_FontHZkaiti_CharInfo[149],
+      &GUI_FontHZkaiti_CharInfo[150],
       (void *)&GUI_FontHZkaiti_Propc0db 
 };
 /*空--空*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbfd5= {
       0xbfd5,
       0xbfd5,
-      &GUI_FontHZkaiti_CharInfo[148],
+      &GUI_FontHZkaiti_CharInfo[149],
       (void *)&GUI_FontHZkaiti_Propbfec 
 };
 /*克--克*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbfcb= {
       0xbfcb,
       0xbfcb,
-      &GUI_FontHZkaiti_CharInfo[147],
+      &GUI_FontHZkaiti_CharInfo[148],
       (void *)&GUI_FontHZkaiti_Propbfd5 
 };
 /*看--看*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbfb4= {
       0xbfb4,
       0xbfb4,
-      &GUI_FontHZkaiti_CharInfo[146],
+      &GUI_FontHZkaiti_CharInfo[147],
       (void *)&GUI_FontHZkaiti_Propbfcb 
 };
 /*开--开*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbfaa= {
       0xbfaa,
       0xbfaa,
-      &GUI_FontHZkaiti_CharInfo[145],
+      &GUI_FontHZkaiti_CharInfo[146],
       (void *)&GUI_FontHZkaiti_Propbfb4 
 };
 /*据--据*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbedd= {
       0xbedd,
       0xbedd,
-      &GUI_FontHZkaiti_CharInfo[144],
+      &GUI_FontHZkaiti_CharInfo[145],
       (void *)&GUI_FontHZkaiti_Propbfaa 
 };
 /*进--进*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbdf8= {
       0xbdf8,
       0xbdf8,
-      &GUI_FontHZkaiti_CharInfo[143],
+      &GUI_FontHZkaiti_CharInfo[144],
       (void *)&GUI_FontHZkaiti_Propbedd 
 };
 /*结--结*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbde1= {
       0xbde1,
       0xbde1,
-      &GUI_FontHZkaiti_CharInfo[142],
+      &GUI_FontHZkaiti_CharInfo[143],
       (void *)&GUI_FontHZkaiti_Propbdf8 
 };
 /*检--检*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbcec= {
       0xbcec,
       0xbcec,
-      &GUI_FontHZkaiti_CharInfo[141],
+      &GUI_FontHZkaiti_CharInfo[142],
       (void *)&GUI_FontHZkaiti_Propbde1 
 };
 /*计--计*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbcc6= {
       0xbcc6,
       0xbcc6,
-      &GUI_FontHZkaiti_CharInfo[140],
+      &GUI_FontHZkaiti_CharInfo[141],
       (void *)&GUI_FontHZkaiti_Propbcec 
 };
 /*极--极*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbcab= {
       0xbcab,
       0xbcab,
-      &GUI_FontHZkaiti_CharInfo[139],
+      &GUI_FontHZkaiti_CharInfo[140],
       (void *)&GUI_FontHZkaiti_Propbcc6 
 };
 /*击--击*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbbf7= {
       0xbbf7,
       0xbbf7,
-      &GUI_FontHZkaiti_CharInfo[138],
+      &GUI_FontHZkaiti_CharInfo[139],
       (void *)&GUI_FontHZkaiti_Propbcab 
 };
 /*回--回*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbbd8= {
       0xbbd8,
       0xbbd8,
-      &GUI_FontHZkaiti_CharInfo[137],
+      &GUI_FontHZkaiti_CharInfo[138],
       (void *)&GUI_FontHZkaiti_Propbbf7 
 };
 /*环--环*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbbb7= {
       0xbbb7,
       0xbbb7,
-      &GUI_FontHZkaiti_CharInfo[136],
+      &GUI_FontHZkaiti_CharInfo[137],
       (void *)&GUI_FontHZkaiti_Propbbd8 
+};
+/*后--后*/
+GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbaf3= {
+      0xbaf3,
+      0xbaf3,
+      &GUI_FontHZkaiti_CharInfo[136],
+      (void *)&GUI_FontHZkaiti_Propbbb7 
 };
 /*红--红*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbaec= {
       0xbaec,
       0xbaec,
       &GUI_FontHZkaiti_CharInfo[135],
-      (void *)&GUI_FontHZkaiti_Propbbb7 
+      (void *)&GUI_FontHZkaiti_Propbaf3 
 };
 /*号--号*/
 GUI_FLASH  const GUI_FONT_PROP GUI_FontHZkaiti_Propbac5= {

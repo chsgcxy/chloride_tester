@@ -5,7 +5,7 @@
 
 extern int ad770x_init(void);
 extern int ad770x_read_val(u16 *val);
-extern void ad7705_read(void);
+extern double ad7705_read(void);
 
 #endif
 

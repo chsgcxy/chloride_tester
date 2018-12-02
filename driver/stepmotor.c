@@ -30,26 +30,26 @@ int stepmotor_init(void)
     return 0;
 }
 
-void stepmotor_run(int dir, int step)
+int stepmotor_run(int dir, int step)
 {   
     if (MOTOR_DIR_UP == dir)
         GPIO_SetBits(GPIOC, GPIO_Pin_7);
     else if (MOTOR_DIR_DOWN == dir)
         GPIO_ResetBits(GPIOC, GPIO_Pin_7);
     else
-        return;
+        return 0;
 
     delay_us(200);
 
     while (step) {
         if (MOTOR_DIR_UP == dir) {
             if (!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_3))
-                return;
+                return 1;
         } else if (MOTOR_DIR_DOWN == dir) {
             if (!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_2))
-                return;
+                return 1;
         } else
-            return;
+            return 0;
 
         if (step > 0)
             step--;
@@ -59,6 +59,7 @@ void stepmotor_run(int dir, int step)
         GPIO_SetBits(GPIOC, GPIO_Pin_6);
         delay_us(200);
     }
+    return 0;
 }
 
 void relay_ctrl(int ctrl)

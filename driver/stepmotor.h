@@ -12,7 +12,7 @@
 #define MOTOR_WATER_01ML   194
 
 extern int stepmotor_init(void);
-extern void stepmotor_run(int dir, int step);
+extern int stepmotor_run(int dir, int step);
 extern void relay_ctrl(int ctrl);
 
 

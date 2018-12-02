@@ -163,18 +163,19 @@ int ad770x_init(void)
 	return 0;
 }
 
-void ad7705_read(void)
+double ad7705_read(void)
 {
 	u16 data;
-	float volt;
+	double volt;
 	
 	while (1) {
 		if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) == 0) {
 			data = AD770xReadDataReg();
-			volt = (float)((float)data * (2.5 / 65535));
-			printf("ad1 orign data = %d, volt = %.4f\r\n", data, volt);
+			volt = (double)((double)data * ((double)2500 / (double)65535)) - (double)235.0;
+			if (volt < 0)
+				volt = 0;
 			AD770xWriteSetupReg(setup_reg);
-			return;
+			return volt;
 		}
 	}
 }
