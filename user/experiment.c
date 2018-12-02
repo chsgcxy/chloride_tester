@@ -193,7 +193,7 @@ static float exper_filter(void)
 
 static void agno3_start(void)
 {
-    float volt_scale = 0.0; // 230mV to change step
+    float volt_scale = 210.0; // 230mV to change step
     float step_ml = 0.3;
     int step = 3;
     float volt_diff = 0.0;
@@ -234,11 +234,12 @@ static void agno3_start(void)
             g_oil_stock -= step;
         }
         /* wait oil act */
-        vTaskDelay(2000);
+        vTaskDelay(2100);
         
         /* get volt */
         volt = exper_filter();
-        EXPER_DBG_PRINT("volt current = %f\r\n", volt);
+        EXPER_DBG_PRINT("volt current = %f, AgNo3 used %.1fmL\r\n",
+            volt, g_exper_stat.agno3_used);
      
         /* do not care step 0.3 */
         if (step == 1) {
@@ -255,7 +256,7 @@ static void agno3_start(void)
                     else {
                         /* set finished flag, and get ex 10 point */
                         EXPER_DBG_PRINT("set finished flag to 10\r\n");
-                        g_exper.ex_step = 30;
+                        g_exper.ex_step = 180;
                     }
                 }
             } else {
