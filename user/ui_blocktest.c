@@ -48,15 +48,17 @@
 #define ID_TEXT_DJDW (GUI_ID_USER + 0x0A)
 #define ID_TEXT_RYCL (GUI_ID_USER + 0x0B)
 #define ID_TEXT_NACLND (GUI_ID_USER + 0x0C)
-#define ID_TEXT_5 (GUI_ID_USER + 0x0D)
+#define ID_TEXT_PERCENTAGE (GUI_ID_USER + 0x0D)
+#define ID_TEXT_5 (GUI_ID_USER + 0x0E)
 
-#define ID_PROGBAR_0 (GUI_ID_USER + 0x0E)
-#define ID_GRAPH_0   (GUI_ID_USER + 0x0F)
+#define ID_PROGBAR_0 (GUI_ID_USER + 0x0F)
+#define ID_GRAPH_0   (GUI_ID_USER + 0x10)
 
-#define ID_TEXT_NACLND_VALUE  (GUI_ID_USER + 0x10)
-#define ID_TEXT_NO3ND_VALUE   (GUI_ID_USER + 0x11)
-#define ID_TEXT_NO3YL_VALUE   (GUI_ID_USER + 0x12)
-#define ID_TEXT_DJDW_VALUE    (GUI_ID_USER + 0x13)
+#define ID_TEXT_NACLND_VALUE  (GUI_ID_USER + 0x11)
+#define ID_TEXT_NO3ND_VALUE   (GUI_ID_USER + 0x12)
+#define ID_TEXT_NO3YL_VALUE   (GUI_ID_USER + 0x13)
+#define ID_TEXT_DJDW_VALUE    (GUI_ID_USER + 0x14)
+#define ID_TEXT_PERCENT_VALUE (GUI_ID_USER + 0x15)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_Consolas;
@@ -98,6 +100,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
     {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 5, 215, 160, 32, 0, 0x64, 0},
     {TEXT_CreateIndirect, "0V", ID_TEXT_DJDW_VALUE, 5, 250, 160, 32, 0, 0x64, 0},
+
+    {TEXT_CreateIndirect, "质量分数", ID_TEXT_PERCENTAGE, 5, 285, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0.00%", ID_TEXT_PERCENT_VALUE, 5, 320, 160, 32, 0, 0x64, 0},
 
     {BUTTON_CreateIndirect, "菜单", ID_BUTTON_RETURN, 600, 5, 180, 50, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 600, 240, 180, 60, 0, 0x0, 0},
@@ -230,6 +235,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
+        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
+        TEXT_SetTextColor(hItem, GUI_RED);
+
         //
         // Initialization of 'Text'
         //
@@ -239,7 +253,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
         PROGBAR_SetFont(hItem, GUI_FONT_24B_ASCII);
-        PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
+        PROGBAR_SetBarColor(hItem, 0, GUI_RED);
+        PROGBAR_SetSkinClassic(hItem);
         PROGBAR_SetMinMax(hItem, 0, 100);
         
 
@@ -251,17 +266,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         GRAPH_SetGridDistX(hItem, 40);
         
         hScaleV = GRAPH_SCALE_Create(3, GUI_TA_LEFT, GRAPH_SCALE_CF_VERTICAL, 20);
-        //GRAPH_SCALE_SetNumDecs(hScaleV, 2);
-        //GRAPH_SCALE_SetFactor(hScaleV, 2.0);
         GRAPH_SCALE_SetTextColor(hScaleV, GUI_RED);
+        GRAPH_SCALE_SetOff(hScaleV, -140);
         GRAPH_AttachScale(hItem, hScaleV);
         
         hScaleH = GRAPH_SCALE_Create(395, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 40);
-        //GRAPH_SCALE_SetFactor(hScaleH, 0.01);
-        //GRAPH_SCALE_SetNumDecs(hScaleH, 2);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
         pdataGRP = GRAPH_DATA_XY_Create(GUI_GREEN, 500, 0, 0);
+        GRAPH_DATA_XY_SetOffY(pdataGRP, -140);
         GRAPH_AttachData(hItem, pdataGRP);
         GRAPH_DATA_XY_Clear(pdataGRP);
         // USER END
@@ -295,6 +308,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
                 msg.msg = EXPER_MSG_OIL_PUT;
                 printf("put clicked\r\n");
+
                 if (put_func) {    
                     BUTTON_SetText(hItem, "排液");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
@@ -358,6 +372,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_START_BLOCK: // Notifications sent by 'Button'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
+                GRAPH_DATA_XY_Clear(pdataGRP);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                 BUTTON_SetText(hItem, "停止实验");
                 BUTTON_SetTextColor(hItem, 0, GUI_RED);
@@ -385,6 +400,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, 0, GUI_RED);
                 ctrl_all_btn(pMsg->hWin, 0);
                 WM_EnableWindow(hItem);
+                GRAPH_DATA_XY_Clear(pdataGRP);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
                 BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
@@ -402,6 +418,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_START_TEST:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
+                GRAPH_DATA_XY_Clear(pdataGRP);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                 BUTTON_SetText(hItem, "停止检测");
                 BUTTON_SetTextColor(hItem, 0, GUI_RED);
@@ -430,16 +447,22 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case EXPER_STAT_UPDATE_PROGRESS:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
+                if (stat->oil_stock < 20)
+                    PROGBAR_SetBarColor(hItem, 0, GUI_RED);
+                else if (stat->oil_stock < 60)
+                    PROGBAR_SetBarColor(hItem, 0, GUI_YELLOW);
+                else
+                    PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
                 PROGBAR_SetValue(hItem, stat->oil_stock);
                 break;
             case EXPER_STAT_UPDATE_GRAPH:
                 GRAPH_DATA_XY_AddPoint(pdataGRP, &stat->graph_pos);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
-                sprintf(buf, "%.1fmV", stat->volt);
+                sprintf(buf, "%.3fmV", stat->volt);
                 TEXT_SetText(hItem, buf);
                 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.1fmL", stat->agno3_used);
+                sprintf(buf, "%.3fmL", stat->agno3_used);
                 TEXT_SetText(hItem, buf);
                 break;
             case EXPER_STAT_OIL_GET_FINISHED:
@@ -466,7 +489,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 beep_finished();
                 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
-                sprintf(buf, "%.2fmol/L", stat->agno3_consistence);
+                sprintf(buf, "%.4fmol/L", stat->agno3_consistence);
+                TEXT_SetText(hItem, buf);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
+                sprintf(buf, "%.3fmL", stat->agno3_used);
                 TEXT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
@@ -475,12 +502,26 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case EXPER_STAT_BLOCK_FINISHED:
                 beep_finished();
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
+                sprintf(buf, "%.3fmL", stat->agno3_used);
+                TEXT_SetText(hItem, buf);
+
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                 BUTTON_SetText(hItem, "空白实验");
                 ctrl_all_btn(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_CL_FINISHED:
                 beep_finished();
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
+                sprintf(buf, "%.3f%%", stat->cl_percentage);
+                TEXT_SetText(hItem, buf);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
+                sprintf(buf, "%.3fmL", stat->agno3_used);
+                TEXT_SetText(hItem, buf);
+
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                 BUTTON_SetText(hItem, "氯离子检测");
                 ctrl_all_btn(pMsg->hWin, 1);

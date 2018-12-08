@@ -29,7 +29,6 @@ USB_OTG_CORE_HANDLE  USB_OTG_Core;
 struct ui_msg g_ui_msg;
 
 static struct tprinter g_printer;
-static struct report report_test;
 static TaskHandle_t handle_touch, handle_gui;
 
 extern WM_HWIN main_menu_creat(void);
@@ -123,6 +122,10 @@ int main(void)
 	touch_init();
 	touch_calibrate();
 
+	g_printer.name = "simple printer";
+    g_printer.send = g_printer_send;
+	report_init(&g_printer);
+
 #if 0
 	while (1) {
 		status = uart_get_status();
@@ -191,33 +194,6 @@ int main(void)
 
 	/* creat freertos task */
 	task_init();
-
-	/* test the printer, fill obj report,  then show */	
-	g_printer.name = "simple printer";
-    g_printer.send = g_printer_send;
-	report_init(&g_printer);
-	report_test.data[0] = 12.31;
-	report_test.data[1] = 22.5;
-	report_test.data[2] = 23.84;
-	report_test.data[3] = 128.1;
-	report_test.data[4] = 129.82;
-	report_test.data[5] = 130.9;
-	report_test.data[6] = 222.22;
-	report_test.data[7] = 223.31;
-	report_test.data[8] = 224.4;
-	report_test.data[9] = 225.50;
-	report_test.data[10] = 24.31;
-	report_test.data[11] = 34.5;
-	report_test.data_num = 12;
-	report_test.nitrate_dosage = 32.78;
-	report_test.percentage = 0.78;
-	report_test.year = 18;
-	report_test.month = 10;
-	report_test.day = 28;
-	report_test.hour = 14;
-	report_test.minute = 28;
-	//report_show(&report_test);
-
 
 	/* run rtos */
 	vTaskStartScheduler();

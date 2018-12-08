@@ -34,6 +34,7 @@ struct exper_stat {
     float agno3_used;
     float agno3_consistence;
     float cl_consistence;
+    float cl_percentage;
 };
 
 extern void exper_msg_set(struct exper_msg *msg);

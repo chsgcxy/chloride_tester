@@ -7,6 +7,7 @@
 #include "main.h"
 #include "stepmotor.h"
 #include "ad770x.h"
+#include "report.h"
 
 #define EXPER_TOTAL_ML        (228)
 #define EXPER_DISCARD         (5)
@@ -22,12 +23,17 @@
 #endif
 
 struct exper {
-    float volt[250];
+    float volt[50];
+    float agno3_used[50];
     float volt_diff;
-    int cur_idx;
-    int jump_idx;
-    int step_change_idx;
-    int ex_step;
+    int count;
+    int jump;
+    int steps;
+    float pre_AgNO3_dosage;
+    float pre_AgNO3_used;
+    float block_AgNO3_used;
+    float true_AgNO3_used;
+    float cl_percentage;
 };
 
 static struct exper_stat g_exper_stat;
@@ -37,6 +43,7 @@ static int g_oil_stock = 0;
 
 static float volt_buff[20];
 static struct exper g_exper;
+static struct report report_test;
 
 
 static void _exper_oil_get(void)
@@ -172,7 +179,7 @@ static float exper_filter(void)
         volt += volt_buff[i];
     volt = volt / (float)EXPER_WINDOWS;
 
-#ifdef EXPER_DBG_PRINT
+#if 0
 	for (i = 0; i < EXPER_BUF_CNT; i++) {
 		if (i == 0)
 			EXPER_DBG_PRINT("\r\ndiscard:\r\n");
@@ -190,14 +197,35 @@ static float exper_filter(void)
     return volt;
 }
 
+static float count_agno3_used(struct exper *exp)
+{
+    float delta_pre, delta_delta_pre, delta_after, delta_delta_after, delta_cur;
+    float res;
 
-static void agno3_start(void)
+    EXPER_DBG_PRINT("count AgNO3 used\r\n");
+    delta_pre = exp->volt[exp->jump] - exp->volt[exp->jump - 1];
+    delta_cur = exp->volt[exp->jump + 1] - exp->volt[exp->jump];
+    delta_after = exp->volt[exp->jump + 2] - exp->volt[exp->jump + 1];
+    delta_delta_pre = delta_cur - delta_pre;
+    delta_delta_after = delta_after - delta_cur;
+    EXPER_DBG_PRINT("exp->jump = %d\r\n", exp->jump);
+    EXPER_DBG_PRINT("delta_pre = %f, delta_cur = %f, delta_after = %f\r\n",
+        delta_pre, delta_cur, delta_after);
+    EXPER_DBG_PRINT("delta_delta_pre = %f, delta_delta_after = %f\r\n",
+        delta_delta_pre, delta_delta_after);
+    res = exp->agno3_used[exp->jump] + (delta_delta_pre / (delta_delta_pre - delta_delta_after)) * 0.1;
+    EXPER_DBG_PRINT("actual AgNO3 used = %f\r\n", res);
+    return res;
+}
+
+static void do_test(int mode)
 {
     float volt_scale = 210.0; // 230mV to change step
     float step_ml = 0.3;
     int step = 3;
     float volt_diff = 0.0;
     float volt;
+    int index = 0;
 
     msg.MsgId = WM_USER;
     msg.hWinSrc = 0;
@@ -205,10 +233,24 @@ static void agno3_start(void)
     g_exper_stat.graph_pos.x = 0;
 
     relay_ctrl(MOTOR_WATER_PUT);
-    /* pre get once */
-    g_exper.cur_idx = 0;
+
+    g_exper.count = 0;
     g_exper.volt_diff = 0.0;
-    g_exper.ex_step = 0;
+    g_exper_stat.agno3_used = 0;
+    g_exper_stat.graph_pos.x = 0;
+
+    switch (mode) {
+    case EXPER_MSG_AGNO3_START:
+        g_exper.steps = 35;
+        break;
+    case EXPER_MSG_CL_START:
+    case EXPER_MSG_BLOCK_START:
+        g_exper.steps = 25;
+        break;
+    default:
+        return;
+    }
+
 
     while (1) {
         /* user stop */
@@ -221,8 +263,6 @@ static void agno3_start(void)
             step = 1;
         }
 
-        EXPER_DBG_PRINT("step = %d\r\n", step);
-
         /* put AgNo3 oil */
         if (stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * step)) {
             g_exper_stat.stat = EXPER_STAT_FAIL;
@@ -231,54 +271,36 @@ static void agno3_start(void)
         } else {
             g_exper_stat.graph_pos.x += step;
             g_exper_stat.agno3_used += step_ml;
-            g_oil_stock -= step;
+            g_oil_stock -= step;           
         }
+
         /* wait oil act */
-        vTaskDelay(2100);
+        vTaskDelay(5000);
         
         /* get volt */
+        EXPER_DBG_PRINT("\r\n\r\nindex = %d, step = %d\r\n", index++, step);
         volt = exper_filter();
-        EXPER_DBG_PRINT("volt current = %f, AgNo3 used %.1fmL\r\n",
+        EXPER_DBG_PRINT("volt current = %f, AgNo3 used %.3fmL\r\n",
             volt, g_exper_stat.agno3_used);
      
         /* do not care step 0.3 */
         if (step == 1) {
-            if (g_exper.cur_idx > 0) {
-                g_exper.volt[g_exper.cur_idx] = volt;
-                volt_diff = (g_exper.volt[g_exper.cur_idx]) - (g_exper.volt[g_exper.cur_idx - 1]);
-                EXPER_DBG_PRINT("cur volt = %f, pre volt = %f, volt diff = %2f\r\n",
-                    g_exper.volt[g_exper.cur_idx], g_exper.volt[g_exper.cur_idx - 1], volt_diff);
-                g_exper.cur_idx++;
-
-                if (g_exper.ex_step == 0) {
-                    if (g_exper.volt_diff <= volt_diff)
-                        g_exper.volt_diff = volt_diff;
-                    else {
-                        /* set finished flag, and get ex 10 point */
-                        EXPER_DBG_PRINT("set finished flag to 10\r\n");
-                        g_exper.ex_step = 180;
-                    }
+            g_exper.volt[g_exper.count] = volt;
+            g_exper.agno3_used[g_exper.count] = g_exper_stat.agno3_used;
+            g_exper.count++;
+            g_exper.steps--;
+            if (g_exper.count > 1) {
+                volt_diff = (g_exper.volt[g_exper.count - 1]) - (g_exper.volt[g_exper.count - 2]);
+                if (g_exper.volt_diff < volt_diff) {
+                    g_exper.volt_diff = volt_diff;
+                    g_exper.jump = g_exper.count - 2;
                 }
-            } else {
-                g_exper.volt[g_exper.cur_idx++] = volt;
-            }
-
-            if (g_exper.ex_step > 0) {
-                g_exper.ex_step--;
-                if (g_exper.ex_step <= 0) {
-                    /* finished */
-                    EXPER_DBG_PRINT("AgNo3 test finished.\r\n");
-                    g_exper_stat.agno3_consistence = (float)0.02 / g_exper_stat.agno3_used;
-                    printf("AgNo3 nongdu is %.2f\r\n", g_exper_stat.agno3_consistence);
-                    g_exper_stat.stat = EXPER_STAT_AGNO3_FINISHED;
-                    WM_BroadcastMessage(&msg);
-                    return;
-                }
+                EXPER_DBG_PRINT("cur volt = %f, derta = %f, gdiff = %f, jump = %d\r\n",
+                    volt, volt_diff, g_exper.volt_diff, g_exper.jump);
             }
         }
-
+                
         /* update UI */
-        EXPER_DBG_PRINT("AgNo3 test update UI.\r\n");
         g_exper_stat.graph_pos.y = (int)volt;
         g_exper_stat.stat = EXPER_STAT_UPDATE_GRAPH;
         g_exper_stat.volt = volt;
@@ -287,25 +309,62 @@ static void agno3_start(void)
         g_exper_stat.oil_stock = g_oil_stock * 100 / EXPER_TOTAL_ML;
         g_exper_stat.stat = EXPER_STAT_UPDATE_PROGRESS;
         WM_BroadcastMessage(&msg);
+
+        if (g_exper.steps == 0) {
+            switch (mode) {
+            case EXPER_MSG_AGNO3_START:
+                g_exper.pre_AgNO3_used = count_agno3_used(&g_exper);
+                g_exper.pre_AgNO3_dosage = (float)0.2 / g_exper_stat.agno3_used;
+                
+                EXPER_DBG_PRINT("\r\n\r\n\r\nAgNo3 test finished.\r\n");
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", g_exper.pre_AgNO3_used);
+                EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", g_exper.pre_AgNO3_dosage);
+
+                g_exper_stat.agno3_used = g_exper.pre_AgNO3_used;
+                g_exper_stat.agno3_consistence = g_exper.pre_AgNO3_dosage;
+                g_exper_stat.stat = EXPER_STAT_AGNO3_FINISHED;
+                WM_BroadcastMessage(&msg);
+                return;
+            case EXPER_MSG_BLOCK_START:
+                g_exper.block_AgNO3_used = count_agno3_used(&g_exper);
+
+                EXPER_DBG_PRINT("\r\n\r\n\r\nblock test finished.\r\n");
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", g_exper.block_AgNO3_used);
+
+                g_exper_stat.agno3_used = g_exper.block_AgNO3_used;
+                g_exper_stat.stat = EXPER_STAT_BLOCK_FINISHED;
+                WM_BroadcastMessage(&msg);
+                return;
+            case EXPER_MSG_CL_START:
+                g_exper.true_AgNO3_used = count_agno3_used(&g_exper);
+                g_exper.cl_percentage = (g_exper.pre_AgNO3_dosage * (float)3.545 * (g_exper.true_AgNO3_used - g_exper.block_AgNO3_used)) / (float)5;
+
+                EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", g_exper.true_AgNO3_used);
+                EXPER_DBG_PRINT("cl percentage is %f%%\r\n", g_exper.cl_percentage);
+                
+                g_exper_stat.agno3_used = g_exper.true_AgNO3_used;
+                g_exper_stat.cl_percentage = g_exper.cl_percentage;
+                g_exper_stat.stat = EXPER_STAT_CL_FINISHED;
+                WM_BroadcastMessage(&msg);
+
+                for (index = 0; index < 12; index++)
+                    report_test.data[index] = g_exper.volt[g_exper.jump - 5 + index] - g_exper.volt[g_exper.jump - 6 + index];
+                report_test.data_num = 12;
+                report_test.nitrate_dosage = g_exper.true_AgNO3_used;
+                report_test.percentage = g_exper.cl_percentage;
+                report_test.year = 18;
+                report_test.month = 12;
+                report_test.day = 8;
+                report_test.hour = 16;
+                report_test.minute = 0;
+                report_show(&report_test);
+                return;
+            default:
+                return;
+            }
+        }
     }
-}
-
-static void block_start(void)
-{
-    msg.MsgId = WM_USER;
-    msg.hWinSrc = 0;
-    msg.Data.p = &g_exper_stat;
-    g_exper_stat.stat = EXPER_STAT_BLOCK_FINISHED;
-    WM_BroadcastMessage(&msg);
-}
-
-static void cl_start(void)
-{
-    msg.MsgId = WM_USER;
-    msg.hWinSrc = 0;
-    msg.Data.p = &g_exper_stat;
-    g_exper_stat.stat = EXPER_STAT_CL_FINISHED;
-    WM_BroadcastMessage(&msg);
 }
 
 void exper_task(void *args)
@@ -315,15 +374,18 @@ void exper_task(void *args)
         case EXPER_MSG_NONE:
             break;
         case EXPER_MSG_AGNO3_START:
-            agno3_start();
+            EXPER_DBG_PRINT("EXPER_MSG_AGNO3_START\r\n");
+            do_test(EXPER_MSG_AGNO3_START);
             g_exper_msg.msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_BLOCK_START:
-            block_start();
+            EXPER_DBG_PRINT("EXPER_MSG_BLOCK_START\r\n");
+            do_test(EXPER_MSG_BLOCK_START);
             g_exper_msg.msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_CL_START:
-            cl_start();
+            EXPER_DBG_PRINT("EXPER_MSG_CL_START\r\n");
+            do_test(EXPER_MSG_CL_START);
             g_exper_msg.msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_OIL_GET:
