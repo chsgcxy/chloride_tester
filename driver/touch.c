@@ -4,6 +4,8 @@
 #include "GUI.h"
 #include "stdlib.h"
 #include "delay.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 extern const GUI_FONT GUI_FontHZ_Consolas;
 extern const GUI_FONT GUI_FontHZ_Arial;
@@ -342,15 +344,14 @@ void touch_update(void)
 	pstate.Layer = 0;
 	if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10)) {
         pstate.Pressed = 0;
-		goto store;
+		GUI_PID_StoreState(&pstate);
+		return;
     }
     
     touch_read_phy();
     touch_trans(&pstate, &g_touch);
-	//printf("pressed=%d, (%d,%d)\r\n", pstate.Pressed, pstate.x, pstate.y);
-
-store:
 	GUI_PID_StoreState(&pstate);
+	vTaskDelay(100);
 }
 
 int touch_init(void)

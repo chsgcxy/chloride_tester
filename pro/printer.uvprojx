@@ -498,6 +498,11 @@
               <FileType>1</FileType>
               <FilePath>..\user\data.c</FilePath>
             </File>
+            <File>
+              <FileName>ui_numpad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_numpad.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

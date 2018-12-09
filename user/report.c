@@ -66,7 +66,7 @@ int report_show(struct report *rp)
     tprinter_send(report_printer, &char_colon, 1);
     tprinter_send(report_printer, &char_space, 1);
 
-    sprintf(buf, "%.2f", rp->percentage);
+    sprintf(buf, "%.3f", rp->percentage);
     tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
     tprinter_send(report_printer, &char_percent, 1);
     tprinter_newline(report_printer);
@@ -75,7 +75,7 @@ int report_show(struct report *rp)
     tprinter_send(report_printer, &char_colon, 1);
     tprinter_send(report_printer, &char_space, 1);
 
-    sprintf(buf, "%.3f(ml)", rp->nitrate_dosage);
+    sprintf(buf, "%.2f(ml)", rp->nitrate_dosage);
     tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
     tprinter_newline(report_printer);
 

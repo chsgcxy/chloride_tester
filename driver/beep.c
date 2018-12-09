@@ -1,6 +1,8 @@
 #include "beep.h"
 #include "stm32f2xx.h"
 #include "delay.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 void beep_work(int work, int idol)
 {
