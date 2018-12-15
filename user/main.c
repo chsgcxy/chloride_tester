@@ -38,19 +38,11 @@ extern WM_HWIN ui_test_creat(void);
 extern WM_HWIN ui_data_creat(void);
 extern WM_HWIN data_detail_creat(void);
 
-static void task_helloworld(void *args)
-{
-	while (1) {
-		printf("hello world!\r\n");
-		vTaskDelay(10000);
-	}
-}
-
 static void task_touch(void *args)
 {
 	while (1) {
 		touch_update();
-		vTaskDelay(20);
+		vTaskDelay(10);
 	}
 }
 
@@ -74,6 +66,12 @@ static void task_ui(void *args)
 		case MSG_LOAD_UI_DETAIL:
 			data_detail_creat();
 			break;
+		case MSG_LOAD_UI_TOUCH_CALC:
+			vTaskSuspend(handle_touch);
+			touch_calibrate(1);
+			vTaskResume(handle_touch);
+			ui_setting_creat();
+			break;
 		default:
 			break;
 		}
@@ -82,9 +80,8 @@ static void task_ui(void *args)
 
 static void task_init(void)
 {
-	//xTaskCreate(task_helloworld, "hello world", 64, NULL, 1, NULL);
 	xTaskCreate(task_touch, "touch", 128, NULL, 2, &handle_touch);
-	xTaskCreate(task_ui, "ui", 512, NULL, 1, &handle_gui);
+	xTaskCreate(task_ui, "ui", 1024, NULL, 1, &handle_gui);
 	xTaskCreate(exper_task, "exper", 512, NULL, 1, NULL);
 }
 
@@ -120,7 +117,7 @@ int main(void)
 	sysconf_load();
 	GUI_Init();
 	touch_init();
-	touch_calibrate();
+	touch_calibrate(0);
 
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;

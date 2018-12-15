@@ -195,7 +195,7 @@ static void _disp_calibrate_fail(void)
 	delay_ms(2000); // for Visual effects
 }
 
-void touch_calibrate(void)
+void touch_calibrate(int force)
 {
 	struct touch *ptouch = &g_touch;
 	struct sysconf *conf = sysconf_get();
@@ -207,7 +207,7 @@ void touch_calibrate(void)
 	_read_phy(CMD_RDX);
 	_read_phy(CMD_RDY);
 
-	if (sysconf_is_valid()) {
+	if (sysconf_is_valid() && !force) {
 		printf("get touch config, x_coe=%lf, y_coe=%lf, x_cor=%d, y_cor=%d\r\n",
 			conf->x_coe, conf->y_coe, conf->x_correct, conf->y_correct);
 		ptouch->x_coe = conf->x_coe;
@@ -344,6 +344,8 @@ void touch_update(void)
 	pstate.Layer = 0;
 	if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10)) {
         pstate.Pressed = 0;
+		pstate.x = 0;
+		pstate.y = 0;
 		GUI_PID_StoreState(&pstate);
 		return;
     }
@@ -351,6 +353,10 @@ void touch_update(void)
     touch_read_phy();
     touch_trans(&pstate, &g_touch);
 	GUI_PID_StoreState(&pstate);
+	/* if touch pressed, do not act within 100ms
+	 * if not, gui event may exec twice.
+	 * this taste bad, but it work
+	 */
 	vTaskDelay(100);
 }
 

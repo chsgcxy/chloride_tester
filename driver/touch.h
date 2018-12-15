@@ -7,6 +7,6 @@
 extern int touch_init(void);
 extern void touch_test(void);
 extern void touch_update(void);
-extern void touch_calibrate(void);
+extern void touch_calibrate(int force);
 
 #endif
