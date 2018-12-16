@@ -78,11 +78,20 @@ static void task_ui(void *args)
 	}
 }
 
+static void task_usb(void *args)
+{
+	while (1) {
+		USBH_Process(&USB_OTG_Core, &USB_Host);
+		vTaskDelay(100);
+	}
+}
+
 static void task_init(void)
 {
 	xTaskCreate(task_touch, "touch", 128, NULL, 2, &handle_touch);
-	xTaskCreate(task_ui, "ui", 1024, NULL, 1, &handle_gui);
+	xTaskCreate(task_ui, "ui", 512, NULL, 1, &handle_gui);
 	xTaskCreate(exper_task, "exper", 512, NULL, 1, NULL);
+	xTaskCreate(task_usb, "usb", 512, NULL, 1, NULL);
 }
 
 static int g_printer_send(uint8_t *buf, int len)
@@ -118,6 +127,8 @@ int main(void)
 	GUI_Init();
 	touch_init();
 	touch_calibrate(0);
+
+	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
 
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;
@@ -176,16 +187,6 @@ int main(void)
 		default:
 			break;
 		}
-	}
-#endif
-
-	/* USB Test */
-#if 0	
-	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host,
-		&USBH_MSC_cb, &USR_cb);
-	printf("USB inited...\r\n");
-	while (1) {
-		USBH_Process(&USB_OTG_Core, &USB_Host);
 	}
 #endif
 

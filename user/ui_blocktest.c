@@ -61,8 +61,7 @@
 #define ID_TEXT_PERCENT_VALUE (GUI_ID_USER + 0x15)
 
 // USER START (Optionally insert additional defines)
-extern const GUI_FONT GUI_FontHZ_Consolas;
-extern const GUI_FONT GUI_FontHZ_Arial;
+extern const GUI_FONT GUI_FontHZ_kaiti;
 // USER END
 
 /*********************************************************************
@@ -165,43 +164,43 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, BUTTON_CI_UNPRESSED, GUI_BLUE);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, BUTTON_CI_UNPRESSED, GUI_BLUE);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, 0, GUI_RED);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
@@ -211,7 +210,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
@@ -221,7 +220,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
@@ -229,7 +228,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(hItem, GUI_RED);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND_VALUE);
@@ -237,7 +236,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(hItem, GUI_RED);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
@@ -248,7 +247,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_RYCL);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);

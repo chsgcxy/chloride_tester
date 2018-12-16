@@ -173,9 +173,8 @@ void USB_OTG_BSP_uDelay (const uint32_t usec)
   */
 void USB_OTG_BSP_mDelay (const uint32_t msec)
 {
-
-    USB_OTG_BSP_uDelay(msec * 1000);    
-
+    vTaskDelay(msec);
+    //USB_OTG_BSP_uDelay(msec * 1000);
 }
 
 

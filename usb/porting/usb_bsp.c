@@ -29,6 +29,9 @@
 
 #include "usb_bsp.h"
 #include "usb_hcd_int.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "stdio.h"
 
 /** @addtogroup USBH_USER
 * @{
@@ -212,6 +215,7 @@ void USB_OTG_BSP_uDelay(const uint32_t usec)
   */
 void USB_OTG_BSP_mDelay (const uint32_t msec)
 {  
+    //vTaskDelay(msec);
     BSP_Delay(msec, TIM_MSEC_DELAY);      
 }
 

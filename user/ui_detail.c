@@ -47,8 +47,8 @@
 #define ID_TEXT_8 (GUI_ID_USER + 0x0C)
 
 // USER START (Optionally insert additional defines)
-extern const GUI_FONT GUI_FontHZ_Consolas;
-extern const GUI_FONT GUI_FontHZ_Arial;
+extern const GUI_FONT GUI_FontHZ_kaiti_28;
+extern const GUI_FONT GUI_FontHZ_kaiti;
 // USER END
 
 /*********************************************************************
@@ -114,7 +114,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = pMsg->hWin;
         FRAMEWIN_SetTitleHeight(hItem, 50);
         FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Arial);
+        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_kaiti_28);
         FRAMEWIN_SetTextColor(hItem, GUI_BLUE);
         FRAMEWIN_SetText(hItem, "实验数据");
         FRAMEWIN_SetClientColor(hItem, GUI_GRAY);
@@ -164,28 +164,28 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "返回");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "导出");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PRINT);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_Consolas);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "打印");
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "序号");
         //
@@ -206,7 +206,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_5);
-        TEXT_SetFont(hItem,  &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "硝酸银用量");
         //
@@ -220,7 +220,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_7);
-        TEXT_SetFont(hItem,  &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "每克试样含氯离子");
         //

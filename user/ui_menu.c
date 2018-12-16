@@ -34,23 +34,23 @@
 #define ID_FRAMEWIN_0   (GUI_ID_USER + 0x00)
 
 #define ID_IMAGE_BLOCKTEST   (GUI_ID_USER + 0x02)
-//#define ID_IMAGE_TEST        (GUI_ID_USER + 0x03)
+#define ID_IMAGE_STAND       (GUI_ID_USER + 0x03)
 #define ID_IMAGE_DATA        (GUI_ID_USER + 0x04)
 #define ID_IMAGE_SETTING     (GUI_ID_USER + 0x05)
 
 #define ID_TEXT_BLOCKTEST    (GUI_ID_USER + 0x06)
-//#define ID_TEXT_TEST         (GUI_ID_USER + 0x07)
+#define ID_TEXT_STAND        (GUI_ID_USER + 0x07)
 #define ID_TEXT_DATA         (GUI_ID_USER + 0x08)
 #define ID_TEXT_SETTING      (GUI_ID_USER + 0x09)
 
 // USER START (Optionally insert additional defines)
-//extern const GUI_BITMAP bmlaboratory_72px;
 extern const GUI_BITMAP bmprocess_running_72px;
 extern const GUI_BITMAP bmchemical_72px;
 extern const GUI_BITMAP bmpic_view_72px;
+extern const GUI_BITMAP bmstand_72px;
 
-extern const GUI_FONT GUI_FontHZ_Consolas;
-extern const GUI_FONT GUI_FontHZ_Arial;
+extern const GUI_FONT GUI_FontHZ_kaiti_28;
+extern const GUI_FONT GUI_FontHZ_kaiti;
 // USER END
 
 /*********************************************************************
@@ -60,13 +60,15 @@ extern const GUI_FONT GUI_FontHZ_Arial;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0 },
 
-    { IMAGE_CreateIndirect, "block", ID_IMAGE_BLOCKTEST, 146, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "data", ID_IMAGE_DATA, 364, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 582, 140, 72, 72, 0, 0, 0 },
-
-    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 110, 225, 150, 32, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 345, 225, 120, 32, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 564, 225, 120, 32, 0, 0x0, 0 },
+    { IMAGE_CreateIndirect, "block", ID_IMAGE_BLOCKTEST, 102, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "stand", ID_IMAGE_STAND, 274, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "data", ID_IMAGE_DATA, 446, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 620, 140, 72, 72, 0, 0, 0 },
+    
+    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 82, 225, 120, 32, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "stand", ID_TEXT_STAND, 254, 225, 120, 32, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 426, 225, 120, 32, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 600, 225, 120, 32, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -91,7 +93,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         hItem = pMsg->hWin;
         FRAMEWIN_SetTitleHeight(hItem, 50);
         FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_Arial);
+        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_kaiti_28);
         FRAMEWIN_SetTextColor(hItem, GUI_BLACK);
         FRAMEWIN_SetClientColor(hItem, GUI_GRAY);
         FRAMEWIN_SetText(hItem, "全自动氯离子检测仪");
@@ -102,9 +104,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBitmap(hItem, &bmchemical_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_BLOCKTEST);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        TEXT_SetText(hItem, "氯离子检测");  
+        TEXT_SetText(hItem, "水泥检测");  
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_STAND);
+        IMAGE_SetBitmap(hItem, &bmstand_72px);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_STAND);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        TEXT_SetText(hItem, "其他检测");
         //
         // Initialization of 'Image'
         //
@@ -112,7 +122,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBitmap(hItem, &bmpic_view_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DATA);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "数据处理");
         //
@@ -122,7 +132,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBitmap(hItem, &bmprocess_running_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SETTING);
-        TEXT_SetFont(hItem, &GUI_FontHZ_Consolas);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "系统设置");
 

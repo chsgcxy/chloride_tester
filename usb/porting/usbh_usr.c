@@ -167,7 +167,7 @@ void USBH_USR_DeviceAttached(void)
 * @param  None
 * @retval None
 */
-void USBH_USR_UnrecoveredError (void)
+void USBH_USR_UnrecoveredError(void)
 {
     USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_UNREC_ERROR);
 }
