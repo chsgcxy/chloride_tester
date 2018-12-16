@@ -41,7 +41,7 @@
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
-extern const GUI_FONT GUI_FontHZ_kaiti;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
 // USER END
 
 /*********************************************************************
@@ -120,7 +120,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_LOOK);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "查看");
         //
@@ -128,27 +128,27 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DEL);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetText(hItem, "删除");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetText(hItem, "导出");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "返回");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXPALL);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "全部导出");
 

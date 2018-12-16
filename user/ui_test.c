@@ -49,7 +49,7 @@
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
-extern const GUI_FONT GUI_FontHZ_kaiti;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
 // USER END
 
 /*********************************************************************
@@ -122,35 +122,35 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "水泥质量");
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "AgNO3浓度");
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "AgNO3用量");
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_3);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "氯离子浓度");
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_4);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "电极电位");
         //
@@ -172,21 +172,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "吸液");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "排液");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetText(hItem, "返回");
 
@@ -194,7 +194,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_7);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetText(hItem, "溶液存量");
 

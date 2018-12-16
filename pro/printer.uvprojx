@@ -499,14 +499,14 @@
               <FilePath>..\user\stand_72px.c</FilePath>
             </File>
             <File>
-              <FileName>font_kaiti.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\font_kaiti.c</FilePath>
-            </File>
-            <File>
               <FileName>font_kaiti_28.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\font_kaiti_28.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_kaiti_20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\font_kaiti_20.c</FilePath>
             </File>
           </Files>
         </Group>

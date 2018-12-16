@@ -7,8 +7,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-extern const GUI_FONT GUI_FontHZ_kaiti;
-extern const GUI_FONT GUI_FontHZ_kaiti;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
 
 #define CMD_RDY 0X90
 #define CMD_RDX	0XD0
@@ -223,11 +223,11 @@ do_calc:
 	GUI_Clear();
 
 	GUI_SetColor(GUI_BLUE);
-	GUI_SetFont(&GUI_FontHZ_kaiti);
+	GUI_SetFont(&GUI_FontHZ_kaiti_20);
 	GUI_DispStringHCenterAt("校准触摸屏", 400, 10);
 	
 	GUI_SetColor(GUI_WHITE);
-	GUI_SetFont(&GUI_FontHZ_kaiti);
+	GUI_SetFont(&GUI_FontHZ_kaiti_20);
 	GUI_DispStringHCenterAt("请依次点击红色圆点", 400, 350);	
 	GUI_SetColor(GUI_RED);
 	/* draw p1 */

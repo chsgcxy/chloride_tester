@@ -50,7 +50,7 @@ extern const GUI_BITMAP bmpic_view_72px;
 extern const GUI_BITMAP bmstand_72px;
 
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
-extern const GUI_FONT GUI_FontHZ_kaiti;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
 // USER END
 
 /*********************************************************************
@@ -104,15 +104,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBitmap(hItem, &bmchemical_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_BLOCKTEST);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "水泥检测");  
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_STAND);
         IMAGE_SetBitmap(hItem, &bmstand_72px);
 
+
+
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_STAND);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "其他检测");
         //
@@ -122,7 +124,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBitmap(hItem, &bmpic_view_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DATA);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "数据处理");
         //
@@ -132,7 +134,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBitmap(hItem, &bmprocess_running_72px);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SETTING);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "系统设置");
 

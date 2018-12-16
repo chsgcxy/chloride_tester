@@ -52,7 +52,7 @@
 #define ID_BUTTON_3 (GUI_ID_USER + 0x13)
 
 // USER START (Optionally insert additional defines)
-extern const GUI_FONT GUI_FontHZ_kaiti;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
 // USER END
 
@@ -132,13 +132,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         //
         // Initialization of 'Spinbox'
@@ -151,7 +151,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Spinbox'
         // month
@@ -163,7 +163,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Spinbox'
         // day
@@ -175,7 +175,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Spinbox'
         // hour
@@ -194,12 +194,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_3);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_4);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Spinbox'
         //
@@ -212,7 +212,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_5);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Text'
         //
@@ -222,11 +222,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END

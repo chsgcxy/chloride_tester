@@ -60,8 +60,11 @@
 #define ID_TEXT_DJDW_VALUE    (GUI_ID_USER + 0x14)
 #define ID_TEXT_PERCENT_VALUE (GUI_ID_USER + 0x15)
 
+#define ID_TEXT_TEMP          (GUI_ID_USER + 0x16)
+#define ID_TEXT_TEMP_VALUE    (GUI_ID_USER + 0x17)
 // USER START (Optionally insert additional defines)
-extern const GUI_FONT GUI_FontHZ_kaiti;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
+extern const GUI_FONT GUI_Fontfont_spec;
 // USER END
 
 /*********************************************************************
@@ -82,33 +85,35 @@ extern const GUI_FONT GUI_FontHZ_kaiti;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     
-    {TEXT_CreateIndirect, "溶液存量", ID_TEXT_RYCL, 20, 415, 120, 35, 0, 0x64, 0},
-    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 5, 450, 150, 25, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "吸液", ID_BUTTON_GET, 180, 425, 100, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "排液", ID_BUTTON_PUT, 330, 425, 100, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "清洗", ID_BUTTON_CLEAR, 480, 425, 100, 50, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "溶液存量", ID_TEXT_RYCL, 5, 435, 120, 35, 0, 0x64, 0},
+    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 135, 435, 150, 30, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "吸液", ID_BUTTON_GET, 320, 425, 120, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "排液", ID_BUTTON_PUT, 490, 425, 120, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "清洗", ID_BUTTON_CLEAR, 660, 425, 120, 50, 0, 0x0, 0},
     
-    {TEXT_CreateIndirect, "氯离子浓度", ID_TEXT_NACLND, 5, 5, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_NACLND_VALUE, 5, 40, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "氯离子标准液浓度", ID_TEXT_NACLND, 5, 5, 250, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_NACLND_VALUE, 75, 40, 160, 32, 0, 0x64, 0},
 
     {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 75, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "-- mol/L", ID_TEXT_NO3ND_VALUE, 5, 110, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "---- mol/L", ID_TEXT_NO3ND_VALUE, 75, 110, 160, 32, 0, 0x64, 0},
     
     {TEXT_CreateIndirect, "AgNO3用量", ID_TEXT_NO3YL, 5, 145, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 5, 180, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 75, 180, 160, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 5, 215, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0V", ID_TEXT_DJDW_VALUE, 5, 250, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "水泥氯离子质量分数", ID_TEXT_PERCENTAGE, 5, 215, 250, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "----%", ID_TEXT_PERCENT_VALUE, 75, 250, 160, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "质量分数", ID_TEXT_PERCENTAGE, 5, 285, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0.00%", ID_TEXT_PERCENT_VALUE, 5, 320, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "温度", ID_TEXT_TEMP, 5, 300, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "37.5", ID_TEXT_TEMP_VALUE, 75, 303, 160, 32, 0, 0x64, 0},
 
-    {BUTTON_CreateIndirect, "菜单", ID_BUTTON_RETURN, 600, 5, 180, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 600, 240, 180, 60, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "AgNO3检测", ID_BUTTON_START_NO3, 600, 130, 180, 60, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "氯离子检测", ID_BUTTON_START_TEST, 600, 350, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "返回菜单", ID_BUTTON_RETURN, 600, 5, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "AgNO3检测", ID_BUTTON_START_NO3, 600, 110, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 600, 215, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "氯离子检测", ID_BUTTON_START_TEST, 600, 320, 180, 60, 0, 0x0, 0},
     
-    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 180, 5, 400, 405, 0, 0x0, 0 },
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 320, 5, 265, 340, 0, 0x0, 0 },
+    {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 340, 350, 135, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "320.1mV", ID_TEXT_DJDW_VALUE, 475, 353, 130, 25, 0, 0x64, 0},
 };
 
 /*********************************************************************
@@ -164,90 +169,103 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, BUTTON_CI_UNPRESSED, GUI_BLUE);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, BUTTON_CI_UNPRESSED, GUI_BLUE);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_RED);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
-        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEMP);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEMP_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_24_1);
+        TEXT_SetTextColor(hItem, GUI_GREEN);
+        sprintf(buf, "%.1f", 37.5);
+        buf[4] = 0xBA;
+        buf[5] = 0x43;
+        buf[6] = 0;
+        TEXT_SetText(hItem, buf);
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
-        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
-        TEXT_SetTextColor(hItem, GUI_RED);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+        TEXT_SetTextColor(hItem, GUI_GREEN);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND_VALUE);
-        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
-        TEXT_SetTextColor(hItem, GUI_RED);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
-        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
 
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_RYCL);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);

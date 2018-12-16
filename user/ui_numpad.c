@@ -49,7 +49,7 @@
 // USER START (Optionally insert additional defines)
 // USER END
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
-extern const GUI_FONT GUI_FontHZ_kaiti;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
 /*********************************************************************
 *
 *       Static data
