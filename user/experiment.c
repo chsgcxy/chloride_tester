@@ -67,8 +67,9 @@ static void _exper_oil_get(void)
         }
 
         if (correct > 20) {
-             g_exper_stat.stat = EXPER_STAT_ERR_MOTOR;
-             WM_BroadcastMessage(&msg);
+            g_exper_stat.stat = EXPER_STAT_ERR_MOTOR;
+            WM_BroadcastMessage(&msg);
+            return;
         } else {
             g_exper_stat.oil_stock = g_oil_stock * 100 / EXPER_TOTAL_ML;
             WM_BroadcastMessage(&msg);

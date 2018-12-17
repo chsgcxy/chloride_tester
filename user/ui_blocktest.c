@@ -67,6 +67,8 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 extern const GUI_FONT GUI_Fontfont_spec;
 // USER END
 
+
+extern WM_HWIN simple_diag_creat(void);
 /*********************************************************************
 *
 *       Static data
@@ -111,9 +113,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 600, 215, 180, 60, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "氯离子检测", ID_BUTTON_START_TEST, 600, 320, 180, 60, 0, 0x0, 0},
     
-    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 320, 5, 265, 340, 0, 0x0, 0 },
-    {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 340, 350, 135, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "320.1mV", ID_TEXT_DJDW_VALUE, 475, 353, 130, 25, 0, 0x64, 0},
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 265, 5, 310, 350, 0, 0x0, 0 },
+    {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 325, 360, 135, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "320.1mV", ID_TEXT_DJDW_VALUE, 455, 363, 130, 25, 0, 0x64, 0},
 };
 
 /*********************************************************************
@@ -280,17 +282,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         GRAPH_SetGridVis(hItem, 2);
         GRAPH_SetGridFixedX(hItem, 2);
         GRAPH_SetGridDistY(hItem, 20);
-        GRAPH_SetGridDistX(hItem, 40);
+        GRAPH_SetGridDistX(hItem, 50);
         
         hScaleV = GRAPH_SCALE_Create(3, GUI_TA_LEFT, GRAPH_SCALE_CF_VERTICAL, 20);
         GRAPH_SCALE_SetTextColor(hScaleV, GUI_RED);
         GRAPH_SCALE_SetOff(hScaleV, -140);
         GRAPH_AttachScale(hItem, hScaleV);
         
-        hScaleH = GRAPH_SCALE_Create(395, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 40);
+        hScaleH = GRAPH_SCALE_Create(340, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
-        pdataGRP = GRAPH_DATA_XY_Create(GUI_GREEN, 500, 0, 0);
+        pdataGRP = GRAPH_DATA_XY_Create(GUI_GREEN, 350, 0, 0);
         GRAPH_DATA_XY_SetOffY(pdataGRP, -140);
         GRAPH_AttachData(hItem, pdataGRP);
         GRAPH_DATA_XY_Clear(pdataGRP);
@@ -461,6 +463,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         stat = (struct exper_stat *)pMsg->Data.p;
         switch (stat->stat) {
             case EXPER_STAT_ERR_MOTOR:
+                simple_diag_creat();
+
                 break;
             case EXPER_STAT_UPDATE_PROGRESS:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);

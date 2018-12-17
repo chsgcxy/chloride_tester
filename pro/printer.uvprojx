@@ -429,26 +429,6 @@
               <FilePath>..\user\ui_menu.c</FilePath>
             </File>
             <File>
-              <FileName>chemical_72px.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\chemical_72px.c</FilePath>
-            </File>
-            <File>
-              <FileName>laboratory_72px.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\laboratory_72px.c</FilePath>
-            </File>
-            <File>
-              <FileName>process_running_72px.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\process_running_72px.c</FilePath>
-            </File>
-            <File>
-              <FileName>view_72px.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\view_72px.c</FilePath>
-            </File>
-            <File>
               <FileName>ui_blocktest.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\ui_blocktest.c</FilePath>
@@ -494,19 +474,9 @@
               <FilePath>..\user\ui_numpad.c</FilePath>
             </File>
             <File>
-              <FileName>stand_72px.c</FileName>
+              <FileName>ui_diag.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\user\stand_72px.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_kaiti_28.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\font_kaiti_28.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_kaiti_20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\font_kaiti_20.c</FilePath>
+              <FilePath>..\user\ui_diag.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -902,6 +872,61 @@
               <FileName>beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\driver\beep.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fonts</GroupName>
+          <Files>
+            <File>
+              <FileName>font_kaiti_20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fonts\font_kaiti_20.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_kaiti_28.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fonts\font_kaiti_28.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>pictures</GroupName>
+          <Files>
+            <File>
+              <FileName>chemical_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\chemical_72px.c</FilePath>
+            </File>
+            <File>
+              <FileName>error_32px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\error_32px.c</FilePath>
+            </File>
+            <File>
+              <FileName>infor_32px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\infor_32px.c</FilePath>
+            </File>
+            <File>
+              <FileName>process_running_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\process_running_72px.c</FilePath>
+            </File>
+            <File>
+              <FileName>stand_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\stand_72px.c</FilePath>
+            </File>
+            <File>
+              <FileName>view_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\view_72px.c</FilePath>
+            </File>
+            <File>
+              <FileName>warning_32px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\warning_32px.c</FilePath>
             </File>
           </Files>
         </Group>
