@@ -68,7 +68,8 @@ extern const GUI_FONT GUI_Fontfont_spec;
 // USER END
 
 
-extern WM_HWIN simple_diag_creat(void);
+extern WM_HWIN diag_err_creat(void);
+extern WM_HWIN diag_info_creat(void);
 /*********************************************************************
 *
 *       Static data
@@ -87,33 +88,33 @@ extern WM_HWIN simple_diag_creat(void);
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     
-    {TEXT_CreateIndirect, "溶液存量", ID_TEXT_RYCL, 5, 435, 120, 35, 0, 0x64, 0},
-    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 135, 435, 150, 30, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "吸液", ID_BUTTON_GET, 320, 425, 120, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "排液", ID_BUTTON_PUT, 490, 425, 120, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "清洗", ID_BUTTON_CLEAR, 660, 425, 120, 50, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "溶液存量", ID_TEXT_RYCL, 5, 425, 120, 35, 0, 0x64, 0},
+    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 135, 425, 150, 30, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "吸液", ID_BUTTON_GET, 320, 415, 120, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "排液", ID_BUTTON_PUT, 490, 415, 120, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "清洗", ID_BUTTON_CLEAR, 660, 415, 120, 50, 0, 0x0, 0},
     
-    {TEXT_CreateIndirect, "氯离子标准液浓度", ID_TEXT_NACLND, 5, 5, 250, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_NACLND_VALUE, 75, 40, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "氯离子标准液浓度", ID_TEXT_NACLND, 5, 15, 250, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_NACLND_VALUE, 75, 50, 160, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 75, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "---- mol/L", ID_TEXT_NO3ND_VALUE, 75, 110, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 85, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "---- mol/L", ID_TEXT_NO3ND_VALUE, 75, 120, 160, 32, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "AgNO3用量", ID_TEXT_NO3YL, 5, 145, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 75, 180, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "AgNO3用量", ID_TEXT_NO3YL, 5, 155, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 75, 190, 160, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "水泥氯离子质量分数", ID_TEXT_PERCENTAGE, 5, 215, 250, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "----%", ID_TEXT_PERCENT_VALUE, 75, 250, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "水泥氯离子质量分数", ID_TEXT_PERCENTAGE, 5, 225, 250, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "----%", ID_TEXT_PERCENT_VALUE, 75, 260, 160, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "温度", ID_TEXT_TEMP, 5, 300, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "37.5", ID_TEXT_TEMP_VALUE, 75, 303, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "温度", ID_TEXT_TEMP, 5, 310, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "37.5", ID_TEXT_TEMP_VALUE, 75, 313, 160, 32, 0, 0x64, 0},
 
-    {BUTTON_CreateIndirect, "返回菜单", ID_BUTTON_RETURN, 600, 5, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "返回菜单", ID_BUTTON_RETURN, 600, 15, 180, 60, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "AgNO3检测", ID_BUTTON_START_NO3, 600, 110, 180, 60, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 600, 215, 180, 60, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "氯离子检测", ID_BUTTON_START_TEST, 600, 320, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 600, 205, 180, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "氯离子检测", ID_BUTTON_START_TEST, 600, 300, 180, 60, 0, 0x0, 0},
     
-    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 265, 5, 310, 350, 0, 0x0, 0 },
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 265, 15, 310, 340, 0, 0x0, 0 },
     {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 325, 360, 135, 32, 0, 0x64, 0},
     {TEXT_CreateIndirect, "320.1mV", ID_TEXT_DJDW_VALUE, 455, 363, 130, 25, 0, 0x64, 0},
 };
@@ -278,7 +279,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_0);
-        GRAPH_SetBorder(hItem, 40, 3, 3, 15);
+        GRAPH_SetBorder(hItem, 35, 3, 3, 15);
         GRAPH_SetGridVis(hItem, 2);
         GRAPH_SetGridFixedX(hItem, 2);
         GRAPH_SetGridDistY(hItem, 20);
@@ -289,7 +290,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         GRAPH_SCALE_SetOff(hScaleV, -140);
         GRAPH_AttachScale(hItem, hScaleV);
         
-        hScaleH = GRAPH_SCALE_Create(340, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
+        hScaleH = GRAPH_SCALE_Create(330, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
         pdataGRP = GRAPH_DATA_XY_Create(GUI_GREEN, 350, 0, 0);
@@ -463,7 +464,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         stat = (struct exper_stat *)pMsg->Data.p;
         switch (stat->stat) {
             case EXPER_STAT_ERR_MOTOR:
-                simple_diag_creat();
+                diag_err_creat();
 
                 break;
             case EXPER_STAT_UPDATE_PROGRESS:

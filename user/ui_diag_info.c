@@ -31,23 +31,23 @@
 */
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x01)
-#define ID_IMAGE_0 (GUI_ID_USER + 0x02)
-#define ID_TEXT_1 (GUI_ID_USER + 0x03)
-#define ID_BUTTON_0 (GUI_ID_USER + 0x04)
+#define ID_BUTTON_0 (GUI_ID_USER + 0x03)
+#define ID_TEXT_1 (GUI_ID_USER + 0x04)
+#define ID_BUTTON_1 (GUI_ID_USER + 0x05)
+#define ID_IMAGE_0 (GUI_ID_USER + 0x06)
+#define ID_TEXT_2 (GUI_ID_USER + 0x07)
 
-// USER START (Optionally insert additional defines)
-// USER END
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
-extern const GUI_BITMAP bmerror_32px;
-extern const GUI_BITMAP bmwarning_32px;
 extern const GUI_BITMAP bminfor_32px;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-    {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 200, 140, 400, 200, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_0, 10, 72, 381, 25, 0, 0x64, 0},
-    {IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 11, 10, 32, 32, 0, 0, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 51, 15, 66, 25, 0, 0x64, 0},
-    {BUTTON_CreateIndirect, "确认", ID_BUTTON_0, 139, 150, 116, 35, 0, 0x0, 0},
+    {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 150, 120, 500, 240, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_0, 52, 14, 80, 25, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "开始实验", ID_BUTTON_0, 20, 190, 140, 35, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "信息", ID_TEXT_1, 10, 67, 466, 25, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "退出", ID_BUTTON_1, 340, 190, 140, 35, 0, 0x0, 0},
+    {IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 10, 10, 32, 32, 0, 0, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 10, 98, 462, 25, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -64,32 +64,43 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     {
     case WM_INIT_DIALOG:
         //
-        // Initialization of 'Window'
-        //
-        hItem = pMsg->hWin;
-        WINDOW_SetBkColor(hItem, GUI_MAKE_COLOR(0x00C08000));
-        //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
-        TEXT_SetText(hItem, "吸液错误");
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        //
-        // Initialization of 'Image'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        IMAGE_SetBitmap(hItem, &bmerror_32px);
-        //
-        // Initialization of 'Text'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
-        TEXT_SetText(hItem, "错误");
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        //
+        // Initialization of 'Text'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        //
+        // Initialization of 'Button'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        //
+        // Initialization of 'Image'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
+        IMAGE_SetBitmap(hItem, &bminfor_32px);
+        //
+        // Initialization of 'Text'
+        //
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetText(hItem, "即将进行AgNO3检测实验");
+
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetText(hItem, "准备好了吗？");
+        //
+        // Initialization of 'Text'
+        //
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
@@ -103,7 +114,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                GUI_EndDialog(pMsg->hWin, 0);
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_BUTTON_1: // Notifications sent by 'Button'
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -136,7 +161,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 *       CreateWindow
 */
-WM_HWIN simple_diag_creat(void)
+
+WM_HWIN diag_info_creat(void)
 {
     WM_HWIN hWin;
 

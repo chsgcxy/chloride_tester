@@ -474,9 +474,14 @@
               <FilePath>..\user\ui_numpad.c</FilePath>
             </File>
             <File>
-              <FileName>ui_diag.c</FileName>
+              <FileName>ui_diag_err.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\user\ui_diag.c</FilePath>
+              <FilePath>..\user\ui_diag_err.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_diag_info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_diag_info.c</FilePath>
             </File>
           </Files>
         </Group>
