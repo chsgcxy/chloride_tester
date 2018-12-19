@@ -22,7 +22,7 @@
 // USER END
 
 #include "DIALOG.h"
-
+#include "beep.h"
 /*********************************************************************
 *
 *       Defines
@@ -42,11 +42,11 @@ extern const GUI_BITMAP bmerror_32px;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 150, 120, 500, 240, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_0, 10, 72, 381, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_0, 10, 105, 480, 25, 0, 0x64, 0},
     {IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 11, 10, 32, 32, 0, 0, 0},
     {TEXT_CreateIndirect, "Text", ID_TEXT_1, 51, 15, 66, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 51, 45, 66, 25, 0, 0x64, 0},
-    {BUTTON_CreateIndirect, "确认", ID_BUTTON_0, 120, 190, 135, 40, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 10, 70, 480, 25, 0, 0x64, 0},
+    {BUTTON_CreateIndirect, "确认", ID_BUTTON_0, 180, 190, 135, 40, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -66,17 +66,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Window'
         //
         hItem = pMsg->hWin;
-        WINDOW_SetBkColor(hItem, GUI_MAKE_COLOR(0x00C08000));
+        WINDOW_SetBkColor(hItem, GUI_BLACK);
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
         TEXT_SetText(hItem, "吸液超时，电机或限位开关异常");
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_WHITE);
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
         TEXT_SetText(hItem, "请检查设备硬件");
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_WHITE);
         //
         // Initialization of 'Image'
         //
@@ -88,6 +90,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
         TEXT_SetText(hItem, "错误");
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_WHITE);
         //
         // Initialization of 'Button'
         //
@@ -106,6 +109,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_work(100, 0);
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;
@@ -139,12 +143,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 *       CreateWindow
 */
-WM_HWIN diag_err_creat(void)
+int diag_err_creat(void)
 {
-    WM_HWIN hWin;
-
-    hWin = GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    return hWin;
+    return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 
 // USER START (Optionally insert additional public code)

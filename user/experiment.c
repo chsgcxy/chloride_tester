@@ -68,6 +68,7 @@ static void _exper_oil_get(void)
 
         if (correct > 20) {
             g_exper_stat.stat = EXPER_STAT_ERR_MOTOR;
+            g_exper_stat.oil_stock = 0;
             WM_BroadcastMessage(&msg);
             return;
         } else {
@@ -101,6 +102,7 @@ static void _exper_oil_put(void)
         if (g_exper_msg.stop) {
             g_exper_msg.stop = 0;
             EXPER_DBG_PRINT("stoped.\r\n");
+            vTaskDelay(50);
             return;
         }
             
@@ -261,7 +263,7 @@ static void do_test(int mode)
             step = 1;
         }
 
-        if (g_exper_stat.oil_stock < 20)
+        if (g_exper_stat.oil_stock < 10)
             _exper_oil_get();
 
         /* put AgNo3 oil */

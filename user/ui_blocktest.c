@@ -68,8 +68,8 @@ extern const GUI_FONT GUI_Fontfont_spec;
 // USER END
 
 
-extern WM_HWIN diag_err_creat(void);
-extern WM_HWIN diag_info_creat(void);
+extern int diag_err_creat(void);
+extern int diag_info_creat(int flag);
 /*********************************************************************
 *
 *       Static data
@@ -127,9 +127,10 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 */
 static struct exper_msg msg;
 static uint8_t put_func = 0;
+static uint8_t test_func = 0;
 // USER START (Optionally insert additional static code)
-GRAPH_SCALE_Handle hScaleV, hScaleH;
-GRAPH_DATA_Handle pdataGRP;
+static GRAPH_SCALE_Handle hScaleV, hScaleH;
+static GRAPH_DATA_Handle pdataGRP;
 // USER END
 
 static void ctrl_all_btn(WM_HWIN hWin, int enable)
@@ -306,7 +307,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_GET: // Notifications sent by 'Button'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(50, 0);
+                beep_work(100, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
                 BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_GREEN);
                 BUTTON_SetText(hItem, "ÎüÒºÖÐ");
@@ -324,10 +325,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_PUT: // Notifications sent by 'Button'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 100);
+                beep_work(100, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
                 msg.msg = EXPER_MSG_OIL_PUT;
-                printf("put clicked\r\n");
 
                 if (put_func) {    
                     BUTTON_SetText(hItem, "ÅÅÒº");
@@ -375,6 +375,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
+                beep_work(100, 0);
                 // USER START (Optionally insert code for reacting on notification message)
                 printf("run main menu\r\n");
                 g_ui_msg.msg = MSG_LOAD_UI_MENU;
@@ -392,20 +393,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_START_BLOCK: // Notifications sent by 'Button'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                GRAPH_DATA_XY_Clear(pdataGRP);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
-                BUTTON_SetText(hItem, "Í£Ö¹ÊµÑé");
-                BUTTON_SetTextColor(hItem, 0, GUI_RED);
-                ctrl_all_btn(pMsg->hWin, 0);
-                WM_EnableWindow(hItem);
+                beep_work(100, 0);
+                /* cancel */
+                if (diag_info_creat(test_func))
+                    break;
 
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
-                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
-                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
-
+                if (test_func) {
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
+                    BUTTON_SetText(hItem, "¿Õ°×ÊµÑé");
+                    BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    ctrl_all_btn(pMsg->hWin, 1);
+                    msg.stop = 1;
+                    test_func = 0;
+                } else {
+                    GRAPH_DATA_XY_Clear(pdataGRP);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
+                    BUTTON_SetText(hItem, "Í£Ö¹ÊµÑé");
+                    BUTTON_SetTextColor(hItem, 0, GUI_RED);
+                    ctrl_all_btn(pMsg->hWin, 0);
+                    WM_EnableWindow(hItem);
+                    msg.stop = 0;
+                    test_func = 1;
+                }
                 msg.msg = EXPER_MSG_BLOCK_START;
-                msg.stop = 0;
                 exper_msg_set(&msg);
                 break;
             default:
@@ -415,20 +425,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_START_NO3:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
-                BUTTON_SetText(hItem, "Í£Ö¹¼ì²â");
-                BUTTON_SetTextColor(hItem, 0, GUI_RED);
-                ctrl_all_btn(pMsg->hWin, 0);
-                WM_EnableWindow(hItem);
-                GRAPH_DATA_XY_Clear(pdataGRP);
+                beep_work(100, 0);
+                /* cancel */
+                if (diag_info_creat(test_func))
+                    break;
 
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
-                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
-                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);    
-                
+                if (test_func) {
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+                    BUTTON_SetText(hItem, "AgNO3¼ì²â");
+                    BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    ctrl_all_btn(pMsg->hWin, 1);
+                    msg.stop = 1;
+                    test_func = 0;
+                } else {
+                    GRAPH_DATA_XY_Clear(pdataGRP);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+                    BUTTON_SetText(hItem, "Í£Ö¹ÊµÑé");
+                    BUTTON_SetTextColor(hItem, 0, GUI_RED);
+                    ctrl_all_btn(pMsg->hWin, 0);
+                    WM_EnableWindow(hItem);
+                    msg.stop = 0;
+                    test_func = 1;
+                }
                 msg.msg = EXPER_MSG_AGNO3_START;
-                msg.stop = 0;
                 exper_msg_set(&msg);
                 break;
             default:
@@ -438,20 +457,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_START_TEST:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                GRAPH_DATA_XY_Clear(pdataGRP);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
-                BUTTON_SetText(hItem, "Í£Ö¹¼ì²â");
-                BUTTON_SetTextColor(hItem, 0, GUI_RED);
-                ctrl_all_btn(pMsg->hWin, 0);
-                WM_EnableWindow(hItem);
+                beep_work(100, 0);
+                /* cancel */
+                if (diag_info_creat(test_func))
+                    break;
 
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
-                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
-                BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
-
+                if (test_func) {
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+                    BUTTON_SetText(hItem, "ÂÈÀë×Ó¼ì²â");
+                    BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    ctrl_all_btn(pMsg->hWin, 1);
+                    msg.stop = 1;
+                    test_func = 0;
+                } else {
+                    GRAPH_DATA_XY_Clear(pdataGRP);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+                    BUTTON_SetText(hItem, "Í£Ö¹ÊµÑé");
+                    BUTTON_SetTextColor(hItem, 0, GUI_RED);
+                    ctrl_all_btn(pMsg->hWin, 0);
+                    WM_EnableWindow(hItem);
+                    msg.stop = 0;
+                    test_func = 1;
+                }
                 msg.msg = EXPER_MSG_CL_START;
-                msg.stop = 0;
                 exper_msg_set(&msg);
                 break;
             default:
@@ -464,14 +492,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         stat = (struct exper_stat *)pMsg->Data.p;
         switch (stat->stat) {
             case EXPER_STAT_ERR_MOTOR:
+                beep_warning();
                 diag_err_creat();
-
                 break;
             case EXPER_STAT_UPDATE_PROGRESS:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-                if (stat->oil_stock < 20)
+                if (stat->oil_stock < 10)
                     PROGBAR_SetBarColor(hItem, 0, GUI_RED);
-                else if (stat->oil_stock < 60)
+                else if (stat->oil_stock < 40)
                     PROGBAR_SetBarColor(hItem, 0, GUI_YELLOW);
                 else
                     PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);

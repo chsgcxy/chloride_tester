@@ -357,7 +357,7 @@ void touch_update(void)
 	 * if not, gui event may exec twice.
 	 * this taste bad, but it work
 	 */
-	vTaskDelay(100);
+	vTaskDelay(150);
 }
 
 int touch_init(void)

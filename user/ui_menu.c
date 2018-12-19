@@ -24,7 +24,7 @@
 #include "DIALOG.h"
 #include "stdio.h"
 #include "main.h"
-
+#include "beep.h"
 /*********************************************************************
 *
 *       Defines
@@ -146,6 +146,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 printf("run block test\r\n");
+                beep_work(100, 0);
                 g_ui_msg.msg = MSG_LOAD_UI_BLOCKTEST;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -157,6 +158,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 printf("run data\r\n");
+                beep_work(100, 0);
                 g_ui_msg.msg = MSG_LOAD_UI_DATA;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -168,6 +170,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 printf("run setting\r\n");
+                beep_work(100, 0);
                 g_ui_msg.msg = MSG_LOAD_UI_SETTING;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;

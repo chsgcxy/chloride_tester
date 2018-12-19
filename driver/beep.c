@@ -19,10 +19,10 @@ void beep_finished(void)
     
 void beep_warning(void)
 {
-	beep_work(500, 50);
-	beep_work(500, 50);
-	beep_work(500, 50);
-	beep_work(500, 0);
+	beep_work(100, 50);
+	beep_work(100, 50);
+	beep_work(100, 50);
+	beep_work(100, 0);
 }
 
 int beep_init(void)
