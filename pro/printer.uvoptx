@@ -205,7 +205,7 @@
 
   <Group>
     <GroupName>user</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -308,19 +308,6 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\user\ui_test.c</PathWithFileName>
-      <FilenameWithoutPath>ui_test.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
-      <FileNumber>9</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\user\ui_data.c</PathWithFileName>
       <FilenameWithoutPath>ui_data.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -328,7 +315,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>10</FileNumber>
+      <FileNumber>9</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -341,7 +328,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>11</FileNumber>
+      <FileNumber>10</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -354,7 +341,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>12</FileNumber>
+      <FileNumber>11</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -367,7 +354,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>13</FileNumber>
+      <FileNumber>12</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -380,7 +367,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>14</FileNumber>
+      <FileNumber>13</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -393,7 +380,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>15</FileNumber>
+      <FileNumber>14</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -404,11 +391,24 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>15</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\user\ui_diag_res.c</PathWithFileName>
+      <FilenameWithoutPath>ui_diag_res.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
   </Group>
 
   <Group>
     <GroupName>core</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -801,7 +801,7 @@
 
   <Group>
     <GroupName>emwin</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1278,7 +1278,7 @@
 
   <Group>
     <GroupName>driver</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

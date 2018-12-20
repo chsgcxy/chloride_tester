@@ -462,12 +462,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 *       CreateFramewin
 */
-WM_HWIN ui_setting_creat(void)
+int ui_setting_creat(void)
 {
-    WM_HWIN hWin;
-
-    hWin = GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    return hWin;
+    return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 
 // USER START (Optionally insert additional public code)

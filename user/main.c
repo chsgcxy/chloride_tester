@@ -31,12 +31,12 @@ struct ui_msg g_ui_msg;
 static struct tprinter g_printer;
 static TaskHandle_t handle_touch, handle_gui;
 
-extern WM_HWIN main_menu_creat(void);
-extern WM_HWIN ui_blocktest_creat(void);
-extern WM_HWIN ui_setting_creat(void);
-extern WM_HWIN ui_test_creat(void);
-extern WM_HWIN ui_data_creat(void);
-extern WM_HWIN data_detail_creat(void);
+extern int main_menu_creat(void);
+extern int ui_blocktest_creat(void);
+extern int ui_setting_creat(void);
+extern int ui_test_creat(void);
+extern int ui_data_creat(void);
+extern int data_detail_creat(void);
 
 static void task_touch(void *args)
 {

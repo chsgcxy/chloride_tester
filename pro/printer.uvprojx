@@ -444,11 +444,6 @@
               <FilePath>..\user\ui_setting.c</FilePath>
             </File>
             <File>
-              <FileName>ui_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\ui_test.c</FilePath>
-            </File>
-            <File>
               <FileName>ui_data.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\ui_data.c</FilePath>
@@ -482,6 +477,11 @@
               <FileName>ui_diag_info.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\ui_diag_info.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_diag_res.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_diag_res.c</FilePath>
             </File>
           </Files>
         </Group>

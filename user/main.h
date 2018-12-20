@@ -16,4 +16,10 @@ struct ui_msg {
 extern struct ui_msg g_ui_msg;
 
 
+struct ui_exper_res {
+    int func;
+    float agno3_used;
+    float res;
+};
+
 #endif

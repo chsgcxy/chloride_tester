@@ -22,26 +22,29 @@
 // USER END
 
 #include "DIALOG.h"
-#include "stdio.h"
 #include "main.h"
+#include "beep.h"
+#include "string.h"
+#include "experiment.h"
+#include "report.h"
+#include "stdio.h"
 /*********************************************************************
 *
 *       Defines
 *
 **********************************************************************
 */
-#define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)
-#define ID_LISTBOX_0 (GUI_ID_USER + 0x01)
-#define ID_BUTTON_LOOK (GUI_ID_USER + 0x02)
-#define ID_BUTTON_DEL (GUI_ID_USER + 0x03)
-#define ID_BUTTON_EXP (GUI_ID_USER + 0x04)
-#define ID_BUTTON_RETURN (GUI_ID_USER + 0x05)
-#define ID_BUTTON_EXPALL (GUI_ID_USER + 0x06)
-#define ID_PROGBAR_0 (GUI_ID_USER + 0x07)
+#define ID_WINDOW_0 (GUI_ID_USER + 0x00)
+#define ID_TEXT_0 (GUI_ID_USER + 0x01)
+#define ID_TEXT_1 (GUI_ID_USER + 0x03)
+#define ID_TEXT_2 (GUI_ID_USER + 0x04)
+#define ID_TEXT_3 (GUI_ID_USER + 0x05)
+#define ID_TEXT_4 (GUI_ID_USER + 0x06)
+#define ID_BUTTON_0 (GUI_ID_USER + 0x07)
+#define ID_BUTTON_1 (GUI_ID_USER + 0x08)
+#define ID_BUTTON_2 (GUI_ID_USER + 0x09)
 
 // USER START (Optionally insert additional defines)
-extern const GUI_FONT GUI_FontHZ_kaiti_28;
-extern const GUI_FONT GUI_FontHZ_kaiti_20;
 // USER END
 
 /*********************************************************************
@@ -50,7 +53,7 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 *
 **********************************************************************
 */
-
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
 // USER START (Optionally insert additional static data)
 // USER END
 
@@ -59,14 +62,15 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-    {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
-    {LISTBOX_CreateIndirect, "Listbox", ID_LISTBOX_0, 5, 5, 485, 380, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_LOOK, 565, 10, 170, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_DEL, 565, 80, 170, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 565, 150, 170, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 565, 370, 170, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXPALL, 565, 220, 170, 40, 0, 0x0, 0},
-    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 5, 390, 485, 25, 0, 0x0, 0},
+    {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 151, 119, 500, 240, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "实验结果", ID_TEXT_0, 182, 12, 133, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 10, 60, 198, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 230, 60, 152, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_3, 10, 100, 204, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_4, 230, 100, 112, 25, 0, 0x64, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 10, 190, 120, 40, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 187, 190, 120, 40, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_2, 368, 190, 120, 40, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -77,7 +81,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *
 **********************************************************************
 */
-
+static struct ui_exper_res exper_res;
 // USER START (Optionally insert additional static code)
 // USER END
 
@@ -90,6 +94,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
     int NCode;
     int Id;
+    char buf[16];
+    struct report *rep;
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -97,65 +103,120 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     {
     case WM_INIT_DIALOG:
         //
-        // Initialization of 'Framewin'
+        // Initialization of 'Window'
         //
         hItem = pMsg->hWin;
-        FRAMEWIN_SetTitleHeight(hItem, 50);
-        FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        FRAMEWIN_SetTextColor(hItem, GUI_BLUE);
-        FRAMEWIN_SetClientColor(hItem, GUI_GRAY);
-        FRAMEWIN_SetText(hItem, "数据处理");
-        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_kaiti_28);
+        WINDOW_SetBkColor(hItem, GUI_MAKE_COLOR(0x00000000));
         //
-        // Initialization of 'Listbox'
+        // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
-        LISTBOX_SetFont(hItem, GUI_FONT_32_ASCII);
-        LISTBOX_AddString(hItem, "data_000_20180910_1231");
-        LISTBOX_AddString(hItem, "data_001_20180910_1232");
-        LISTBOX_AddString(hItem, "data_002_20180910_1233");
-        LISTBOX_AddString(hItem, "data_003_20180911_0918");
-        LISTBOX_AddString(hItem, "data_004_20181011_0920");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+        //
+        // Initialization of 'Text'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
+        TEXT_SetText(hItem, "AgNO3用量");
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+        //
+        // Initialization of 'Text'
+        //
+        sprintf(buf, "%.2fmL", exper_res.agno3_used);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
+        TEXT_SetFont(hItem, GUI_FONT_24_1);
+        TEXT_SetText(hItem, buf);
+        TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+        //
+        // Initialization of 'Text'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_3);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+        TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+        switch (exper_res.func) {
+        case EXPER_STAT_AGNO3_FINISHED:
+            TEXT_SetText(hItem, "AgNO3浓度");
+            break;
+        case EXPER_STAT_BLOCK_FINISHED:
+            WM_HideWindow(hItem);
+            break;
+        case EXPER_STAT_CL_FINISHED:
+            TEXT_SetText(hItem, "水泥氯离子质量分数");
+            break;
+        default:
+            break;
+        }
+        //
+        // Initialization of 'Text'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_4);
+        TEXT_SetFont(hItem, GUI_FONT_24_1);
+        TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+        switch (exper_res.func) {
+        case EXPER_STAT_AGNO3_FINISHED:
+            sprintf(buf, "%.3fmol/L", exper_res.res);
+            TEXT_SetText(hItem, buf);
+            break;
+        case EXPER_STAT_BLOCK_FINISHED:
+            WM_HideWindow(hItem);
+            break;
+        case EXPER_STAT_CL_FINISHED:
+            sprintf(buf, "%.3f%%", exper_res.res);
+            TEXT_SetText(hItem, buf);
+            break;
+        default:
+            break;
+        }
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_LOOK);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "查看");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+        switch (exper_res.func) {
+        case EXPER_STAT_AGNO3_FINISHED:
+        case EXPER_STAT_BLOCK_FINISHED:
+            WM_HideWindow(hItem);
+            break;
+        case EXPER_STAT_CL_FINISHED:
+            BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+            BUTTON_SetText(hItem, "打印");
+            break;
+        default:
+            break;
+        }
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DEL);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetText(hItem, "删除");
+        switch (exper_res.func) {
+        case EXPER_STAT_AGNO3_FINISHED:
+        case EXPER_STAT_BLOCK_FINISHED:
+            BUTTON_SetText(hItem, "确定");
+            break;
+        case EXPER_STAT_CL_FINISHED:
+            BUTTON_SetText(hItem, "U盘导出");
+            break;
+        default:
+            break;
+        }
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetText(hItem, "导出");
-        //
-        // Initialization of 'Button'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "返回");
-        //
-        // Initialization of 'Button'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXPALL);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "全部导出");
-
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-        PROGBAR_SetFont(hItem, GUI_FONT_20B_ASCII);
-        PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
-        PROGBAR_SetMinMax(hItem, 0, 100);
+        switch (exper_res.func) {
+        case EXPER_STAT_AGNO3_FINISHED:
+        case EXPER_STAT_BLOCK_FINISHED:
+            WM_HideWindow(hItem);
+            break;
+        case EXPER_STAT_CL_FINISHED:
+            BUTTON_SetText(hItem, "保存返回");
+            break;
+        default:
+            break;
+        }
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
@@ -164,32 +225,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         NCode = pMsg->Data.v;
         switch (Id)
         {
-        case ID_LISTBOX_0: // Notifications sent by 'Listbox'
+        case ID_BUTTON_0: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-            case WM_NOTIFICATION_SEL_CHANGED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
-        case ID_BUTTON_LOOK: // Notifications sent by 'Button'
-            switch (NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                printf("run data detail\r\n");
-                g_ui_msg.msg = MSG_LOAD_UI_DETAIL;
+                beep_work(100, 0);
+                rep = exper_get_report();
+                report_show(rep);
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;
@@ -201,11 +244,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_DEL: // Notifications sent by 'Button'
+        case ID_BUTTON_1: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
+                beep_work(100, 0);
                 // USER START (Optionally insert code for reacting on notification message)
+                switch (exper_res.func) {
+                case EXPER_STAT_AGNO3_FINISHED:
+                case EXPER_STAT_BLOCK_FINISHED:
+                    GUI_EndDialog(pMsg->hWin, 0);
+                    break;
+                case EXPER_STAT_CL_FINISHED:
+                    // to be continued, save to usb
+                    break;
+                default:
+                    break;
+                }
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -216,43 +271,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_EXP: // Notifications sent by 'Button'
+        case ID_BUTTON_2: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
-        case ID_BUTTON_RETURN: // Notifications sent by 'Button'
-            switch (NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                printf("run main menu\r\n");
-                g_ui_msg.msg = MSG_LOAD_UI_MENU;
+                beep_work(100, 0);
                 GUI_EndDialog(pMsg->hWin, 0);
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
-        case ID_BUTTON_EXPALL: // Notifications sent by 'Button'
-            switch (NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 // USER END
                 break;
@@ -284,11 +308,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 */
 /*********************************************************************
 *
-*       CreateFramewin
+*       CreateWindow
 */
-
-int ui_data_creat(void)
+int diag_res_creat(struct ui_exper_res *res)
 {
+    memcpy(&exper_res, res, sizeof(struct ui_exper_res));
     return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

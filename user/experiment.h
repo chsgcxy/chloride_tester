@@ -39,5 +39,6 @@ struct exper_stat {
 
 extern void exper_msg_set(struct exper_msg *msg);
 extern void exper_task(void *args);
+extern struct report *exper_get_report(void);
 
 #endif

@@ -499,13 +499,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 *       CreateWindow
 */
-WM_HWIN CreateWindow(void);
-WM_HWIN CreateWindow(void)
+int numpad_creat(void)
 {
-    WM_HWIN hWin;
-
-    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    return hWin;
+    return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 
 // USER START (Optionally insert additional public code)

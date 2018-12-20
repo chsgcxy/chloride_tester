@@ -45,6 +45,10 @@ static float volt_buff[20];
 static struct exper g_exper;
 static struct report report_test;
 
+struct report *exper_get_report(void)
+{
+    return &report_test;
+}
 
 static void _exper_oil_get(void)
 {
@@ -371,7 +375,6 @@ static void do_test(int mode)
                 report_test.day = 8;
                 report_test.hour = 16;
                 report_test.minute = 0;
-                report_show(&report_test);
                 return;
             default:
                 return;
