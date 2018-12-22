@@ -211,17 +211,28 @@ static void lcd_fsmc_init(void)
     RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
-    p.FSMC_AddressSetupTime = 1;
+#if 0
+    p.FSMC_AddressSetupTime = 2;
     p.FSMC_AddressHoldTime = 0;
     p.FSMC_DataSetupTime = 9;
     p.FSMC_BusTurnAroundDuration = 0;
     p.FSMC_CLKDivision = 0;
     p.FSMC_DataLatency = 0;
     p.FSMC_AccessMode = FSMC_AccessMode_A;
-
+    FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;
+#else
+    p.FSMC_AddressSetupTime = 0x02;
+    p.FSMC_AddressHoldTime = 0x00;
+    p.FSMC_DataSetupTime = 0x05;
+    p.FSMC_BusTurnAroundDuration = 0x00;
+    p.FSMC_CLKDivision = 0x01;
+    p.FSMC_DataLatency = 0x00;
+    p.FSMC_AccessMode = FSMC_AccessMode_B;
+    FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_NOR;
+#endif
+    
     FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;
     FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
-    FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;
     FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
     FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
     FSMC_NORSRAMInitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
@@ -256,7 +267,7 @@ void lcd_draw_point(int x, int y, int color)
     LCD_WRITE_RAM(color); 
 }  
  
-#if 0
+#if 1
 static void lcd_clear(unsigned short Color)
 {
     unsigned int count;
@@ -280,6 +291,7 @@ static void lcd_clear(unsigned short Color)
 
 static void lcd_ssd1963_config(void)
 {  
+#if 0
   	LCD_WRITE_REG(0x002b);	
 	LCD_WRITE_RAM(0);
 	lcd_delay(50);
@@ -361,6 +373,87 @@ static void lcd_ssd1963_config(void)
 	LCD_WRITE_RAM(0x0003); //03:16?   02:24?
 
 	LCD_WRITE_REG(0x0029); //display on
+#else
+    LCD_WRITE_REG(0x00E2);	
+    LCD_WRITE_RAM(0x0023);	   
+    LCD_WRITE_RAM(0x0002);
+    LCD_WRITE_RAM(0x0004);
+    LCD_WRITE_REG(0x00E0);
+    LCD_WRITE_RAM(0x0001);
+    lcd_delay(1);
+    LCD_WRITE_REG(0x00E0);
+    LCD_WRITE_RAM(0x0003);
+    lcd_delay(5);
+    LCD_WRITE_REG(0x0001);  // software reset
+    lcd_delay(5);
+    LCD_WRITE_REG(0x00E6);	//PLL setting for PCLK, depends on resolution
+
+    LCD_WRITE_RAM(0x0004);
+    LCD_WRITE_RAM(0x0093);
+    LCD_WRITE_RAM(0x00e0);
+
+    LCD_WRITE_REG(0x00B0);	//LCD SPECIFICATION
+    LCD_WRITE_RAM(0x0000);
+    LCD_WRITE_RAM(0x0000);
+    LCD_WRITE_RAM((HDP>>8)&0X00FF);  //Set HDP
+    LCD_WRITE_RAM(HDP&0X00FF);
+    LCD_WRITE_RAM((VDP>>8)&0X00FF);  //Set VDP
+    LCD_WRITE_RAM(VDP&0X00FF);
+    LCD_WRITE_RAM(0x0000);
+
+    LCD_WRITE_REG(0x00B4);	//HSYNC
+    LCD_WRITE_RAM((HT>>8)&0X00FF);  //Set HT
+    LCD_WRITE_RAM(HT&0X00FF);
+    LCD_WRITE_RAM((HPS>>8)&0X00FF);  //Set HPS
+    LCD_WRITE_RAM(HPS&0X00FF);
+    LCD_WRITE_RAM(HPW);			   //Set HPW
+    LCD_WRITE_RAM((LPS>>8)&0X00FF);  //Set HPS
+    LCD_WRITE_RAM(LPS&0X00FF);
+    LCD_WRITE_RAM(0x0000);
+
+    LCD_WRITE_REG(0x00B6);	//VSYNC
+    LCD_WRITE_RAM((VT>>8)&0X00FF);   //Set VT
+    LCD_WRITE_RAM(VT&0X00FF);
+    LCD_WRITE_RAM((VPS>>8)&0X00FF);  //Set VPS
+    LCD_WRITE_RAM(VPS&0X00FF);
+    LCD_WRITE_RAM(VPW);			   //Set VPW
+    LCD_WRITE_RAM((FPS>>8)&0X00FF);  //Set FPS
+    LCD_WRITE_RAM(FPS&0X00FF);
+
+    LCD_WRITE_REG(0x00BA);
+    LCD_WRITE_RAM(0x000F);    //GPIO[3:0] out 1
+
+    LCD_WRITE_REG(0x00B8);
+    LCD_WRITE_RAM(0x0007);    //GPIO3=input, GPIO[2:0]=output
+    LCD_WRITE_RAM(0x0001);    //GPIO0 normal
+
+    LCD_WRITE_REG(0x0036); //rotation
+    LCD_WRITE_RAM(0x0000);
+
+    LCD_WRITE_REG(0x00F0); //pixel data interface
+    LCD_WRITE_RAM(0x0003);
+
+    lcd_delay(5);
+    lcd_clear(0xffff);
+
+    LCD_WRITE_REG(0x0026); //display on
+    LCD_WRITE_RAM(0x0001);
+
+    LCD_WRITE_REG(0x0029); //display on
+
+    LCD_WRITE_REG(0x00BE); //set PWM for B/L
+    LCD_WRITE_RAM(0x0006);
+    LCD_WRITE_RAM(0x0080);
+
+    LCD_WRITE_RAM(0x0001);
+    LCD_WRITE_RAM(0x00f0);
+    LCD_WRITE_RAM(0x0000);
+    LCD_WRITE_RAM(0x0000);
+
+    LCD_WRITE_REG(0x00d0);//设置动态背光控制配置 
+    LCD_WRITE_RAM(0x000d);
+
+#endif
 }
 	
 
@@ -496,7 +589,7 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData) {
         //
         // ...
         //printf("gui init................\r\n");
-        lcd_io_init();
+        //lcd_io_init();
         lcd_fsmc_init();
         lcd_ssd1963_config();
         return 0;
