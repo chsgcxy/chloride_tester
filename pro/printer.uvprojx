@@ -933,6 +933,11 @@
               <FileType>1</FileType>
               <FilePath>..\picture\warning_32px.c</FilePath>
             </File>
+            <File>
+              <FileName>logo_170px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\logo_170px.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

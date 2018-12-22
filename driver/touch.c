@@ -250,7 +250,6 @@ do_calc:
 	TOUCH_DBG_PRINT("draw point2(%d,%d), waitting for press.\r\n",
 		ptouch->point2.pos.x, ptouch->point2.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
-	delay_ms(1);
 	touch_read_phy();
 	ptouch->point2.phy.x = ptouch->cur_phy.x;
 	ptouch->point2.phy.y = ptouch->cur_phy.y;
@@ -275,7 +274,6 @@ do_calc:
 	TOUCH_DBG_PRINT("draw point_centre(%d,%d), waitting for press.\r\n",
 		ptouch->point_centre.pos.x, ptouch->point_centre.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
-	delay_ms(1);
 	touch_read_phy();
 	ptouch->point_centre.phy.x = ptouch->cur_phy.x;
 	ptouch->point_centre.phy.y = ptouch->cur_phy.y;
@@ -300,17 +298,15 @@ do_calc:
 	TOUCH_DBG_PRINT("draw point_adjust(%d,%d), waitting for press.\r\n",
 		ptouch->point_adjust.pos.x, ptouch->point_adjust.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
-	delay_ms(1);
 	touch_read_phy();
 	TOUCH_DBG_PRINT("get point_adjust adc value (%d,%d).\r\n",
 		 ptouch->point_adjust.phy.x, ptouch->point_adjust.phy.y);
 	touch_trans(&state, ptouch);
-	
 	delay_ms(500); // for Visual effects
+
 	GUI_SetColor(GUI_DARKGRAY);
 	GUI_FillCircle(ptouch->point_adjust.pos.x, ptouch->point_adjust.pos.y, 4);
 	GUI_SetColor(GUI_RED);
-
 	_precision = abs(state.x - ptouch->point_adjust.pos.x);
 	if (ptouch->precision < _precision) {
 		_disp_calibrate_fail();
@@ -323,18 +319,18 @@ do_calc:
 		goto do_calc;
 	}
 
-	GUI_DispStringHCenterAt("校准成功", 400, 240);
-	//GUI_Clear();
-	TOUCH_DBG_PRINT("calibrate succeed, correct=(%d,%d)\r\n",
-		ptouch->correct.x, ptouch->correct.y);
-
 	conf->x_coe = ptouch->x_coe;
 	conf->y_coe = ptouch->y_coe;
 	conf->x_correct = ptouch->correct.x;
 	conf->y_correct = ptouch->correct.y;
+
+	TOUCH_DBG_PRINT("calibrate succeed, correct=(%d,%d)\r\n",
+		ptouch->correct.x, ptouch->correct.y);
+
 	printf("touch calc x_coe=%lf, y_coe=%lf, x_cor=%d, y_cor=%d\r\n",
 		conf->x_coe, conf->y_coe, conf->x_correct, conf->y_correct);
 	sysconf_save();
+	GUI_DispStringHCenterAt("校准成功", 400, 240);
 }
 
 void touch_update(void)

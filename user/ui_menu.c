@@ -65,10 +65,10 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { IMAGE_CreateIndirect, "data", ID_IMAGE_DATA, 446, 140, 72, 72, 0, 0, 0 },
     { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 620, 140, 72, 72, 0, 0, 0 },
     
-    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 82, 225, 120, 32, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "stand", ID_TEXT_STAND, 254, 225, 120, 32, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 426, 225, 120, 32, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 600, 225, 120, 32, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 82, 212, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "stand", ID_TEXT_STAND, 254, 212, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 426, 212, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 600, 212, 120, 45, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -143,6 +143,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         NCode = pMsg->Data.v;
         switch(Id) {
         case ID_IMAGE_BLOCKTEST:
+        case ID_TEXT_BLOCKTEST:
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
@@ -154,6 +155,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             }
             break;
         case ID_IMAGE_DATA:
+        case ID_TEXT_DATA:
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
@@ -165,6 +167,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             }
             break;
         case ID_IMAGE_SETTING:
+        case ID_TEXT_SETTING:
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();

@@ -56,6 +56,7 @@ Purpose     : Display controller configuration (single layer)
 #include "stm32f2xx_gpio.h"
 #include "stm32f2xx_fsmc.h"
 #include "stdio.h"
+#include "delay.h"
 /*********************************************************************
 *
 *       Layer configuration (to be modified)
@@ -146,7 +147,7 @@ static void lcd_delay(int cnt)
 		for (dl = 0; dl < 500; dl++);
 }
 
-static void lcd_io_init(void)
+void lcd_io_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -197,8 +198,6 @@ static void lcd_io_init(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
     GPIO_ResetBits(GPIOB, GPIO_Pin_11);
-    lcd_delay(50000);
-    GPIO_SetBits(GPIOB, GPIO_Pin_11);
 }
 
 static void lcd_fsmc_init(void)
@@ -207,6 +206,8 @@ static void lcd_fsmc_init(void)
     FSMC_NORSRAMTimingInitTypeDef p;
 
     /* Enable FSMC clock */
+    delay_ms(500);
+    GPIO_SetBits(GPIOB, GPIO_Pin_11);
     RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 

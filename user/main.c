@@ -37,6 +37,11 @@ extern int ui_setting_creat(void);
 extern int ui_test_creat(void);
 extern int ui_data_creat(void);
 extern int data_detail_creat(void);
+extern void lcd_io_init(void);
+
+extern const GUI_BITMAP bmlogo;
+extern const GUI_FONT GUI_FontHZ_kaiti_28;
+extern const GUI_FONT GUI_FontHZ_kaiti_20;
 
 static void task_touch(void *args)
 {
@@ -115,6 +120,21 @@ int main(void)
 	uart4_init();
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
+
+	lcd_io_init();
+	GUI_Init();
+
+	/* show logo */
+	GUI_SetBkColor(GUI_WHITE);
+	GUI_Clear();
+	GUI_DrawBitmap(&bmlogo, 315, 150);
+	GUI_SetFont(&GUI_FontHZ_kaiti_20);
+	GUI_SetColor(GUI_BLACK);
+	GUI_DispStringHCenterAt("ZCL-II 氯离子(全自动电位滴定仪)", 400, 60);
+	GUI_SetFont(&GUI_FontHZ_kaiti_28);
+	GUI_DispStringHCenterAt("北京同创中仪科技为您服务", 400, 350);
+	delay_ms(3000);
+	
 	spi1_init();
 	spi2_init();
 	spi3_init();
@@ -124,7 +144,6 @@ int main(void)
 	//w25xxx_erase_chip();
 	stepmotor_init();
 	sysconf_load();
-	GUI_Init();
 	touch_init();
 	touch_calibrate(0);
 
@@ -133,62 +152,6 @@ int main(void)
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;
 	report_init(&g_printer);
-
-#if 0
-	while (1) {
-		status = uart_get_status();
-		switch (status) {
-		case 0x11:
-			printf("run cmd 1: motor up 0.3ml\r\n");
-			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 3);
-			printf("finished\r\n");
-			break;
-		case 0x12:
-			printf("run cmd 2: motor down\r\n");
-			stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML);
-			printf("finished\r\n");
-			break;
-		case 0x01:
-			printf("run cmd 5: motor down fast, change dir to get water\r\n");
-			relay_ctrl(MOTOR_WATER_GET);
-			stepmotor_run(MOTOR_DIR_DOWN, 8000);
-			printf("finished\r\n");
-			break;
-		case 0x02:
-			printf("run cmd 6: motor up fast, change dir to put water\r\n");
-			relay_ctrl(MOTOR_WATER_PUT);
-			stepmotor_run(MOTOR_DIR_UP, 8000);
-			printf("finished\r\n");
-			break;
-		case 7:
-			printf("run cmd 7: motor up 0.1ml\r\n");
-			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML);
-			printf("finished\r\n");
-			break;
-		case 8:
-			printf("run cmd 8: motor up 1ml\r\n");
-			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 10);
-			printf("finished\r\n");
-			break;
-		case 0x03:
-			printf("beep work 100ms\r\n");
-			beep_clicked();
-			printf("finished\r\n");
-			break;
-		case 0x04:
-			printf("ad7705 read\r\n");
-			ad7705_read();
-			printf("finished\r\n");
-			break;
-		case 0x0C:
-			break;
-		case 0x0D:
-			break;
-		default:
-			break;
-		}
-	}
-#endif
 
 	/* creat freertos task */
 	task_init();

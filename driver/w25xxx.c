@@ -141,9 +141,9 @@ void w25xxx_write_sector(uint8_t *buf, u32 sector, int len)
         for (i = 0; i < W25X20_SECTOR_PER_BLOCK; i++, p += W25X20_SECTOR_SIZE) {
             if ((sector_align + i) == sector)
                 memcpy(p, buf, len);
-            w25xxx_read_sector(p, sector_align + i, W25X20_SECTOR_SIZE);
+            else
+                w25xxx_read_sector(p, sector_align + i, W25X20_SECTOR_SIZE);
         }
-            
         w25xxx_erase_block(block_addr);
 
         p = block_buf;
