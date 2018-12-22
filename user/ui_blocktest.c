@@ -69,7 +69,11 @@ extern const GUI_FONT GUI_Fontfont_spec;
 
 
 extern int diag_err_creat(void);
-extern int diag_info_creat(int flag);
+extern int diag_info_creat(struct ui_exper_info *info);
+extern int diag_res_creat(struct ui_exper_res *res);
+
+static struct ui_exper_info ginfo;
+static struct ui_exper_res gres;
 /*********************************************************************
 *
 *       Static data
@@ -307,7 +311,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_GET: // Notifications sent by 'Button'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
                 BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_GREEN);
                 BUTTON_SetText(hItem, "ÎüÒºÖÐ");
@@ -325,7 +329,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_PUT: // Notifications sent by 'Button'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);
                 msg.msg = EXPER_MSG_OIL_PUT;
 
@@ -356,7 +360,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_CLEAR: // Notifications sent by 'Button'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
                 BUTTON_SetText(hItem, "ÇåÏ´ÖÐ");
                 BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_GREEN);
@@ -375,7 +379,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 // USER START (Optionally insert code for reacting on notification message)
                 printf("run main menu\r\n");
                 g_ui_msg.msg = MSG_LOAD_UI_MENU;
@@ -393,9 +397,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_START_BLOCK: // Notifications sent by 'Button'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 /* cancel */
-                if (diag_info_creat(test_func))
+                ginfo.func = EXPER_MSG_BLOCK_START;
+                ginfo.flag = test_func;
+                if (diag_info_creat(&ginfo))
                     break;
 
                 if (test_func) {
@@ -425,9 +431,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_START_NO3:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 /* cancel */
-                if (diag_info_creat(test_func))
+                ginfo.func = EXPER_MSG_AGNO3_START;
+                ginfo.flag = test_func;
+                if (diag_info_creat(&ginfo))
                     break;
 
                 if (test_func) {
@@ -457,9 +465,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_START_TEST:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 /* cancel */
-                if (diag_info_creat(test_func))
+                ginfo.func = EXPER_MSG_CL_START;
+                ginfo.flag = test_func;
+                if (diag_info_creat(&ginfo))
                     break;
 
                 if (test_func) {
@@ -516,13 +526,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 TEXT_SetText(hItem, buf);
                 break;
             case EXPER_STAT_OIL_GET_FINISHED:
-                beep_finished();
+                test_func = 0;
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
                 BUTTON_SetText(hItem, "ÎüÒº");
                 ctrl_all_btn(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_OIL_PUT_FINISHED:
                 beep_finished();
+                test_func = 0;
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);   
                 BUTTON_SetText(hItem, "ÅÅÒº");
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
@@ -537,7 +548,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case EXPER_STAT_AGNO3_FINISHED:
                 beep_finished();
-                
+                test_func = 0;
+                gres.func = EXPER_STAT_AGNO3_FINISHED;
+                gres.agno3_used = stat->agno3_used;
+                gres.res = stat->agno3_consistence;
+                diag_res_creat(&gres);
+
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
                 sprintf(buf, "%.4fmol/L", stat->agno3_consistence);
                 TEXT_SetText(hItem, buf);
@@ -548,10 +564,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
                 BUTTON_SetText(hItem, "AgNO3¼ì²â");
+                BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_btn(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_BLOCK_FINISHED:
                 beep_finished();
+                test_func = 0;
+                gres.func = EXPER_STAT_BLOCK_FINISHED;
+                gres.agno3_used = stat->agno3_used;
+                diag_res_creat(&gres);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
                 sprintf(buf, "%.3fmL", stat->agno3_used);
@@ -559,10 +580,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                 BUTTON_SetText(hItem, "¿Õ°×ÊµÑé");
+                BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_btn(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_CL_FINISHED:
                 beep_finished();
+                test_func = 0;
+                gres.func = EXPER_STAT_CL_FINISHED;
+                gres.agno3_used = stat->agno3_used;
+                gres.res = stat->cl_percentage;
+                diag_res_creat(&gres);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
                 sprintf(buf, "%.3f%%", stat->cl_percentage);
@@ -574,6 +601,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                 BUTTON_SetText(hItem, "ÂÈÀë×Ó¼ì²â");
+                BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_btn(pMsg->hWin, 1);
                 break;
             default:

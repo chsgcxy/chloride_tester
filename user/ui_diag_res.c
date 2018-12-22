@@ -64,10 +64,10 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 151, 119, 500, 240, 0, 0x0, 0},
     {TEXT_CreateIndirect, "实验结果", ID_TEXT_0, 182, 12, 133, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 10, 60, 198, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 230, 60, 152, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_3, 10, 100, 204, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_4, 230, 100, 112, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 10, 60, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 275, 60, 150, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_3, 10, 100, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_4, 275, 100, 150, 25, 0, 0x64, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 10, 190, 120, 40, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 187, 190, 120, 40, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_2, 368, 190, 120, 40, 0, 0x0, 0},
@@ -133,7 +133,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_3);
-        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (exper_res.func) {
         case EXPER_STAT_AGNO3_FINISHED:
@@ -230,7 +230,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                beep_work(100, 0);
+                beep_clicked();
                 rep = exper_get_report();
                 report_show(rep);
                 GUI_EndDialog(pMsg->hWin, 0);
@@ -248,7 +248,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 // USER START (Optionally insert code for reacting on notification message)
                 switch (exper_res.func) {
                 case EXPER_STAT_AGNO3_FINISHED:
@@ -275,7 +275,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                beep_work(100, 0);
+                beep_clicked();
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER START (Optionally insert code for reacting on notification message)
                 // USER END

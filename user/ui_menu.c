@@ -145,8 +145,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_IMAGE_BLOCKTEST:
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
-                printf("run block test\r\n");
-                beep_work(100, 0);
+                beep_clicked();
                 g_ui_msg.msg = MSG_LOAD_UI_BLOCKTEST;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -157,8 +156,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_IMAGE_DATA:
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
-                printf("run data\r\n");
-                beep_work(100, 0);
+                beep_clicked();
                 g_ui_msg.msg = MSG_LOAD_UI_DATA;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -169,8 +167,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_IMAGE_SETTING:
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
-                printf("run setting\r\n");
-                beep_work(100, 0);
+                beep_clicked();
                 g_ui_msg.msg = MSG_LOAD_UI_SETTING;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;

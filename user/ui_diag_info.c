@@ -23,6 +23,10 @@
 
 #include "DIALOG.h"
 #include "beep.h"
+#include "main.h"
+#include "string.h"
+#include "stdio.h"
+#include "experiment.h"
 /*********************************************************************
 *
 *       Defines
@@ -41,7 +45,7 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 extern const GUI_BITMAP bminfor_32px;
 extern const GUI_BITMAP bmwarning_32px;
 
-static int mode_flag;
+static struct ui_exper_info ginfo;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 150, 120, 500, 240, 0, 0x0, 0},
@@ -71,7 +75,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        if (mode_flag)
+        if (ginfo.flag)
             BUTTON_SetText(hItem, "停止实验");
         else
             BUTTON_SetText(hItem, "开始实验");
@@ -79,7 +83,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
-        if (mode_flag)
+        if (ginfo.flag)
             TEXT_SetText(hItem, "警告");
         else
             TEXT_SetText(hItem, "信息");
@@ -88,7 +92,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        if (mode_flag)
+        if (ginfo.flag)
             IMAGE_SetBitmap(hItem, &bmwarning_32px);
         else
             IMAGE_SetBitmap(hItem, &bminfor_32px);
@@ -96,18 +100,31 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
-        if (mode_flag)
+        if (ginfo.flag)
             TEXT_SetText(hItem, "实验正在进行中");
-        else
-            TEXT_SetText(hItem, "即将进行AgNO3检测实验");
+        else {
+            switch (ginfo.func) {
+            case EXPER_MSG_AGNO3_START:
+                TEXT_SetText(hItem, "即将进行AgNO3浓度检测");
+                break;
+            case EXPER_MSG_BLOCK_START:
+                TEXT_SetText(hItem, "即将进行空白实验");
+                break;
+            case EXPER_MSG_CL_START:
+                TEXT_SetText(hItem, "即将进行水泥氯离子含量检测");
+                break;
+            default:
+                break;
+            }
+        }
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
-        if (mode_flag)
-            TEXT_SetText(hItem, "确定停止实验吗？");
+        if (ginfo.flag)
+            TEXT_SetText(hItem, "确定停止实验吗?");
         else
-            TEXT_SetText(hItem, "准备好了吗？");
+            TEXT_SetText(hItem, "准备好了吗?");
         break;
     case WM_NOTIFY_PARENT:
         Id = WM_GetId(pMsg->hWinSrc);
@@ -119,7 +136,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                beep_work(100, 0);
+                beep_clicked();
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;
@@ -136,7 +153,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                beep_work(100, 0);
+                beep_clicked();
                 GUI_EndDialog(pMsg->hWin, 1);
                 // USER END
                 break;
@@ -171,9 +188,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *       CreateWindow
 */
 
-int diag_info_creat(int flag)
+int diag_info_creat(struct ui_exper_info *info)
 {
-    mode_flag = flag;
+    memcpy(&ginfo, info, sizeof(struct ui_exper_info));
     return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

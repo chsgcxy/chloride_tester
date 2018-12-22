@@ -24,6 +24,7 @@
 #include "DIALOG.h"
 #include "stdio.h"
 #include "main.h"
+#include "beep.h"
 /*********************************************************************
 *
 *       Defines
@@ -188,7 +189,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                printf("run data detail\r\n");
+                beep_clicked();
                 g_ui_msg.msg = MSG_LOAD_UI_DETAIL;
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
@@ -206,6 +207,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -221,6 +223,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -236,7 +239,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                printf("run main menu\r\n");
+                beep_clicked();
                 g_ui_msg.msg = MSG_LOAD_UI_MENU;
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
@@ -254,6 +257,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:

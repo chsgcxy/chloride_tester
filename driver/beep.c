@@ -16,13 +16,19 @@ void beep_finished(void)
 {
 	beep_work(500, 0);
 }
+
+void beep_clicked(void)
+{
+	beep_work(30, 0);
+}
     
 void beep_warning(void)
 {
-	beep_work(100, 50);
-	beep_work(100, 50);
-	beep_work(100, 50);
-	beep_work(100, 0);
+	beep_work(30, 100);
+	beep_work(30, 100);
+	beep_work(30, 100);
+	beep_work(30, 100);
+	beep_work(30, 0);
 }
 
 int beep_init(void)

@@ -172,7 +172,7 @@ int main(void)
 			break;
 		case 0x03:
 			printf("beep work 100ms\r\n");
-			beep_work(100);
+			beep_clicked();
 			printf("finished\r\n");
 			break;
 		case 0x04:

@@ -109,7 +109,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                beep_work(100, 0);
+                beep_clicked();
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;

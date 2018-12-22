@@ -71,8 +71,10 @@ static void _exper_oil_get(void)
         }
 
         if (correct > 20) {
-            g_exper_stat.stat = EXPER_STAT_ERR_MOTOR;
             g_exper_stat.oil_stock = 0;
+            g_oil_stock = 0;
+            WM_BroadcastMessage(&msg);
+            g_exper_stat.stat = EXPER_STAT_ERR_MOTOR;
             WM_BroadcastMessage(&msg);
             return;
         } else {
@@ -121,8 +123,11 @@ static void _exper_oil_put(void)
         }
         
         if (correct > 20) {
-             g_exper_stat.stat = EXPER_STAT_ERR_MOTOR;
-             WM_BroadcastMessage(&msg);
+            g_exper_stat.oil_stock = 0;
+            g_oil_stock = 0;
+            WM_BroadcastMessage(&msg);
+            g_exper_stat.stat = EXPER_STAT_ERR_MOTOR;
+            WM_BroadcastMessage(&msg);
         } else {
             g_exper_stat.oil_stock = g_oil_stock * 100 / EXPER_TOTAL_ML;
             WM_BroadcastMessage(&msg);
@@ -385,23 +390,33 @@ static void do_test(int mode)
 
 void exper_task(void *args)
 {
+    msg.MsgId = WM_USER;
+    msg.hWinSrc = 0;
+    msg.Data.p = &g_exper_stat;
+    
     while (1) {
         switch (g_exper_msg.msg) {
         case EXPER_MSG_NONE:
             break;
         case EXPER_MSG_AGNO3_START:
             EXPER_DBG_PRINT("EXPER_MSG_AGNO3_START\r\n");
-            do_test(EXPER_MSG_AGNO3_START);
+            //do_test(EXPER_MSG_AGNO3_START);
+            g_exper_stat.stat = EXPER_STAT_AGNO3_FINISHED;
+            WM_BroadcastMessage(&msg);
             g_exper_msg.msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_BLOCK_START:
             EXPER_DBG_PRINT("EXPER_MSG_BLOCK_START\r\n");
-            do_test(EXPER_MSG_BLOCK_START);
+            //do_test(EXPER_MSG_BLOCK_START);
+            g_exper_stat.stat = EXPER_STAT_BLOCK_FINISHED;
+            WM_BroadcastMessage(&msg);
             g_exper_msg.msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_CL_START:
             EXPER_DBG_PRINT("EXPER_MSG_CL_START\r\n");
-            do_test(EXPER_MSG_CL_START);
+            //do_test(EXPER_MSG_CL_START);
+            g_exper_stat.stat = EXPER_STAT_CL_FINISHED;
+            WM_BroadcastMessage(&msg);
             g_exper_msg.msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_OIL_GET:
