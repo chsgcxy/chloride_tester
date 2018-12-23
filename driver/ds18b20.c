@@ -1,22 +1,21 @@
 #include "ds18b20.h"
 
-/* 相关引脚定义,方便以后移植 */  
 #define DQ         S3C2410_GPF(3)   
 #define CFG_IN     S3C2410_GPIO_INPUT   
 #define CFG_OUT    S3C2410_GPIO_OUTPUT   
   
-// ds18b20主次设备号（动态分配）   
+// ds18b20主�?��?��?�号（动态分配）   
 static int ds18b20_major = 0;  
 static int ds18b20_minor = 0;  
 static int ds18b20_nr_devs = 1;  
   
-// 定义设备类型   
+// 定义设�?�类�?   
 static struct ds18b20_device  
 {  
     struct cdev cdev;  
 };  
   
-struct ds18b20_device *ds18b20_devp;    /*设备结构体指针 */  
+struct ds18b20_device *ds18b20_devp;    /*设�?�结构体指针 */  
   
 static struct class *ds18b20_class;  
 static struct class_device *ds18b20_class_dev;  
@@ -52,13 +51,13 @@ static int ds18b20_init(void)
   
     s3c2410_gpio_setpin(DQ, 1);  
     udelay(2);  
-    s3c2410_gpio_setpin(DQ, 0); // 拉低ds18b20总线，复位ds18b20   
+    s3c2410_gpio_setpin(DQ, 0); // 拉低ds18b20总线，�?�位ds18b20   
     udelay(500);                // 保持复位电平500us   
   
     s3c2410_gpio_setpin(DQ, 1); // 释放ds18b20总线   
     udelay(60);  
   
-    // 若复位成功，ds18b20发出存在脉冲（低电平，持续60~240us）   
+    // 若�?�位成功，ds18b20发出存在脉冲（低电平，持�?60~240us�?   
     s3c2410_gpio_cfgpin(DQ, CFG_IN);  
     retval = s3c2410_gpio_getpin(DQ);  
   
@@ -79,7 +78,7 @@ static void write_byte(unsigned char data)
   
     for (i = 0; i < 8; i++)  
     {  
-        // 总线从高拉至低电平时，就产生写时隙   
+        // 总线从高拉至低电平时，就产生写时�?   
         s3c2410_gpio_setpin(DQ, 1);  
         udelay(2);  
         s3c2410_gpio_setpin(DQ, 0);  
@@ -97,7 +96,7 @@ static unsigned char read_byte(void)
   
     for (i = 0; i < 8; i++)  
     {  
-        // 总线从高拉至低，只需维持低电平17ts，再把总线拉高，就产生读时隙   
+        // 总线从高拉至低，�?需维持低电�?17ts，再把总线拉高，就产生读时�?   
         s3c2410_gpio_cfgpin(DQ, CFG_OUT);  
         s3c2410_gpio_pullup(DQ, 0);  
         s3c2410_gpio_setpin(DQ, 1);  
@@ -142,8 +141,8 @@ static ssize_t ds18b20_read(struct file *filp, char __user * buf, size_t count, 
     write_byte(0xcc);  
     write_byte(0xbe);  
   
-    result[0] = read_byte();    // 温度低八位   
-    result[1] = read_byte();    // 温度高八位   
+    result[0] = read_byte();    // 温度低八�?   
+    result[1] = read_byte();    // 温度高八�?   
   
     err = copy_to_user(buf, &result, sizeof(result));  
     return err ? -EFAULT : min(sizeof(result), count);  
@@ -190,10 +189,10 @@ static int __init ds18b20_dev_init(void)
         return result;  
     }  
   
-    /* 为新设备分配内存和初始化 */  
+    /* 为新设�?�分配内存和初�?�化 */  
     ds18b20_devp = kmalloc(sizeof(struct ds18b20_device), GFP_KERNEL);  
     if (!ds18b20_devp)  
-    {                           /*申请失败 */  
+    {                           /*申�?�失�? */  
         result = -ENOMEM;  
         goto fail_malloc;  
     }  
@@ -201,7 +200,7 @@ static int __init ds18b20_dev_init(void)
   
     ds18b20_setup_cdev(ds18b20_devp, 0);  
   
-    /* 自动创建设备节点 */  
+    /* �?动创建�?��?�节�? */  
     ds18b20_class = class_create(THIS_MODULE, "ds18b20_sys_class");  
     if (IS_ERR(ds18b20_class))  
         return PTR_ERR(ds18b20_class);  
@@ -221,8 +220,8 @@ static int __init ds18b20_dev_init(void)
 static void __exit ds18b20_dev_exit(void)  
 {  
     cdev_del(&ds18b20_devp->cdev);  /*注销cdev */  
-    kfree(ds18b20_devp);        /*释放设备结构体内存 */  
-    unregister_chrdev_region(MKDEV(ds18b20_major, 0), ds18b20_nr_devs); /*释放设备号 */  
+    kfree(ds18b20_devp);        /*释放设�?�结构体内存 */  
+    unregister_chrdev_region(MKDEV(ds18b20_major, 0), ds18b20_nr_devs); /*释放设�?�号 */  
     device_unregister(ds18b20_class_dev);  
     class_destroy(ds18b20_class);  
 }  
@@ -236,9 +235,9 @@ void ds18b20_delay(int i);
 int main()  
 {  
     int fd, i;  
-    unsigned char result[2];    // 从ds18b20读出的结果，result[0]存放低八位   
+    unsigned char result[2];    // 从ds18b20读出的结果，result[0]存放低八�?   
     unsigned char integer_value = 0;  
-    float decimal_value = 0;    // 温度数值,decimal_value为小数部分的值   
+    float decimal_value = 0;    // 温度数�?,decimal_value为小数部分的�?   
     float temperature = 0;  
   
     fd = open("/dev/ds18b20", 0);  
@@ -252,7 +251,7 @@ int main()
         i++;  
         read(fd, &result, sizeof(result));  
         integer_value = ((result[0] & 0xf0) >> 4) | ((result[1] & 0x07) << 4);  
-        // 精确到0.25度   
+        // 精确�?0.25�?   
         decimal_value = 0.5 * ((result[0] & 0x0f) >> 3) + 0.25 * ((result[0] & 0x07) >> 2);  
         temperature = (float)integer_value + decimal_value;  
         printf("Current Temperature:%6.2f\n", temperature);  
