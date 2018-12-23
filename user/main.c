@@ -30,9 +30,10 @@ struct ui_msg g_ui_msg;
 
 static struct tprinter g_printer;
 static TaskHandle_t handle_touch, handle_gui;
+static struct ui_exper_test test_func;
 
 extern int main_menu_creat(void);
-extern int ui_blocktest_creat(void);
+extern int ui_blocktest_creat(struct ui_exper_test *test);
 extern int ui_setting_creat(void);
 extern int ui_test_creat(void);
 extern int ui_data_creat(void);
@@ -60,7 +61,12 @@ static void task_ui(void *args)
 			main_menu_creat();
 			break;
 		case MSG_LOAD_UI_BLOCKTEST:
-			ui_blocktest_creat();
+			test_func.func = MSG_LOAD_UI_BLOCKTEST;
+			ui_blocktest_creat(&test_func);
+			break;
+		case MSG_LOAD_UI_STAND:
+			test_func.func = MSG_LOAD_UI_STAND;
+			ui_blocktest_creat(&test_func);
 			break;
 		case MSG_LOAD_UI_SETTING:
 			ui_setting_creat();
@@ -133,7 +139,7 @@ int main(void)
 	GUI_DispStringHCenterAt("ZCL-II 氯离子(全自动电位滴定仪)", 400, 60);
 	GUI_SetFont(&GUI_FontHZ_kaiti_28);
 	GUI_DispStringHCenterAt("北京同创中仪科技为您服务", 400, 350);
-	delay_ms(3000);
+	delay_ms(2000);
 	
 	spi1_init();
 	spi2_init();

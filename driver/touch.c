@@ -6,6 +6,7 @@
 #include "delay.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "beep.h"
 
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
@@ -236,6 +237,8 @@ do_calc:
 		ptouch->point1.pos.x, ptouch->point1.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
 	touch_read_phy();
+	beep_clicked();
+
 	ptouch->point1.phy.x = ptouch->cur_phy.x;
 	ptouch->point1.phy.y = ptouch->cur_phy.y;
 	TOUCH_DBG_PRINT("get point1 adc value (%d,%d).\r\n",
@@ -251,6 +254,7 @@ do_calc:
 		ptouch->point2.pos.x, ptouch->point2.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
 	touch_read_phy();
+	beep_clicked();
 	ptouch->point2.phy.x = ptouch->cur_phy.x;
 	ptouch->point2.phy.y = ptouch->cur_phy.y;
 	TOUCH_DBG_PRINT("get point2 adc value (%d,%d).\r\n",
@@ -275,6 +279,8 @@ do_calc:
 		ptouch->point_centre.pos.x, ptouch->point_centre.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
 	touch_read_phy();
+	beep_clicked();
+
 	ptouch->point_centre.phy.x = ptouch->cur_phy.x;
 	ptouch->point_centre.phy.y = ptouch->cur_phy.y;
 	TOUCH_DBG_PRINT("get point_centre adc value (%d,%d).\r\n",
@@ -299,6 +305,7 @@ do_calc:
 		ptouch->point_adjust.pos.x, ptouch->point_adjust.pos.y);
 	while (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10));
 	touch_read_phy();
+	beep_clicked();
 	TOUCH_DBG_PRINT("get point_adjust adc value (%d,%d).\r\n",
 		 ptouch->point_adjust.phy.x, ptouch->point_adjust.phy.y);
 	touch_trans(&state, ptouch);
@@ -316,6 +323,7 @@ do_calc:
 	_precision = abs(state.y - ptouch->point_adjust.pos.y);
 	if (ptouch->precision < _precision) {
 		_disp_calibrate_fail();
+		beep_warning();
 		goto do_calc;
 	}
 
@@ -331,6 +339,7 @@ do_calc:
 		conf->x_coe, conf->y_coe, conf->x_correct, conf->y_correct);
 	sysconf_save();
 	GUI_DispStringHCenterAt("校准成功", 400, 240);
+	beep_finished();
 }
 
 void touch_update(void)
@@ -386,7 +395,7 @@ int touch_init(void)
 	g_touch.point_centre.pos.y = TOUCH_GET_Y(TOUCH_CENTRE_X);
 	g_touch.point_adjust.pos.x = 650;
 	g_touch.point_adjust.pos.y = 100;
-	g_touch.precision = 12;
+	g_touch.precision = 10;
     return 0;
 }
 

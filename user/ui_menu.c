@@ -154,6 +154,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
             }
             break;
+        case ID_IMAGE_STAND:
+        case ID_TEXT_STAND:
+            switch(NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                beep_clicked();
+                g_ui_msg.msg = MSG_LOAD_UI_STAND;
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
         case ID_IMAGE_DATA:
         case ID_TEXT_DATA:
             switch(NCode) {

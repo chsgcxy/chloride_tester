@@ -193,11 +193,13 @@ void lcd_io_init(void)
     GPIO_PinAFConfig(GPIOE, GPIO_PinSource15 , GPIO_AF_FSMC);
 
     /* force reset */ 
+#if 1  
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
     GPIO_ResetBits(GPIOB, GPIO_Pin_11);
+#endif
 }
 
 static void lcd_fsmc_init(void)
@@ -206,14 +208,16 @@ static void lcd_fsmc_init(void)
     FSMC_NORSRAMTimingInitTypeDef p;
 
     /* Enable FSMC clock */
+#if 1
     delay_ms(500);
     GPIO_SetBits(GPIOB, GPIO_Pin_11);
+#endif    
     RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
-    p.FSMC_AddressSetupTime = 0x4;
-    p.FSMC_AddressHoldTime = 0x4;
-    p.FSMC_DataSetupTime = 0x15;
+    p.FSMC_AddressSetupTime = 0x2;
+    p.FSMC_AddressHoldTime = 0x1;
+    p.FSMC_DataSetupTime = 0x09;
     p.FSMC_BusTurnAroundDuration = 0;
     p.FSMC_CLKDivision = 1;
     p.FSMC_DataLatency = 0;

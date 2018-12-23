@@ -22,7 +22,7 @@
 // USER END
 
 #include "DIALOG.h"
-
+#include "beep.h"
 /*********************************************************************
 *
 *       Defines
@@ -30,21 +30,21 @@
 **********************************************************************
 */
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
-#define ID_BUTTON_0 (GUI_ID_USER + 0x01)
-#define ID_BUTTON_1 (GUI_ID_USER + 0x02)
+#define ID_BUTTON_NUM7 (GUI_ID_USER + 0x01)
+#define ID_BUTTON_NUM8 (GUI_ID_USER + 0x02)
 #define ID_EDIT_0 (GUI_ID_USER + 0x03)
-#define ID_BUTTON_2 (GUI_ID_USER + 0x04)
-#define ID_BUTTON_3 (GUI_ID_USER + 0x05)
-#define ID_BUTTON_4 (GUI_ID_USER + 0x06)
-#define ID_BUTTON_5 (GUI_ID_USER + 0x07)
-#define ID_BUTTON_6 (GUI_ID_USER + 0x08)
-#define ID_BUTTON_7 (GUI_ID_USER + 0x09)
-#define ID_BUTTON_8 (GUI_ID_USER + 0x0A)
-#define ID_BUTTON_9 (GUI_ID_USER + 0x0B)
-#define ID_BUTTON_10 (GUI_ID_USER + 0x0C)
-#define ID_BUTTON_11 (GUI_ID_USER + 0x0D)
-#define ID_BUTTON_12 (GUI_ID_USER + 0x0E)
-#define ID_BUTTON_13 (GUI_ID_USER + 0x0F)
+#define ID_BUTTON_NUM9 (GUI_ID_USER + 0x04)
+#define ID_BUTTON_NUM4 (GUI_ID_USER + 0x05)
+#define ID_BUTTON_NUM5 (GUI_ID_USER + 0x06)
+#define ID_BUTTON_NUM6 (GUI_ID_USER + 0x07)
+#define ID_BUTTON_NUM1 (GUI_ID_USER + 0x08)
+#define ID_BUTTON_NUM2 (GUI_ID_USER + 0x09)
+#define ID_BUTTON_NUM3 (GUI_ID_USER + 0x0A)
+#define ID_BUTTON_NUM0 (GUI_ID_USER + 0x0B)
+#define ID_BUTTON_POINT (GUI_ID_USER + 0x0C)
+#define ID_BUTTON_DIACARD (GUI_ID_USER + 0x0D)
+#define ID_BUTTON_SET (GUI_ID_USER + 0x0E)
+#define ID_BUTTON_BACK (GUI_ID_USER + 0x0F)
 
 // USER START (Optionally insert additional defines)
 // USER END
@@ -66,21 +66,21 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 150, 100, 368, 260, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 2, 55, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 102, 55, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM7, 2, 55, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM8, 102, 55, 80, 35, 0, 0x0, 0},
     {EDIT_CreateIndirect, "Edit", ID_EDIT_0, 2, 2, 284, 35, 0, 0x64, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_2, 202, 55, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_3, 2, 110, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_4, 102, 110, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_5, 202, 110, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_6, 2, 165, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_7, 102, 165, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_8, 202, 165, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_9, 2, 220, 179, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_10, 202, 220, 80, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_11, 305, 55, 60, 90, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_12, 305, 165, 60, 90, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_13, 305, 2, 60, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM9, 202, 55, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM4, 2, 110, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM5, 102, 110, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM6, 202, 110, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM1, 2, 165, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM2, 102, 165, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM3, 202, 165, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_NUM0, 2, 220, 179, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_POINT, 202, 220, 80, 35, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_DIACARD, 305, 55, 60, 90, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_SET, 305, 165, 60, 90, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_BACK, 305, 2, 60, 35, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -120,13 +120,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM7);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "7");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM8);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "8");
         //
@@ -139,73 +139,73 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM9);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "9");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM4);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "4");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM5);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "5");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM6);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "6");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_6);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM1);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "1");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_7);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM2);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "2");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_8);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM3);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "3");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_9);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_NUM0);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "0");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_10);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_POINT);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, ".");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_11);
-        BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
-        BUTTON_SetText(hItem, "N");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DIACARD);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetText(hItem, "È¡Ïû");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_12);
-        BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
-        BUTTON_SetText(hItem, "Y");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_SET);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetText(hItem, "ÉèÖÃ");
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_13);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_BACK);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
         BUTTON_SetText(hItem, "X");
         // USER START (Optionally insert additional code for further widget initialization)
@@ -218,11 +218,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         NCode = pMsg->Data.v;
         switch (Id)
         {
-        case ID_BUTTON_0: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM7: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '7';
                 numpad_buf[count] = 0;
                 // USER END
@@ -235,11 +236,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_1: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM8: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '8';
                 numpad_buf[count] = 0;
                 // USER END
@@ -271,11 +273,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_2: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM9: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '9';
                 numpad_buf[count] = 0;
                 // USER END
@@ -288,11 +291,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_3: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM4: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '4';
                 numpad_buf[count] = 0;
                 // USER END
@@ -305,11 +309,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_4: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM5: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '5';
                 numpad_buf[count] = 0;
                 // USER END
@@ -322,11 +327,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_5: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM6: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '6';
                 numpad_buf[count] = 0;
                 // USER END
@@ -339,11 +345,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_6: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM1: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '1';
                 numpad_buf[count] = 0;
                 // USER END
@@ -356,11 +363,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_7: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM2: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '2';
                 numpad_buf[count] = 0;
                 // USER END
@@ -373,11 +381,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_8: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM3: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '3';
                 numpad_buf[count] = 0;
                 // USER END
@@ -390,11 +399,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_9: // Notifications sent by 'Button'
+        case ID_BUTTON_NUM0: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '0';
                 numpad_buf[count] = 0;
                 // USER END
@@ -407,11 +417,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_10: // Notifications sent by 'Button'
+        case ID_BUTTON_POINT: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 numpad_buf[count++] = '.';
                 numpad_buf[count] = 0;
                 // USER END
@@ -424,11 +435,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_11: // Notifications sent by 'Button'
+        case ID_BUTTON_DIACARD: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
+                GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -439,11 +452,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_12: // Notifications sent by 'Button'
+        case ID_BUTTON_SET: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -454,11 +468,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_13: // Notifications sent by 'Button'
+        case ID_BUTTON_BACK: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 if (count == 1)
                     numpad_buf[--count] = '0';
                 else if (count > 1)

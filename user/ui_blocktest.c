@@ -28,6 +28,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "beep.h"
+#include "string.h"
 /*********************************************************************
 *
 *       Defines
@@ -49,12 +50,13 @@
 #define ID_TEXT_RYCL (GUI_ID_USER + 0x0B)
 #define ID_TEXT_NACLND (GUI_ID_USER + 0x0C)
 #define ID_TEXT_PERCENTAGE (GUI_ID_USER + 0x0D)
+
 #define ID_TEXT_5 (GUI_ID_USER + 0x0E)
 
 #define ID_PROGBAR_0 (GUI_ID_USER + 0x0F)
 #define ID_GRAPH_0   (GUI_ID_USER + 0x10)
 
-#define ID_TEXT_NACLND_VALUE  (GUI_ID_USER + 0x11)
+#define ID_EDIT_NACLND_VALUE  (GUI_ID_USER + 0x11)
 #define ID_TEXT_NO3ND_VALUE   (GUI_ID_USER + 0x12)
 #define ID_TEXT_NO3YL_VALUE   (GUI_ID_USER + 0x13)
 #define ID_TEXT_DJDW_VALUE    (GUI_ID_USER + 0x14)
@@ -62,6 +64,9 @@
 
 #define ID_TEXT_TEMP          (GUI_ID_USER + 0x16)
 #define ID_TEXT_TEMP_VALUE    (GUI_ID_USER + 0x17)
+
+#define ID_TEXT_SNZL          (GUI_ID_USER + 0x18)
+#define ID_EDIT_SNZL_VALUE    (GUI_ID_USER + 0x19)
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
 extern const GUI_FONT GUI_Fontfont_spec;
@@ -71,9 +76,11 @@ extern const GUI_FONT GUI_Fontfont_spec;
 extern int diag_err_creat(void);
 extern int diag_info_creat(struct ui_exper_info *info);
 extern int diag_res_creat(struct ui_exper_res *res);
+extern int numpad_creat(void);
 
 static struct ui_exper_info ginfo;
 static struct ui_exper_res gres;
+static struct ui_exper_test gtest;
 /*********************************************************************
 *
 *       Static data
@@ -99,19 +106,22 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {BUTTON_CreateIndirect, "清洗", ID_BUTTON_CLEAR, 660, 415, 120, 50, 0, 0x0, 0},
     
     {TEXT_CreateIndirect, "氯离子标准液浓度", ID_TEXT_NACLND, 5, 15, 250, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_NACLND_VALUE, 75, 50, 160, 32, 0, 0x64, 0},
+    {EDIT_CreateIndirect, "0.02mol/L", ID_EDIT_NACLND_VALUE, 35, 50, 150, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 85, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "---- mol/L", ID_TEXT_NO3ND_VALUE, 75, 120, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "水泥试样质量", ID_TEXT_SNZL, 5, 85, 200, 32, 0, 0x64, 0},
+    {EDIT_CreateIndirect, "5g", ID_EDIT_SNZL_VALUE, 35, 120, 150, 32, 0, 0x64, 0},
+
+    {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 155, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "---- mol/L", ID_TEXT_NO3ND_VALUE, 75, 190, 160, 32, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "AgNO3用量", ID_TEXT_NO3YL, 5, 155, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 75, 190, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "AgNO3用量", ID_TEXT_NO3YL, 5, 225, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 75, 260, 160, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "水泥氯离子质量分数", ID_TEXT_PERCENTAGE, 5, 225, 250, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "----%", ID_TEXT_PERCENT_VALUE, 75, 260, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "水泥氯离子质量分数", ID_TEXT_PERCENTAGE, 5, 295, 250, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "----%", ID_TEXT_PERCENT_VALUE, 75, 330, 160, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "温度", ID_TEXT_TEMP, 5, 310, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "37.5", ID_TEXT_TEMP_VALUE, 75, 313, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "温度", ID_TEXT_TEMP, 5, 365, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "37.5", ID_TEXT_TEMP_VALUE, 75, 368, 160, 32, 0, 0x64, 0},
 
     {BUTTON_CreateIndirect, "返回菜单", ID_BUTTON_RETURN, 600, 15, 180, 60, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "AgNO3检测", ID_BUTTON_START_NO3, 600, 110, 180, 60, 0, 0x0, 0},
@@ -137,18 +147,18 @@ static GRAPH_SCALE_Handle hScaleV, hScaleH;
 static GRAPH_DATA_Handle pdataGRP;
 // USER END
 
-static void ctrl_all_btn(WM_HWIN hWin, int enable)
+static void ctrl_all_items(WM_HWIN hWin, int enable)
 {
     WM_HWIN hItem;
     int id;
 
-    for (id = ID_BUTTON_GET; id <= ID_BUTTON_CLEAR; id++) {
+    for (id = ID_BUTTON_GET; id <= ID_EDIT_SNZL_VALUE; id++) {
         hItem = WM_GetDialogItem(hWin, id);
         if (enable)
             WM_EnableWindow(hItem);
         else
             WM_DisableWindow(hItem);
-    }
+    }    
 }
 
 /*********************************************************************
@@ -215,6 +225,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            TEXT_SetText(hItem, "氯离子含量");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
@@ -256,19 +268,39 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND_VALUE);
-        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
-        TEXT_SetTextColor(hItem, GUI_BLACK);
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            TEXT_SetText(hItem, "AgNO3标准液浓度");
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
+        EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
+        EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
+        EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
+        EDIT_SetText(hItem, "0.02mol/L");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            TEXT_SetText(hItem, "PPM");
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
 
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SNZL);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            TEXT_SetText(hItem, "待测试样体积");
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
+        EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
+        EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
+        EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            EDIT_SetText(hItem, "100mL");            
+        else
+            EDIT_SetText(hItem, "5g");
         //
         // Initialization of 'Text'
         //
@@ -317,7 +349,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetText(hItem, "吸液中");
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
                 BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
-                ctrl_all_btn(pMsg->hWin, 0);
+                ctrl_all_items(pMsg->hWin, 0);
                 msg.msg = EXPER_MSG_OIL_GET;
                 msg.stop = 0;
                 exper_msg_set(&msg);
@@ -336,13 +368,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 if (put_func) {    
                     BUTTON_SetText(hItem, "排液");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-                    ctrl_all_btn(pMsg->hWin, 1);                    
+                    ctrl_all_items(pMsg->hWin, 1);                    
                     put_func = 0;
                     msg.stop = 1;
                 } else {
                     BUTTON_SetText(hItem, "停止");
                     BUTTON_SetTextColor(hItem, 0, GUI_RED);
-                    ctrl_all_btn(pMsg->hWin, 0);
+                    ctrl_all_items(pMsg->hWin, 0);
                     WM_EnableWindow(hItem);
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
                     BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
@@ -366,7 +398,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_GREEN);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
                 BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_BLACK);
-                ctrl_all_btn(pMsg->hWin, 0);
+                ctrl_all_items(pMsg->hWin, 0);
                 msg.msg = EXPER_MSG_OIL_CLEAR;
                 msg.stop = 0;
                 exper_msg_set(&msg);
@@ -401,14 +433,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /* cancel */
                 ginfo.func = EXPER_MSG_BLOCK_START;
                 ginfo.flag = test_func;
-                if (diag_info_creat(&ginfo))
+                
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
                     break;
+                }
+                ctrl_all_items(pMsg->hWin, 1);
 
                 if (test_func) {
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                     BUTTON_SetText(hItem, "空白实验");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-                    ctrl_all_btn(pMsg->hWin, 1);
+                    ctrl_all_items(pMsg->hWin, 1);
                     msg.stop = 1;
                     test_func = 0;
                 } else {
@@ -416,7 +454,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                     BUTTON_SetText(hItem, "停止实验");
                     BUTTON_SetTextColor(hItem, 0, GUI_RED);
-                    ctrl_all_btn(pMsg->hWin, 0);
+                    ctrl_all_items(pMsg->hWin, 0);
                     WM_EnableWindow(hItem);
                     msg.stop = 0;
                     test_func = 1;
@@ -435,14 +473,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /* cancel */
                 ginfo.func = EXPER_MSG_AGNO3_START;
                 ginfo.flag = test_func;
-                if (diag_info_creat(&ginfo))
-                    break;
 
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
+                    break;
+                }
+                ctrl_all_items(pMsg->hWin, 1);
+                    
                 if (test_func) {
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
                     BUTTON_SetText(hItem, "AgNO3检测");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-                    ctrl_all_btn(pMsg->hWin, 1);
+                    ctrl_all_items(pMsg->hWin, 1);
                     msg.stop = 1;
                     test_func = 0;
                 } else {
@@ -450,7 +494,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
                     BUTTON_SetText(hItem, "停止实验");
                     BUTTON_SetTextColor(hItem, 0, GUI_RED);
-                    ctrl_all_btn(pMsg->hWin, 0);
+                    ctrl_all_items(pMsg->hWin, 0);
                     WM_EnableWindow(hItem);
                     msg.stop = 0;
                     test_func = 1;
@@ -469,14 +513,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /* cancel */
                 ginfo.func = EXPER_MSG_CL_START;
                 ginfo.flag = test_func;
-                if (diag_info_creat(&ginfo))
+
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
                     break;
+                }
+                ctrl_all_items(pMsg->hWin, 1);
 
                 if (test_func) {
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                     BUTTON_SetText(hItem, "氯离子检测");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-                    ctrl_all_btn(pMsg->hWin, 1);
+                    ctrl_all_items(pMsg->hWin, 1);
                     msg.stop = 1;
                     test_func = 0;
                 } else {
@@ -484,13 +534,39 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                     BUTTON_SetText(hItem, "停止实验");
                     BUTTON_SetTextColor(hItem, 0, GUI_RED);
-                    ctrl_all_btn(pMsg->hWin, 0);
+                    ctrl_all_items(pMsg->hWin, 0);
                     WM_EnableWindow(hItem);
                     msg.stop = 0;
                     test_func = 1;
                 }
                 msg.msg = EXPER_MSG_CL_START;
                 exper_msg_set(&msg);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_EDIT_NACLND_VALUE:
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                beep_clicked();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                numpad_creat();
+                ctrl_all_items(pMsg->hWin, 1);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_EDIT_SNZL_VALUE:
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                beep_clicked();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                numpad_creat();
+                ctrl_all_items(pMsg->hWin, 1);
                 break;
             default:
                 break;
@@ -526,10 +602,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 TEXT_SetText(hItem, buf);
                 break;
             case EXPER_STAT_OIL_GET_FINISHED:
+                beep_finished();
                 test_func = 0;
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_GET);
                 BUTTON_SetText(hItem, "吸液");
-                ctrl_all_btn(pMsg->hWin, 1);
+                ctrl_all_items(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_OIL_PUT_FINISHED:
                 beep_finished();
@@ -537,14 +614,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_PUT);   
                 BUTTON_SetText(hItem, "排液");
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-                ctrl_all_btn(pMsg->hWin, 1);
+                ctrl_all_items(pMsg->hWin, 1);
                 put_func = 0;
                 break;
             case EXPER_STAT_OIL_CLEAR_FINISHED:
                 beep_finished();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
                 BUTTON_SetText(hItem, "清洗");
-                ctrl_all_btn(pMsg->hWin, 1);
+                ctrl_all_items(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_AGNO3_FINISHED:
                 beep_finished();
@@ -552,7 +629,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 gres.func = EXPER_STAT_AGNO3_FINISHED;
                 gres.agno3_used = stat->agno3_used;
                 gres.res = stat->agno3_consistence;
+
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
                 diag_res_creat(&gres);
+                ctrl_all_items(pMsg->hWin, 1);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
                 sprintf(buf, "%.4fmol/L", stat->agno3_consistence);
@@ -565,14 +646,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
                 BUTTON_SetText(hItem, "AgNO3检测");
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-                ctrl_all_btn(pMsg->hWin, 1);
+                ctrl_all_items(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_BLOCK_FINISHED:
                 beep_finished();
                 test_func = 0;
                 gres.func = EXPER_STAT_BLOCK_FINISHED;
                 gres.agno3_used = stat->agno3_used;
+                
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
                 diag_res_creat(&gres);
+                ctrl_all_items(pMsg->hWin, 1);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
                 sprintf(buf, "%.3fmL", stat->agno3_used);
@@ -581,7 +666,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                 BUTTON_SetText(hItem, "空白实验");
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-                ctrl_all_btn(pMsg->hWin, 1);
+                ctrl_all_items(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_CL_FINISHED:
                 beep_finished();
@@ -589,7 +674,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 gres.func = EXPER_STAT_CL_FINISHED;
                 gres.agno3_used = stat->agno3_used;
                 gres.res = stat->cl_percentage;
+
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
                 diag_res_creat(&gres);
+                ctrl_all_items(pMsg->hWin, 1);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
                 sprintf(buf, "%.3f%%", stat->cl_percentage);
@@ -602,7 +691,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                 BUTTON_SetText(hItem, "氯离子检测");
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-                ctrl_all_btn(pMsg->hWin, 1);
+                ctrl_all_items(pMsg->hWin, 1);
                 break;
             default:
                 break;
@@ -625,8 +714,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *       CreateFramewin
 */
 
-int ui_blocktest_creat(void)
+int ui_blocktest_creat(struct ui_exper_test *test)
 {
+    memcpy(&gtest, test, sizeof(struct ui_exper_test));
     return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

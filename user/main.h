@@ -4,7 +4,7 @@
 struct ui_msg {
 #define MSG_LOAD_UI_MENU         0x01
 #define MSG_LOAD_UI_BLOCKTEST    0x02
-//#define MSG_LOAD_UI_TEST         0x03
+#define MSG_LOAD_UI_STAND        0x03
 #define MSG_LOAD_UI_SETTING      0x04
 #define MSG_LOAD_UI_DATA         0x05
 #define MSG_LOAD_UI_DETAIL       0x06
@@ -25,6 +25,10 @@ struct ui_exper_res {
     int func;
     float agno3_used;
     float res;
+};
+
+struct ui_exper_test {
+    int func;
 };
 
 #endif
