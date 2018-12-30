@@ -99,13 +99,9 @@ static char numpad_buf[32];
 static int count = 0;
 // USER END
 
-float numpad_get(void)
+char *numpad_get(void)
 {
-    float num = 0.0;
-    sscanf(numpad_buf, "%f", &num);
-    printf("read numpad %f\r\n", num);
-    
-    return num;
+    return numpad_buf;
 }
 
 /*********************************************************************

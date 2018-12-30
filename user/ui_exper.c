@@ -77,6 +77,7 @@ extern int diag_err_creat(void);
 extern int diag_info_creat(struct ui_exper_info *info);
 extern int diag_res_creat(struct ui_exper_res *res);
 extern int numpad_creat(void);
+extern char *numpad_get(void);
 
 static struct ui_exper_info ginfo;
 static struct ui_exper_res gres;
@@ -172,6 +173,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int Id;
     struct exper_stat *stat;
     char buf[16];
+    float fval;
+    int ival;
+    char *p;
+    
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -275,7 +280,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        EDIT_SetText(hItem, "0.02mol/L");
+        sprintf(buf, "%.2fmol/L", exper_agno3_dosage_get()); 
+        EDIT_SetText(hItem, buf);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
@@ -297,10 +303,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        if (gtest.func == MSG_LOAD_UI_STAND)
-            EDIT_SetText(hItem, "100mL");            
-        else
-            EDIT_SetText(hItem, "5g");
+        if (gtest.func == MSG_LOAD_UI_STAND) {
+            EDIT_SetText(hItem, "100mL");
+        } else {
+            sprintf(buf, "%dg", exper_cement_weight_get()); 
+            EDIT_SetText(hItem, buf);
+        }
+            
         //
         // Initialization of 'Text'
         //
@@ -552,7 +561,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 beep_clicked();
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
-                numpad_creat();
+                if (numpad_creat()) {
+                    p = numpad_get();
+                    sscanf(p, "%f", &fval);
+                    if (fval > 1.0 || fval == 0.0) {
+                        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
+                        sprintf(buf, "%.2fmol/L", fval); 
+                        EDIT_SetText(hItem, buf);
+                        exper_agno3_dosage_set(fval);
+                    }
+                }
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
             default:

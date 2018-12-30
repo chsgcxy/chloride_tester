@@ -29,15 +29,22 @@ struct exper {
     int count;
     int jump;
     int steps;
-    float pre_agno3_dosage;
-    float pre_AgNO3_used;
-    float block_AgNO3_used;
-    float true_AgNO3_used;
+    
+    int agno3_stock;
+    int cement_weight;
+    
+    float test_agno3_dosage;
+    float test_agno3_used;
+
+    float block_agno3_used;
+    
+    float cl_agno3_used;
     float cl_percentage;
+    
     struct exper_stat estat;
     struct exper_msg emsg;
     struct WM_MESSAGE wmsg;
-    int agno3_stock;
+    
     struct report rep;
 };
 
@@ -47,6 +54,26 @@ static struct exper g_exper;
 struct report *exper_get_report(void)
 {
     return &g_exper.rep;
+}
+
+void exper_agno3_dosage_set(float dosage)
+{
+    g_exper.test_agno3_dosage = dosage;
+}
+
+float exper_agno3_dosage_get(void)
+{
+    return g_exper.test_agno3_dosage;
+}
+
+void exper_cement_weight_set(float weight)
+{
+    g_exper.cement_weight = weight;
+}
+
+int exper_cement_weight_get(void)
+{
+    return g_exper.cement_weight;
 }
 
 static void _exper_oil_get(struct exper *exp)
@@ -332,37 +359,37 @@ static void do_test(struct exper *exp, int mode)
         if (exp->steps == 0) {
             switch (mode) {
             case EXPER_MSG_AGNO3_START:
-                exp->pre_AgNO3_used = count_agno3_used(exp);
-                exp->pre_agno3_dosage = (float)0.2 / exp->pre_AgNO3_used;
+                exp->test_agno3_used = count_agno3_used(exp);
+                exp->test_agno3_dosage = (float)0.2 / exp->test_agno3_used;
                 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nAgNo3 test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->pre_AgNO3_used);
-                EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", exp->pre_agno3_dosage);
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->test_agno3_used);
+                EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", exp->test_agno3_dosage);
 
-                exp->estat.agno3_used = exp->pre_AgNO3_used;
-                exp->estat.agno3_consistence = exp->pre_agno3_dosage;
+                exp->estat.agno3_used = exp->test_agno3_used;
+                exp->estat.agno3_consistence = exp->test_agno3_dosage;
                 exp->estat.stat = EXPER_STAT_AGNO3_FINISHED;
                 WM_BroadcastMessage(&exp->wmsg);
                 return;
             case EXPER_MSG_BLOCK_START:
-                exp->block_AgNO3_used = count_agno3_used(exp);
+                exp->block_agno3_used = count_agno3_used(exp);
 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nblock test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->block_AgNO3_used);
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->block_agno3_used);
 
-                exp->estat.agno3_used = exp->block_AgNO3_used;
+                exp->estat.agno3_used = exp->block_agno3_used;
                 exp->estat.stat = EXPER_STAT_BLOCK_FINISHED;
                 WM_BroadcastMessage(&exp->wmsg);
                 return;
             case EXPER_MSG_CL_START:
-                exp->true_AgNO3_used = count_agno3_used(exp);
-                exp->cl_percentage = (exp->pre_agno3_dosage * (float)3.545 * (exp->true_AgNO3_used - exp->block_AgNO3_used)) / (float)5;
+                exp->cl_agno3_used = count_agno3_used(exp);
+                exp->cl_percentage = (exp->test_agno3_dosage * (float)3.545 * (exp->cl_agno3_used - exp->block_agno3_used)) / exp->cement_weight;
 
                 EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->true_AgNO3_used);
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->cl_agno3_used);
                 EXPER_DBG_PRINT("cl percentage is %f%%\r\n", exp->cl_percentage);
                 
-                exp->estat.agno3_used = exp->true_AgNO3_used;
+                exp->estat.agno3_used = exp->cl_agno3_used;
                 exp->estat.cl_percentage = exp->cl_percentage;
                 exp->estat.stat = EXPER_STAT_CL_FINISHED;
                 WM_BroadcastMessage(&exp->wmsg);
@@ -370,7 +397,7 @@ static void do_test(struct exper *exp, int mode)
                 for (index = 0; index < 12; index++)
                     exp->rep.data[index] = exp->volt[exp->jump - 5 + index] - exp->volt[exp->jump - 6 + index];
                 exp->rep.data_num = 12;
-                exp->rep.nitrate_dosage = exp->true_AgNO3_used;
+                exp->rep.nitrate_dosage = exp->cl_agno3_used;
                 exp->rep.percentage = exp->cl_percentage;
                 exp->rep.year = 18;
                 exp->rep.month = 12;
@@ -432,4 +459,10 @@ void exper_msg_set(struct exper_msg *msg)
 {
     memcpy(&g_exper.emsg, msg, sizeof(struct exper_msg));
     printf("get msg.msg=%x, stop=%d\r\n", msg->msg, msg->stop);
+}
+
+void exper_init(void)
+{
+    g_exper.cement_weight = 5.0;
+    g_exper.test_agno3_dosage = 0.02;
 }

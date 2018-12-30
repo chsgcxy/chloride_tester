@@ -159,6 +159,8 @@ int main(void)
     g_printer.send = g_printer_send;
 	report_init(&g_printer);
 
+	exper_init();
+
 	/* creat freertos task */
 	task_init();
 

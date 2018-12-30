@@ -124,7 +124,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         if (ginfo.flag)
             TEXT_SetText(hItem, "确定停止实验吗?");
         else
-            TEXT_SetText(hItem, "准备好了吗?");
+            TEXT_SetText(hItem, "确定开始实验吗?");
         break;
     case WM_NOTIFY_PARENT:
         Id = WM_GetId(pMsg->hWinSrc);

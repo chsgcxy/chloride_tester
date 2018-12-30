@@ -40,5 +40,11 @@ struct exper_stat {
 extern void exper_msg_set(struct exper_msg *msg);
 extern void exper_task(void *args);
 extern struct report *exper_get_report(void);
+extern void exper_agno3_dosage_set(float dosage);
+extern float exper_agno3_dosage_get(void);
+extern void exper_cement_weight_set(float weight);
+extern int exper_cement_weight_get(void);
+
+extern void exper_init(void);
 
 #endif
