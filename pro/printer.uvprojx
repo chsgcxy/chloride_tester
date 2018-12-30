@@ -429,11 +429,6 @@
               <FilePath>..\user\ui_menu.c</FilePath>
             </File>
             <File>
-              <FileName>ui_blocktest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\ui_blocktest.c</FilePath>
-            </File>
-            <File>
               <FileName>experiment.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\experiment.c</FilePath>
@@ -482,6 +477,11 @@
               <FileName>ui_diag_res.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\ui_diag_res.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_exper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\ui_exper.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -23,6 +23,8 @@
 
 #include "DIALOG.h"
 #include "beep.h"
+#include "stdio.h"
+#include "string.h"
 /*********************************************************************
 *
 *       Defines
@@ -96,6 +98,15 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 static char numpad_buf[32];
 static int count = 0;
 // USER END
+
+float numpad_get(void)
+{
+    float num = 0.0;
+    sscanf(numpad_buf, "%f", &num);
+    printf("read numpad %f\r\n", num);
+    
+    return num;
+}
 
 /*********************************************************************
 *
@@ -195,13 +206,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DIACARD);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetText(hItem, "取消");
+        BUTTON_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        BUTTON_SetText(hItem, "取\n消");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_SET);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetText(hItem, "设置");
+        BUTTON_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        BUTTON_SetText(hItem, "设\n置");
         //
         // Initialization of 'Button'
         //
@@ -458,6 +471,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
+                GUI_EndDialog(pMsg->hWin, 1);
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
