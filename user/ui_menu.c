@@ -25,6 +25,7 @@
 #include "stdio.h"
 #include "main.h"
 #include "beep.h"
+#include "config.h"
 /*********************************************************************
 *
 *       Defines
@@ -42,6 +43,7 @@
 #define ID_TEXT_STAND        (GUI_ID_USER + 0x07)
 #define ID_TEXT_DATA         (GUI_ID_USER + 0x08)
 #define ID_TEXT_SETTING      (GUI_ID_USER + 0x09)
+#define ID_TEXT_VERSION      (GUI_ID_USER + 0x0A)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_BITMAP bmprocess_running_72px;
@@ -69,6 +71,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "stand", ID_TEXT_STAND, 254, 212, 120, 45, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 426, 212, 120, 45, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 600, 212, 120, 45, 0, 0x0, 0 },
+
+    { TEXT_CreateIndirect, SOFTWARE_VERSION_STR, ID_TEXT_VERSION, 730, 395, 90, 16, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -111,8 +115,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_STAND);
         IMAGE_SetBitmap(hItem, &bmstand_72px);
 
-
-
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_STAND);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
@@ -137,6 +139,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "ÏµÍ³ÉèÖÃ");
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_VERSION);
+        TEXT_SetFont(hItem, GUI_FONT_20_ASCII);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
 
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

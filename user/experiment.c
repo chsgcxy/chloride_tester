@@ -34,6 +34,7 @@ struct exper {
     
     int stand_v;
     float stand_agno3_dosage;
+    float ppm;
 
     float test_cl_dosage;
     float test_agno3_dosage;
@@ -273,6 +274,11 @@ static float exper_filter(void)
     return volt;
 }
 
+float exper_volt_get(void)
+{
+    return ad7705_read();
+}
+
 static float count_agno3_used(struct exper *exp)
 {
     float delta_pre, delta_delta_pre, delta_after, delta_delta_after, delta_cur;
@@ -294,6 +300,24 @@ static float count_agno3_used(struct exper *exp)
     return res;
 }
 
+static void exper_report_load(struct exper *exp, int type)
+{
+    int index = 0;
+    
+    for (index = 0; index < 12; index++)
+       exp->rep.data[index] = exp->volt[exp->jump - 5 + index] - exp->volt[exp->jump - 6 + index];
+    
+    exp->rep.type = type;
+    exp->rep.data_num = 12;
+    exp->rep.nitrate_dosage = exp->cl_agno3_used;
+    exp->rep.percentage = exp->cl_percentage;
+    exp->rep.year = 18;
+    exp->rep.month = 12;
+    exp->rep.day = 8;
+    exp->rep.hour = 16;
+    exp->rep.minute = 0;
+}
+
 static void do_test(struct exper *exp, int mode)
 {
     float volt_scale = 210.0; // 230mV to change step
@@ -301,7 +325,6 @@ static void do_test(struct exper *exp, int mode)
     int step = 3;
     float volt_diff = 0.0;
     float volt;
-    int index = 0;
     int ext_delay = 0;
 
     exp->estat.graph_pos.x = 0;
@@ -312,6 +335,7 @@ static void do_test(struct exper *exp, int mode)
 
     switch (mode) {
     case EXPER_MSG_AGNO3_START:
+    case EXPER_MSG_STAND_START:
         exp->steps = 25;
         break;
     case EXPER_MSG_CL_START:
@@ -346,9 +370,11 @@ static void do_test(struct exper *exp, int mode)
         } else {
             exp->estat.graph_pos.x += step;
             exp->estat.agno3_used += step_ml;
-            exp->agno3_stock -= step;           
+            exp->agno3_stock -= step;      
         }
-
+        exp->estat.stat = EXPER_STAT_UPDATE_AGNO3_USED;
+        WM_BroadcastMessage(&exp->wmsg);
+        
         /* wait oil act */
         EXPER_DBG_PRINT("\r\n\r\n");
         if (step == 1) {
@@ -430,17 +456,19 @@ static void do_test(struct exper *exp, int mode)
                 exp->estat.cl_percentage = exp->cl_percentage;
                 exp->estat.stat = EXPER_STAT_CL_FINISHED;
                 WM_BroadcastMessage(&exp->wmsg);
+                exper_report_load(exp, REP_TYPE_CL);
+                return;
+            case EXPER_MSG_STAND_START:
+                exp->cl_agno3_used = count_agno3_used(exp);
+                exp->cl_percentage = (exp->stand_agno3_dosage * (exp->cl_agno3_used - exp->block_agno3_used)) / exp->stand_v;
+                exp->ppm = exp->cl_percentage * (float)35450;
 
-                for (index = 0; index < 12; index++)
-                    exp->rep.data[index] = exp->volt[exp->jump - 5 + index] - exp->volt[exp->jump - 6 + index];
-                exp->rep.data_num = 12;
-                exp->rep.nitrate_dosage = exp->cl_agno3_used;
-                exp->rep.percentage = exp->cl_percentage;
-                exp->rep.year = 18;
-                exp->rep.month = 12;
-                exp->rep.day = 8;
-                exp->rep.hour = 16;
-                exp->rep.minute = 0;
+                exp->estat.agno3_used = exp->cl_agno3_used;
+                exp->estat.cl_percentage = exp->cl_percentage;
+                exp->estat.stat = EXPER_STAT_STAND_FINISHED;
+                exp->estat.ppm = exp->ppm;
+                WM_BroadcastMessage(&exp->wmsg);
+                exper_report_load(exp, REP_TYPE_STAND);
                 return;
             default:
                 return;
@@ -478,6 +506,13 @@ void exper_task(void *args)
             EXPER_DBG_PRINT("EXPER_MSG_CL_START\r\n");
             exper_is_run = 1;
             do_test(&g_exper, EXPER_MSG_CL_START);
+            g_exper.emsg.msg = EXPER_MSG_NONE;
+            exper_is_run = 0;
+            break;
+        case EXPER_MSG_STAND_START:
+            EXPER_DBG_PRINT("EXPER_MSG_STAND_START\r\n");
+            exper_is_run = 1;
+            do_test(&g_exper, EXPER_MSG_STAND_START);
             g_exper.emsg.msg = EXPER_MSG_NONE;
             exper_is_run = 0;
             break;

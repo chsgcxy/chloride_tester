@@ -7,23 +7,13 @@
  * Chinese characters are not used directly because it depends on the encoding of the editor.
  * use amo tools function ascii2hex to creat this string.
  * */
-
-/* æ°?ç¦»å­æ£€æµ‹æŠ¥å‘? */
-uint8_t str_llzjcbg[] = {0xC2,0xC8,0xC0,0xEB,0xD7,0xD3,0xBC,0xEC,0xB2,0xE2,0xB1,0xA8,0xB8,0xE6};
-/* è¯•æ ·æ£€æµ‹ç”µåŽ? */
-uint8_t str_ssjcdy[] = {0xCA,0xD4,0xD1,0xF9,0xBC,0xEC,0xB2,0xE2,0xB5,0xE7,0xD1,0xB9};
-/* ç¡é…¸é“¶ç”¨é‡? */
-uint8_t str_xsyyl[] = {0xCF,0xF5,0xCB,0xE1,0xD2,0xF8,0xD3,0xC3,0xC1,0xBF};
-/* æ¯å…‹è¯•æ ·å?æ°?ç¦»å­ */
-uint8_t str_mksyhllz[] = {0xC3,0xBF,0xBF,0xCB,0xCA,0xD4,0xD1,0xF9,0xBA,0xAC,0xC2,0xC8,0xC0,0xEB,0xD7,0xD3};
-/* æµ‹è¯•æ—¥æœŸ */
-uint8_t str_csrq[] = {0xB2,0xE2,0xCA,0xD4,0xC8,0xD5,0xC6,0xDA};
-/* å¹? */
-uint8_t str_year[] = {0xC4, 0xEA};
-/* æœ? */
-uint8_t str_month[] = {0xD4, 0xC2};
-/* æ—? */
-uint8_t str_day[] = {0xC8, 0xD5};
+#define STRING_TITLE    "ÂÈÀë×Ó¼ì²â±¨¸æ"
+#define STRING_DATE     "²âÊÔÈÕÆÚ: "
+#define STRING_SSJCDY   "ÊÔÑù¼ì²âµçÑ¹(mv)"
+#define STRING_XSYYL    "ÏõËáÒøÓÃÁ¿: "
+#define STRING_MKSYHLLZ "Ã¿¿ËÊÔÑùº¬ÂÈÀë×Ó: "
+#define STRING_PPM      "       PPM: "
+#define STRING_LLZND    "ÂÈÀë×ÓÅ¨¶È: "
 
 uint8_t char_space = 0x20;
 uint8_t char_colon = 0x3A;
@@ -40,45 +30,42 @@ int report_init(struct tprinter *printer)
 int report_show(struct report *rp)
 {
     int total;
-    char buf[16];
+    char buf[64];
     
     tprinter_prepare(report_printer);
     tprinter_zoomin(report_printer, 1, 1);
 
-    tprinter_send(report_printer, str_csrq, sizeof(str_csrq));
-    tprinter_send(report_printer, &char_colon, 1);
-    tprinter_send(report_printer, &char_space, 1);
-    sprintf(buf, "20%02d", rp->year);
-    tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
-    tprinter_send(report_printer, str_year, 2);
-    sprintf(buf, "%02d", rp->month);
-    tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
-    tprinter_send(report_printer, str_month, 2);
-    sprintf(buf, "%02d", rp->day);
-    tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
-    tprinter_send(report_printer, str_day, 2);
-    tprinter_send(report_printer, &char_space, 1);
-    sprintf(buf, "%02d:%02d", rp->hour, rp->minute);
+    tprinter_send(report_printer, STRING_DATE, sizeof(STRING_DATE));
+    sprintf(buf, "20%02dÄê%02dÔÂ%02dÈÕ  %02d:%02d", rp->year, rp->month, rp->day, rp->hour, rp->minute);
     tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
     tprinter_newline(report_printer);
 
-    tprinter_send(report_printer, str_mksyhllz, sizeof(str_mksyhllz));
-    tprinter_send(report_printer, &char_colon, 1);
-    tprinter_send(report_printer, &char_space, 1);
+    switch (rp->type) {
+    case REP_TYPE_CL:
+        tprinter_send(report_printer, STRING_MKSYHLLZ, sizeof(STRING_MKSYHLLZ));
+        sprintf(buf, "%.3f%%", rp->percentage);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        break;
+    case REP_TYPE_STAND:
+        tprinter_send(report_printer, STRING_PPM, sizeof(STRING_PPM));
+        sprintf(buf, "%.1f", rp->ppm);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
 
-    sprintf(buf, "%.3f", rp->percentage);
-    tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
-    tprinter_send(report_printer, &char_percent, 1);
-    tprinter_newline(report_printer);
+        tprinter_send(report_printer, STRING_LLZND, sizeof(STRING_LLZND));
+        sprintf(buf, "%.3fmol/L", rp->percentage);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        break;
+    default:
+        break;
+    }
 
-    tprinter_send(report_printer, str_xsyyl, sizeof(str_xsyyl));
-    tprinter_send(report_printer, &char_colon, 1);
-    tprinter_send(report_printer, &char_space, 1);
-
+    tprinter_send(report_printer, STRING_XSYYL, sizeof(STRING_XSYYL));
     sprintf(buf, "%.2f(ml)", rp->nitrate_dosage);
     tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
     tprinter_newline(report_printer);
-
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);
 
@@ -96,16 +83,14 @@ int report_show(struct report *rp)
     tprinter_prepare(report_printer);
     tprinter_newline(report_printer);
     
-    tprinter_send(report_printer, str_ssjcdy, sizeof(str_ssjcdy));
-    tprinter_send(report_printer, "(mv)", 4);
+    tprinter_send(report_printer, STRING_SSJCDY, sizeof(STRING_SSJCDY));
     tprinter_newline(report_printer);
-
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);
 
     tprinter_send(report_printer, &char_space, 1);
     tprinter_zoomin(report_printer, 2, 2);
-    tprinter_send(report_printer, str_llzjcbg, sizeof(str_llzjcbg));
+    tprinter_send(report_printer, STRING_TITLE, sizeof(STRING_TITLE));
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);

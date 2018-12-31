@@ -71,10 +71,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     {
     case WM_INIT_DIALOG:
         hItem = pMsg->hWin;
-        WINDOW_SetBkColor(hItem, GUI_BLACK);
+        WINDOW_SetBkColor(hItem, GUI_DARKBLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         if (ginfo.flag)
             BUTTON_SetText(hItem, "停止实验");
         else
@@ -90,6 +91,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
         if (ginfo.flag)
@@ -112,6 +114,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case EXPER_MSG_CL_START:
                 TEXT_SetText(hItem, "即将进行水泥氯离子含量检测");
+                break;
+            case EXPER_MSG_STAND_START:
+                TEXT_SetText(hItem, "即将进行氯离子含量检测");
                 break;
             default:
                 break;

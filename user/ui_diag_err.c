@@ -66,7 +66,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Window'
         //
         hItem = pMsg->hWin;
-        WINDOW_SetBkColor(hItem, GUI_BLACK);
+        WINDOW_SetBkColor(hItem, GUI_DARKBLUE);
         //
         // Initialization of 'Text'
         //
@@ -96,6 +96,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;

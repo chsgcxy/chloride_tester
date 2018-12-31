@@ -35,38 +35,44 @@
 *
 **********************************************************************
 */
-#define ID_WINDOW_0   (GUI_ID_USER + 0x00)
-#define ID_BUTTON_GET (GUI_ID_USER + 0x01)
-#define ID_BUTTON_PUT (GUI_ID_USER + 0x02)
-#define ID_BUTTON_RETURN (GUI_ID_USER + 0x03)
-#define ID_BUTTON_START_NO3 (GUI_ID_USER + 0x04)
-#define ID_BUTTON_START_TEST (GUI_ID_USER + 0x05)
-#define ID_BUTTON_START_BLOCK (GUI_ID_USER + 0x06)
-#define ID_BUTTON_CLEAR (GUI_ID_USER + 0x07)
+#define ID_WINDOW_0                 (GUI_ID_USER + 0x00)
+#define ID_BUTTON_GET               (GUI_ID_USER + 0x01)
+#define ID_BUTTON_PUT               (GUI_ID_USER + 0x02)
+#define ID_BUTTON_RETURN            (GUI_ID_USER + 0x03)
+#define ID_BUTTON_START_NO3         (GUI_ID_USER + 0x04)
+#define ID_BUTTON_START_TEST        (GUI_ID_USER + 0x05)
+#define ID_BUTTON_START_BLOCK       (GUI_ID_USER + 0x06)
+#define ID_BUTTON_CLEAR             (GUI_ID_USER + 0x07)
+#define ID_EDIT_NACLND_VALUE        (GUI_ID_USER + 0x08)
+#define ID_EDIT_SNZL_VALUE          (GUI_ID_USER + 0x09)
+#define ID_EDIT_NO3ND_VALUE         (GUI_ID_USER + 0x0A)
 
-#define ID_TEXT_NO3ND (GUI_ID_USER + 0x08)
-#define ID_TEXT_NO3YL (GUI_ID_USER + 0x09)
-#define ID_TEXT_DJDW (GUI_ID_USER + 0x0A)
-#define ID_TEXT_RYCL (GUI_ID_USER + 0x0B)
-#define ID_TEXT_NACLND (GUI_ID_USER + 0x0C)
-#define ID_TEXT_PERCENTAGE (GUI_ID_USER + 0x0D)
+#define ID_TEXT_NO3ND               (GUI_ID_USER + 0x0B)
+#define ID_TEXT_NO3YL               (GUI_ID_USER + 0x0C)
+#define ID_TEXT_DJDW                (GUI_ID_USER + 0x0D)
+#define ID_TEXT_RYCL                (GUI_ID_USER + 0x0E)
+#define ID_TEXT_NACLND              (GUI_ID_USER + 0x0F)
+#define ID_TEXT_PERCENTAGE          (GUI_ID_USER + 0x10)
 
-#define ID_TEXT_5 (GUI_ID_USER + 0x0E)
+#define ID_TEXT_5                   (GUI_ID_USER + 0x11)
 
-#define ID_PROGBAR_0 (GUI_ID_USER + 0x0F)
-#define ID_GRAPH_0   (GUI_ID_USER + 0x10)
+#define ID_PROGBAR_0                (GUI_ID_USER + 0x12)
+#define ID_GRAPH_0                  (GUI_ID_USER + 0x13)
 
-#define ID_EDIT_NACLND_VALUE  (GUI_ID_USER + 0x11)
-#define ID_TEXT_NO3ND_VALUE   (GUI_ID_USER + 0x12)
-#define ID_TEXT_NO3YL_VALUE   (GUI_ID_USER + 0x13)
-#define ID_TEXT_DJDW_VALUE    (GUI_ID_USER + 0x14)
-#define ID_TEXT_PERCENT_VALUE (GUI_ID_USER + 0x15)
+#define ID_TEXT_NO3ND_VALUE         (GUI_ID_USER + 0x14)
+#define ID_TEXT_NO3YL_VALUE         (GUI_ID_USER + 0x15)
+#define ID_TEXT_DJDW_VALUE          (GUI_ID_USER + 0x16)
+#define ID_TEXT_PERCENT_VALUE       (GUI_ID_USER + 0x17)
 
-#define ID_TEXT_TEMP          (GUI_ID_USER + 0x16)
-#define ID_TEXT_TEMP_VALUE    (GUI_ID_USER + 0x17)
+#define ID_TEXT_TEMP                (GUI_ID_USER + 0x18)
+#define ID_TEXT_TEMP_VALUE          (GUI_ID_USER + 0x19)
 
-#define ID_TEXT_SNZL          (GUI_ID_USER + 0x18)
-#define ID_EDIT_SNZL_VALUE    (GUI_ID_USER + 0x19)
+#define ID_TEXT_SNZL                (GUI_ID_USER + 0x1A)
+
+#define ID_TEXT_PPM                 (GUI_ID_USER + 0x1B)
+#define ID_TEXT_PPM_VALUE           (GUI_ID_USER + 0x1C)
+
+
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
 extern const GUI_FONT GUI_Fontfont_spec;
@@ -82,9 +88,6 @@ extern char *numpad_get(void);
 static struct ui_exper_info ginfo;
 static struct ui_exper_res gres;
 static struct ui_exper_test gtest;
-
-static char test_agno3_finished_flag = 0;
-static char block_finished_flag = 0;
 /*********************************************************************
 *
 *       Static data
@@ -115,26 +118,29 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {TEXT_CreateIndirect, "水泥试样质量", ID_TEXT_SNZL, 5, 85, 200, 32, 0, 0x64, 0},
     {EDIT_CreateIndirect, "5g", ID_EDIT_SNZL_VALUE, 35, 120, 150, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 155, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "---- mol/L", ID_TEXT_NO3ND_VALUE, 75, 190, 160, 32, 0, 0x64, 0},
-    
+    {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 155, 250, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "---- mol/L", ID_TEXT_NO3ND_VALUE, 75, 190, 150, 32, 0, 0x64, 0},
+    {EDIT_CreateIndirect, "0.02mol/L", ID_EDIT_NO3ND_VALUE, 35, 190, 150, 32, 0, 0x64, 0},
+
     {TEXT_CreateIndirect, "AgNO3用量", ID_TEXT_NO3YL, 5, 225, 160, 32, 0, 0x64, 0},
     {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 75, 260, 160, 32, 0, 0x64, 0},
 
     {TEXT_CreateIndirect, "水泥氯离子质量分数", ID_TEXT_PERCENTAGE, 5, 295, 250, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "----%", ID_TEXT_PERCENT_VALUE, 75, 330, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "--- %", ID_TEXT_PERCENT_VALUE, 75, 330, 160, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "温度", ID_TEXT_TEMP, 5, 365, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "37.5", ID_TEXT_TEMP_VALUE, 75, 368, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "PPM", ID_TEXT_PPM, 5, 365, 70, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "---", ID_TEXT_PPM_VALUE, 75, 365, 120, 32, 0, 0x64, 0},
 
     {BUTTON_CreateIndirect, "返回菜单", ID_BUTTON_RETURN, 600, 15, 180, 60, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "AgNO3检测", ID_BUTTON_START_NO3, 600, 110, 180, 60, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 600, 205, 180, 60, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "氯离子检测", ID_BUTTON_START_TEST, 600, 300, 180, 60, 0, 0x0, 0},
     
-    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 265, 15, 310, 340, 0, 0x0, 0 },
-    {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 325, 360, 135, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "320.1mV", ID_TEXT_DJDW_VALUE, 455, 363, 130, 25, 0, 0x64, 0},
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 265, 15, 310, 330, 0, 0x0, 0 },
+    {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 325, 350, 135, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "320.1mV", ID_TEXT_DJDW_VALUE, 455, 353, 130, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "温度", ID_TEXT_TEMP, 353, 380, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "37.5", ID_TEXT_TEMP_VALUE, 455, 383, 100, 25, 0, 0x64, 0},
 };
 
 /*********************************************************************
@@ -156,24 +162,12 @@ static void ctrl_all_items(WM_HWIN hWin, int enable)
     WM_HWIN hItem;
     int id;
 
-    for (id = ID_BUTTON_GET; id <= ID_EDIT_SNZL_VALUE; id++) {
+    for (id = ID_BUTTON_GET; id <= ID_EDIT_NO3ND_VALUE; id++) {
         hItem = WM_GetDialogItem(hWin, id);
-        if (id == ID_BUTTON_START_BLOCK) {
-            if (test_agno3_finished_flag && enable)
-                WM_EnableWindow(hItem);
-            else 
-                WM_DisableWindow(hItem);
-        } else if (id == ID_BUTTON_START_TEST) {
-            if (block_finished_flag && enable)
-                WM_EnableWindow(hItem);
-            else 
-                WM_DisableWindow(hItem);
-        } else {
-            if (enable)
-                WM_EnableWindow(hItem);
-            else
-                WM_DisableWindow(hItem);
-        }
+        if (enable)
+            WM_EnableWindow(hItem);
+        else
+            WM_DisableWindow(hItem);
     }    
 }
 
@@ -243,10 +237,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        if (test_agno3_finished_flag)
-            WM_EnableWindow(hItem);
-        else
-            WM_DisableWindow(hItem);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
@@ -255,10 +245,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        if (block_finished_flag)
-            WM_EnableWindow(hItem);
-        else
-            WM_DisableWindow(hItem);
         //
         // Initialization of 'Text'
         //
@@ -266,12 +252,25 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         if (gtest.func == MSG_LOAD_UI_STAND)
-            TEXT_SetText(hItem, "氯离子含量");
+            TEXT_SetText(hItem, "AgNO3标准液浓度");
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
-        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
-        TEXT_SetTextColor(hItem, GUI_RED);
-
+        if (gtest.func == MSG_LOAD_UI_STAND) {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
+            EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
+            EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
+            EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
+            sprintf(buf, "%.2fmol/L", exper_stand_agno3_dosage_get());
+            EDIT_SetText(hItem, buf);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
+            WM_HideWindow(hItem);
+        } else {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
+            TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+            TEXT_SetTextColor(hItem, GUI_RED);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
+            WM_HideWindow(hItem);
+        }
+        
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEMP);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
@@ -304,21 +303,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_GREEN);
+        sprintf(buf, "%.3fmV", exper_volt_get());
+        TEXT_SetText(hItem, buf);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (gtest.func == MSG_LOAD_UI_STAND)
-            TEXT_SetText(hItem, "AgNO3标准液浓度");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
         EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        if (gtest.func == MSG_LOAD_UI_STAND)
-            sprintf(buf, "%.2fmol/L", exper_stand_agno3_dosage_get());
-        else
-            sprintf(buf, "%.2fmol/L", exper_test_cl_dosage_get()); 
+        sprintf(buf, "%.2fmol/L", exper_test_cl_dosage_get());
         EDIT_SetText(hItem, buf);
         
 
@@ -326,11 +322,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         if (gtest.func == MSG_LOAD_UI_STAND)
-            TEXT_SetText(hItem, "PPM");
+            TEXT_SetText(hItem, "氯离子浓度");
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            TEXT_SetText(hItem, "--- mol/L");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SNZL);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
@@ -347,6 +345,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         else
             sprintf(buf, "%dg", exper_cement_weight_get());
         EDIT_SetText(hItem, buf);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
+        if (gtest.func == MSG_LOAD_UI_STAND) {
+            TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+        } else {
+            WM_HideWindow(hItem);
+        }
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
+        if (gtest.func == MSG_LOAD_UI_STAND) {
+            TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+            TEXT_SetTextColor(hItem, GUI_RED);
+        } else {
+            WM_HideWindow(hItem);
+        }
+
         //
         // Initialization of 'Text'
         //
@@ -373,7 +388,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         GRAPH_SCALE_SetOff(hScaleV, -140);
         GRAPH_AttachScale(hItem, hScaleV);
         
-        hScaleH = GRAPH_SCALE_Create(330, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
+        hScaleH = GRAPH_SCALE_Create(320, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
         pdataGRP = GRAPH_DATA_XY_Create(GUI_GREEN, 350, 0, 0);
@@ -556,17 +571,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
-                /* cancel */
-                ginfo.func = EXPER_MSG_CL_START;
+                
+                if (gtest.func == MSG_LOAD_UI_STAND)
+                    ginfo.func = EXPER_MSG_STAND_START;
+                else
+                    ginfo.func = EXPER_MSG_CL_START;
                 ginfo.flag = test_func;
-
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
                 if (diag_info_creat(&ginfo)) {
                     ctrl_all_items(pMsg->hWin, 1);
                     break;
                 }
-                ctrl_all_items(pMsg->hWin, 1);
 
                 if (test_func) {
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
@@ -585,7 +601,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     msg.stop = 0;
                     test_func = 1;
                 }
-                msg.msg = EXPER_MSG_CL_START;
+
+                if (gtest.func == MSG_LOAD_UI_STAND)
+                    msg.msg = EXPER_MSG_STAND_START;
+                else
+                    msg.msg = EXPER_MSG_CL_START;
                 exper_msg_set(&msg);
                 break;
             default:
@@ -601,17 +621,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 if (numpad_creat()) {
                     p = numpad_get();
                     sscanf(p, "%f", &fval);
-                    if (fval > 0.0 && fval < 1.0) {
-                        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
-                        sprintf(buf, "%.2fmol/L", fval); 
-                        EDIT_SetText(hItem, buf);
-                        if (gtest.func == MSG_LOAD_UI_STAND)
-                            exper_stand_agno3_dosage_set(fval);
-                        else
-                            exper_test_cl_dosage_set(fval);
-                    } else {
-                        beep_warning();
-                    }
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
+                    sprintf(buf, "%.2fmol/L", fval); 
+                    EDIT_SetText(hItem, buf);
+                    exper_test_cl_dosage_set(fval);
                 }
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
@@ -627,20 +640,33 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_Exec();
                 if (numpad_creat()) {
                     p = numpad_get();
-                    sscanf(p, "%d", &ival);
-                    if (ival > 0 && ival < 500) {
-                        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
-                        if (gtest.func == MSG_LOAD_UI_STAND) {
-                            sprintf(buf, "%dmL", ival);
-                            exper_stand_v_set(ival);
-                        } else {
-                            sprintf(buf, "%dg", ival);
-                            exper_cement_weight_set(ival);
-                        }
-                        EDIT_SetText(hItem, buf);
+                    sscanf(p, "%d", &ival);                    
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
+                    if (gtest.func == MSG_LOAD_UI_STAND) {
+                        sprintf(buf, "%dmL", ival);
+                        exper_stand_v_set(ival);
                     } else {
-                        beep_warning();
+                        sprintf(buf, "%dg", ival);
+                        exper_cement_weight_set(ival);
                     }
+                    EDIT_SetText(hItem, buf);                    
+                }
+                ctrl_all_items(pMsg->hWin, 1);
+            }
+            break;
+        case ID_EDIT_NO3ND_VALUE:
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                beep_clicked();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                if (numpad_creat()) {
+                    p = numpad_get();
+                    sscanf(p, "%f", &fval);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
+                    sprintf(buf, "%.2fmol/L", fval);
+                    exper_stand_agno3_dosage_set(fval);
+                    EDIT_SetText(hItem, buf);
                 }
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
@@ -648,8 +674,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             }
             break;
+        default:
+            break;
         }
-        break;
     case WM_USER:
         stat = (struct exper_stat *)pMsg->Data.p;
         switch (stat->stat) {
@@ -666,7 +693,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
                 sprintf(buf, "%.3fmV", stat->volt);
                 TEXT_SetText(hItem, buf);
-                
+                break;
+            case EXPER_STAT_UPDATE_AGNO3_USED:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
                 sprintf(buf, "%.3fmL", stat->agno3_used);
                 TEXT_SetText(hItem, buf);
@@ -705,8 +733,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 diag_res_creat(&gres);
                 //ctrl_all_items(pMsg->hWin, 1);
 
-                test_agno3_finished_flag = 1;
-
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
                 sprintf(buf, "%.4fmol/L", stat->agno3_consistence);
                 TEXT_SetText(hItem, buf);
@@ -730,8 +756,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_Exec();
                 diag_res_creat(&gres);
                 //ctrl_all_items(pMsg->hWin, 1);
-
-                block_finished_flag = 1;
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
                 sprintf(buf, "%.3fmL", stat->agno3_used);
@@ -760,6 +784,36 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
                 sprintf(buf, "%.3fmL", stat->agno3_used);
+                TEXT_SetText(hItem, buf);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+                BUTTON_SetText(hItem, "氯离子检测");
+                BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                ctrl_all_items(pMsg->hWin, 1);
+                break;
+            case EXPER_STAT_STAND_FINISHED:
+                beep_finished();
+                test_func = 0;
+                gres.func = EXPER_STAT_STAND_FINISHED;
+                gres.agno3_used = stat->agno3_used;
+                gres.res = stat->cl_percentage;
+                gres.res2 = stat->ppm; 
+
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(&gres);
+                //ctrl_all_items(pMsg->hWin, 1);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
+                sprintf(buf, "%.3fmol/L", stat->cl_percentage);
+                TEXT_SetText(hItem, buf);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
+                sprintf(buf, "%.3fmL", stat->agno3_used);
+                TEXT_SetText(hItem, buf);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
+                sprintf(buf, "%.1f", stat->ppm);
                 TEXT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);

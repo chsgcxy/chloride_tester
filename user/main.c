@@ -23,6 +23,7 @@
 #include "experiment.h"
 #include "sysconf.h"
 #include "beep.h"
+#include "ds18b20.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -113,6 +114,7 @@ static int g_printer_send(uint8_t *buf, int len)
 int main(void)
 {
 	int status;
+	float temp;
 
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
@@ -139,7 +141,7 @@ int main(void)
 	GUI_DispStringHCenterAt("ZCL-II 氯离子(全自动电位滴定仪)", 400, 60);
 	GUI_SetFont(&GUI_FontHZ_kaiti_28);
 	GUI_DispStringHCenterAt("北京同创中仪科技为您服务", 400, 350);
-	delay_ms(2000);
+	delay_ms(1500);
 	
 	spi1_init();
 	spi2_init();
@@ -147,13 +149,12 @@ int main(void)
 	ad770x_init();
 	beep_init();
 	w25xxx_init();
+	ds18b20_open();
 	//w25xxx_erase_chip();
 	stepmotor_init();
 	sysconf_load();
 	touch_init();
 	touch_calibrate(0);
-
-	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
 
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;
@@ -161,11 +162,19 @@ int main(void)
 
 	exper_init();
 
+	while (1) {
+		temp = ds18b20_get_temp();
+		printf("temp = %f\r\n", temp);
+		delay_ms(1000);
+	}
+
 	/* creat freertos task */
 	task_init();
 
 	/* run rtos */
 	vTaskStartScheduler();
+
+	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
 	/* if run here, system error */
 	while (1) {
 		printf("system error!\r\n");

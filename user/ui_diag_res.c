@@ -34,16 +34,17 @@
 *
 **********************************************************************
 */
-#define ID_WINDOW_0 (GUI_ID_USER + 0x00)
-#define ID_TEXT_0 (GUI_ID_USER + 0x01)
-#define ID_TEXT_1 (GUI_ID_USER + 0x03)
-#define ID_TEXT_2 (GUI_ID_USER + 0x04)
-#define ID_TEXT_3 (GUI_ID_USER + 0x05)
-#define ID_TEXT_4 (GUI_ID_USER + 0x06)
-#define ID_BUTTON_0 (GUI_ID_USER + 0x07)
-#define ID_BUTTON_1 (GUI_ID_USER + 0x08)
-#define ID_BUTTON_2 (GUI_ID_USER + 0x09)
-
+#define ID_WINDOW_0          (GUI_ID_USER + 0x00)
+#define ID_TEXT_0            (GUI_ID_USER + 0x01)
+#define ID_TEXT_1            (GUI_ID_USER + 0x03)
+#define ID_TEXT_2            (GUI_ID_USER + 0x04)
+#define ID_TEXT_3            (GUI_ID_USER + 0x05)
+#define ID_TEXT_4            (GUI_ID_USER + 0x06)
+#define ID_BUTTON_0          (GUI_ID_USER + 0x07)
+#define ID_BUTTON_1          (GUI_ID_USER + 0x08)
+#define ID_BUTTON_2          (GUI_ID_USER + 0x09)
+#define ID_TEXT_PPM          (GUI_ID_USER + 0x0A)
+#define ID_TEXT_PPM_VALUE    (GUI_ID_USER + 0x0B)
 // USER START (Optionally insert additional defines)
 // USER END
 
@@ -64,10 +65,16 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 151, 119, 500, 240, 0, 0x0, 0},
     {TEXT_CreateIndirect, "实验结果", ID_TEXT_0, 182, 12, 133, 25, 0, 0x64, 0},
+    
     {TEXT_CreateIndirect, "Text", ID_TEXT_1, 10, 60, 250, 25, 0, 0x64, 0},
     {TEXT_CreateIndirect, "Text", ID_TEXT_2, 275, 60, 150, 25, 0, 0x64, 0},
+    
     {TEXT_CreateIndirect, "Text", ID_TEXT_3, 10, 100, 250, 25, 0, 0x64, 0},
     {TEXT_CreateIndirect, "Text", ID_TEXT_4, 275, 100, 150, 25, 0, 0x64, 0},
+    
+    {TEXT_CreateIndirect, "PPM", ID_TEXT_PPM, 10, 140, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_PPM_VALUE, 275, 140, 150, 25, 0, 0x64, 0},
+
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 10, 190, 120, 40, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 187, 190, 120, 40, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_2, 368, 190, 120, 40, 0, 0x0, 0},
@@ -106,7 +113,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Window'
         //
         hItem = pMsg->hWin;
-        WINDOW_SetBkColor(hItem, GUI_MAKE_COLOR(0x00000000));
+        WINDOW_SetBkColor(hItem, GUI_DARKBLUE);
         //
         // Initialization of 'Text'
         //
@@ -145,6 +152,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_STAT_CL_FINISHED:
             TEXT_SetText(hItem, "水泥氯离子质量分数");
             break;
+        case EXPER_STAT_STAND_FINISHED:
+            TEXT_SetText(hItem, "氯离子浓度");
+            break;
         default:
             break;
         }
@@ -166,19 +176,58 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             sprintf(buf, "%.3f%%", exper_res.res);
             TEXT_SetText(hItem, buf);
             break;
+        case EXPER_STAT_STAND_FINISHED:
+            sprintf(buf, "%.3fmol/L", exper_res.res);
+            TEXT_SetText(hItem, buf);
+            break;
         default:
             break;
         }
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
+        switch (exper_res.func) {
+        case EXPER_STAT_AGNO3_FINISHED:
+        case EXPER_STAT_BLOCK_FINISHED:
+        case EXPER_STAT_CL_FINISHED:
+            WM_HideWindow(hItem);
+            break;
+        case EXPER_STAT_STAND_FINISHED:
+            TEXT_SetFont(hItem, GUI_FONT_24_1);
+            TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+            break;
+        default:
+            break;
+        }
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
+        switch (exper_res.func) {
+        case EXPER_STAT_AGNO3_FINISHED:
+        case EXPER_STAT_BLOCK_FINISHED:
+        case EXPER_STAT_CL_FINISHED:
+            WM_HideWindow(hItem);
+            break;
+        case EXPER_STAT_STAND_FINISHED:
+            TEXT_SetFont(hItem, GUI_FONT_24_1);
+            TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+            sprintf(buf, "%.1f", exper_res.res2);
+            TEXT_SetText(hItem, buf);
+            break;
+        default:
+            break;
+        }
+
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         switch (exper_res.func) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
+        case EXPER_STAT_STAND_FINISHED:
             BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
             BUTTON_SetText(hItem, "打印");
             break;
@@ -190,12 +239,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         switch (exper_res.func) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
             BUTTON_SetText(hItem, "确定");
             break;
         case EXPER_STAT_CL_FINISHED:
+        case EXPER_STAT_STAND_FINISHED:
             BUTTON_SetText(hItem, "U盘导出");
             break;
         default:
@@ -206,12 +257,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         switch (exper_res.func) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
+        case EXPER_STAT_STAND_FINISHED:
             BUTTON_SetText(hItem, "保存返回");
             break;
         default:
@@ -256,6 +309,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     GUI_EndDialog(pMsg->hWin, 0);
                     break;
                 case EXPER_STAT_CL_FINISHED:
+                case EXPER_STAT_STAND_FINISHED:
                     // to be continued, save to usb
                     break;
                 default:

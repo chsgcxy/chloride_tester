@@ -5,6 +5,7 @@
 //#define BOARD_TYPE_DEMO
 #define BOARD_TYPE_MY
 
+#define SOFTWARE_VERSION_STR    "V2.0.0"
 
 /* board special config */
 #ifdef BOARD_TYPE_DEMO
