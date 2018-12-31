@@ -220,6 +220,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // USER START (Optionally insert additional code for further widget initialization)
         count = 0;
         numpad_buf[0] = '0';
+        numpad_buf[1] = 0;
         // USER END
         break;
     case WM_NOTIFY_PARENT:

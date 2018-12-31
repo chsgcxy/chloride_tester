@@ -31,8 +31,11 @@ struct exper {
     int steps;
     
     int agno3_stock;
-    int cement_weight;
     
+    int stand_v;
+    float stand_agno3_dosage;
+
+    float test_cl_dosage;
     float test_agno3_dosage;
     float test_agno3_used;
 
@@ -40,6 +43,7 @@ struct exper {
     
     float cl_agno3_used;
     float cl_percentage;
+    int cement_weight;
     
     struct exper_stat estat;
     struct exper_msg emsg;
@@ -49,21 +53,41 @@ struct exper {
 };
 
 static struct exper g_exper;
+static char exper_is_run = 0;
 
+char exper_busy(void)
+{
+    return exper_is_run;
+}
 
 struct report *exper_get_report(void)
 {
     return &g_exper.rep;
 }
 
-void exper_agno3_dosage_set(float dosage)
+int exper_agno3_stock_get(void)
 {
-    g_exper.test_agno3_dosage = dosage;
+    return g_exper.agno3_stock * 100 / EXPER_TOTAL_ML;
 }
 
-float exper_agno3_dosage_get(void)
+void exper_stand_agno3_dosage_set(float dosage)
 {
-    return g_exper.test_agno3_dosage;
+    g_exper.stand_agno3_dosage = dosage;
+}
+
+float exper_stand_agno3_dosage_get(void)
+{
+    return g_exper.stand_agno3_dosage;
+}
+
+int exper_stand_v_get(void)
+{
+    return g_exper.stand_v;
+}
+
+void exper_stand_v_set(int v)
+{
+    g_exper.stand_v = v;
 }
 
 void exper_cement_weight_set(float weight)
@@ -76,6 +100,16 @@ int exper_cement_weight_get(void)
     return g_exper.cement_weight;
 }
 
+void exper_test_cl_dosage_set(float dosage)
+{
+    g_exper.test_cl_dosage = dosage;
+}
+
+float exper_test_cl_dosage_get(void)
+{
+    return g_exper.test_cl_dosage;
+}
+
 static void _exper_oil_get(struct exper *exp)
 {
     int correct = 0;
@@ -84,6 +118,11 @@ static void _exper_oil_get(struct exper *exp)
 
     relay_ctrl(MOTOR_WATER_GET);
     while (exp->agno3_stock < EXPER_TOTAL_ML) {
+        if (exp->emsg.stop) {
+            EXPER_DBG_PRINT("stoped.\r\n");
+            return;
+        }
+
         if (stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML))
             exp->agno3_stock = EXPER_TOTAL_ML;
         else {
@@ -111,6 +150,7 @@ static void _exper_oil_get(struct exper *exp)
 static void exper_oil_get(struct exper *exp)
 {
     _exper_oil_get(exp);
+    exp->emsg.stop = 0;
     exp->wmsg.MsgId = WM_USER;
     exp->wmsg.hWinSrc = 0;
     exp->wmsg.Data.p = &exp->estat;
@@ -128,9 +168,7 @@ static void _exper_oil_put(struct exper *exp)
     relay_ctrl(MOTOR_WATER_PUT);
     while (exp->agno3_stock > 0) {
         if (exp->emsg.stop) {
-            exp->emsg.stop = 0;
             EXPER_DBG_PRINT("stoped.\r\n");
-            vTaskDelay(50);
             return;
         }
             
@@ -161,6 +199,7 @@ static void _exper_oil_put(struct exper *exp)
 static void exper_oil_put(struct exper *exp)
 {
     _exper_oil_put(exp);
+    exp->emsg.stop = 0;
     exp->wmsg.MsgId = WM_USER;
     exp->wmsg.hWinSrc = 0;
     exp->wmsg.Data.p = &exp->estat;
@@ -284,6 +323,8 @@ static void do_test(struct exper *exp, int mode)
     }
 
     while (1) {
+        if (exp->estat.oil_stock < 10)
+            _exper_oil_get(exp);
         /* user stop */
         if (exp->emsg.stop) {
             exp->emsg.stop = 0;
@@ -295,9 +336,6 @@ static void do_test(struct exper *exp, int mode)
             step_ml = 0.1;
             step = 1;
         }
-
-        if (exp->estat.oil_stock < 10)
-            _exper_oil_get(exp);
 
         /* put AgNo3 oil */
         relay_ctrl(MOTOR_WATER_PUT);
@@ -312,7 +350,6 @@ static void do_test(struct exper *exp, int mode)
         }
 
         /* wait oil act */
-       
         EXPER_DBG_PRINT("\r\n\r\n");
         if (step == 1) {
             vTaskDelay(10000 + ext_delay);
@@ -360,7 +397,7 @@ static void do_test(struct exper *exp, int mode)
             switch (mode) {
             case EXPER_MSG_AGNO3_START:
                 exp->test_agno3_used = count_agno3_used(exp);
-                exp->test_agno3_dosage = (float)0.2 / exp->test_agno3_used;
+                exp->test_agno3_dosage = exp->test_cl_dosage * 10 / exp->test_agno3_used;
                 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nAgNo3 test finished.\r\n");
                 EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->test_agno3_used);
@@ -417,37 +454,50 @@ void exper_task(void *args)
     g_exper.wmsg.MsgId = WM_USER;
     g_exper.wmsg.hWinSrc = 0;
     g_exper.wmsg.Data.p = &g_exper.estat;
-    
+    exper_is_run = 0;
+
     while (1) {
         switch (g_exper.emsg.msg) {
         case EXPER_MSG_NONE:
             break;
         case EXPER_MSG_AGNO3_START:
             EXPER_DBG_PRINT("EXPER_MSG_AGNO3_START\r\n");
+            exper_is_run = 1;
             do_test(&g_exper, EXPER_MSG_AGNO3_START);
             g_exper.emsg.msg = EXPER_MSG_NONE;
+            exper_is_run = 0;
             break;
         case EXPER_MSG_BLOCK_START:
             EXPER_DBG_PRINT("EXPER_MSG_BLOCK_START\r\n");
+            exper_is_run = 1;
             do_test(&g_exper, EXPER_MSG_BLOCK_START);
             g_exper.emsg.msg = EXPER_MSG_NONE;
+            exper_is_run = 0;
             break;
         case EXPER_MSG_CL_START:
             EXPER_DBG_PRINT("EXPER_MSG_CL_START\r\n");
+            exper_is_run = 1;
             do_test(&g_exper, EXPER_MSG_CL_START);
             g_exper.emsg.msg = EXPER_MSG_NONE;
+            exper_is_run = 0;
             break;
         case EXPER_MSG_OIL_GET:
+            exper_is_run = 1;
             exper_oil_get(&g_exper);
             g_exper.emsg.msg = EXPER_MSG_NONE;
+            exper_is_run = 0;
             break;
         case EXPER_MSG_OIL_PUT:
+            exper_is_run = 1;
             exper_oil_put(&g_exper);
             g_exper.emsg.msg = EXPER_MSG_NONE;
+            exper_is_run = 0;
             break;
         case EXPER_MSG_OIL_CLEAR:
+            exper_is_run = 1;
             exper_oil_clear(&g_exper);
             g_exper.emsg.msg = EXPER_MSG_NONE;
+            exper_is_run = 0;
             break;
         default:
             break;
@@ -464,5 +514,7 @@ void exper_msg_set(struct exper_msg *msg)
 void exper_init(void)
 {
     g_exper.cement_weight = 5.0;
-    g_exper.test_agno3_dosage = 0.02;
+    g_exper.stand_agno3_dosage = 0.02;
+    g_exper.test_cl_dosage = 0.02;
+    g_exper.stand_v = 100;
 }

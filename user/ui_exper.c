@@ -82,6 +82,9 @@ extern char *numpad_get(void);
 static struct ui_exper_info ginfo;
 static struct ui_exper_res gres;
 static struct ui_exper_test gtest;
+
+static char test_agno3_finished_flag = 0;
+static char block_finished_flag = 0;
 /*********************************************************************
 *
 *       Static data
@@ -155,12 +158,36 @@ static void ctrl_all_items(WM_HWIN hWin, int enable)
 
     for (id = ID_BUTTON_GET; id <= ID_EDIT_SNZL_VALUE; id++) {
         hItem = WM_GetDialogItem(hWin, id);
-        if (enable)
-            WM_EnableWindow(hItem);
-        else
-            WM_DisableWindow(hItem);
+        if (id == ID_BUTTON_START_BLOCK) {
+            if (test_agno3_finished_flag && enable)
+                WM_EnableWindow(hItem);
+            else 
+                WM_DisableWindow(hItem);
+        } else if (id == ID_BUTTON_START_TEST) {
+            if (block_finished_flag && enable)
+                WM_EnableWindow(hItem);
+            else 
+                WM_DisableWindow(hItem);
+        } else {
+            if (enable)
+                WM_EnableWindow(hItem);
+            else
+                WM_DisableWindow(hItem);
+        }
     }    
 }
+
+static void progress_show(WM_HWIN hItem, int progress)
+{
+    if (progress < 10)
+        PROGBAR_SetBarColor(hItem, 0, GUI_RED);
+    else if (progress < 40)
+        PROGBAR_SetBarColor(hItem, 0, GUI_YELLOW);
+    else
+        PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
+    PROGBAR_SetValue(hItem, progress);
+}
+
 
 /*********************************************************************
 *
@@ -216,7 +243,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-
+        if (test_agno3_finished_flag)
+            WM_EnableWindow(hItem);
+        else
+            WM_DisableWindow(hItem);
+        
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
@@ -224,6 +255,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        if (block_finished_flag)
+            WM_EnableWindow(hItem);
+        else
+            WM_DisableWindow(hItem);
         //
         // Initialization of 'Text'
         //
@@ -280,8 +315,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        sprintf(buf, "%.2fmol/L", exper_agno3_dosage_get()); 
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            sprintf(buf, "%.2fmol/L", exper_stand_agno3_dosage_get());
+        else
+            sprintf(buf, "%.2fmol/L", exper_test_cl_dosage_get()); 
         EDIT_SetText(hItem, buf);
+        
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
@@ -303,13 +342,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        if (gtest.func == MSG_LOAD_UI_STAND) {
-            EDIT_SetText(hItem, "100mL");
-        } else {
-            sprintf(buf, "%dg", exper_cement_weight_get()); 
-            EDIT_SetText(hItem, buf);
-        }
-            
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            sprintf(buf, "%dmL", exper_stand_v_get());
+        else
+            sprintf(buf, "%dg", exper_cement_weight_get());
+        EDIT_SetText(hItem, buf);
         //
         // Initialization of 'Text'
         //
@@ -322,8 +359,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         PROGBAR_SetBarColor(hItem, 0, GUI_RED);
         PROGBAR_SetSkinClassic(hItem);
         PROGBAR_SetMinMax(hItem, 0, 100);
+        progress_show(hItem, exper_agno3_stock_get());
         
-
         hItem = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_0);
         GRAPH_SetBorder(hItem, 35, 3, 3, 15);
         GRAPH_SetGridVis(hItem, 2);
@@ -564,11 +601,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 if (numpad_creat()) {
                     p = numpad_get();
                     sscanf(p, "%f", &fval);
-                    if (fval > 1.0 || fval == 0.0) {
+                    if (fval > 0.0 && fval < 1.0) {
                         hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
                         sprintf(buf, "%.2fmol/L", fval); 
                         EDIT_SetText(hItem, buf);
-                        exper_agno3_dosage_set(fval);
+                        if (gtest.func == MSG_LOAD_UI_STAND)
+                            exper_stand_agno3_dosage_set(fval);
+                        else
+                            exper_test_cl_dosage_set(fval);
+                    } else {
+                        beep_warning();
                     }
                 }
                 ctrl_all_items(pMsg->hWin, 1);
@@ -583,7 +625,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 beep_clicked();
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
-                numpad_creat();
+                if (numpad_creat()) {
+                    p = numpad_get();
+                    sscanf(p, "%d", &ival);
+                    if (ival > 0 && ival < 500) {
+                        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
+                        if (gtest.func == MSG_LOAD_UI_STAND) {
+                            sprintf(buf, "%dmL", ival);
+                            exper_stand_v_set(ival);
+                        } else {
+                            sprintf(buf, "%dg", ival);
+                            exper_cement_weight_set(ival);
+                        }
+                        EDIT_SetText(hItem, buf);
+                    } else {
+                        beep_warning();
+                    }
+                }
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
             default:
@@ -601,13 +659,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case EXPER_STAT_UPDATE_PROGRESS:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-                if (stat->oil_stock < 10)
-                    PROGBAR_SetBarColor(hItem, 0, GUI_RED);
-                else if (stat->oil_stock < 40)
-                    PROGBAR_SetBarColor(hItem, 0, GUI_YELLOW);
-                else
-                    PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
-                PROGBAR_SetValue(hItem, stat->oil_stock);
+                progress_show(hItem, stat->oil_stock);
                 break;
             case EXPER_STAT_UPDATE_GRAPH:
                 GRAPH_DATA_XY_AddPoint(pdataGRP, &stat->graph_pos);
@@ -651,7 +703,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
                 diag_res_creat(&gres);
-                ctrl_all_items(pMsg->hWin, 1);
+                //ctrl_all_items(pMsg->hWin, 1);
+
+                test_agno3_finished_flag = 1;
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
                 sprintf(buf, "%.4fmol/L", stat->agno3_consistence);
@@ -675,7 +729,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
                 diag_res_creat(&gres);
-                ctrl_all_items(pMsg->hWin, 1);
+                //ctrl_all_items(pMsg->hWin, 1);
+
+                block_finished_flag = 1;
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
                 sprintf(buf, "%.3fmL", stat->agno3_used);
@@ -696,7 +752,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
                 diag_res_creat(&gres);
-                ctrl_all_items(pMsg->hWin, 1);
+                //ctrl_all_items(pMsg->hWin, 1);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
                 sprintf(buf, "%.3f%%", stat->cl_percentage);

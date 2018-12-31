@@ -14,6 +14,7 @@ void beep_work(int work, int idol)
 
 void beep_finished(void)
 {
+	beep_work(500, 50);
 	beep_work(500, 0);
 }
 
@@ -24,11 +25,9 @@ void beep_clicked(void)
     
 void beep_warning(void)
 {
-	beep_work(30, 100);
-	beep_work(30, 100);
-	beep_work(30, 100);
-	beep_work(30, 100);
-	beep_work(30, 0);
+	beep_work(100, 30);
+	beep_work(100, 30);
+	beep_work(100, 0);
 }
 
 int beep_init(void)
