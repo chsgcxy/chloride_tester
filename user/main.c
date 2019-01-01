@@ -162,12 +162,13 @@ int main(void)
 
 	exper_init();
 
+#if 0
 	while (1) {
 		temp = ds18b20_get_temp();
 		printf("temp = %f\r\n", temp);
 		delay_ms(1000);
 	}
-
+#endif
 	/* creat freertos task */
 	task_init();
 

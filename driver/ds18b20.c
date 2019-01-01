@@ -32,27 +32,27 @@ static uint8_t ds18b20_gpio_get(void)
     return GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_4);
 }
 
-static int ds18b20_init(void)  
-{  
-    int res = 500;
-  
+static void ds18b20_reset(void)
+{
     ds18b20_gpio_cfg(CFG_OUT);
-    ds18b20_gpio_set(1);
-    delay_us(100);
     ds18b20_gpio_set(0);
-    delay_us(600);  
+    delay_us(750);
     ds18b20_gpio_set(1);
-  
-    ds18b20_gpio_cfg(CFG_IN);  
-    while (ds18b20_gpio_get() && res--);
+    delay_us(15);  
+}
 
-    return res;
+static int ds18b20_check(void)
+{
+    int retry = 50;
+
+    ds18b20_gpio_cfg(CFG_IN); 
+    while (ds18b20_gpio_get() && retry--)
+        delay_us(1);
+    return retry;
 }
 
 int ds18b20_open(void)  
 {  
-    int flag = 0;  
-
     GPIO_InitTypeDef GPIO_InitStructure;
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 
@@ -64,12 +64,7 @@ int ds18b20_open(void)
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
     GPIO_ResetBits(GPIOC, GPIO_Pin_4);
   
-    flag = ds18b20_init();  
-    if (flag == 0) {  
-        printf("open ds18b20 failed\r\n");  
-        return -1;
-    }  
-    printf("open ds18b20 successful\r\n");  
+    ds18b20_reset();
     return 0;  
 }  
 
@@ -79,7 +74,9 @@ static void write_byte(unsigned char data)
   
     ds18b20_gpio_cfg(CFG_OUT);
   
-    for (i = 0; i < 8; i++) {  
+    for (i = 0; i < 8; i++) {
+        //ds18b20_gpio_set(1);
+        //delay_us(1);  
         ds18b20_gpio_set(0);  
         delay_us(1);
         ds18b20_gpio_set(data & 0x01);  
@@ -99,45 +96,40 @@ static unsigned char read_byte(void)
     for (i = 0; i < 8; i++) {
         ds18b20_gpio_cfg(CFG_OUT);  
         ds18b20_gpio_set(0);
-        delay_us(1);
+        delay_us(2);
         ds18b20_gpio_set(1);
+        delay_us(1);
         ds18b20_gpio_cfg(CFG_IN);
-        delay_us(4);
+        delay_us(20);
         data >>= 1;
         if (ds18b20_gpio_get())  
             data |= 0x80;  
-        delay_us(60);
+        delay_us(70);
     }
     return data;  
 }  
   
 float ds18b20_get_temp(void)  
 {  
-    int flag;
     unsigned char result[2] = { 0x00, 0x00 }; 
     int val;
     float temp = 0;
   
-    flag = ds18b20_init();  
-    if (flag == 0) {  
-        printf("ds18b20 init failed\r\n");  
-        return 0;
-    }  
-  
-    delay_us(420);
+    ds18b20_reset();
+    ds18b20_check();
+    delay_us(50);
     write_byte(0xcc);  
     write_byte(0x44);  
-    delay_us(800);
+    delay_us(50);
 
-    flag = ds18b20_init();  
-    if (flag == 0)  
-        return 0;  
-    delay_us(400);
+    ds18b20_reset();
+    ds18b20_check();
+    delay_us(50);
     write_byte(0xcc);  
-    write_byte(0xbe);  
-  
+    write_byte(0xbe);
     result[0] = read_byte();
     result[1] = read_byte();
+    printf("res0=%x, res1=%x\r\n", result[0], result[1]);
   
     val = result[1];
     val <<= 8;

@@ -73,23 +73,27 @@ extern const GUI_FONT GUI_FontHZ_kaiti_28;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "触摸屏校准", ID_BUTTON_0, 10, 13, 769, 55, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "保存设置", ID_BUTTON_1, 589, 300, 190, 35, 0, 0x0, 0},
-    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_0, 10, 300, 70, 35, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "年", ID_TEXT_0, 87, 300, 35, 35, 0, 0x64, 0},
-    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_1, 126, 300, 70, 35, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "月", ID_TEXT_1, 200, 300, 35, 35, 0, 0x64, 0},
-    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_2, 240, 300, 70, 35, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "日", ID_TEXT_2, 312, 300, 35, 35, 0, 0x64, 0},
-    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_3, 352, 300, 70, 35, 0, 0x0, 0},
-    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_4, 470, 300, 70, 35, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "时", ID_TEXT_3, 428, 300, 35, 35, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "分", ID_TEXT_4, 546, 300, 35, 35, 0, 0x64, 0},
-    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_5, 144, 160, 107, 35, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "越变电位", ID_TEXT_5, 10, 160, 140, 38, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "mV", ID_TEXT_6, 258, 160, 43, 35, 0, 0x64, 0},
-    {BUTTON_CreateIndirect, "保存设置", ID_BUTTON_2, 349, 160, 428, 35, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "返回", ID_BUTTON_3, 638, 384, 146, 34, 0, 0x0, 0},
+    
+    {BUTTON_CreateIndirect, "触摸屏校准", ID_BUTTON_0, 10, 10, 300, 155, 0, 0x0, 0},
+    
+    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_0, 10, 230, 110, 70, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "年", ID_TEXT_0, 123, 250, 25, 35, 0, 0x64, 0},
+    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_1, 150, 230, 110, 70, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "月", ID_TEXT_1, 263, 250, 25, 35, 0, 0x64, 0},
+    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_2, 290, 230, 110, 70, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "日", ID_TEXT_2, 403, 250, 25, 35, 0, 0x64, 0},
+    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_3, 430, 230, 110, 70, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "时", ID_TEXT_3, 543, 250, 25, 35, 0, 0x64, 0},
+    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_4, 570, 230, 110, 70, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "分", ID_TEXT_4, 683, 250, 25, 35, 0, 0x64, 0},
+    {BUTTON_CreateIndirect, "保存", ID_BUTTON_1, 710, 230, 80, 70, 0, 0x0, 0},
+
+    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_5, 550, 10, 120, 70, 0, 0x0, 0},
+    {TEXT_CreateIndirect, "越变电位", ID_TEXT_5, 430, 30, 130, 38, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "mV", ID_TEXT_6, 675, 25, 40, 35, 0, 0x64, 0},
+    {BUTTON_CreateIndirect, "保存电位", ID_BUTTON_2, 420, 115, 300, 50, 0, 0x0, 0},
+    
+    {BUTTON_CreateIndirect, "返回", ID_BUTTON_3, 638, 370, 146, 50, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -277,6 +281,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();              
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -289,6 +294,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_VALUE_CHANGED:
                 // USER START (Optionally insert code for reacting on notification message)
+                
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -300,6 +306,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -312,6 +319,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_VALUE_CHANGED:
                 // USER START (Optionally insert code for reacting on notification message)
+                
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -323,6 +331,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -335,6 +344,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_VALUE_CHANGED:
                 // USER START (Optionally insert code for reacting on notification message)
+                
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -346,6 +356,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -358,6 +369,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_VALUE_CHANGED:
                 // USER START (Optionally insert code for reacting on notification message)
+                
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -369,6 +381,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -381,6 +394,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_VALUE_CHANGED:
                 // USER START (Optionally insert code for reacting on notification message)
+                
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -392,6 +406,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -404,6 +419,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_VALUE_CHANGED:
                 // USER START (Optionally insert code for reacting on notification message)
+                
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
