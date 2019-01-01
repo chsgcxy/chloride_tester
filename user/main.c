@@ -138,7 +138,7 @@ int main(void)
 	GUI_DrawBitmap(&bmlogo, 315, 150);
 	GUI_SetFont(&GUI_FontHZ_kaiti_20);
 	GUI_SetColor(GUI_BLACK);
-	GUI_DispStringHCenterAt("ZCL-II 氯离子(全自动电位滴定仪)", 400, 60);
+	GUI_DispStringHCenterAt("ZCL-II型氯离子(全自动电位滴定仪)", 400, 60);
 	GUI_SetFont(&GUI_FontHZ_kaiti_28);
 	GUI_DispStringHCenterAt("北京同创中仪科技为您服务", 400, 350);
 	delay_ms(1500);
