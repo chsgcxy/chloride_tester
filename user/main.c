@@ -24,6 +24,7 @@
 #include "sysconf.h"
 #include "beep.h"
 #include "ds18b20.h"
+#include "data.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -38,7 +39,7 @@ extern int ui_blocktest_creat(struct ui_exper_test *test);
 extern int ui_setting_creat(void);
 extern int ui_test_creat(void);
 extern int ui_data_creat(void);
-extern int data_detail_creat(void);
+extern int data_detail_creat(struct data *dat);
 extern void lcd_io_init(void);
 
 extern const GUI_BITMAP bmlogo;
@@ -76,7 +77,7 @@ static void task_ui(void *args)
 			ui_data_creat();
 			break;
 		case MSG_LOAD_UI_DETAIL:
-			data_detail_creat();
+			data_detail_creat(data_get());
 			break;
 		case MSG_LOAD_UI_TOUCH_CALC:
 			vTaskSuspend(handle_touch);
@@ -113,9 +114,8 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
-	int status;
-	float temp;
-
+	int i;
+	char buf[64];
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
@@ -162,13 +162,10 @@ int main(void)
 
 	exper_init();
 
-#if 0
-	while (1) {
-		temp = ds18b20_get_temp();
-		printf("temp = %f\r\n", temp);
-		delay_ms(1000);
-	}
-#endif
+	sprintf(buf, "?");
+	for (i = 0; i < 16; i++)
+		printf("0x%02x  ", buf[i]);
+
 	/* creat freertos task */
 	task_init();
 

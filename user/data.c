@@ -8,7 +8,7 @@
 #define DATA_CFG_MAGIC    0xB5
 
 struct data_cfg {
-    uint8_t magic;
+    uint16_t magic;
     uint8_t crc;
     uint8_t crc_start;
 
@@ -89,5 +89,29 @@ int data_save(struct data *stream)
 {
 
     return 0;
+}
+
+struct data *data_get(void)
+{
+    static struct data dat;
+    int i;
+
+    dat.index = 3;
+    dat.year = 19;
+    dat.month = 1;
+    dat.day = 1;
+    dat.hour = 20;
+    dat.minute = 30;
+    dat.items_cnt = 9;
+    dat.agno3_used = 10.32;
+    dat.res = 0.042;
+    dat.ppm = 0.12;
+    for (i = 0; i < 9; i++) {
+        dat.items[i].agno3_used = 10.0 + i * 0.1;
+        dat.items[i].volt = 200 + i * 10;
+        dat.items[i].delta_v = (i - 1) * 10;
+        dat.items[i].delta2_v = 5;
+    }
+    return &dat;
 }
 

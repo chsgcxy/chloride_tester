@@ -6,25 +6,28 @@
 
 struct item {
     float agno3_used;
-    float e_mv;
-    float delta_emv;
-    float delta_vml;
-    float delta_ev;
-    float delta_2ev2;
+    float volt;
+    float delta_v;
+    float delta2_v;
 };
 
 struct data {
-    uint16_t magic;
+    uint8_t magic;
+    uint8_t type;
+    uint16_t index;
     uint8_t crc8;
     uint8_t year;
     uint8_t month;
     uint8_t day;
     uint8_t hour;
     uint8_t minute;
-    struct item items[10];
-    float nitrate_dosage;
-    float percentage;
+    uint8_t items_cnt;
+    struct item items[9];
+    float agno3_used;
+    float res;
+    float ppm;
 };
 
+extern struct data *data_get(void);
 
 #endif

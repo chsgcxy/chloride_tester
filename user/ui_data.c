@@ -25,20 +25,22 @@
 #include "stdio.h"
 #include "main.h"
 #include "beep.h"
+#include "data.h"
 /*********************************************************************
 *
 *       Defines
 *
 **********************************************************************
 */
-#define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)
-#define ID_LISTBOX_0 (GUI_ID_USER + 0x01)
-#define ID_BUTTON_LOOK (GUI_ID_USER + 0x02)
-#define ID_BUTTON_DEL (GUI_ID_USER + 0x03)
-#define ID_BUTTON_EXP (GUI_ID_USER + 0x04)
-#define ID_BUTTON_RETURN (GUI_ID_USER + 0x05)
-#define ID_BUTTON_EXPALL (GUI_ID_USER + 0x06)
-#define ID_PROGBAR_0 (GUI_ID_USER + 0x07)
+#define ID_FRAMEWIN_0       (GUI_ID_USER + 0x00)
+#define ID_LISTBOX_0        (GUI_ID_USER + 0x01)
+#define ID_BUTTON_LOOK      (GUI_ID_USER + 0x02)
+#define ID_BUTTON_DEL       (GUI_ID_USER + 0x03)
+#define ID_BUTTON_EXP       (GUI_ID_USER + 0x04)
+#define ID_BUTTON_RETURN    (GUI_ID_USER + 0x05)
+#define ID_BUTTON_EXPALL    (GUI_ID_USER + 0x06)
+#define ID_BUTTON_DELALL    (GUI_ID_USER + 0x07)
+#define ID_PROGBAR_0        (GUI_ID_USER + 0x08)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
@@ -62,11 +64,14 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
     {LISTBOX_CreateIndirect, "Listbox", ID_LISTBOX_0, 5, 5, 485, 380, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_LOOK, 565, 10, 170, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_DEL, 565, 80, 170, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 565, 150, 170, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 565, 370, 170, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXPALL, 565, 220, 170, 40, 0, 0x0, 0},
+    
+    {BUTTON_CreateIndirect, "查看", ID_BUTTON_LOOK, 545, 5, 210, 45, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "删除", ID_BUTTON_DEL, 545, 80, 210, 45, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "全部删除", ID_BUTTON_DELALL, 545, 155, 210, 45, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "导出", ID_BUTTON_EXP, 545, 230, 210, 45, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "全部导出", ID_BUTTON_EXPALL, 545, 305, 210, 45, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "返回", ID_BUTTON_RETURN, 545, 380, 210, 40, 0, 0x0, 0},
+
     {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 5, 390, 485, 25, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
@@ -123,35 +128,34 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_LOOK);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "查看");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DEL);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetText(hItem, "删除");
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DELALL);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetText(hItem, "导出");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "返回");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXPALL);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "全部导出");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
         PROGBAR_SetFont(hItem, GUI_FONT_20B_ASCII);

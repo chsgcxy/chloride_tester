@@ -28,28 +28,34 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "beep.h"
+#include "data.h"
+#include "string.h"
 /*********************************************************************
 *
 *       Defines
 *
 **********************************************************************
 */
-#define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)
+#define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_LISTVIEW_0 (GUI_ID_USER + 0x01)
 #define ID_BUTTON_RETURN (GUI_ID_USER + 0x03)
 #define ID_BUTTON_EXP (GUI_ID_USER + 0x04)
 #define ID_BUTTON_PRINT (GUI_ID_USER + 0x05)
-#define ID_TEXT_0 (GUI_ID_USER + 0x06)
-#define ID_TEXT_1 (GUI_ID_USER + 0x07)
-#define ID_TEXT_2 (GUI_ID_USER + 0x08)
-#define ID_TEXT_5 (GUI_ID_USER + 0x09)
-#define ID_TEXT_6 (GUI_ID_USER + 0x0A)
-#define ID_TEXT_7 (GUI_ID_USER + 0x0B)
-#define ID_TEXT_8 (GUI_ID_USER + 0x0C)
+#define ID_TEXT_IDX (GUI_ID_USER + 0x06)
+#define ID_TEXT_IDX_VALUE (GUI_ID_USER + 0x07)
+#define ID_TEXT_DATE (GUI_ID_USER + 0x08)
+#define ID_TEXT_XSYYL (GUI_ID_USER + 0x09)
+#define ID_TEXT_XSYYL_VALUE (GUI_ID_USER + 0x0A)
+#define ID_TEXT_MKSYHLLZ (GUI_ID_USER + 0x0B)
+#define ID_TEXT_MKSYHLLZ_VALUE (GUI_ID_USER + 0x0C)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
+extern GUI_CONST_STORAGE GUI_FONT GUI_FontArial24;
+
+
+static struct data *pdata;
 // USER END
 
 /*********************************************************************
@@ -67,18 +73,23 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-    {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
-    {LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 10, 96, 630, 319, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 660, 370, 120, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 660, 200, 120, 40, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PRINT, 660, 96, 120, 40, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_0, 10, 5, 60, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 100, 5, 80, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 260, 5, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_5, 10, 35, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_6, 260, 35, 80, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_7, 10, 65, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_8, 260, 65, 81, 25, 0, 0x64, 0},
+    {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0},
+    {LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 5, 5, 420, 460, 0, 0x0, 0},
+    
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 460, 200, 300, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PRINT, 460, 300, 300, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 460, 400, 300, 50, 0, 0x0, 0},
+
+    {TEXT_CreateIndirect, "Text", ID_TEXT_DATE, 440, 10, 250, 25, 0, 0x64, 0},
+
+    {TEXT_CreateIndirect, "Text", ID_TEXT_IDX, 440, 40, 50, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_IDX_VALUE, 690, 40, 80, 25, 0, 0x64, 0},
+    
+    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYYL, 440, 70, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYYL_VALUE, 690, 70, 80, 25, 0, 0x64, 0},
+    
+    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ, 440, 100, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ_VALUE, 690, 100, 81, 25, 0, 0x64, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -102,6 +113,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
     int NCode;
     int Id;
+    int i;
+    unsigned row;
+    char buf[32];
     HEADER_Handle hHeader;
     // USER START (Optionally insert additional variables)
     // USER END
@@ -113,54 +127,53 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Framewin'
         //
         hItem = pMsg->hWin;
-        FRAMEWIN_SetTitleHeight(hItem, 50);
-        FRAMEWIN_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        FRAMEWIN_SetFont(hItem, &GUI_FontHZ_kaiti_28);
-        FRAMEWIN_SetTextColor(hItem, GUI_BLUE);
-        FRAMEWIN_SetText(hItem, "实验数据");
-        FRAMEWIN_SetClientColor(hItem, GUI_GRAY);
+        WINDOW_SetBkColor(hItem, GUI_GRAY);
         //
         // Initialization of 'Listview'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-        LISTVIEW_SetRowHeight(hItem, 29);
+        LISTVIEW_SetRowHeight(hItem, 25);
         LISTVIEW_SetBkColor(hItem, 0, GUI_GRAY);
         LISTVIEW_SetGridVis(hItem, 1);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
-        LISTVIEW_AddRow(hItem, NULL);
         LISTVIEW_SetFont(hItem, GUI_FONT_24_ASCII);
+        for (i = 0; i < 17; i++)
+            LISTVIEW_AddRow(hItem, NULL);
 
         hHeader = LISTVIEW_GetHeader(hItem);
-        HEADER_SetFont(hHeader, GUI_FONT_24_ASCII);
+        HEADER_SetFont(hHeader, &GUI_FontArial24);
         HEADER_SetTextColor(hHeader, GUI_BLUE);
-        HEADER_SetHeight(hHeader, 29);
+        HEADER_SetHeight(hHeader, 35);
         HEADER_SetBkColor(hHeader, GUI_GRAY);
-        LISTVIEW_AddColumn(hItem, 105, "AgNO3", GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(hItem, 105, "E/Mv", GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(hItem, 105, "E/Mv", GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(hItem, 105, "v_ml", GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(hItem, 105, "Col", GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(hItem, 105, "Col", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(hItem, 120, "AgNO3/mL", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(hItem, 105, "V/mV", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(hItem, 105, "Δ/mV", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(hItem, 105, "Δ?/mV", GUI_TA_HCENTER | GUI_TA_VCENTER);
         
-        LISTVIEW_SetTextColor(hItem, 0, GUI_WHITE);
-        LISTVIEW_SetItemText(hItem, 0, 0, "0.00");
-        LISTVIEW_SetItemText(hItem, 0, 1, "0.01");
-        LISTVIEW_SetItemText(hItem, 5, 1, "0.01");
-        LISTVIEW_SetTextColor(hItem, 0, GUI_RED);
-        LISTVIEW_SetItemText(hItem, 0, 2, "0.03");
-        LISTVIEW_SetItemText(hItem, 1, 2, "0.03");
-        LISTVIEW_SetItemText(hItem, 2, 2, "0.10");
-        LISTVIEW_SetItemText(hItem, 3, 2, "0.10");
-        LISTVIEW_SetItemText(hItem, 4, 2, "0.10");
-        LISTVIEW_SetItemText(hItem, 5, 2, "0.10");
+        LISTVIEW_SetTextColor(hItem, 0, GUI_BLACK);
+
+        row = 0;
+        for (i = 0; i < pdata->items_cnt; i++, row += 2) {
+            sprintf(buf, "%.2f", pdata->items[i].agno3_used);
+            LISTVIEW_SetItemText(hItem, 0, row, buf);
+            sprintf(buf, "%.1f", pdata->items[i].volt);
+            LISTVIEW_SetItemText(hItem, 1, row, buf);
+        }
+
+        row = 1;
+        for (i = 1; i < pdata->items_cnt; i++, row += 2) {
+            sprintf(buf, "%.1f", pdata->items[i].delta_v);
+            LISTVIEW_SetItemText(hItem, 2, row, buf);
+        }
+            
+
+        row = 2;
+        for (i = 2; i < pdata->items_cnt; i++, row += 2) {
+            sprintf(buf, "%.1f", pdata->items[i].delta2_v);
+            LISTVIEW_SetItemText(hItem, 3, row, buf);
+        }
+
+        LISTVIEW_SetSel(hItem, 8);
+            
         //
         // Initialization of 'Button'
         //
@@ -185,52 +198,57 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_IDX);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "序号");
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_IDX_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "001");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        sprintf(buf, "%03d", pdata->index);
+        TEXT_SetText(hItem, buf);
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DATE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "2018-11-23  19:23");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        sprintf(buf, "20%02d-%02d-%02d      %02d:%02d",
+            pdata->year, pdata->month, pdata->day, pdata->hour, pdata->minute);
+        TEXT_SetText(hItem, buf);
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_5);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_XSYYL);
         TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti_20);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "硝酸银用量");
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_6);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_XSYYL_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "0.01mL");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        sprintf(buf, "%.2fmL", pdata->agno3_used);
+        TEXT_SetText(hItem, buf);
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_7);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MKSYHLLZ);
         TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti_20);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "每克试样含氯离子");
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_8);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MKSYHLLZ_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
-        TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetText(hItem, "0.12%");
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        sprintf(buf, "%.3f%%", pdata->res);
+        TEXT_SetText(hItem, buf);
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
@@ -331,8 +349,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *       CreateFramewin
 */
 
-int data_detail_creat(void)
+int data_detail_creat(struct data *dat)
 {
+    pdata = dat;
     return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

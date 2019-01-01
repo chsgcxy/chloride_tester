@@ -898,6 +898,11 @@
               <FileType>1</FileType>
               <FilePath>..\fonts\font_kaiti_28.c</FilePath>
             </File>
+            <File>
+              <FileName>font_arial_24.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fonts\font_arial_24.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
