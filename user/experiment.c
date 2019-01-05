@@ -22,206 +22,210 @@
 	#define EXPER_DBG_PRINT(fmt, args...)
 #endif
 
-struct exper {
-    float volt[50];
-    float agno3_used[50];
+#define EXPER_TEST
+
+#define EXPER_CNT     2
+
+struct exper_buf {
+    float volt;
+    float agno3_used;
+};
+
+struct exper_ctrl {
+    struct exper_buf buf[50];
     float volt_diff;
     int count;
     int jump;
     int steps;
-    
-    int agno3_stock;
-    
-    int stand_v;
-    float stand_agno3_dosage;
-    float ppm;
-
-    float test_cl_dosage;
-    float test_agno3_dosage;
-    float test_agno3_used;
-
-    float block_agno3_used;
-    
-    float cl_agno3_used;
-    float cl_percentage;
-    int cement_weight;
-    
-    struct exper_stat estat;
-    struct exper_msg emsg;
-    struct WM_MESSAGE wmsg;
-    
-    struct report rep;
 };
 
-static struct exper g_exper;
-static char exper_is_run = 0;
+struct experiment {
+    char *name;
+    
+    volatile struct exper_data data;
+    struct report rep;
 
-char exper_busy(void)
+    struct exper_ctrl *ctrl;
+    struct exper_stat *stat;
+    struct exper_msg *msg;
+    struct WM_MESSAGE *ui;
+};
+
+static struct experiment gexper[EXPER_CNT];
+static struct experiment *cur_exper = NULL;
+
+static volatile int exper_agno3_stock = 0;
+static volatile float exper_stock_percentage = 0.0;
+
+void exper_init(void)
 {
-    return exper_is_run;
+    int i;
+    
+    static struct exper_stat stat;
+    static struct exper_msg msg;
+    static struct exper_ctrl ctrl;
+    static struct WM_MESSAGE ui;
+    
+    gexper[0].name = "shuini";
+    gexper[1].name = "qita";
+
+    for (i = 0; i < EXPER_CNT; i++) {
+        gexper[i].ctrl = &ctrl;
+        gexper[i].stat = &stat;
+        gexper[i].msg = &msg;
+        gexper[i].ui = &ui;
+        
+        gexper[i].msg->stop = 0;
+        gexper[i].msg->msg = EXPER_MSG_NONE;
+        gexper[i].stat->data = &gexper[i].data;
+        gexper[i].ui->Data.p = gexper[i].stat;    
+        gexper[i].ui->MsgId = WM_USER;
+        gexper[i].ui->hWinSrc = 0;
+
+        gexper[i].data.sample_weight = 5.0;
+        gexper[i].data.agno3_dosage = 0.02;
+        gexper[i].data.nacl_dosage = 0.02;
+        gexper[i].data.sample_volume = 100;
+        gexper[i].data.agno3_stock = &exper_agno3_stock;
+        gexper[i].data.stock_percentage = &exper_stock_percentage;
+    }
 }
 
-struct report *exper_get_report(void)
+static int is_run = 0;
+
+int exper_busy_get(void)
 {
-    return &g_exper.rep;
+    return is_run;
 }
 
-int exper_agno3_stock_get(void)
+void exper_print_report(int idx)
 {
-    return g_exper.agno3_stock * 100 / EXPER_TOTAL_ML;
+    if (idx >= EXPER_CNT)
+        return;
+    
+    report_show(&gexper[idx].rep);
+}
+              
+volatile struct exper_data *exper_data_get(int idx)
+{
+    if (idx >= EXPER_CNT)
+        return NULL;
+    
+    return &gexper[idx].data;
 }
 
-void exper_stand_agno3_dosage_set(float dosage)
-{
-    g_exper.stand_agno3_dosage = dosage;
-}
-
-float exper_stand_agno3_dosage_get(void)
-{
-    return g_exper.stand_agno3_dosage;
-}
-
-int exper_stand_v_get(void)
-{
-    return g_exper.stand_v;
-}
-
-void exper_stand_v_set(int v)
-{
-    g_exper.stand_v = v;
-}
-
-void exper_cement_weight_set(float weight)
-{
-    g_exper.cement_weight = weight;
-}
-
-int exper_cement_weight_get(void)
-{
-    return g_exper.cement_weight;
-}
-
-void exper_test_cl_dosage_set(float dosage)
-{
-    g_exper.test_cl_dosage = dosage;
-}
-
-float exper_test_cl_dosage_get(void)
-{
-    return g_exper.test_cl_dosage;
-}
-
-static void _exper_oil_get(struct exper *exp)
+static void _exper_oil_get(struct experiment *exper)
 {
     int correct = 0;
     
-    exp->estat.stat = EXPER_STAT_UPDATE_PROGRESS;
-
     relay_ctrl(MOTOR_WATER_GET);
-    while (exp->agno3_stock < EXPER_TOTAL_ML) {
-        if (exp->emsg.stop) {
+    while (1) {
+        if (exper->msg->stop) {
             EXPER_DBG_PRINT("stoped.\r\n");
-            return;
+            break;
         }
 
-        if (stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML))
-            exp->agno3_stock = EXPER_TOTAL_ML;
-        else {
-            exp->agno3_stock++;
-            if (exp->agno3_stock >= EXPER_TOTAL_ML) {
-                exp->agno3_stock = EXPER_TOTAL_ML - 1;
+        if (stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML)) {
+            exper_agno3_stock = EXPER_TOTAL_ML;
+            break;
+        } else {
+            exper_agno3_stock++;
+            if (exper_agno3_stock >= EXPER_TOTAL_ML) {
+                exper_agno3_stock = EXPER_TOTAL_ML - 1;
                 correct++;
             }
         }
 
         if (correct > 20) {
-            exp->estat.oil_stock = 0;
-            exp->agno3_stock = 0;
-            WM_BroadcastMessage(&exp->wmsg);
-            exp->estat.stat = EXPER_STAT_ERR_MOTOR;
-            WM_BroadcastMessage(&exp->wmsg);
+            /* report error */
+            exper_agno3_stock = 0;
+            exper_stock_percentage = 0.0;
+            exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
+            WM_BroadcastMessage(exper->ui);
+            exper->stat->stat = EXPER_STAT_ERR_MOTOR;
+            WM_BroadcastMessage(exper->ui);
             return;
         } else {
-            exp->estat.oil_stock = exp->agno3_stock * 100 / EXPER_TOTAL_ML;
-            WM_BroadcastMessage(&exp->wmsg);
+            /* update progress */
+            exper_stock_percentage = exper_agno3_stock * 100 / EXPER_TOTAL_ML;
+            exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
+            WM_BroadcastMessage(exper->ui);
         }
     }
+
+    exper_stock_percentage = exper_agno3_stock * 100 / EXPER_TOTAL_ML;
+    exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
+    WM_BroadcastMessage(exper->ui);
 }
 
-static void exper_oil_get(struct exper *exp)
-{
-    _exper_oil_get(exp);
-    exp->emsg.stop = 0;
-    exp->wmsg.MsgId = WM_USER;
-    exp->wmsg.hWinSrc = 0;
-    exp->wmsg.Data.p = &exp->estat;
-    exp->estat.stat = EXPER_STAT_OIL_GET_FINISHED;
-    WM_BroadcastMessage(&exp->wmsg);
+static void exper_oil_get(struct experiment *exper)
+{   
+    _exper_oil_get(exper);
+    exper->stat->stat = EXPER_STAT_OIL_GET_FINISHED;
+    WM_BroadcastMessage(exper->ui);
 }
 
-static void _exper_oil_put(struct exper *exp)
+static void _exper_oil_put(struct experiment *exper)
 {
     int correct = 0;
     
-    exp->estat.stat = EXPER_STAT_UPDATE_PROGRESS;
+    exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
 
     EXPER_DBG_PRINT("oil put\r\n");
     relay_ctrl(MOTOR_WATER_PUT);
-    while (exp->agno3_stock > 0) {
-        if (exp->emsg.stop) {
+    while (1) {
+        if (exper->msg->stop) {
             EXPER_DBG_PRINT("stoped.\r\n");
-            return;
+            break;
         }
             
-        if (stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML))
-            exp->agno3_stock = 0;
-        else {
-            exp->agno3_stock--;
-            if (exp->agno3_stock <= 0) {
-                exp->agno3_stock = 3;
+        if (stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML)) {
+            exper_agno3_stock = 0;
+            break;
+        } else {
+            exper_agno3_stock--;
+            if (exper_agno3_stock <= 0) {
+                exper_agno3_stock = 1;
                 correct++;
             }
         }
         
         if (correct > 20) {
-            exp->estat.oil_stock = 0;
-            exp->agno3_stock = 0;
-            WM_BroadcastMessage(&exp->wmsg);
-            exp->estat.stat = EXPER_STAT_ERR_MOTOR;
-            WM_BroadcastMessage(&exp->wmsg);
+            exper_agno3_stock = 0;
+            exper_stock_percentage = 0.0;
+            WM_BroadcastMessage(exper->ui);
+            exper->stat->stat = EXPER_STAT_ERR_MOTOR;
+            WM_BroadcastMessage(exper->ui);
+            return;
         } else {
-            exp->estat.oil_stock = exp->agno3_stock * 100 / EXPER_TOTAL_ML;
-            WM_BroadcastMessage(&exp->wmsg);
+            exper_stock_percentage = exper_agno3_stock * 100 / EXPER_TOTAL_ML;
+            WM_BroadcastMessage(exper->ui);
         }
     }
-    EXPER_DBG_PRINT("stop while\r\n");
+
+    exper_stock_percentage = exper_agno3_stock * 100 / EXPER_TOTAL_ML;
+    exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
+    WM_BroadcastMessage(exper->ui);
 }
 
-static void exper_oil_put(struct exper *exp)
+static void exper_oil_put(struct experiment *exper)
 {
-    _exper_oil_put(exp);
-    exp->emsg.stop = 0;
-    exp->wmsg.MsgId = WM_USER;
-    exp->wmsg.hWinSrc = 0;
-    exp->wmsg.Data.p = &exp->estat;
-    exp->estat.stat = EXPER_STAT_OIL_PUT_FINISHED;
-    WM_BroadcastMessage(&exp->wmsg);
+    _exper_oil_put(exper);
+    exper->stat->stat = EXPER_STAT_OIL_PUT_FINISHED;
+    WM_BroadcastMessage(exper->ui);
 }
 
-static void exper_oil_clear(struct exper *exp)
+static void exper_oil_clear(struct experiment *exper)
 {
     int i;
 
     for (i = 0; i < 3; i++) {
-        _exper_oil_get(exp);
-        _exper_oil_put(exp);
+        _exper_oil_get(exper);
+        _exper_oil_put(exper);
     }
 
-    exp->wmsg.MsgId = WM_USER;
-    exp->wmsg.hWinSrc = 0;
-    exp->wmsg.Data.p = &exp->estat;
-    exp->estat.stat = EXPER_STAT_OIL_CLEAR_FINISHED;
-    WM_BroadcastMessage(&exp->wmsg); 
+    exper->stat->stat = EXPER_STAT_OIL_CLEAR_FINISHED;
+    WM_BroadcastMessage(exper->ui); 
 }
 
 static void float_swap(float *float1, float *float2)  
@@ -233,12 +237,11 @@ static void float_swap(float *float1, float *float2)
     *float2 = temp;
 }
 
-static float volt_buff[20];
-
 static float exper_filter(void)
 {
 	int i, j;
     float volt = 0;
+    static float volt_buff[20];
 
     for (i = 0; i < EXPER_BUF_CNT; i++)
         volt_buff[i] = ad7705_read();
@@ -256,21 +259,6 @@ static float exper_filter(void)
         volt += volt_buff[i];
     volt = volt / (float)EXPER_WINDOWS;
 
-#if 0
-	for (i = 0; i < EXPER_BUF_CNT; i++) {
-		if (i == 0)
-			EXPER_DBG_PRINT("\r\ndiscard:\r\n");
-		else if (i == EXPER_DISCARD)
-			EXPER_DBG_PRINT("\r\nwindows:\r\n");
-		else if (i == (EXPER_DISCARD + EXPER_WINDOWS))
-			EXPER_DBG_PRINT("\r\ndiscard:\r\n");
-		else
-			;
-		EXPER_DBG_PRINT("%lf ", volt_buff[i]);
-	}
-	EXPER_DBG_PRINT("\r\nresult:\r\n");
-	EXPER_DBG_PRINT("%lf\r\n", volt);
-#endif
     return volt;
 }
 
@@ -279,46 +267,53 @@ float exper_volt_get(void)
     return ad7705_read();
 }
 
-static float count_agno3_used(struct exper *exp)
+static float count_agno3_used(struct experiment *exper)
 {
     float delta_pre, delta_delta_pre, delta_after, delta_delta_after, delta_cur;
     float res;
+    struct exper_ctrl *ctrl = exper->ctrl;
+    struct exper_buf *buf = ctrl->buf;
 
     EXPER_DBG_PRINT("count AgNO3 used\r\n");
-    delta_pre = exp->volt[exp->jump] - exp->volt[exp->jump - 1];
-    delta_cur = exp->volt[exp->jump + 1] - exp->volt[exp->jump];
-    delta_after = exp->volt[exp->jump + 2] - exp->volt[exp->jump + 1];
+    delta_pre = buf[ctrl->jump].volt - buf[ctrl->jump - 1].volt;
+    delta_cur = buf[ctrl->jump + 1].volt - buf[ctrl->jump].volt;
+    delta_after = buf[ctrl->jump + 2].volt - buf[ctrl->jump + 1].volt;
     delta_delta_pre = delta_cur - delta_pre;
     delta_delta_after = delta_after - delta_cur;
-    EXPER_DBG_PRINT("exp->jump = %d\r\n", exp->jump);
+    EXPER_DBG_PRINT("exper->jump = %d\r\n", ctrl->jump);
     EXPER_DBG_PRINT("delta_pre = %f, delta_cur = %f, delta_after = %f\r\n",
         delta_pre, delta_cur, delta_after);
     EXPER_DBG_PRINT("delta_delta_pre = %f, delta_delta_after = %f\r\n",
         delta_delta_pre, delta_delta_after);
-    res = exp->agno3_used[exp->jump] + (delta_delta_pre / (delta_delta_pre - delta_delta_after)) * 0.1;
+    res = buf[ctrl->jump].agno3_used + (delta_delta_pre / (delta_delta_pre - delta_delta_after)) * 0.1;
     EXPER_DBG_PRINT("actual AgNO3 used = %f\r\n", res);
     return res;
 }
 
-static void exper_report_load(struct exper *exp, int type)
+static void exper_report_load(struct experiment *exper, int type)
 {
     int index = 0;
+    struct report *rep = &exper->rep;
+    struct exper_ctrl *ctrl = exper->ctrl;
+    struct exper_buf *buf = ctrl->buf;
     
-    for (index = 0; index < 12; index++)
-       exp->rep.data[index] = exp->volt[exp->jump - 5 + index] - exp->volt[exp->jump - 6 + index];
+    for (index = 0; index < 8; index++)
+       rep->data[index] = buf[ctrl->jump - 3 + index].volt - buf[ctrl->jump - 4 + index].volt;
     
-    exp->rep.type = type;
-    exp->rep.data_num = 12;
-    exp->rep.nitrate_dosage = exp->cl_agno3_used;
-    exp->rep.percentage = exp->cl_percentage;
-    exp->rep.year = 18;
-    exp->rep.month = 12;
-    exp->rep.day = 8;
-    exp->rep.hour = 16;
-    exp->rep.minute = 0;
+    exper->rep.type = type;
+    exper->rep.data_num = 8;
+    exper->rep.cl_agno3_used = exper->data.cl_agno3_used;
+    exper->rep.cl_percentage = exper->data.cl_percentage;
+    exper->rep.cl_dosage = exper->data.cl_dosage;
+
+    exper->rep.year = 18;
+    exper->rep.month = 12;
+    exper->rep.day = 8;
+    exper->rep.hour = 16;
+    exper->rep.minute = 0;
 }
 
-static void do_test(struct exper *exp, int mode)
+static void do_test(struct experiment *exper, int mode)
 {
     float volt_scale = 210.0; // 230mV to change step
     float step_ml = 0.3;
@@ -326,32 +321,35 @@ static void do_test(struct exper *exp, int mode)
     float volt_diff = 0.0;
     float volt;
     int ext_delay = 0;
+    int step1_cnt = 0;
+    struct exper_ctrl *ctrl = exper->ctrl;
+    volatile struct exper_data *data = &exper->data;
+    struct exper_stat *stat = exper->stat;
+    struct exper_buf *buf = ctrl->buf;
 
-    exp->estat.graph_pos.x = 0;
-    exp->count = 0;
-    exp->volt_diff = 0.0;
-    exp->estat.agno3_used = 0;
-    exp->estat.graph_pos.x = 0;
+    ctrl->count = 0;
+    ctrl->volt_diff = 0.0;
+    data->agno3_used = 0.0;
 
     switch (mode) {
     case EXPER_MSG_AGNO3_START:
     case EXPER_MSG_STAND_START:
-        exp->steps = 25;
+        step1_cnt = 25;
         break;
     case EXPER_MSG_CL_START:
     case EXPER_MSG_BLOCK_START:
-        exp->steps = 20;
+        step1_cnt = 20;
         break;
     default:
         return;
     }
 
     while (1) {
-        if (exp->estat.oil_stock < 10)
-            _exper_oil_get(exp);
+        if (*data->stock_percentage < 10)
+            _exper_oil_get(exper);
         /* user stop */
-        if (exp->emsg.stop) {
-            exp->emsg.stop = 0;
+        if (exper->msg->stop) {
+            exper->msg->stop = 0;
             return;
         }
 
@@ -364,16 +362,16 @@ static void do_test(struct exper *exp, int mode)
         /* put AgNo3 oil */
         relay_ctrl(MOTOR_WATER_PUT);
         if (stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * step)) {
-            exp->estat.stat = EXPER_STAT_FAIL;
-            WM_BroadcastMessage(&exp->wmsg);
+            stat->stat = EXPER_STAT_FAIL;
+            WM_BroadcastMessage(exper->ui);
             break;
         } else {
-            exp->estat.graph_pos.x += step;
-            exp->estat.agno3_used += step_ml;
-            exp->agno3_stock -= step;      
+            data->agno3_used += step_ml;
+            *data->agno3_stock -= step;
+            *data->stock_percentage = *data->agno3_stock * 100 / EXPER_TOTAL_ML;
         }
-        exp->estat.stat = EXPER_STAT_UPDATE_AGNO3_USED;
-        WM_BroadcastMessage(&exp->wmsg);
+        stat->stat = EXPER_STAT_UPDATE_AGNO3_USED;
+        WM_BroadcastMessage(exper->ui);
         
         /* wait oil act */
         EXPER_DBG_PRINT("\r\n\r\n");
@@ -384,20 +382,21 @@ static void do_test(struct exper *exp, int mode)
             vTaskDelay(3000);
             volt = exper_filter();
         }
+        data->volt = volt;
         EXPER_DBG_PRINT("step = %d, volt = %f, AgNo3 used %.3fmL\r\n",
-            step, volt, exp->estat.agno3_used);
+            step, volt, data->agno3_used);
         
         /* do not care step 0.3 */
         if (step == 1) {
-            exp->volt[exp->count] = volt;
-            exp->agno3_used[exp->count] = exp->estat.agno3_used;
-            exp->count++;
-            exp->steps--;
-            if (exp->count > 1) {
-                volt_diff = (exp->volt[exp->count - 1]) - (exp->volt[exp->count - 2]);
-                if (exp->volt_diff < volt_diff) {
-                    exp->volt_diff = volt_diff;
-                    exp->jump = exp->count - 2;
+            buf[ctrl->count].volt = volt;
+            buf[ctrl->count].agno3_used = data->agno3_used;
+            ctrl->count++;
+            step1_cnt--;
+            if (ctrl->count > 1) {
+                volt_diff = (buf[ctrl->count - 1].volt) - (buf[ctrl->count - 2].volt);
+                if (ctrl->volt_diff < volt_diff) {
+                    ctrl->volt_diff = volt_diff;
+                    ctrl->jump = ctrl->count - 2;
                 }
                 
                 if (volt_diff > 5.0)
@@ -405,70 +404,62 @@ static void do_test(struct exper *exp, int mode)
                 else
                     ext_delay = 0;
                 EXPER_DBG_PRINT("derta = %f, gdiff = %f, jump = %d, ext_delay = %d\r\n",
-                    volt_diff, exp->volt_diff, exp->jump, ext_delay);
+                    volt_diff, ctrl->volt_diff, ctrl->jump, ext_delay);
             }
         }
 
         /* update UI */
-        exp->estat.graph_pos.y = (int)volt;
-        exp->estat.stat = EXPER_STAT_UPDATE_GRAPH;
-        exp->estat.volt = volt;
-        WM_BroadcastMessage(&exp->wmsg);
+        stat->stat = EXPER_STAT_UPDATE_GRAPH;
+        WM_BroadcastMessage(exper->ui);
+        stat->stat = EXPER_STAT_UPDATE_PROGRESS;
+        WM_BroadcastMessage(exper->ui);
 
-        exp->estat.oil_stock = exp->agno3_stock * 100 / EXPER_TOTAL_ML;
-        exp->estat.stat = EXPER_STAT_UPDATE_PROGRESS;
-        WM_BroadcastMessage(&exp->wmsg);
-
-        if (exp->steps == 0) {
+        if (step1_cnt == 0) {
             switch (mode) {
             case EXPER_MSG_AGNO3_START:
-                exp->test_agno3_used = count_agno3_used(exp);
-                exp->test_agno3_dosage = exp->test_cl_dosage * 10 / exp->test_agno3_used;
+                data->agno3_agno3_used = count_agno3_used(exper);
+                data->agno3_dosage = data->nacl_dosage * 10 / data->agno3_agno3_used;
                 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nAgNo3 test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->test_agno3_used);
-                EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", exp->test_agno3_dosage);
+                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
+                    ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->agno3_agno3_used);
+                EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", data->agno3_dosage);
 
-                exp->estat.agno3_used = exp->test_agno3_used;
-                exp->estat.agno3_consistence = exp->test_agno3_dosage;
-                exp->estat.stat = EXPER_STAT_AGNO3_FINISHED;
-                WM_BroadcastMessage(&exp->wmsg);
+                stat->stat = EXPER_STAT_AGNO3_FINISHED;
+                WM_BroadcastMessage(exper->ui);
                 return;
             case EXPER_MSG_BLOCK_START:
-                exp->block_agno3_used = count_agno3_used(exp);
+                data->block_agno3_used = count_agno3_used(exper);
 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nblock test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->block_agno3_used);
+                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
+                    ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->block_agno3_used);
 
-                exp->estat.agno3_used = exp->block_agno3_used;
-                exp->estat.stat = EXPER_STAT_BLOCK_FINISHED;
-                WM_BroadcastMessage(&exp->wmsg);
+                stat->stat = EXPER_STAT_BLOCK_FINISHED;
+                WM_BroadcastMessage(exper->ui);
                 return;
             case EXPER_MSG_CL_START:
-                exp->cl_agno3_used = count_agno3_used(exp);
-                exp->cl_percentage = (exp->test_agno3_dosage * (float)3.545 * (exp->cl_agno3_used - exp->block_agno3_used)) / exp->cement_weight;
+                data->cl_agno3_used = count_agno3_used(exper);
+                data->cl_percentage = (data->agno3_dosage * (float)3.545 * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_weight;
 
                 EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", exp->cl_agno3_used);
-                EXPER_DBG_PRINT("cl percentage is %f%%\r\n", exp->cl_percentage);
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("cl percentage is %f%%\r\n", data->cl_percentage);
                 
-                exp->estat.agno3_used = exp->cl_agno3_used;
-                exp->estat.cl_percentage = exp->cl_percentage;
-                exp->estat.stat = EXPER_STAT_CL_FINISHED;
-                WM_BroadcastMessage(&exp->wmsg);
-                exper_report_load(exp, REP_TYPE_CL);
+                stat->stat = EXPER_STAT_CL_FINISHED;
+                WM_BroadcastMessage(exper->ui);
+                exper_report_load(exper, REP_TYPE_CL);
                 return;
             case EXPER_MSG_STAND_START:
-                exp->cl_agno3_used = count_agno3_used(exp);
-                exp->cl_percentage = (exp->stand_agno3_dosage * (exp->cl_agno3_used - exp->block_agno3_used)) / exp->stand_v;
-                exp->ppm = exp->cl_percentage * (float)35450;
+                data->cl_agno3_used = count_agno3_used(exper);
+                data->cl_dosage = (data->agno3_dosage * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_volume;
+                data->ppm = data->cl_dosage * (float)35450;
 
-                exp->estat.agno3_used = exp->cl_agno3_used;
-                exp->estat.cl_percentage = exp->cl_percentage;
-                exp->estat.stat = EXPER_STAT_STAND_FINISHED;
-                exp->estat.ppm = exp->ppm;
-                WM_BroadcastMessage(&exp->wmsg);
-                exper_report_load(exp, REP_TYPE_STAND);
+                stat->stat = EXPER_STAT_STAND_FINISHED;
+                WM_BroadcastMessage(exper->ui);
+                exper_report_load(exper, REP_TYPE_STAND);
                 return;
             default:
                 return;
@@ -479,60 +470,69 @@ static void do_test(struct exper *exp, int mode)
 
 void exper_task(void *args)
 {
-    g_exper.wmsg.MsgId = WM_USER;
-    g_exper.wmsg.hWinSrc = 0;
-    g_exper.wmsg.Data.p = &g_exper.estat;
-    exper_is_run = 0;
-
+   struct exper_data *data;
     while (1) {
-        switch (g_exper.emsg.msg) {
+        switch (cur_exper->msg->msg) {
         case EXPER_MSG_NONE:
             break;
         case EXPER_MSG_AGNO3_START:
-            EXPER_DBG_PRINT("EXPER_MSG_AGNO3_START\r\n");
-            exper_is_run = 1;
-            do_test(&g_exper, EXPER_MSG_AGNO3_START);
-            g_exper.emsg.msg = EXPER_MSG_NONE;
-            exper_is_run = 0;
+            EXPER_DBG_PRINT("EXPER_MSG_AGNO3_START\r\n");     
+#ifdef EXPER_TEST
+            cur_exper->data.agno3_agno3_used = 10.1;
+            cur_exper->data.agno3_used = 11.3;
+            cur_exper->data.agno3_dosage = 0.0312;
+            cur_exper->stat->stat = EXPER_STAT_AGNO3_FINISHED;
+
+            data = exper_data_get(0);
+            printf("data agno3 dosage = %f, used = %f\r\n",
+                data->agno3_dosage, data->agno3_agno3_used);
+            WM_BroadcastMessage(cur_exper->ui);
+#else        
+            do_test(cur_exper, EXPER_MSG_AGNO3_START);
+#endif            
+            cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_BLOCK_START:
             EXPER_DBG_PRINT("EXPER_MSG_BLOCK_START\r\n");
-            exper_is_run = 1;
-            do_test(&g_exper, EXPER_MSG_BLOCK_START);
-            g_exper.emsg.msg = EXPER_MSG_NONE;
-            exper_is_run = 0;
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_BLOCK_FINISHED;
+            WM_BroadcastMessage(cur_exper->ui);
+#else            
+            do_test(cur_exper, EXPER_MSG_BLOCK_START);
+#endif            
+            cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_CL_START:
             EXPER_DBG_PRINT("EXPER_MSG_CL_START\r\n");
-            exper_is_run = 1;
-            do_test(&g_exper, EXPER_MSG_CL_START);
-            g_exper.emsg.msg = EXPER_MSG_NONE;
-            exper_is_run = 0;
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_CL_FINISHED;
+            WM_BroadcastMessage(cur_exper->ui);
+#else             
+            do_test(cur_exper, EXPER_MSG_CL_START);
+#endif            
+            cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_STAND_START:
             EXPER_DBG_PRINT("EXPER_MSG_STAND_START\r\n");
-            exper_is_run = 1;
-            do_test(&g_exper, EXPER_MSG_STAND_START);
-            g_exper.emsg.msg = EXPER_MSG_NONE;
-            exper_is_run = 0;
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_STAND_FINISHED;
+            WM_BroadcastMessage(cur_exper->ui);
+#else              
+            do_test(cur_exper, EXPER_MSG_STAND_START);
+#endif            
+            cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_OIL_GET:
-            exper_is_run = 1;
-            exper_oil_get(&g_exper);
-            g_exper.emsg.msg = EXPER_MSG_NONE;
-            exper_is_run = 0;
+            exper_oil_get(cur_exper);
+            cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_OIL_PUT:
-            exper_is_run = 1;
-            exper_oil_put(&g_exper);
-            g_exper.emsg.msg = EXPER_MSG_NONE;
-            exper_is_run = 0;
+            exper_oil_put(cur_exper);
+            cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
         case EXPER_MSG_OIL_CLEAR:
-            exper_is_run = 1;
-            exper_oil_clear(&g_exper);
-            g_exper.emsg.msg = EXPER_MSG_NONE;
-            exper_is_run = 0;
+            exper_oil_clear(cur_exper);
+            cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
         default:
             break;
@@ -540,16 +540,16 @@ void exper_task(void *args)
     }
 }
 
-void exper_msg_set(struct exper_msg *msg)
+void exper_msg_set(struct exper_msg *msg, int idx)
 {
-    memcpy(&g_exper.emsg, msg, sizeof(struct exper_msg));
-    printf("get msg.msg=%x, stop=%d\r\n", msg->msg, msg->stop);
+    if (idx >= EXPER_CNT)
+        return;    
+    
+    cur_exper = &(gexper[idx]);
+    printf("exper %s get msg.msg=%x, stop=%d\r\n",
+        cur_exper->name, msg->msg, msg->stop);
+    memcpy(cur_exper->msg, msg, sizeof(struct exper_msg));
+
 }
 
-void exper_init(void)
-{
-    g_exper.cement_weight = 5.0;
-    g_exper.stand_agno3_dosage = 0.02;
-    g_exper.test_cl_dosage = 0.02;
-    g_exper.stand_v = 100;
-}
+

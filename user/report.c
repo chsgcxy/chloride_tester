@@ -43,7 +43,7 @@ int report_show(struct report *rp)
     switch (rp->type) {
     case REP_TYPE_CL:
         tprinter_send(report_printer, STRING_MKSYHLLZ, sizeof(STRING_MKSYHLLZ));
-        sprintf(buf, "%.3f%%", rp->percentage);
+        sprintf(buf, "%.3f%%", rp->cl_percentage);
         tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
         tprinter_newline(report_printer);
         break;
@@ -54,7 +54,7 @@ int report_show(struct report *rp)
         tprinter_newline(report_printer);
 
         tprinter_send(report_printer, STRING_LLZND, sizeof(STRING_LLZND));
-        sprintf(buf, "%.3fmol/L", rp->percentage);
+        sprintf(buf, "%.3fmol/L", rp->cl_dosage);
         tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
         tprinter_newline(report_printer);
         break;
@@ -63,7 +63,7 @@ int report_show(struct report *rp)
     }
 
     tprinter_send(report_printer, STRING_XSYYL, sizeof(STRING_XSYYL));
-    sprintf(buf, "%.2f(ml)", rp->nitrate_dosage);
+    sprintf(buf, "%.2f(ml)", rp->cl_agno3_used);
     tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);

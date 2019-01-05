@@ -88,7 +88,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *
 **********************************************************************
 */
-static struct ui_exper_res exper_res;
+static struct exper_stat *stat;
 // USER START (Optionally insert additional static code)
 // USER END
 
@@ -102,7 +102,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int NCode;
     int Id;
     char buf[16];
-    struct report *rep;
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -131,7 +130,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Text'
         //
-        sprintf(buf, "%.2fmL", exper_res.agno3_used);
+        switch (stat->stat) {
+        case EXPER_STAT_AGNO3_FINISHED:
+            sprintf(buf, "%.2fmL", stat->data->agno3_agno3_used);
+            break;
+        case EXPER_STAT_BLOCK_FINISHED:
+            sprintf(buf, "%.2fmL", stat->data->block_agno3_used);
+            break;
+        case EXPER_STAT_CL_FINISHED:
+        case EXPER_STAT_STAND_FINISHED:
+            sprintf(buf, "%.2fmL", stat->data->cl_agno3_used);
+            break;
+        default:
+            break;
+        }
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
         TEXT_SetFont(hItem, GUI_FONT_24_1);
         TEXT_SetText(hItem, buf);
@@ -142,7 +154,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_3);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
-        switch (exper_res.func) {
+        switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
             TEXT_SetText(hItem, "AgNO3浓度");
             break;
@@ -164,20 +176,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_4);
         TEXT_SetFont(hItem, GUI_FONT_24_1);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
-        switch (exper_res.func) {
+        switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
-            sprintf(buf, "%.3fmol/L", exper_res.res);
+            sprintf(buf, "%.4fmol/L", stat->data->agno3_dosage);
             TEXT_SetText(hItem, buf);
             break;
         case EXPER_STAT_BLOCK_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
-            sprintf(buf, "%.3f%%", exper_res.res);
+            sprintf(buf, "%.3f%%", stat->data->cl_percentage);
             TEXT_SetText(hItem, buf);
             break;
         case EXPER_STAT_STAND_FINISHED:
-            sprintf(buf, "%.3fmol/L", exper_res.res);
+            sprintf(buf, "%.3fmol/L", stat->data->cl_dosage);
             TEXT_SetText(hItem, buf);
             break;
         default:
@@ -185,7 +197,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
-        switch (exper_res.func) {
+        switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
         case EXPER_STAT_CL_FINISHED:
@@ -200,7 +212,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
-        switch (exper_res.func) {
+        switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
         case EXPER_STAT_CL_FINISHED:
@@ -209,7 +221,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_STAT_STAND_FINISHED:
             TEXT_SetFont(hItem, GUI_FONT_24_1);
             TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
-            sprintf(buf, "%.1f", exper_res.res2);
+            sprintf(buf, "%.1f", stat->data->ppm);
             TEXT_SetText(hItem, buf);
             break;
         default:
@@ -221,7 +233,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        switch (exper_res.func) {
+        switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
             WM_HideWindow(hItem);
@@ -240,14 +252,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        switch (exper_res.func) {
+        switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
             BUTTON_SetText(hItem, "确定");
             break;
         case EXPER_STAT_CL_FINISHED:
         case EXPER_STAT_STAND_FINISHED:
-            BUTTON_SetText(hItem, "U盘导出");
+            WM_HideWindow(hItem);
             break;
         default:
             break;
@@ -258,14 +270,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        switch (exper_res.func) {
+        switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
         case EXPER_STAT_STAND_FINISHED:
-            BUTTON_SetText(hItem, "保存返回");
+            BUTTON_SetText(hItem, "返回");
             break;
         default:
             break;
@@ -284,9 +296,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
-                rep = exper_get_report();
-                report_show(rep);
-                GUI_EndDialog(pMsg->hWin, 0);
+                switch (stat->stat) {
+                case EXPER_STAT_AGNO3_FINISHED:
+                case EXPER_STAT_BLOCK_FINISHED:
+                    break;
+                case EXPER_STAT_CL_FINISHED:
+                    exper_print_report(0);
+                    break;
+                case EXPER_STAT_STAND_FINISHED:
+                    exper_print_report(1);
+                    break;
+                default:
+                    break;
+                }                
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -303,14 +325,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
                 // USER START (Optionally insert code for reacting on notification message)
-                switch (exper_res.func) {
+                switch (stat->stat) {
                 case EXPER_STAT_AGNO3_FINISHED:
                 case EXPER_STAT_BLOCK_FINISHED:
                     GUI_EndDialog(pMsg->hWin, 0);
                     break;
                 case EXPER_STAT_CL_FINISHED:
                 case EXPER_STAT_STAND_FINISHED:
-                    // to be continued, save to usb
                     break;
                 default:
                     break;
@@ -364,9 +385,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 *       CreateWindow
 */
-int diag_res_creat(struct ui_exper_res *res)
+int diag_res_creat(struct exper_stat *es)
 {
-    memcpy(&exper_res, res, sizeof(struct ui_exper_res));
+    stat = es;
     return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

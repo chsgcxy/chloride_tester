@@ -9,11 +9,12 @@ struct report {
 #define REP_TYPE_CL     0x02
     int type;
 
-    float data[30];
+    float data[10];
     uint8_t data_num;
-    // AgNO3 used
-    float nitrate_dosage;
-    float percentage;
+    
+    float cl_agno3_used;
+    float cl_dosage;
+    float cl_percentage;
     float ppm;
 
     uint8_t year;

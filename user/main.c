@@ -114,8 +114,6 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
-	int i;
-	char buf[64];
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
@@ -161,10 +159,6 @@ int main(void)
 	report_init(&g_printer);
 
 	exper_init();
-
-	sprintf(buf, "?");
-	for (i = 0; i < 16; i++)
-		printf("0x%02x  ", buf[i]);
 
 	/* creat freertos task */
 	task_init();

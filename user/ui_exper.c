@@ -81,12 +81,11 @@ extern const GUI_FONT GUI_Fontfont_spec;
 
 extern int diag_err_creat(void);
 extern int diag_info_creat(struct ui_exper_info *info);
-extern int diag_res_creat(struct ui_exper_res *res);
+extern int diag_res_creat(struct exper_stat *es);
 extern int numpad_creat(void);
 extern char *numpad_get(void);
 
 static struct ui_exper_info ginfo;
-static struct ui_exper_res gres;
 static struct ui_exper_test gtest;
 /*********************************************************************
 *
@@ -119,11 +118,11 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {EDIT_CreateIndirect, "5g", ID_EDIT_SNZL_VALUE, 35, 120, 150, 32, 0, 0x64, 0},
 
     {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 155, 250, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "---- mol/L", ID_TEXT_NO3ND_VALUE, 75, 190, 150, 32, 0, 0x64, 0},
-    {EDIT_CreateIndirect, "0.02mol/L", ID_EDIT_NO3ND_VALUE, 35, 190, 150, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0.0200mol/L", ID_TEXT_NO3ND_VALUE, 75, 190, 150, 32, 0, 0x64, 0},
+    {EDIT_CreateIndirect, "0.0200mol/L", ID_EDIT_NO3ND_VALUE, 35, 190, 150, 32, 0, 0x64, 0},
 
     {TEXT_CreateIndirect, "AgNO3用量", ID_TEXT_NO3YL, 5, 225, 160, 32, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "0mL", ID_TEXT_NO3YL_VALUE, 75, 260, 160, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "0.00mL", ID_TEXT_NO3YL_VALUE, 75, 260, 160, 32, 0, 0x64, 0},
 
     {TEXT_CreateIndirect, "水泥氯离子质量分数", ID_TEXT_PERCENTAGE, 5, 295, 250, 32, 0, 0x64, 0},
     {TEXT_CreateIndirect, "--- %", ID_TEXT_PERCENT_VALUE, 75, 330, 160, 32, 0, 0x64, 0},
@@ -192,18 +191,25 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
     int NCode;
     int Id;
-    struct exper_stat *stat;
+    struct exper_data *data;
     char buf[16];
     float fval;
     int ival;
     char *p;
-    
+    GUI_POINT point;
+    struct exper_stat *stat;
     // USER START (Optionally insert additional variables)
     // USER END
 
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
+
+        if (gtest.func == MSG_LOAD_UI_STAND)
+            data = exper_data_get(1);
+        else
+            data = exper_data_get(0);
+        
         //
         // Initialization of 'Framewin'
         //
@@ -259,7 +265,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
             EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
             EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-            sprintf(buf, "%.2fmol/L", exper_stand_agno3_dosage_get());
+            sprintf(buf, "%.4fmol/L", data->agno3_dosage);
             EDIT_SetText(hItem, buf);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
             WM_HideWindow(hItem);
@@ -267,6 +273,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
             TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
             TEXT_SetTextColor(hItem, GUI_RED);
+            sprintf(buf, "%.4fmol/L", data->agno3_dosage);
+            TEXT_SetText(hItem, buf);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
             WM_HideWindow(hItem);
         }
@@ -314,10 +322,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        sprintf(buf, "%.2fmol/L", exper_test_cl_dosage_get());
+        sprintf(buf, "%.2fmol/L", data->nacl_dosage);
         EDIT_SetText(hItem, buf);
         
-
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
@@ -341,9 +348,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
         if (gtest.func == MSG_LOAD_UI_STAND)
-            sprintf(buf, "%dmL", exper_stand_v_get());
+            sprintf(buf, "%dmL", data->sample_volume);
         else
-            sprintf(buf, "%dg", exper_cement_weight_get());
+            sprintf(buf, "%dg", data->sample_weight);
         EDIT_SetText(hItem, buf);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
@@ -374,7 +381,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         PROGBAR_SetBarColor(hItem, 0, GUI_RED);
         PROGBAR_SetSkinClassic(hItem);
         PROGBAR_SetMinMax(hItem, 0, 100);
-        progress_show(hItem, exper_agno3_stock_get());
+        progress_show(hItem, *data->stock_percentage);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_0);
         GRAPH_SetBorder(hItem, 35, 3, 3, 15);
@@ -413,7 +420,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 0);
                 msg.msg = EXPER_MSG_OIL_GET;
                 msg.stop = 0;
-                exper_msg_set(&msg);
+                if (gtest.func == MSG_LOAD_UI_STAND)
+                    exper_msg_set(&msg, 1);
+                else
+                    exper_msg_set(&msg, 0);
                 break;
             default:
                 break;
@@ -444,7 +454,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     put_func = 1;
                     msg.stop = 0;
                 }
-                exper_msg_set(&msg);
+                if (gtest.func == MSG_LOAD_UI_STAND)
+                    exper_msg_set(&msg, 1);
+                else
+                    exper_msg_set(&msg, 0);
                 break;
             default:
                 break;
@@ -462,7 +475,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 0);
                 msg.msg = EXPER_MSG_OIL_CLEAR;
                 msg.stop = 0;
-                exper_msg_set(&msg);
+                if (gtest.func == MSG_LOAD_UI_STAND)
+                    exper_msg_set(&msg, 1);
+                else
+                    exper_msg_set(&msg, 0);
                 break;
             default:
                 break;
@@ -521,7 +537,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     test_func = 1;
                 }
                 msg.msg = EXPER_MSG_BLOCK_START;
-                exper_msg_set(&msg);
+                if (gtest.func == MSG_LOAD_UI_STAND)
+                    exper_msg_set(&msg, 1);
+                else
+                    exper_msg_set(&msg, 0);
                 break;
             default:
                 break;
@@ -561,7 +580,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     test_func = 1;
                 }
                 msg.msg = EXPER_MSG_AGNO3_START;
-                exper_msg_set(&msg);
+                if (gtest.func == MSG_LOAD_UI_STAND)
+                    exper_msg_set(&msg, 1);
+                else
+                    exper_msg_set(&msg, 0);
                 break;
             default:
                 break;
@@ -606,7 +628,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     msg.msg = EXPER_MSG_STAND_START;
                 else
                     msg.msg = EXPER_MSG_CL_START;
-                exper_msg_set(&msg);
+                if (gtest.func == MSG_LOAD_UI_STAND)
+                    exper_msg_set(&msg, 1);
+                else
+                    exper_msg_set(&msg, 0);
                 break;
             default:
                 break;
@@ -624,7 +649,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
                     sprintf(buf, "%.2fmol/L", fval); 
                     EDIT_SetText(hItem, buf);
-                    exper_test_cl_dosage_set(fval);
+                    data->nacl_dosage = fval;
                 }
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
@@ -642,12 +667,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     p = numpad_get();
                     sscanf(p, "%d", &ival);                    
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
-                    if (gtest.func == MSG_LOAD_UI_STAND) {
+                    if (gtest.func == MSG_LOAD_UI_STAND) {                        
                         sprintf(buf, "%dmL", ival);
-                        exper_stand_v_set(ival);
+                        data->sample_volume = ival;
                     } else {
                         sprintf(buf, "%dg", ival);
-                        exper_cement_weight_set(ival);
+                        data->sample_weight = ival;
                     }
                     EDIT_SetText(hItem, buf);                    
                 }
@@ -665,7 +690,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     sscanf(p, "%f", &fval);
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
                     sprintf(buf, "%.2fmol/L", fval);
-                    exper_stand_agno3_dosage_set(fval);
+                    data->agno3_dosage = fval;
                     EDIT_SetText(hItem, buf);
                 }
                 ctrl_all_items(pMsg->hWin, 1);
@@ -686,17 +711,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case EXPER_STAT_UPDATE_PROGRESS:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-                progress_show(hItem, stat->oil_stock);
+                progress_show(hItem, *data->stock_percentage);
                 break;
             case EXPER_STAT_UPDATE_GRAPH:
-                GRAPH_DATA_XY_AddPoint(pdataGRP, &stat->graph_pos);
+                point.x = (int)(data->agno3_used * 10);
+                point.y = (int)(data->volt);
+                GRAPH_DATA_XY_AddPoint(pdataGRP, &point);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
-                sprintf(buf, "%.3fmV", stat->volt);
+                sprintf(buf, "%.3fmV", data->volt);
                 TEXT_SetText(hItem, buf);
                 break;
             case EXPER_STAT_UPDATE_AGNO3_USED:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.3fmL", stat->agno3_used);
+                sprintf(buf, "%.3fmL", data->agno3_used);
                 TEXT_SetText(hItem, buf);
                 break;
             case EXPER_STAT_OIL_GET_FINISHED:
@@ -724,23 +751,28 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_STAT_AGNO3_FINISHED:
                 beep_finished();
                 test_func = 0;
-                gres.func = EXPER_STAT_AGNO3_FINISHED;
-                gres.agno3_used = stat->agno3_used;
-                gres.res = stat->agno3_consistence;
-
-                ctrl_all_items(pMsg->hWin, 0);
-                WM_Exec();
-                diag_res_creat(&gres);
-                //ctrl_all_items(pMsg->hWin, 1);
-
+                printf("agno3 finieshed...............................\r\n");
+                printf("agno3_dosage = %f, used = %f \r\n",
+                    stat->data->agno3_dosage, data->agno3_agno3_used);
+                // show agno3 nongdu to text and edit, when shui ni test
+                // ID_TEXT_NO3ND_VALUE will show, and ID_EDIT_NO3ND_VALUE
+                // will hide; when stand test, ID_EDIT_NO3ND_VALUE will
+                // show and ID_TEXT_NO3ND_VALUE will hide
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
-                sprintf(buf, "%.4fmol/L", stat->agno3_consistence);
+                sprintf(buf, "%.4fmol/L", stat->data->agno3_dosage);
                 TEXT_SetText(hItem, buf);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
+                EDIT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.3fmL", stat->agno3_used);
+                sprintf(buf, "%.3fmL", data->agno3_agno3_used);
                 TEXT_SetText(hItem, buf);
 
+                WM_Exec();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(stat);
+                
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
                 BUTTON_SetText(hItem, "AgNO3检测");
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
@@ -749,17 +781,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_STAT_BLOCK_FINISHED:
                 beep_finished();
                 test_func = 0;
-                gres.func = EXPER_STAT_BLOCK_FINISHED;
-                gres.agno3_used = stat->agno3_used;
                 
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
+                sprintf(buf, "%.3fmL", data->block_agno3_used);
+                TEXT_SetText(hItem, buf);
+
+                WM_Exec();
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
-                diag_res_creat(&gres);
-                //ctrl_all_items(pMsg->hWin, 1);
-
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.3fmL", stat->agno3_used);
-                TEXT_SetText(hItem, buf);
+                diag_res_creat(stat);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                 BUTTON_SetText(hItem, "空白实验");
@@ -769,22 +799,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_STAT_CL_FINISHED:
                 beep_finished();
                 test_func = 0;
-                gres.func = EXPER_STAT_CL_FINISHED;
-                gres.agno3_used = stat->agno3_used;
-                gres.res = stat->cl_percentage;
-
-                ctrl_all_items(pMsg->hWin, 0);
-                WM_Exec();
-                diag_res_creat(&gres);
-                //ctrl_all_items(pMsg->hWin, 1);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
-                sprintf(buf, "%.3f%%", stat->cl_percentage);
+                sprintf(buf, "%.3f%%", data->cl_percentage);
                 TEXT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.3fmL", stat->agno3_used);
+                sprintf(buf, "%.3fmL", data->cl_agno3_used);
                 TEXT_SetText(hItem, buf);
+                
+                WM_Exec();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(stat);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                 BUTTON_SetText(hItem, "氯离子检测");
@@ -794,27 +821,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_STAT_STAND_FINISHED:
                 beep_finished();
                 test_func = 0;
-                gres.func = EXPER_STAT_STAND_FINISHED;
-                gres.agno3_used = stat->agno3_used;
-                gres.res = stat->cl_percentage;
-                gres.res2 = stat->ppm; 
-
-                ctrl_all_items(pMsg->hWin, 0);
-                WM_Exec();
-                diag_res_creat(&gres);
-                //ctrl_all_items(pMsg->hWin, 1);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
-                sprintf(buf, "%.3fmol/L", stat->cl_percentage);
+                sprintf(buf, "%.3fmol/L", data->cl_dosage);
                 TEXT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.3fmL", stat->agno3_used);
+                sprintf(buf, "%.3fmL", data->cl_agno3_used);
                 TEXT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
-                sprintf(buf, "%.1f", stat->ppm);
+                sprintf(buf, "%.1f", data->ppm);
                 TEXT_SetText(hItem, buf);
+                
+                WM_Exec();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(stat);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                 BUTTON_SetText(hItem, "氯离子检测");

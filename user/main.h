@@ -21,13 +21,6 @@ struct ui_exper_info {
     int flag;
 };
 
-struct ui_exper_res {
-    int func;
-    float agno3_used;
-    float res;
-    float res2;
-};
-
 struct ui_exper_test {
     int func;
 };
