@@ -7,6 +7,8 @@
 
 #define SOFTWARE_VERSION_STR    "V2.0.0"
 
+#define DEFAULT_VOLT_SCALE       210.0
+
 /* board special config */
 #ifdef BOARD_TYPE_DEMO
     #define HSE_VALUE  ((uint32_t)25000000) /*!< Value of the External oscillator in Hz */

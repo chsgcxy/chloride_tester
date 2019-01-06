@@ -27,6 +27,7 @@
 #include "stdio.h"
 #include "main.h"
 #include "beep.h"
+#include "sysconf.h"
 /*********************************************************************
 *
 *       Defines
@@ -117,6 +118,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
     int NCode;
     int Id;
+    struct sysconf *cfg;
+    char buf[8];
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -229,7 +232,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-
+        
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
@@ -432,6 +435,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
+                cfg = sysconf_get();
+                sprintf(buf, "%d", (int)cfg->volt_scale);
+                sysconf_save();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:

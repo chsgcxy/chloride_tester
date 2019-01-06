@@ -4,12 +4,18 @@
 #include "stm32f2xx.h"
 #include "rd-tprinter.h"
 
+struct report_data {
+    float volt;
+    float agno3_used;
+    float delta_volt;
+};
+
 struct report {
 #define REP_TYPE_STAND  0x01
 #define REP_TYPE_CL     0x02
     int type;
 
-    float data[10];
+    struct report_data data[10];
     uint8_t data_num;
     
     float cl_agno3_used;

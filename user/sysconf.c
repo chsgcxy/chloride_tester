@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include "w25xxx.h"
 #include "string.h"
+#include "config.h"
 
 #define SYSCONF_SECTOR    0
 #define SYSCONF_MAGIC     0xA55A0005
@@ -14,8 +15,10 @@ int sysconf_load(void)
     w25xxx_read_sector((uint8_t *)&g_cfg, SYSCONF_SECTOR, sizeof(struct sysconf));
     if (g_cfg.magic == SYSCONF_MAGIC)
         valid_flag = 1;
-    else
+    else {
         valid_flag = 0;
+        g_cfg.volt_scale = DEFAULT_VOLT_SCALE;
+    }
     return valid_flag;
 }
 

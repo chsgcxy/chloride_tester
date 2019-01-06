@@ -203,20 +203,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DIACARD);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        BUTTON_SetText(hItem, "取\n消");
+        BUTTON_SetText(hItem, "退\n出");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_SET);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextAlign(hItem, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        BUTTON_SetText(hItem, "设\n置");
+        BUTTON_SetText(hItem, "确\n定");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_BACK);
         BUTTON_SetFont(hItem, GUI_FONT_32B_ASCII);
-        BUTTON_SetText(hItem, "X");
+        BUTTON_SetText(hItem, "<");
         // USER START (Optionally insert additional code for further widget initialization)
         count = 0;
         numpad_buf[0] = '0';

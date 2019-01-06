@@ -9,6 +9,7 @@ struct sysconf {
 	double y_coe;
 	int32_t x_correct;
 	int32_t y_correct;
+	float volt_scale;
 };
 
 extern int sysconf_load(void);

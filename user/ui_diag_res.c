@@ -92,6 +92,20 @@ static struct exper_stat *stat;
 // USER START (Optionally insert additional static code)
 // USER END
 
+static void ctrl_all_items(WM_HWIN hWin, int enable)
+{
+    WM_HWIN hItem;
+    int id;
+
+    for (id = ID_BUTTON_0; id <= ID_BUTTON_2; id++) {
+        hItem = WM_GetDialogItem(hWin, id);
+        if (enable)
+            WM_EnableWindow(hItem);
+        else
+            WM_DisableWindow(hItem);
+    }    
+}
+
 /*********************************************************************
 *
 *       _cbDialog
@@ -132,14 +146,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
-            sprintf(buf, "%.2fmL", stat->data->agno3_agno3_used);
+            sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used);
             break;
         case EXPER_STAT_BLOCK_FINISHED:
-            sprintf(buf, "%.2fmL", stat->data->block_agno3_used);
+            sprintf(buf, "%.2fmL", stat->data.block_agno3_used);
             break;
         case EXPER_STAT_CL_FINISHED:
         case EXPER_STAT_STAND_FINISHED:
-            sprintf(buf, "%.2fmL", stat->data->cl_agno3_used);
+            sprintf(buf, "%.2fmL", stat->data.cl_agno3_used);
             break;
         default:
             break;
@@ -178,18 +192,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
-            sprintf(buf, "%.4fmol/L", stat->data->agno3_dosage);
+            sprintf(buf, "%.4fmol/L", stat->data.agno3_dosage);
             TEXT_SetText(hItem, buf);
             break;
         case EXPER_STAT_BLOCK_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
-            sprintf(buf, "%.3f%%", stat->data->cl_percentage);
+            sprintf(buf, "%.3f%%", stat->data.cl_percentage);
             TEXT_SetText(hItem, buf);
             break;
         case EXPER_STAT_STAND_FINISHED:
-            sprintf(buf, "%.3fmol/L", stat->data->cl_dosage);
+            sprintf(buf, "%.3fmol/L", stat->data.cl_dosage);
             TEXT_SetText(hItem, buf);
             break;
         default:
@@ -221,7 +235,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_STAT_STAND_FINISHED:
             TEXT_SetFont(hItem, GUI_FONT_24_1);
             TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
-            sprintf(buf, "%.1f", stat->data->ppm);
+            sprintf(buf, "%.1f", stat->data.ppm);
             TEXT_SetText(hItem, buf);
             break;
         default:
@@ -301,10 +315,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 case EXPER_STAT_BLOCK_FINISHED:
                     break;
                 case EXPER_STAT_CL_FINISHED:
+                    ctrl_all_items(pMsg->hWin, 0);
+                    WM_Exec();
                     exper_print_report(0);
+                    ctrl_all_items(pMsg->hWin, 1);
                     break;
                 case EXPER_STAT_STAND_FINISHED:
+                    ctrl_all_items(pMsg->hWin, 0);
+                    WM_Exec();
                     exper_print_report(1);
+                    ctrl_all_items(pMsg->hWin, 1);
                     break;
                 default:
                     break;

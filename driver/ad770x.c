@@ -171,7 +171,8 @@ double ad7705_read(void)
 	while (1) {
 		if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) == 0) {
 			data = AD770xReadDataReg();
-			volt = (double)((double)data * ((double)2500 / (double)65535)) - (double)235.0;
+			//volt = (double)((double)data * ((double)2500 / (double)65535)) - (double)235.0;
+			volt = (double)((double)data * ((double)2500 / (double)65535)) - (double)204.0;
 			if (volt < 0)
 				volt = 0;
 			AD770xWriteSetupReg(setup_reg);
