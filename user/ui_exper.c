@@ -836,7 +836,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 test_func = 0;
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
-                sprintf(buf, "%.3fmol/L", stat->data.cl_dosage);
+                sprintf(buf, "%fmol/L", stat->data.cl_dosage);
                 TEXT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);

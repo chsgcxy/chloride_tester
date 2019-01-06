@@ -119,7 +119,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int NCode;
     int Id;
     struct sysconf *cfg;
-    char buf[8];
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -213,8 +212,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_5);
         SPINBOX_SetFont(hItem, GUI_FONT_32_ASCII);
-        SPINBOX_SetRange(hItem, 190, 230);
-        SPINBOX_SetValue(hItem, 210);
+        SPINBOX_SetRange(hItem, 150, 220);
+        cfg = sysconf_get();
+        SPINBOX_SetValue(hItem, (int)cfg->volt_scale);
         SPINBOX_SetStep(hItem, 5);
         //
         // Initialization of 'Text'
@@ -436,7 +436,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
                 cfg = sysconf_get();
-                sprintf(buf, "%d", (int)cfg->volt_scale);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_5);
+                cfg->volt_scale = SPINBOX_GetValue(hItem);
                 sysconf_save();
                 // USER END
                 break;

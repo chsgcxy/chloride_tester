@@ -59,7 +59,7 @@ int report_show(struct report *rp)
         tprinter_newline(report_printer);
 
         tprinter_send(report_printer, STRING_LLZND, sizeof(STRING_LLZND));
-        sprintf(buf, "%.3fmol/L", rp->cl_dosage);
+        sprintf(buf, "%fmol/L", rp->cl_dosage);
         tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
         tprinter_newline(report_printer);
         tprinter_newline(report_printer);
@@ -75,7 +75,7 @@ int report_show(struct report *rp)
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);
 
-    for (total = rp->data_num; total > 0; total--) {  
+    for (total = rp->data_num - 1; total; total--) {  
         tprinter_prepare(report_printer);
         tprinter_pos(report_printer, 0);
         sprintf(buf, "%.2f", rp->data[total].agno3_used);
@@ -86,7 +86,7 @@ int report_show(struct report *rp)
         tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
         tprinter_newline(report_printer);
 
-        if (total > 1) {
+        if (total > 0) {
             tprinter_pos(report_printer, 300);
             sprintf(buf, "%.1f", rp->data[total].delta_volt);
             tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));

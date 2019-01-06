@@ -203,7 +203,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, buf);
             break;
         case EXPER_STAT_STAND_FINISHED:
-            sprintf(buf, "%.3fmol/L", stat->data.cl_dosage);
+            sprintf(buf, "%fmol/L", stat->data.cl_dosage);
             TEXT_SetText(hItem, buf);
             break;
         default:

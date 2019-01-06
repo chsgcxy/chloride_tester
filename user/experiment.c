@@ -8,6 +8,7 @@
 #include "stepmotor.h"
 #include "ad770x.h"
 #include "report.h"
+#include "sysconf.h"
 
 #define EXPER_TOTAL_ML        (228)
 #define EXPER_DISCARD         (5)
@@ -312,17 +313,19 @@ static void exper_report_load(struct experiment *exper, int type)
 {
     int i = 0;
     int pre_idx = 4;
+    int data_cnt = 9;
     struct report *rep = &exper->rep;
     struct report_data *data = rep->data;
     struct exper_ctrl *ctrl = exper->ctrl;
     struct exper_buf *buf = ctrl->buf;
     
-    if (ctrl->jump >= 4)
-        pre_idx = 4;
-    else
+    if (ctrl->jump < pre_idx)
         pre_idx = ctrl->jump;
 
-    for (i = 0; i < 9; i++) {
+    if (ctrl->count < data_cnt)
+        data_cnt = ctrl->count;
+
+    for (i = 0; i < data_cnt; i++) {
         data[i].volt = buf[ctrl->jump - pre_idx + i].volt;
         data[i].agno3_used = buf[ctrl->jump - pre_idx + i].agno3_used;
         if (i > 0)
@@ -330,10 +333,11 @@ static void exper_report_load(struct experiment *exper, int type)
     }
     
     exper->rep.type = type;
-    exper->rep.data_num = 9;
+    exper->rep.data_num = data_cnt;
     exper->rep.cl_agno3_used = exper->data.cl_agno3_used;
     exper->rep.cl_percentage = exper->data.cl_percentage;
     exper->rep.cl_dosage = exper->data.cl_dosage;
+    exper->rep.ppm = exper->data.ppm;
 
     exper->rep.year = 18;
     exper->rep.month = 12;
@@ -344,34 +348,30 @@ static void exper_report_load(struct experiment *exper, int type)
 
 static void do_test(struct experiment *exper, int mode)
 {
-    float volt_scale = 190.0; // 230mV to change step
+    float volt_scale;
     float step_ml = 0.3;
     int step = 3;
     float volt_diff = 0.0;
     float volt;
     int ext_delay = 0;
-    int step1_cnt = 0;
     struct exper_ctrl *ctrl = exper->ctrl;
     struct exper_data *data = &exper->data;
     struct exper_stat *stat = exper->stat;
     struct exper_buf *buf = ctrl->buf;
+    struct sysconf *cfg = sysconf_get();
+
+    char jump_start_flag = 0;
+    char jump_stop_flag = 0;
+    float volt_line = 5.0;
+    int step1_cnt = 3;
 
     ctrl->count = 0;
     ctrl->volt_diff = 0.0;
     data->agno3_used = 0.0;
 
-    switch (mode) {
-    case EXPER_MSG_AGNO3_START:
-    case EXPER_MSG_STAND_START:
-        step1_cnt = 25;
-        break;
-    case EXPER_MSG_CL_START:
-    case EXPER_MSG_BLOCK_START:
-        step1_cnt = 20;
-        break;
-    default:
-        return;
-    }
+    volt_scale = cfg->volt_scale;
+    EXPER_DBG_PRINT("start experiment, volt_scale = %f\r\n",
+        volt_scale);
 
     while (1) {
         if (*data->stock_percentage < 10)
@@ -420,7 +420,6 @@ static void do_test(struct experiment *exper, int mode)
             buf[ctrl->count].volt = volt;
             buf[ctrl->count].agno3_used = data->agno3_used;
             ctrl->count++;
-            step1_cnt--;
             if (ctrl->count > 1) {
                 volt_diff = (buf[ctrl->count - 1].volt) - (buf[ctrl->count - 2].volt);
                 if (ctrl->volt_diff < volt_diff) {
@@ -428,12 +427,21 @@ static void do_test(struct experiment *exper, int mode)
                     ctrl->jump = ctrl->count - 2;
                 }
                 
-                if (volt_diff > 5.0)
+                if (volt_diff > volt_line)
                     ext_delay = 5000;
                 else
                     ext_delay = 0;
-                EXPER_DBG_PRINT("derta = %f, gdiff = %f, jump = %d, ext_delay = %d\r\n",
-                    volt_diff, ctrl->volt_diff, ctrl->jump, ext_delay);
+
+                /* adjust experiment finished */
+                if (volt_diff > volt_line && jump_start_flag == 0)
+                    jump_start_flag = 1;
+                if (volt_diff < volt_line && jump_start_flag == 1 && jump_stop_flag == 0)
+                    jump_stop_flag = 1;
+                if (jump_stop_flag)
+                    step1_cnt--;
+
+                EXPER_DBG_PRINT("derta = %f, gdiff = %f, jump = %d, ext_delay = %d, ext_step = %d\r\n",
+                    volt_diff, ctrl->volt_diff, ctrl->jump, ext_delay, step1_cnt);
             }
         }
 
@@ -443,6 +451,7 @@ static void do_test(struct experiment *exper, int mode)
         stat->stat = EXPER_STAT_UPDATE_PROGRESS;
         exper_update_ui(exper);
 
+        /* experiment finished */
         if (step1_cnt == 0) {
             switch (mode) {
             case EXPER_MSG_AGNO3_START:
@@ -486,6 +495,11 @@ static void do_test(struct experiment *exper, int mode)
                 data->cl_dosage = (data->agno3_dosage * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_volume;
                 data->ppm = data->cl_dosage * (float)35450;
                 
+                EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
+                EXPER_DBG_PRINT("AgNo3 used actual is %f\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("cl dosage is %f\r\n", data->cl_dosage);
+                EXPER_DBG_PRINT("ppm %f\r\n", data->ppm);
+
                 exper_report_load(exper, REP_TYPE_STAND);
                 stat->stat = EXPER_STAT_STAND_FINISHED;
                 exper_update_ui(exper);                
