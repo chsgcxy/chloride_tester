@@ -367,7 +367,7 @@ static void do_test(struct experiment *exper, int mode)
         break;
     case EXPER_MSG_CL_START:
     case EXPER_MSG_BLOCK_START:
-        step1_cnt = 1;
+        step1_cnt = 20;
         break;
     default:
         return;
