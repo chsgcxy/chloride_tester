@@ -39,7 +39,7 @@ extern int ui_blocktest_creat(struct ui_exper_test *test);
 extern int ui_setting_creat(void);
 extern int ui_test_creat(void);
 extern int ui_data_creat(void);
-extern int data_detail_creat(struct data *dat);
+extern int data_detail_creat(int item);
 extern void lcd_io_init(void);
 
 extern const GUI_BITMAP bmlogo;
@@ -77,7 +77,7 @@ static void task_ui(void *args)
 			ui_data_creat();
 			break;
 		case MSG_LOAD_UI_DETAIL:
-			data_detail_creat(data_get());
+			data_detail_creat(g_ui_msg.param0);
 			break;
 		case MSG_LOAD_UI_TOUCH_CALC:
 			vTaskSuspend(handle_touch);
@@ -150,7 +150,11 @@ int main(void)
 	ds18b20_open();
 	//w25xxx_erase_chip();
 	stepmotor_init();
+	
+	/* load from flash */
 	sysconf_load();
+	data_cfg_init();
+
 	touch_init();
 	touch_calibrate(0);
 

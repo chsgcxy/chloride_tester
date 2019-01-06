@@ -30,6 +30,7 @@
 #include "beep.h"
 #include "data.h"
 #include "string.h"
+#include "report.h"
 /*********************************************************************
 *
 *       Defines
@@ -41,21 +42,32 @@
 #define ID_BUTTON_RETURN (GUI_ID_USER + 0x03)
 #define ID_BUTTON_EXP (GUI_ID_USER + 0x04)
 #define ID_BUTTON_PRINT (GUI_ID_USER + 0x05)
-#define ID_TEXT_IDX (GUI_ID_USER + 0x06)
-#define ID_TEXT_IDX_VALUE (GUI_ID_USER + 0x07)
-#define ID_TEXT_DATE (GUI_ID_USER + 0x08)
-#define ID_TEXT_XSYYL (GUI_ID_USER + 0x09)
-#define ID_TEXT_XSYYL_VALUE (GUI_ID_USER + 0x0A)
-#define ID_TEXT_MKSYHLLZ (GUI_ID_USER + 0x0B)
-#define ID_TEXT_MKSYHLLZ_VALUE (GUI_ID_USER + 0x0C)
+
+#define ID_TEXT_DATE (GUI_ID_USER + 0x06)
+
+#define ID_TEXT_IDX (GUI_ID_USER + 0x07)
+#define ID_TEXT_IDX_VALUE (GUI_ID_USER + 0x08)
+
+#define ID_TEXT_XSYND (GUI_ID_USER + 0x09)
+#define ID_TEXT_XSYND_VALUE (GUI_ID_USER + 0x0A)
+
+#define ID_TEXT_KBSYXXYYL (GUI_ID_USER + 0x0B)
+#define ID_TEXT_KBSYXXYYL_VALUE (GUI_ID_USER + 0x0C)
+
+#define ID_TEXT_XSYYL (GUI_ID_USER + 0x0D)
+#define ID_TEXT_XSYYL_VALUE (GUI_ID_USER + 0x0E)
+
+#define ID_TEXT_MKSYHLLZ (GUI_ID_USER + 0x0F)
+#define ID_TEXT_MKSYHLLZ_VALUE (GUI_ID_USER + 0x10)
+
+#define ID_TEXT_PPM (GUI_ID_USER + 0x11)
+#define ID_TEXT_PPM_VALUE (GUI_ID_USER + 0x12)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
 extern GUI_CONST_STORAGE GUI_FONT GUI_FontArial24;
 
-
-static struct data *pdata;
 // USER END
 
 /*********************************************************************
@@ -76,20 +88,29 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0},
     {LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 5, 5, 420, 460, 0, 0x0, 0},
     
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 460, 200, 300, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PRINT, 460, 300, 300, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 660, 300, 100, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PRINT, 460, 300, 100, 50, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 460, 400, 300, 50, 0, 0x0, 0},
 
     {TEXT_CreateIndirect, "Text", ID_TEXT_DATE, 440, 10, 250, 25, 0, 0x64, 0},
 
     {TEXT_CreateIndirect, "Text", ID_TEXT_IDX, 440, 40, 50, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_IDX_VALUE, 690, 40, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_IDX_VALUE, 640, 40, 80, 25, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYYL, 440, 70, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYYL_VALUE, 690, 70, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "硝酸银浓度", ID_TEXT_XSYND, 440, 70, 195, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYND_VALUE, 640, 70, 150, 25, 0, 0x64, 0},
+
+    {TEXT_CreateIndirect, "空白实验用量", ID_TEXT_KBSYXXYYL, 440, 100, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_KBSYXXYYL_VALUE, 640, 100, 80, 25, 0, 0x64, 0},
+
+    {TEXT_CreateIndirect, "硝酸银用量", ID_TEXT_XSYYL, 440, 130, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYYL_VALUE, 640, 130, 80, 25, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ, 440, 100, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ_VALUE, 690, 100, 81, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ, 440, 160, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ_VALUE, 640, 190, 150, 25, 0, 0x64, 0},
+
+    {TEXT_CreateIndirect, "PPM", ID_TEXT_PPM, 440, 220, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_PPM_VALUE, 640, 220, 81, 25, 0, 0x64, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -100,7 +121,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *
 **********************************************************************
 */
-
+static struct result_data res;
+static int index;
 // USER START (Optionally insert additional static code)
 // USER END
 
@@ -119,6 +141,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     HEADER_Handle hHeader;
     // USER START (Optionally insert additional variables)
     // USER END
+    struct result_data *pres = &res;
 
     switch (pMsg->MsgId)
     {
@@ -151,24 +174,26 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         
         LISTVIEW_SetTextColor(hItem, 0, GUI_BLACK);
 
+        data_get_by_idx(pres, index);
+
         row = 0;
-        for (i = 0; i < pdata->items_cnt; i++, row += 2) {
-            sprintf(buf, "%.2f", pdata->items[i].agno3_used);
+        for (i = 0; i < pres->items_cnt; i++, row += 2) {
+            sprintf(buf, "%.2f", pres->items[i].agno3_used);
             LISTVIEW_SetItemText(hItem, 0, row, buf);
-            sprintf(buf, "%.1f", pdata->items[i].volt);
+            sprintf(buf, "%.1f", pres->items[i].volt);
             LISTVIEW_SetItemText(hItem, 1, row, buf);
         }
 
         row = 1;
-        for (i = 1; i < pdata->items_cnt; i++, row += 2) {
-            sprintf(buf, "%.1f", pdata->items[i].delta_v);
+        for (i = 1; i < pres->items_cnt; i++, row += 2) {
+            sprintf(buf, "%.1f", pres->items[i].delta_v);
             LISTVIEW_SetItemText(hItem, 2, row, buf);
         }
             
 
         row = 2;
-        for (i = 2; i < pdata->items_cnt; i++, row += 2) {
-            sprintf(buf, "%.1f", pdata->items[i].delta2_v);
+        for (i = 2; i < pres->items_cnt; i++, row += 2) {
+            sprintf(buf, "%.1f", pres->items[i].delta2_v);
             LISTVIEW_SetItemText(hItem, 3, row, buf);
         }
 
@@ -208,8 +233,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_IDX_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        sprintf(buf, "%03d", pdata->index);
+        sprintf(buf, "%03d", pres->index);
         TEXT_SetText(hItem, buf);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_XSYND);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_XSYND_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        sprintf(buf, "%.4fmol/L", pres->agno3_dosage);
+        TEXT_SetText(hItem, buf);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_KBSYXXYYL);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_KBSYXXYYL_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        sprintf(buf, "%.2fmL", pres->block_agno3_used);
+        TEXT_SetText(hItem, buf);
+
         //
         // Initialization of 'Text'
         //
@@ -217,7 +263,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         sprintf(buf, "20%02d-%02d-%02d      %02d:%02d",
-            pdata->year, pdata->month, pdata->day, pdata->hour, pdata->minute);
+            pres->year, pres->month, pres->day, pres->hour, pres->minute);
         TEXT_SetText(hItem, buf);
         //
         // Initialization of 'Text'
@@ -232,7 +278,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_XSYYL_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        sprintf(buf, "%.2fmL", pdata->agno3_used);
+        sprintf(buf, "%.2fmL", pres->cl_agno3_used);
         TEXT_SetText(hItem, buf);
         //
         // Initialization of 'Text'
@@ -240,15 +286,36 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MKSYHLLZ);
         TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        TEXT_SetText(hItem, "每克试样含氯离子");
+        if (pres->type == DATA_TYPE_STAND)
+            TEXT_SetText(hItem, "氯离子浓度");
+        else
+            TEXT_SetText(hItem, "水泥氯离子质量分数");
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MKSYHLLZ_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        sprintf(buf, "%.3f%%", pdata->res);
+        if (pres->type == DATA_TYPE_STAND)
+            sprintf(buf, "%fmol/L", pres->cl_dosage);
+        else
+            sprintf(buf, "%.3f%%", pres->cl_percentage);
         TEXT_SetText(hItem, buf);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
+        TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        if (pres->type == DATA_TYPE_CL)
+            WM_HideWindow(hItem);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        if (pres->type == DATA_TYPE_STAND) {
+            sprintf(buf, "%.1f", pres->ppm);
+            TEXT_SetText(hItem, buf);
+        } else
+            WM_HideWindow(hItem);        
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
@@ -316,6 +383,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
+                report_show(pres);
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -349,9 +417,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *       CreateFramewin
 */
 
-int data_detail_creat(struct data *dat)
+int data_detail_creat(int item)
 {
-    pdata = dat;
+    index = item;
     return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

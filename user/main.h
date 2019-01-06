@@ -10,6 +10,7 @@ struct ui_msg {
 #define MSG_LOAD_UI_DETAIL       0x06
 #define MSG_LOAD_UI_TOUCH_CALC   0x07
     int msg;
+    int param0;
     WM_HWIN hWin;
 };
 

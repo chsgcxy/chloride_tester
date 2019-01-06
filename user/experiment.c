@@ -9,6 +9,7 @@
 #include "ad770x.h"
 #include "report.h"
 #include "sysconf.h"
+#include "data.h"
 
 #define EXPER_TOTAL_ML        (228)
 #define EXPER_DISCARD         (5)
@@ -39,7 +40,7 @@ struct experiment {
     char *name;
     
     struct exper_data data;
-    struct report rep;
+    struct result_data res;
 
     struct exper_ctrl *ctrl;
     struct exper_stat *stat;
@@ -98,7 +99,7 @@ void exper_print_report(int idx)
     if (idx >= EXPER_CNT)
         return;
     
-    report_show(&gexper[idx].rep);
+    report_show(&gexper[idx].res);
 }
               
 void exper_data_get(struct exper_data *data, int idx)
@@ -309,13 +310,13 @@ static float count_agno3_used(struct experiment *exper)
     return res;
 }
 
-static void exper_report_load(struct experiment *exper, int type)
+static void result_data_creat(struct experiment *exper, int type)
 {
     int i = 0;
-    int pre_idx = 4;
+    int pre_idx = 5;
     int data_cnt = 9;
-    struct report *rep = &exper->rep;
-    struct report_data *data = rep->data;
+    struct result_data *res = &exper->res;
+    struct data_item *items = res->items;
     struct exper_ctrl *ctrl = exper->ctrl;
     struct exper_buf *buf = ctrl->buf;
     
@@ -326,24 +327,33 @@ static void exper_report_load(struct experiment *exper, int type)
         data_cnt = ctrl->count;
 
     for (i = 0; i < data_cnt; i++) {
-        data[i].volt = buf[ctrl->jump - pre_idx + i].volt;
-        data[i].agno3_used = buf[ctrl->jump - pre_idx + i].agno3_used;
+        items[i].volt = buf[ctrl->jump - pre_idx + i].volt;
+        items[i].agno3_used = buf[ctrl->jump - pre_idx + i].agno3_used;
         if (i > 0)
-            data[i].delta_volt = data[i].volt - data[i - 1].volt;
+            items[i].delta_v = items[i].volt - items[i - 1].volt;
+        if (i > 1)
+            items[i].delta2_v = items[i].delta_v - items[i - 1].delta_v;
     }
     
-    exper->rep.type = type;
-    exper->rep.data_num = data_cnt;
-    exper->rep.cl_agno3_used = exper->data.cl_agno3_used;
-    exper->rep.cl_percentage = exper->data.cl_percentage;
-    exper->rep.cl_dosage = exper->data.cl_dosage;
-    exper->rep.ppm = exper->data.ppm;
+    res->type = type;
+    res->items_cnt = data_cnt;
+    res->cl_agno3_used = exper->data.cl_agno3_used;
+    res->cl_percentage = exper->data.cl_percentage;
+    res->cl_dosage = exper->data.cl_dosage;
+    res->ppm = exper->data.ppm;
+    res->block_agno3_used = exper->data.block_agno3_used;
+    res->agno3_dosage = exper->data.agno3_dosage;
 
-    exper->rep.year = 18;
-    exper->rep.month = 12;
-    exper->rep.day = 8;
-    exper->rep.hour = 16;
-    exper->rep.minute = 0;
+    res->year = 18;
+    res->month = 12;
+    res->day = 8;
+    res->hour = 16;
+    res->minute = 0;
+}
+
+static void result_data_save(struct experiment *exper)
+{
+    data_save(&exper->res);
 }
 
 static void do_test(struct experiment *exper, int mode)
@@ -486,7 +496,8 @@ static void do_test(struct experiment *exper, int mode)
                 EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->cl_agno3_used);
                 EXPER_DBG_PRINT("cl percentage is %f%%\r\n", data->cl_percentage);
                 
-                exper_report_load(exper, REP_TYPE_CL);
+                result_data_creat(exper, DATA_TYPE_CL);
+                result_data_save(exper);
                 stat->stat = EXPER_STAT_CL_FINISHED;
                 exper_update_ui(exper);
                 return;
@@ -500,7 +511,8 @@ static void do_test(struct experiment *exper, int mode)
                 EXPER_DBG_PRINT("cl dosage is %f\r\n", data->cl_dosage);
                 EXPER_DBG_PRINT("ppm %f\r\n", data->ppm);
 
-                exper_report_load(exper, REP_TYPE_STAND);
+                result_data_creat(exper, DATA_TYPE_STAND);
+                result_data_save(exper);
                 stat->stat = EXPER_STAT_STAND_FINISHED;
                 exper_update_ui(exper);                
                 return;
@@ -543,7 +555,7 @@ void exper_task(void *args)
         case EXPER_MSG_CL_START:
             EXPER_DBG_PRINT("EXPER_MSG_CL_START\r\n");
 #ifdef EXPER_TEST
-            exper_report_load(cur_exper, REP_TYPE_CL);
+            result_data_creat(cur_exper, REP_TYPE_CL);
             cur_exper->stat->stat = EXPER_STAT_CL_FINISHED;
             exper_update_ui(cur_exper);
 #else             
@@ -554,7 +566,7 @@ void exper_task(void *args)
         case EXPER_MSG_STAND_START:
             EXPER_DBG_PRINT("EXPER_MSG_STAND_START\r\n");
 #ifdef EXPER_TEST
-            exper_report_load(cur_exper, REP_TYPE_STAND);
+            result_data_creat(cur_exper, REP_TYPE_STAND);
             cur_exper->stat->stat = EXPER_STAT_STAND_FINISHED;
             exper_update_ui(cur_exper);
 #else              

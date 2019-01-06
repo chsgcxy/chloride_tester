@@ -83,7 +83,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *
 **********************************************************************
 */
-
+static struct result_data res_stream;
 // USER START (Optionally insert additional static code)
 // USER END
 
@@ -96,6 +96,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
     int NCode;
     int Id;
+    int count, i;
+    char buf[32];
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -115,13 +117,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Listbox'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
-        LISTBOX_SetFont(hItem, GUI_FONT_32_ASCII);
-        LISTBOX_AddString(hItem, "data_000_20180910_1231");
-        LISTBOX_AddString(hItem, "data_001_20180910_1232");
-        LISTBOX_AddString(hItem, "data_002_20180910_1233");
-        LISTBOX_AddString(hItem, "data_003_20180911_0918");
-        LISTBOX_AddString(hItem, "data_004_20181011_0920");
         //
         // Initialization of 'Button'
         //
@@ -161,6 +156,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         PROGBAR_SetFont(hItem, GUI_FONT_20B_ASCII);
         PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
         PROGBAR_SetMinMax(hItem, 0, 100);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
+        LISTBOX_SetFont(hItem, GUI_FONT_32_ASCII);
+        LISTBOX_SetAutoScrollV(hItem, 1);
+        LISTBOX_SetScrollbarWidth(hItem, 30);
+
+        data_foreach_start();
+        count = data_count();
+        while (data_foreach(&res_stream)) {
+            if (!res_stream.valid)
+                continue;
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
+            sprintf(buf, "data-%03d-20%02d%02d%02d_%02d%02d",
+                res_stream.index, res_stream.year, res_stream.month,
+                res_stream.day, res_stream.hour, res_stream.minute);
+            LISTBOX_AddString(hItem, buf);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
+            PROGBAR_SetValue(hItem, i * 100 / count);
+            i++;
+            WM_Exec();
+        }
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
+        PROGBAR_SetValue(hItem, 100);
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
@@ -194,6 +212,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
+                LISTBOX_GetItemText(hItem, LISTBOX_GetSel(hItem), buf, 30);
+                sscanf(buf, "data-%03d-", &g_ui_msg.param0);
                 g_ui_msg.msg = MSG_LOAD_UI_DETAIL;
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
@@ -212,6 +233,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
+                
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
+                i = LISTBOX_GetSel(hItem);
+                LISTBOX_GetItemText(hItem, i, buf, 30);
+                sscanf(buf, "data-%03d-", &i);
+                
+                /* I don't know why LISTBOX_DeleteItem can not work
+                 * so, reload this windows to runaway this bug
+                 */
+                if (data_del(i)) {
+                    g_ui_msg.msg = MSG_LOAD_UI_DATA;
+                    GUI_EndDialog(pMsg->hWin, 0);
+                }                    
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:

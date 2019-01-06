@@ -4,20 +4,18 @@
 
 #define DATA_CFG_SECTOR      W25X20_BLOCK_TO_SECTOR(1)
 #define DATA_START_SECTOR    W25X20_BLOCK_TO_SECTOR(2)
-#define DATA_MAX_NUM    100
-#define DATA_CFG_MAGIC    0xB5
+#define DATA_MAX_NUM         100
+#define DATA_CFG_MAGIC       0xB5
+#define DATA_MAGIC           0x5A
 
 struct data_cfg {
-    uint16_t magic;
+    uint8_t magic;
     uint8_t crc;
-    uint8_t crc_start;
 
     uint16_t start_sector;
     uint16_t next_sector;
     uint16_t total_num;
 };
-
-static struct data_cfg g_data_cfg;
 
 static const uint8_t crc_table[] = {
     0x00,0x31,0x62,0x53,0xc4,0xf5,0xa6,0x97,0xb9,0x88,0xdb,0xea,0x7d,0x4c,0x1f,0x2e,
@@ -38,7 +36,7 @@ static const uint8_t crc_table[] = {
     0x82,0xb3,0xe0,0xd1,0x46,0x77,0x24,0x15,0x3b,0x0a,0x59,0x68,0xff,0xce,0x9d,0xac
 };
 
-uint8_t crc8(uint8_t *buf, int len) 
+static uint8_t crc8(uint8_t *buf, int len) 
 {
     uint8_t crc = 0x00;
 
@@ -57,43 +55,128 @@ static void data_write_flash(uint8_t *buf, u32 sector, int len)
     w25xxx_write_sector(buf, sector, len);
 }
 
-static int data_cfg_load(struct data_cfg *cfg)
+static struct data_cfg *data_cfg_get(void)
+{
+    static struct data_cfg cfg;
+    return &cfg;
+}
+
+int data_cfg_init(void)
 {
     uint8_t crc;
+    struct data_cfg *cfg = data_cfg_get();
 
     data_read_flash((uint8_t *)cfg, DATA_CFG_SECTOR, sizeof(struct data_cfg));
     if (cfg->magic != DATA_CFG_MAGIC) {
         printf("%s: data config bad magic\r\n", __FUNCTION__);
-        return -1;
+        cfg->magic = DATA_CFG_MAGIC;
+        cfg->start_sector = DATA_START_SECTOR;
+        cfg->next_sector = DATA_START_SECTOR;
+        cfg->total_num = 0;
+        return 1;
     }
 
+#if 0
     crc = crc8(&cfg->crc_start, sizeof(struct data_cfg) - 2);
     if (cfg->crc != crc) {
         printf("%s: data config bad crc\r\n", __FUNCTION__);
         return -1;
     }    
-    
+#endif
     return 0;
 }
 
-static int data_cfg_save(struct data_cfg *cfg)
+static int data_cfg_update(void)
 {
-    cfg->magic = DATA_CFG_MAGIC;
-    cfg->crc = crc8(&cfg->crc_start, sizeof(struct data_cfg) - 2);
+    struct data_cfg *cfg = data_cfg_get();
+
+    if (cfg->total_num < DATA_MAX_NUM)
+        cfg->total_num++;
+     
+    if (cfg->next_sector - cfg->start_sector > DATA_MAX_NUM)
+        cfg->next_sector = cfg->start_sector;
+    else
+        cfg->next_sector++;
+        
+    cfg->crc = crc8((uint8_t *)(&cfg->start_sector), sizeof(struct data_cfg) - 2);
     data_write_flash((uint8_t *)cfg, DATA_CFG_SECTOR, sizeof(struct data_cfg));
     return 0;    
 }
 
-
-int data_save(struct data *stream)
+int data_save(struct result_data *stream)
 {
+    struct data_cfg *cfg = data_cfg_get();
 
+    stream->magic = DATA_MAGIC;
+    stream->index = cfg->next_sector - cfg->start_sector;
+    stream->valid = 1;
+    stream->crc = crc8((uint8_t *)(&stream->index), sizeof(struct result_data) - 2);
+    data_write_flash((uint8_t *)stream, cfg->next_sector, sizeof(struct result_data));
+    data_cfg_update();
     return 0;
 }
 
-struct data *data_get(void)
+int data_del(int idx)
 {
-    static struct data dat;
+    struct data_cfg *cfg = data_cfg_get();
+    static struct result_data data;
+
+    if (idx < cfg->total_num) {
+        data_read_flash((uint8_t *)&data, cfg->start_sector + idx, sizeof(struct result_data));
+        data.valid = 0;
+        data_write_flash((uint8_t *)&data, cfg->start_sector + idx, sizeof(struct result_data));
+        return 1;
+    }
+    return 0;    
+}
+
+static int data_foreach_cnt = 0;
+
+void data_foreach_start(void)
+{
+    data_foreach_cnt = 0;
+}
+
+int data_foreach(struct result_data *stream)
+{
+    struct data_cfg *cfg = data_cfg_get();
+    uint16_t sector = cfg->start_sector + data_foreach_cnt;
+
+    if (data_foreach_cnt < cfg->total_num) {
+        data_foreach_cnt++;
+        data_read_flash((uint8_t *)stream, sector, sizeof(struct result_data));
+        if (stream->magic != DATA_MAGIC)
+            stream->valid = 0;
+        return 1;
+    } else {
+        data_foreach_cnt = 0;
+        return 0;
+    }
+}
+
+int data_get_by_idx(struct result_data *stream, int idx)
+{
+    struct data_cfg *cfg = data_cfg_get();
+
+    if (idx < cfg->total_num) {
+        data_read_flash((uint8_t *)stream, cfg->start_sector + idx, sizeof(struct result_data));
+        if (stream->magic != DATA_MAGIC)
+            stream->valid = 0;
+        return 1;
+    }
+    return 0;
+}
+
+int data_count(void)
+{
+    struct data_cfg *cfg = data_cfg_get();
+    
+    return cfg->total_num;
+}
+
+struct result_data *data_get(void)
+{
+    static struct result_data dat;
     int i;
 
     dat.index = 3;
@@ -103,8 +186,8 @@ struct data *data_get(void)
     dat.hour = 20;
     dat.minute = 30;
     dat.items_cnt = 9;
-    dat.agno3_used = 10.32;
-    dat.res = 0.042;
+    dat.cl_agno3_used = 10.32;
+    dat.cl_percentage = 0.042;
     dat.ppm = 0.12;
     for (i = 0; i < 9; i++) {
         dat.items[i].agno3_used = 10.0 + i * 0.1;
