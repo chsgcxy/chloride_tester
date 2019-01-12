@@ -40,7 +40,6 @@
 #define ID_BUTTON_RETURN    (GUI_ID_USER + 0x05)
 #define ID_BUTTON_EXPALL    (GUI_ID_USER + 0x06)
 #define ID_BUTTON_DELALL    (GUI_ID_USER + 0x07)
-#define ID_PROGBAR_0        (GUI_ID_USER + 0x08)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
@@ -63,16 +62,17 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
-    {LISTBOX_CreateIndirect, "Listbox", ID_LISTBOX_0, 5, 5, 485, 380, 0, 0x0, 0},
     
-    {BUTTON_CreateIndirect, "查看", ID_BUTTON_LOOK, 545, 5, 210, 45, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "删除", ID_BUTTON_DEL, 545, 80, 210, 45, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "全部删除", ID_BUTTON_DELALL, 545, 155, 210, 45, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "导出", ID_BUTTON_EXP, 545, 230, 210, 45, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "全部导出", ID_BUTTON_EXPALL, 545, 305, 210, 45, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "返回", ID_BUTTON_RETURN, 545, 380, 210, 40, 0, 0x0, 0},
+    {LISTBOX_CreateIndirect, "Listbox", ID_LISTBOX_0, 5, 5, 380, 415, 0, 0x0, 0},
 
-    {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 5, 390, 485, 25, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "查看", ID_BUTTON_LOOK, 430, 30, 140, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "返回", ID_BUTTON_RETURN, 640, 30, 140, 60, 0, 0x0, 0},
+
+    {BUTTON_CreateIndirect, "删除", ID_BUTTON_DEL, 430, 180, 140, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "全部删除", ID_BUTTON_DELALL, 640, 180, 140, 60, 0, 0x0, 0},
+    
+    {BUTTON_CreateIndirect, "导出", ID_BUTTON_EXP, 430, 330, 140, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "全部导出", ID_BUTTON_EXPALL, 640, 330, 140, 60, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -83,7 +83,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *
 **********************************************************************
 */
-static struct result_data res_stream;
+static struct lb_idx idx_table[DATA_MAX_NUM];
 // USER START (Optionally insert additional static code)
 // USER END
 
@@ -98,6 +98,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int Id;
     int count, i;
     char buf[32];
+    struct data_ui *du;
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -129,7 +130,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DEL);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        
+
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DELALL);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
@@ -144,7 +145,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        BUTTON_SetTextColor(hItem, 0, GUI_RED);
         //
         // Initialization of 'Button'
         //
@@ -152,33 +153,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-        PROGBAR_SetFont(hItem, GUI_FONT_20B_ASCII);
-        PROGBAR_SetBarColor(hItem, 0, GUI_GREEN);
-        PROGBAR_SetMinMax(hItem, 0, 100);
-
         hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
         LISTBOX_SetFont(hItem, GUI_FONT_32_ASCII);
         LISTBOX_SetAutoScrollV(hItem, 1);
         LISTBOX_SetScrollbarWidth(hItem, 30);
 
-        data_foreach_start();
-        count = data_count();
-        while (data_foreach(&res_stream)) {
-            if (!res_stream.valid)
-                continue;
-            hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
-            sprintf(buf, "data-%03d-20%02d%02d%02d_%02d%02d",
-                res_stream.index, res_stream.year, res_stream.month,
-                res_stream.day, res_stream.hour, res_stream.minute);
-            LISTBOX_AddString(hItem, buf);
-            hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-            PROGBAR_SetValue(hItem, i * 100 / count);
-            i++;
-            WM_Exec();
+        count = data_indextable_update(idx_table);
+        for (i = 0; i < count; i++) {
+            du = data_ui_get(idx_table[i].data_idx);
+            if (du) {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
+                LISTBOX_AddString(hItem, du->string);
+            }
         }
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-        PROGBAR_SetValue(hItem, 100);
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
@@ -213,8 +200,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
-                LISTBOX_GetItemText(hItem, LISTBOX_GetSel(hItem), buf, 30);
-                sscanf(buf, "data-%03d-", &g_ui_msg.param0);
+                g_ui_msg.param0 = idx_table[LISTBOX_GetSel(hItem)].data_idx;
                 g_ui_msg.msg = MSG_LOAD_UI_DETAIL;
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END

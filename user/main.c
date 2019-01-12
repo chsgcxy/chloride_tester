@@ -114,7 +114,8 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
-	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
+	float volt;
+    /* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);
@@ -153,7 +154,7 @@ int main(void)
 	
 	/* load from flash */
 	sysconf_load();
-	data_cfg_init();
+	data_init();
 
 	touch_init();
 	touch_calibrate(0);
@@ -163,7 +164,13 @@ int main(void)
 	report_init(&g_printer);
 
 	exper_init();
-
+ #if 0   
+    while (1) {
+        volt = exper_volt_get();
+        printf("volt = %f, true volt = %f\r\n", volt, volt + 204);
+        delay_ms(500)
+    }
+#endif
 	/* creat freertos task */
 	task_init();
 

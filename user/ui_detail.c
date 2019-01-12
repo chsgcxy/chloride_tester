@@ -174,7 +174,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         
         LISTVIEW_SetTextColor(hItem, 0, GUI_BLACK);
 
-        data_get_by_idx(pres, index);
+        data_get(pres, index);
 
         row = 0;
         for (i = 0; i < pres->items_cnt; i++, row += 2) {
@@ -197,7 +197,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             LISTVIEW_SetItemText(hItem, 3, row, buf);
         }
 
-        LISTVIEW_SetSel(hItem, 8);
+        WM_DisableWindow(hItem);
             
         //
         // Initialization of 'Button'

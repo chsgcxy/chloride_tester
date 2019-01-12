@@ -395,7 +395,7 @@ int touch_init(void)
 	g_touch.point_centre.pos.y = TOUCH_GET_Y(TOUCH_CENTRE_X);
 	g_touch.point_adjust.pos.x = 650;
 	g_touch.point_adjust.pos.y = 100;
-	g_touch.precision = 10;
+	g_touch.precision = 15;
     return 0;
 }
 

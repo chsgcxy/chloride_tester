@@ -313,7 +313,7 @@ static float count_agno3_used(struct experiment *exper)
 static void result_data_creat(struct experiment *exper, int type)
 {
     int i = 0;
-    int pre_idx = 5;
+    int pre_idx = 4;
     int data_cnt = 9;
     struct result_data *res = &exper->res;
     struct data_item *items = res->items;

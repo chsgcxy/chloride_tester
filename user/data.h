@@ -3,6 +3,8 @@
 
 #include "stm32f2xx.h"
 
+#define DATA_MAX_NUM         100
+
 struct data_item {
     float agno3_used;
     float volt;
@@ -37,13 +39,26 @@ struct result_data {
     float agno3_dosage;
 };
 
-extern struct result_data *data_get(void);
-extern int data_cfg_init(void);
+/* this listbox index table provide a method that find
+ * data index in data_table fast */
+struct lb_idx {
+    uint8_t data_idx;
+};
+
+struct data_ui {
+    char string[26];
+    uint8_t valid;
+};
+
 extern int data_save(struct result_data *stream);
 extern int data_del(int idx);
-extern int data_foreach(struct result_data *stream);
-extern int data_get_by_idx(struct result_data *stream, int idx);
-extern void data_foreach_start(void);
+
+extern int data_get(struct result_data *stream, int idx);
+extern struct data_ui *data_ui_get(int index);
+
 extern int data_count(void);
+
+extern int data_init(void);
+extern int data_indextable_update(struct lb_idx *lbi);
 
 #endif
