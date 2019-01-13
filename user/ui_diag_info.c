@@ -67,8 +67,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     // USER START (Optionally insert additional variables)
     // USER END
 
-    switch (pMsg->MsgId)
-    {
+    switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
         hItem = pMsg->hWin;
         WINDOW_SetBkColor(hItem, GUI_DARKBLUE);
@@ -76,11 +75,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        if (ginfo.flag)
-            BUTTON_SetText(hItem, "停止实验");
-        else
-            BUTTON_SetText(hItem, "开始实验");
-        
+        switch (ginfo.func) {
+        case EXPER_MSG_AGNO3_START:
+        case EXPER_MSG_BLOCK_START:
+        case EXPER_MSG_CL_START:
+        case EXPER_MSG_STAND_START:
+            if (ginfo.flag)
+                BUTTON_SetText(hItem, "停止实验");
+            else
+                BUTTON_SetText(hItem, "开始实验");
+            break;
+        case EXPER_MSG_OIL_CLEAR:
+            BUTTON_SetText(hItem, "开始清洗");
+            break;
+        case DATA_MSG_DEL:
+            BUTTON_SetText(hItem, "删除");
+            break;
+        case DATA_MSG_DEL_ALL:
+            BUTTON_SetText(hItem, "全部删除");
+            break;
+        default:
+            break;
+        }
+      
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
@@ -118,6 +135,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_MSG_STAND_START:
                 TEXT_SetText(hItem, "即将进行氯离子含量检测");
                 break;
+            case EXPER_MSG_OIL_CLEAR:
+                TEXT_SetText(hItem, "即将进行检测仪自动清洗");
+                break;
+            case DATA_MSG_DEL:
+                TEXT_SetText(hItem, "即将删除数据,删除后无法恢复");
+                break;
+            case DATA_MSG_DEL_ALL:
+                TEXT_SetText(hItem, "即将删除所有数据，删除后无法恢复");
+                break;
             default:
                 break;
             }
@@ -126,10 +152,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
-        if (ginfo.flag)
-            TEXT_SetText(hItem, "确定停止实验吗?");
-        else
-            TEXT_SetText(hItem, "确定开始实验吗?");
+        switch (ginfo.func) {
+        case EXPER_MSG_AGNO3_START:
+        case EXPER_MSG_BLOCK_START:
+        case EXPER_MSG_CL_START:
+        case EXPER_MSG_STAND_START:
+            if (ginfo.flag)
+                TEXT_SetText(hItem, "确定停止实验吗?");
+            else
+                TEXT_SetText(hItem, "确定开始实验吗?");
+            break;
+        case EXPER_MSG_OIL_CLEAR:
+            TEXT_SetText(hItem, "确定开始清洗吗?");
+            break;
+        case DATA_MSG_DEL:
+            TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+            TEXT_SetText(hItem, ginfo.str);
+            break;
+        case DATA_MSG_DEL_ALL:
+            TEXT_SetText(hItem, "请谨慎操作");
+            break;
+        default:
+            break;
+        }
         break;
     case WM_NOTIFY_PARENT:
         Id = WM_GetId(pMsg->hWinSrc);

@@ -20,6 +20,7 @@ extern struct ui_msg g_ui_msg;
 struct ui_exper_info {
     int func;
     int flag;
+    char *str;
 };
 
 struct ui_exper_test {

@@ -76,9 +76,17 @@ struct data_ui *data_ui_get(int index)
         return NULL;
 }
 
+static void data_cfg_save(void)
+{
+    struct data_cfg *cfg = data_cfg_get();
+
+    cfg->crc = crc8((uint8_t *)(&cfg->start_sector), sizeof(struct data_cfg) - 2);
+    data_write_flash((uint8_t *)cfg, DATA_CFG_SECTOR, sizeof(struct data_cfg));
+}
+
 int data_cfg_init(void)
 {
-    uint8_t crc;
+    //uint8_t crc;
     struct data_cfg *cfg = data_cfg_get();
 
     data_read_flash((uint8_t *)cfg, DATA_CFG_SECTOR, sizeof(struct data_cfg));
@@ -139,8 +147,7 @@ int data_save(struct result_data *stream)
     else
         cfg->next_sector++;
         
-    cfg->crc = crc8((uint8_t *)(&cfg->start_sector), sizeof(struct data_cfg) - 2);
-    data_write_flash((uint8_t *)cfg, DATA_CFG_SECTOR, sizeof(struct data_cfg));
+    data_cfg_save();
 
     return stream->index;
 }
@@ -157,6 +164,23 @@ int data_del(int idx)
         return 1;
     } else
         return 0; 
+}
+
+int data_delall(void)
+{
+    int i;
+    struct data_cfg *cfg = data_cfg_get();
+
+    cfg->magic = DATA_CFG_MAGIC;
+    cfg->start_sector = DATA_START_SECTOR;
+    cfg->next_sector = DATA_START_SECTOR;
+    cfg->total_num = 0;
+
+    for (i = 0; i < DATA_MAX_NUM; i++)
+        data_table[i].valid = 0;
+    
+    data_cfg_save();
+    return 0;
 }
 
 int data_get(struct result_data *stream, int idx)

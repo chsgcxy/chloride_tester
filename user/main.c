@@ -114,7 +114,6 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
-	float volt;
     /* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */

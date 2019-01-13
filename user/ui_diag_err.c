@@ -23,6 +23,9 @@
 
 #include "DIALOG.h"
 #include "beep.h"
+#include "experiment.h"
+#include "main.h"
+#include "string.h"
 /*********************************************************************
 *
 *       Defines
@@ -39,6 +42,7 @@
 // USER END
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
 extern const GUI_BITMAP bmerror_32px;
+extern const GUI_BITMAP bminfor_32px;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 150, 120, 500, 240, 0, 0x0, 0},
@@ -50,6 +54,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     // USER START (Optionally insert additional widgets)
     // USER END
 };
+
+static struct ui_exper_info ginfo;
 
 static void _cbDialog(WM_MESSAGE *pMsg)
 {
@@ -71,26 +77,63 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
-        TEXT_SetText(hItem, "吸液超时，电机或限位开关异常");
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
+        switch (ginfo.func) {
+        case ERROR_MOTO:
+            TEXT_SetText(hItem, "吸液超时，电机或限位开关异常");
+            break;
+        case ERROR_DATA_LOOKUP:
+            TEXT_SetText(hItem, ginfo.str);
+            break;
+        default:
+            break;
+        }
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
-        TEXT_SetText(hItem, "请检查设备硬件");
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
+        switch (ginfo.func) {
+        case ERROR_MOTO:
+            TEXT_SetText(hItem, "请检查设备硬件");
+            break;
+        case ERROR_DATA_LOOKUP:
+            WM_HideWindow(hItem);
+            break;
+        default:
+            break;
+        }
         //
         // Initialization of 'Image'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        IMAGE_SetBitmap(hItem, &bmerror_32px);
+        switch (ginfo.func) {
+        case ERROR_MOTO:
+            IMAGE_SetBitmap(hItem, &bmerror_32px);
+            break;
+        case ERROR_DATA_LOOKUP:
+            IMAGE_SetBitmap(hItem, &bminfor_32px);
+            break;
+        default:
+            break;
+        }
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
-        TEXT_SetText(hItem, "错误");
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_WHITE);
+        switch (ginfo.func) {
+        case ERROR_MOTO:
+            TEXT_SetText(hItem, "错误");
+            break;
+        case ERROR_DATA_LOOKUP:
+            TEXT_SetText(hItem, "信息");
+            break;
+        default:
+            break;
+        }
+        
         //
         // Initialization of 'Button'
         //
@@ -144,8 +187,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 *       CreateWindow
 */
-int diag_err_creat(void)
+int diag_err_creat(struct ui_exper_info *info)
 {
+    memcpy(&ginfo, info, sizeof(struct ui_exper_info));
     return GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

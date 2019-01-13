@@ -14,6 +14,12 @@ struct exper_msg {
 #define EXPER_MSG_OIL_GET        0x05
 #define EXPER_MSG_OIL_PUT        0x06
 #define EXPER_MSG_OIL_CLEAR      0x07
+
+#define DATA_MSG_DEL             0xA0
+#define DATA_MSG_DEL_ALL         0xA1
+
+#define ERROR_MOTO               0xB1
+#define ERROR_DATA_LOOKUP        0xB2
     int msg;
 };
 

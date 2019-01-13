@@ -26,6 +26,7 @@
 #include "main.h"
 #include "beep.h"
 #include "data.h"
+#include "experiment.h"
 /*********************************************************************
 *
 *       Defines
@@ -45,7 +46,8 @@
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
 // USER END
-
+extern int diag_info_creat(struct ui_exper_info *info);
+extern int diag_err_creat(struct ui_exper_info *info);
 /*********************************************************************
 *
 *       Static data
@@ -84,9 +86,24 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 **********************************************************************
 */
 static struct lb_idx idx_table[DATA_MAX_NUM];
+static struct ui_exper_info ginfo;
+static int count = 0;
 // USER START (Optionally insert additional static code)
 // USER END
 
+static void ctrl_all_items(WM_HWIN hWin, int enable)
+{
+    WM_HWIN hItem;
+    int id;
+
+    for (id = ID_LISTBOX_0; id <= ID_BUTTON_DELALL; id++) {
+        hItem = WM_GetDialogItem(hWin, id);
+        if (enable)
+            WM_EnableWindow(hItem);
+        else
+            WM_DisableWindow(hItem);
+    }    
+}
 /*********************************************************************
 *
 *       _cbDialog
@@ -96,8 +113,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
     int NCode;
     int Id;
-    int count, i;
-    char buf[32];
+    int i;
     struct data_ui *du;
     // USER START (Optionally insert additional variables)
     // USER END
@@ -200,9 +216,32 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
-                g_ui_msg.param0 = idx_table[LISTBOX_GetSel(hItem)].data_idx;
-                g_ui_msg.msg = MSG_LOAD_UI_DETAIL;
-                GUI_EndDialog(pMsg->hWin, 0);
+                i = LISTBOX_GetSel(hItem);
+                if (i < count) {
+                    g_ui_msg.param0 = idx_table[i].data_idx;
+                    g_ui_msg.msg = MSG_LOAD_UI_DETAIL;
+                    GUI_EndDialog(pMsg->hWin, 0);
+                } else if (count == 0) {
+                    ctrl_all_items(pMsg->hWin, 0);
+                    WM_DisableWindow(pMsg->hWin);
+                    WM_Exec();
+                    ginfo.func = ERROR_DATA_LOOKUP;
+                    ginfo.flag = 0;
+                    ginfo.str = "没有可查看数据";
+                    diag_err_creat(&ginfo);
+                    WM_EnableWindow(pMsg->hWin);
+                    ctrl_all_items(pMsg->hWin, 1);
+                } else {
+                    ctrl_all_items(pMsg->hWin, 0);
+                    WM_DisableWindow(pMsg->hWin);
+                    WM_Exec();
+                    ginfo.func = ERROR_DATA_LOOKUP;
+                    ginfo.flag = 0;
+                    ginfo.str = "系统异常,找不到对应数据";
+                    diag_err_creat(&ginfo);
+                    WM_EnableWindow(pMsg->hWin);
+                    ctrl_all_items(pMsg->hWin, 1);
+                }
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -219,19 +258,106 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
-                
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
+                
                 i = LISTBOX_GetSel(hItem);
-                LISTBOX_GetItemText(hItem, i, buf, 30);
-                sscanf(buf, "data-%03d-", &i);
+                if (count == 0) {
+                    ctrl_all_items(pMsg->hWin, 0);
+                    WM_DisableWindow(pMsg->hWin);
+                    WM_Exec();
+                    ginfo.func = ERROR_DATA_LOOKUP;
+                    ginfo.flag = 0;
+                    ginfo.str = "没有可删除数据";
+                    diag_err_creat(&ginfo);
+                    WM_EnableWindow(pMsg->hWin);
+                    ctrl_all_items(pMsg->hWin, 1);
+                    break;
+                } else if (i >= count) {
+                    ctrl_all_items(pMsg->hWin, 0);
+                    WM_DisableWindow(pMsg->hWin);
+                    WM_Exec();
+                    ginfo.func = ERROR_DATA_LOOKUP;
+                    ginfo.flag = 0;
+                    ginfo.str = "系统异常,找不到对应数据";
+                    diag_err_creat(&ginfo);
+                    WM_EnableWindow(pMsg->hWin);
+                    ctrl_all_items(pMsg->hWin, 1);
+                    break;
+                }
+
+                du = data_ui_get(idx_table[i].data_idx);
+                if (du) {
+                    ginfo.func = DATA_MSG_DEL;
+                    ginfo.flag = 0;
+                    ginfo.str = du->string;
+                } else
+                    break;
+
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_DisableWindow(pMsg->hWin);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
+                    break;
+                }
+                WM_EnableWindow(pMsg->hWin);
+                ctrl_all_items(pMsg->hWin, 1);
+                /* I don't know why LISTBOX_DeleteItem can not work
+                 * so, reload this windows to runaway this bug
+                 */
+                if (data_del(idx_table[i].data_idx)) {
+                    g_ui_msg.msg = MSG_LOAD_UI_DATA;
+                    GUI_EndDialog(pMsg->hWin, 0);
+                }                    
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_BUTTON_DELALL: // Notifications sent by 'Button'
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                beep_clicked();
+
+                if (count == 0) {
+                    ctrl_all_items(pMsg->hWin, 0);
+                    WM_DisableWindow(pMsg->hWin);
+                    WM_Exec();
+                    ginfo.func = ERROR_DATA_LOOKUP;
+                    ginfo.flag = 0;
+                    ginfo.str = "没有可删除数据";
+                    diag_err_creat(&ginfo);
+                    WM_EnableWindow(pMsg->hWin);
+                    ctrl_all_items(pMsg->hWin, 1);
+                    break;
+                }
+
+                ginfo.func = DATA_MSG_DEL_ALL;
+                ginfo.flag = 0;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_DisableWindow(pMsg->hWin);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
+                    break;
+                }
+                WM_EnableWindow(pMsg->hWin);
+                ctrl_all_items(pMsg->hWin, 1);
+                
+                data_delall();
                 
                 /* I don't know why LISTBOX_DeleteItem can not work
                  * so, reload this windows to runaway this bug
                  */
-                if (data_del(i)) {
-                    g_ui_msg.msg = MSG_LOAD_UI_DATA;
-                    GUI_EndDialog(pMsg->hWin, 0);
-                }                    
+                g_ui_msg.msg = MSG_LOAD_UI_DATA;
+                GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:

@@ -79,7 +79,7 @@ extern const GUI_FONT GUI_Fontfont_spec;
 // USER END
 
 
-extern int diag_err_creat(void);
+extern int diag_err_creat(struct ui_exper_info *info);
 extern int diag_info_creat(struct ui_exper_info *info);
 extern int diag_res_creat(struct exper_stat *es);
 extern int numpad_creat(void);
@@ -461,10 +461,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             }
             break;
-        case ID_BUTTON_CLEAR: // Notifications sent by 'Button'
+        case ID_BUTTON_CLEAR: // Notifications sent by 'Button'      
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
+                ginfo.func = EXPER_MSG_OIL_CLEAR;
+                ginfo.flag = 0;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
+                    break;
+                }
+                ctrl_all_items(pMsg->hWin, 1);
+
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_CLEAR);
                 BUTTON_SetText(hItem, "ÇåÏ´ÖÐ");
                 BUTTON_SetTextColor(hItem, BUTTON_CI_DISABLED, GUI_GREEN);
@@ -720,7 +730,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         switch (stat->stat) {
             case EXPER_STAT_ERR_MOTOR:
                 beep_warning();
-                diag_err_creat();
+                ginfo.func = ERROR_MOTO;
+                ginfo.flag = 0;
+                diag_err_creat(&ginfo);
                 break;
             case EXPER_STAT_UPDATE_PROGRESS:
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);

@@ -52,6 +52,7 @@ struct data_ui {
 
 extern int data_save(struct result_data *stream);
 extern int data_del(int idx);
+extern int data_delall(void);
 
 extern int data_get(struct result_data *stream, int idx);
 extern struct data_ui *data_ui_get(int index);
