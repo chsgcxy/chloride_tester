@@ -25,6 +25,7 @@
 #include "beep.h"
 #include "ds18b20.h"
 #include "data.h"
+#include "rtc.h"
 
 USBH_HOST  USB_Host;
 USB_OTG_CORE_HANDLE  USB_OTG_Core;
@@ -126,7 +127,7 @@ int main(void)
 	uart4_init();
 	printf("System Init!\r\n");
 	printf("CoreClock = %dMHz\r\n", SystemCoreClock / 1000000);
-
+	rtc_init();
 	lcd_io_init();
 	GUI_Init();
 
@@ -151,6 +152,7 @@ int main(void)
 	//w25xxx_erase_chip();
 	stepmotor_init();
 	
+	
 	/* load from flash */
 	sysconf_load();
 	data_init();
@@ -163,13 +165,7 @@ int main(void)
 	report_init(&g_printer);
 
 	exper_init();
- #if 0   
-    while (1) {
-        volt = exper_volt_get();
-        printf("volt = %f, true volt = %f\r\n", volt, volt + 204);
-        delay_ms(500)
-    }
-#endif
+
 	/* creat freertos task */
 	task_init();
 

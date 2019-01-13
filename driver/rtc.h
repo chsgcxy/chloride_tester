@@ -11,6 +11,11 @@ struct date_time {
 	uint8_t month;
 	uint8_t date;
 	uint8_t week;
-};					 
+};			
+
+extern void rtc_init(void);
+extern void RTC_TimeRegulate(void);
+extern void RTC_TimeShow(void);
+extern void RTC_DateShow(void);
 
 #endif

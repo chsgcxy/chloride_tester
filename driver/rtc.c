@@ -22,8 +22,8 @@ uint8_t aShowTime[50] = {0};
 
 void RTC_TimeShow(void)
 {
-	RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);	
-	printf("%0.2d:%0.2d:%0.2d",
+	RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
+	printf("%0.2d:%0.2d:%0.2d\r\n",
 		RTC_TimeStructure.RTC_Hours,
 		RTC_TimeStructure.RTC_Minutes,
 		RTC_TimeStructure.RTC_Seconds);
@@ -33,7 +33,7 @@ void RTC_DateShow(void)
 {
 	RTC_GetDate(RTC_Format_BIN, &RTC_DateStructure);
 
-	printf("20%0.2d-%0.2d-%0.2d-%0.1d",
+	printf("20%0.2d-%0.2d-%0.2d-%0.1d\r\n",
 		RTC_DateStructure.RTC_Year,
 		RTC_DateStructure.RTC_Month,
 		RTC_DateStructure.RTC_Date,
@@ -96,7 +96,7 @@ static void RTC_Config(void)
 	RTC_WriteBackupRegister(RTC_BkpRegister_0, 0xAA55A501);	
 }
 
-void bsp_InitRTC(void) 
+void rtc_init(void) 
 { 
 	if (RTC_ReadBackupRegister(RTC_BkpRegister_0) != 0xAA55A501) {
 		RTC_Config();

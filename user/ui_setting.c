@@ -27,7 +27,8 @@
 #include "stdio.h"
 #include "main.h"
 #include "beep.h"
-#include "sysconf.h"
+#include "stm32f2xx_rtc.h"
+#include "experiment.h"
 /*********************************************************************
 *
 *       Defines
@@ -64,7 +65,7 @@ extern const GUI_FONT GUI_FontHZ_kaiti_28;
 *
 **********************************************************************
 */
-
+extern int diag_err_creat(struct ui_exper_info *info);
 // USER START (Optionally insert additional static data)
 // USER END
 
@@ -88,11 +89,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_4, 570, 230, 110, 70, 0, 0x0, 0},
     {TEXT_CreateIndirect, "分", ID_TEXT_4, 683, 250, 25, 35, 0, 0x64, 0},
     {BUTTON_CreateIndirect, "保存", ID_BUTTON_1, 710, 230, 80, 70, 0, 0x0, 0},
-
-    {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_5, 550, 10, 120, 70, 0, 0x0, 0},
-    {TEXT_CreateIndirect, "越变电位", ID_TEXT_5, 430, 30, 130, 38, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "mV", ID_TEXT_6, 675, 25, 40, 35, 0, 0x64, 0},
-    {BUTTON_CreateIndirect, "保存电位", ID_BUTTON_2, 420, 115, 300, 50, 0, 0x0, 0},
     
     {BUTTON_CreateIndirect, "返回", ID_BUTTON_3, 638, 370, 146, 50, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
@@ -108,7 +104,23 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 // USER START (Optionally insert additional static code)
 // USER END
+static RTC_TimeTypeDef  RTC_TimeStructure;
+static RTC_DateTypeDef  RTC_DateStructure;
+static struct ui_exper_info ginfo;
 
+static void ctrl_all_items(WM_HWIN hWin, int enable)
+{
+    WM_HWIN hItem;
+    int id;
+
+    for (id = ID_BUTTON_0; id <= ID_BUTTON_3; id++) {
+        hItem = WM_GetDialogItem(hWin, id);
+        if (enable)
+            WM_EnableWindow(hItem);
+        else
+            WM_DisableWindow(hItem);
+    }    
+}
 /*********************************************************************
 *
 *       _cbDialog
@@ -118,7 +130,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
     int NCode;
     int Id;
-    struct sysconf *cfg;
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -147,13 +158,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        
+        RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
+        RTC_GetDate(RTC_Format_BIN, &RTC_DateStructure);
         //
         // Initialization of 'Spinbox'
         // year
         hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_0);
         SPINBOX_SetFont(hItem, GUI_FONT_32_ASCII);
         SPINBOX_SetRange(hItem, 0, 99);
-        SPINBOX_SetValue(hItem, 18);
+        SPINBOX_SetValue(hItem, RTC_DateStructure.RTC_Year);
         //
         // Initialization of 'Text'
         //
@@ -165,7 +179,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_1);
         SPINBOX_SetFont(hItem, GUI_FONT_32_ASCII);
         SPINBOX_SetRange(hItem, 1, 12);
-        SPINBOX_SetValue(hItem, 6);
+        SPINBOX_SetValue(hItem, RTC_DateStructure.RTC_Month);
         //
         // Initialization of 'Text'
         //
@@ -177,7 +191,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_2);
         SPINBOX_SetFont(hItem, GUI_FONT_32_ASCII);
         SPINBOX_SetRange(hItem, 1, 31);
-        SPINBOX_SetValue(hItem, 18);
+        SPINBOX_SetValue(hItem, RTC_DateStructure.RTC_Date);
         //
         // Initialization of 'Text'
         //
@@ -189,14 +203,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_3);
         SPINBOX_SetFont(hItem, GUI_FONT_32_ASCII);
         SPINBOX_SetRange(hItem, 0, 23);
-        SPINBOX_SetValue(hItem, 10);
+        SPINBOX_SetValue(hItem, RTC_TimeStructure.RTC_Hours);
         //
         // Initialization of 'Spinbox'
         // minute
         hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_4);
         SPINBOX_SetFont(hItem, GUI_FONT_32_ASCII);
         SPINBOX_SetRange(hItem, 0, 59);
-        SPINBOX_SetValue(hItem, 58);
+        SPINBOX_SetValue(hItem, RTC_TimeStructure.RTC_Minutes);
         //
         // Initialization of 'Text'
         //
@@ -208,31 +222,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_4);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
-        // Initialization of 'Spinbox'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_5);
-        SPINBOX_SetFont(hItem, GUI_FONT_32_ASCII);
-        SPINBOX_SetRange(hItem, 150, 220);
-        cfg = sysconf_get();
-        SPINBOX_SetValue(hItem, (int)cfg->volt_scale);
-        SPINBOX_SetStep(hItem, 5);
-        //
-        // Initialization of 'Text'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_5);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        //
-        // Initialization of 'Text'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_6);
-        TEXT_SetFont(hItem, GUI_FONT_32_ASCII);
-        //
         // Initialization of 'Button'
-        //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        
+        //   
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
@@ -269,7 +260,31 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
-                // USER END
+                
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_0);
+                RTC_DateStructure.RTC_Year = SPINBOX_GetValue(hItem);
+		        hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_1);
+                RTC_DateStructure.RTC_Month = SPINBOX_GetValue(hItem);
+		        hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_2);
+                RTC_DateStructure.RTC_Date = SPINBOX_GetValue(hItem);
+		        hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_3);
+                RTC_TimeStructure.RTC_Hours = SPINBOX_GetValue(hItem);
+		        hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_4);
+                RTC_TimeStructure.RTC_Minutes = SPINBOX_GetValue(hItem);
+		        RTC_TimeStructure.RTC_Seconds = 0;
+
+                RTC_SetDate(RTC_Format_BIN, &RTC_DateStructure);
+                RTC_SetTime(RTC_Format_BIN, &RTC_TimeStructure);
+
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_DisableWindow(pMsg->hWin);
+                WM_Exec();
+                ginfo.func = INFO_DATE_SAVE;
+                ginfo.flag = 0;
+                ginfo.str = "时间设置成功!";
+                diag_err_creat(&ginfo);
+                WM_EnableWindow(pMsg->hWin);
+                ctrl_all_items(pMsg->hWin, 1);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
@@ -398,51 +413,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_VALUE_CHANGED:
                 // USER START (Optionally insert code for reacting on notification message)
                 
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
-        case ID_SPINBOX_5: // Notifications sent by 'Spinbox'
-            switch (NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                beep_clicked();
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-            case WM_NOTIFICATION_MOVED_OUT:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-            case WM_NOTIFICATION_VALUE_CHANGED:
-                // USER START (Optionally insert code for reacting on notification message)
-                
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
-        case ID_BUTTON_2: // Notifications sent by 'Button'
-            switch (NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                beep_clicked();
-                cfg = sysconf_get();
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_SPINBOX_5);
-                cfg->volt_scale = SPINBOX_GetValue(hItem);
-                sysconf_save();
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)

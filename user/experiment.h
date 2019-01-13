@@ -20,6 +20,8 @@ struct exper_msg {
 
 #define ERROR_MOTO               0xB1
 #define ERROR_DATA_LOOKUP        0xB2
+
+#define INFO_DATE_SAVE           0xC1
     int msg;
 };
 

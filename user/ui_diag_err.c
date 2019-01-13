@@ -84,6 +84,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, "吸液超时，电机或限位开关异常");
             break;
         case ERROR_DATA_LOOKUP:
+        case INFO_DATE_SAVE:
             TEXT_SetText(hItem, ginfo.str);
             break;
         default:
@@ -98,6 +99,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, "请检查设备硬件");
             break;
         case ERROR_DATA_LOOKUP:
+        case INFO_DATE_SAVE:        
             WM_HideWindow(hItem);
             break;
         default:
@@ -112,6 +114,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             IMAGE_SetBitmap(hItem, &bmerror_32px);
             break;
         case ERROR_DATA_LOOKUP:
+        case INFO_DATE_SAVE:        
             IMAGE_SetBitmap(hItem, &bminfor_32px);
             break;
         default:
@@ -128,6 +131,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, "错误");
             break;
         case ERROR_DATA_LOOKUP:
+        case INFO_DATE_SAVE:
             TEXT_SetText(hItem, "信息");
             break;
         default:

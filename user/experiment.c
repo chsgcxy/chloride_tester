@@ -329,12 +329,15 @@ static float count_agno3_used(struct experiment *exper)
 static void result_data_creat(struct experiment *exper, int type)
 {
     int i = 0;
-    int pre_idx = 4;
+    int pre_idx = 3;
     int data_cnt = 9;
     struct result_data *res = &exper->res;
     struct data_item *items = res->items;
     struct exper_ctrl *ctrl = exper->ctrl;
     struct exper_buf *buf = ctrl->buf;
+
+    RTC_TimeTypeDef  RTC_TimeStructure;
+    RTC_DateTypeDef  RTC_DateStructure;
     
     if (ctrl->jump < pre_idx)
         pre_idx = ctrl->jump;
@@ -360,11 +363,14 @@ static void result_data_creat(struct experiment *exper, int type)
     res->block_agno3_used = exper->data.block_agno3_used;
     res->agno3_dosage = exper->data.agno3_dosage;
 
-    res->year = 18;
-    res->month = 12;
-    res->day = 8;
-    res->hour = 16;
-    res->minute = 0;
+    RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
+    RTC_GetDate(RTC_Format_BIN, &RTC_DateStructure);
+
+    res->year = RTC_DateStructure.RTC_Year;
+    res->month = RTC_DateStructure.RTC_Month;
+    res->day = RTC_DateStructure.RTC_Date;
+    res->hour = RTC_TimeStructure.RTC_Hours;
+    res->minute = RTC_TimeStructure.RTC_Minutes;
 }
 
 static void result_data_save(struct experiment *exper)
