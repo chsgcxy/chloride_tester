@@ -11,6 +11,20 @@
 #include "sysconf.h"
 #include "data.h"
 
+enum exper_sm{
+    STATUS_EXPER_START = 0x00,
+    STATUS_PRE_STEP01ML,
+    STATUS_START_STEP01ML,
+    STATUS_IN_STEP01ML,
+    STATUS_PREJUMP,
+    STATUS_READJUMP,
+    STATUS_JUMPED,
+    STATUS_FINISHED,
+    STATUS_EXPER_STOP,
+};
+
+
+
 #define EXPER_TOTAL_ML        (228)
 #define EXPER_DISCARD         (5)
 #define EXPER_WINDOWS         (10)
@@ -23,6 +37,8 @@
 #else
 	#define EXPER_DBG_PRINT(fmt, args...)
 #endif
+
+#define EXPER_ALGO_NEW
 
 //#define EXPER_TEST
 
@@ -358,44 +374,32 @@ static void result_data_save(struct experiment *exper)
 
 static void do_test(struct experiment *exper, int mode)
 {
-    float volt_scale;
-    float step_ml = 0.3;
-    int step = 3;
-    float volt_diff = 0.0;
-    float volt;
-    int ext_delay = 0;
     struct exper_ctrl *ctrl = exper->ctrl;
     struct exper_data *data = &exper->data;
     struct exper_stat *stat = exper->stat;
     struct exper_buf *buf = ctrl->buf;
-    struct sysconf *cfg = sysconf_get();
-
-    char jump_start_flag = 0;
-    char jump_stop_flag = 0;
-    float volt_line = 5.0;
-    int step1_cnt = 3;
 
     ctrl->count = 0;
     ctrl->volt_diff = 0.0;
     data->agno3_used = 0.0;
 
-    volt_scale = cfg->volt_scale;
-    EXPER_DBG_PRINT("start experiment, volt_scale = %f\r\n",
-        volt_scale);
+    uint32_t exper_sm = STATUS_EXPER_START;
+    uint32_t stop_sm = STATUS_PREJUMP;
 
+    float step_ml = 0.3;
+    int step = 3;
+    float volt_diff = 0.0;
+    float volt;
+    float prevolt = 0.0;
+    TickType_t msdelay = 3000;
+    float volt_line = 5.0;
+        
     while (1) {
-        if (*data->stock_percentage < 10)
+        if (*data->stock_percentage < 5)
             _exper_oil_get(exper);
-        /* user stop */
         if (exper->msg->stop) {
             exper->msg->stop = 0;
             return;
-        }
-
-        /* beyond scale, change to 0.1ml per step */
-        if (volt > volt_scale) {
-            step_ml = 0.1;
-            step = 1;
         }
 
         /* put AgNo3 oil */
@@ -414,55 +418,72 @@ static void do_test(struct experiment *exper, int mode)
         
         /* wait oil act */
         EXPER_DBG_PRINT("\r\n\r\n");
-        if (step == 1) {
-            vTaskDelay(10000 + ext_delay);
-            volt = exper_filter();
-        } else {
-            vTaskDelay(3000);
-            volt = exper_filter();
-        }
+        vTaskDelay(msdelay);
+        volt = exper_filter();
         data->volt = volt;
         EXPER_DBG_PRINT("step = %d, volt = %f, AgNo3 used %.3fmL\r\n",
             step, volt, data->agno3_used);
-        
-        /* do not care step 0.3 */
-        if (step == 1) {
+
+        switch (exper_sm) {
+        case STATUS_EXPER_START:
+            prevolt = volt;
+            exper_sm = STATUS_PRE_STEP01ML;         
+            break;
+        case STATUS_PRE_STEP01ML:
+            volt_diff = volt - prevolt;
+            prevolt = volt;
+            if (volt_diff > 8.0) {
+                exper_sm = STATUS_START_STEP01ML;
+                msdelay = 10000;
+                step = 1;
+                step_ml = 0.1;
+            }
+            break;
+        case STATUS_START_STEP01ML:
             buf[ctrl->count].volt = volt;
             buf[ctrl->count].agno3_used = data->agno3_used;
             ctrl->count++;
-            if (ctrl->count > 1) {
-                volt_diff = (buf[ctrl->count - 1].volt) - (buf[ctrl->count - 2].volt);
-                if (ctrl->volt_diff < volt_diff) {
-                    ctrl->volt_diff = volt_diff;
-                    ctrl->jump = ctrl->count - 2;
-                }
-                
-                if (volt_diff > volt_line)
-                    ext_delay = 5000;
-                else
-                    ext_delay = 0;
-
-                /* adjust experiment finished */
-                if (volt_diff > volt_line && jump_start_flag == 0)
-                    jump_start_flag = 1;
-                if (volt_diff < volt_line && jump_start_flag == 1 && jump_stop_flag == 0)
-                    jump_stop_flag = 1;
-                if (jump_stop_flag)
-                    step1_cnt--;
-
-                EXPER_DBG_PRINT("derta = %f, gdiff = %f, jump = %d, ext_delay = %d, ext_step = %d\r\n",
-                    volt_diff, ctrl->volt_diff, ctrl->jump, ext_delay, step1_cnt);
+            exper_sm = STATUS_IN_STEP01ML;
+            break;        
+        case STATUS_IN_STEP01ML:
+            buf[ctrl->count].volt = volt;
+            buf[ctrl->count].agno3_used = data->agno3_used;
+            volt_diff = (buf[ctrl->count].volt) - (buf[ctrl->count - 1].volt);
+            if (ctrl->volt_diff < volt_diff) {
+                ctrl->volt_diff = volt_diff;
+                ctrl->jump = ctrl->count - 1;
             }
-        }
-
-        /* update UI */
-        stat->stat = EXPER_STAT_UPDATE_GRAPH;
-        exper_update_ui(exper);
-        stat->stat = EXPER_STAT_UPDATE_PROGRESS;
-        exper_update_ui(exper);
-
-        /* experiment finished */
-        if (step1_cnt == 0) {
+            ctrl->count++;
+            printf("volt diff = %f\r\n", volt_diff);
+            
+            if (volt_diff > volt_line)
+                msdelay = 15000;
+            else
+                msdelay = 10000;
+            
+            switch (stop_sm) {
+            case STATUS_PREJUMP:
+                if (volt_diff > volt_line)
+                    stop_sm = STATUS_READJUMP;
+                break;
+            case STATUS_READJUMP:
+                if (volt_diff > volt_line)
+                    stop_sm = STATUS_JUMPED;
+                else 
+                    stop_sm = STATUS_PREJUMP;
+                break;
+            case STATUS_JUMPED:
+                if (volt_diff < volt_line)
+                    stop_sm = STATUS_FINISHED;
+                break;
+            case STATUS_FINISHED:
+                exper_sm = STATUS_EXPER_STOP;
+                break;
+            default:
+                break;                
+            }
+            break;
+        case STATUS_EXPER_STOP:
             switch (mode) {
             case EXPER_MSG_AGNO3_START:
                 data->agno3_agno3_used = count_agno3_used(exper);
@@ -514,12 +535,23 @@ static void do_test(struct experiment *exper, int mode)
                 result_data_creat(exper, DATA_TYPE_STAND);
                 result_data_save(exper);
                 stat->stat = EXPER_STAT_STAND_FINISHED;
-                exper_update_ui(exper);                
+                exper_update_ui(exper);
                 return;
             default:
                 return;
             }
+            break;
+        default:
+            break;
         }
+
+        printf("exper sm = 0x%x, finished sm = 0x%x\r\n",
+            exper_sm, stop_sm);
+
+        stat->stat = EXPER_STAT_UPDATE_GRAPH;
+        exper_update_ui(exper);
+        stat->stat = EXPER_STAT_UPDATE_PROGRESS;
+        exper_update_ui(exper);
     }
 }
 

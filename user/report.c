@@ -7,6 +7,7 @@
  * use amo tools function ascii2hex to creat this string.
  * */
 #define STRING_TITLE        "氯离子检测报告"
+#define STRING_INDEX        "实验编号: "
 #define STRING_DATE         "测试日期: "
 #define STRING_SSJCDY       "试样检测数据:"
 #define STRING_XSYYL        "硝酸银用量: "
@@ -119,6 +120,12 @@ int report_show(struct result_data *rp)
     
     tprinter_prepare(report_printer);
     tprinter_send(report_printer, STRING_SSJCDY, sizeof(STRING_SSJCDY));
+    tprinter_newline(report_printer);
+    tprinter_newline(report_printer);
+
+    tprinter_send(report_printer, STRING_INDEX, sizeof(STRING_INDEX));
+    sprintf(buf, "%03d", rp->index);
+    tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);
     tprinter_newline(report_printer);
