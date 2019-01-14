@@ -12,15 +12,36 @@ void beep_work(int work, int idol)
 	vTaskDelay(idol);
 }
 
+void beep_work_delay(int work, int idol)
+{
+	GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+    delay_ms(work);
+    GPIO_SetBits(GPIOA, GPIO_Pin_1);
+	delay_ms(idol);
+}
+
 void beep_finished(void)
 {
 	beep_work(500, 50);
 	beep_work(500, 0);
 }
 
+void beep_finished_delay(void)
+{
+	beep_work_delay(500, 50);
+	beep_work_delay(500, 0);
+}
+
 void beep_clicked(void)
 {
 	beep_work(30, 0);
+}
+
+void beep_clicked_delay(void)
+{
+   	GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+    delay_ms(30);
+    GPIO_SetBits(GPIOA, GPIO_Pin_1);
 }
     
 void beep_warning(void)
@@ -28,6 +49,13 @@ void beep_warning(void)
 	beep_work(100, 30);
 	beep_work(100, 30);
 	beep_work(100, 0);
+}
+
+void beep_warning_delay(void)
+{
+	beep_work_delay(100, 30);
+	beep_work_delay(100, 30);
+	beep_work_delay(100, 0);
 }
 
 int beep_init(void)
