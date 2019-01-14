@@ -5,7 +5,7 @@
 //#define BOARD_TYPE_DEMO
 #define BOARD_TYPE_MY
 
-#define SOFTWARE_VERSION_STR    "V2.0.1"
+#define SOFTWARE_VERSION_STR    "V2.1.0"
 
 #define DEFAULT_VOLT_SCALE       190
 

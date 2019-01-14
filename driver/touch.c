@@ -360,7 +360,7 @@ void touch_update(void)
 		GUI_PID_StoreState(&pstate);
 		return;
     }
-    
+    delay_ms(10);
     touch_read_phy();
     touch_trans(&pstate, &g_touch);
 	GUI_PID_StoreState(&pstate);
