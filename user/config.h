@@ -5,9 +5,9 @@
 //#define BOARD_TYPE_DEMO
 #define BOARD_TYPE_MY
 
-#define SOFTWARE_VERSION_STR    "V2.1.0"
+#define SOFTWARE_VERSION_STR    "V2.1.1"
 
-#define DEFAULT_VOLT_SCALE       190
+#define ZSB_LEN_DEFAULT         245
 
 /* board special config */
 #ifdef BOARD_TYPE_DEMO

@@ -1,6 +1,8 @@
 #include "data.h"
 #include "w25xxx.h"
 #include "stdio.h"
+#include "main.h"
+#include "diskio.h"
 
 #define DATA_CFG_SECTOR      W25X20_BLOCK_TO_SECTOR(1)
 #define DATA_START_SECTOR    W25X20_BLOCK_TO_SECTOR(2)
@@ -21,7 +23,6 @@ struct data_cfg {
  * and data table must init when system init
  */
 static struct data_ui data_table[DATA_MAX_NUM];
-
 static struct result_data res_data;
 
 static const uint8_t crc_table[] = {
@@ -241,6 +242,76 @@ int data_init(void)
     for (data_idx = 0; data_idx < cfg->total_num; data_idx++) {
         data_read_flash((uint8_t *)(&res_data), cfg->start_sector + data_idx, sizeof(struct result_data));
         dataui_setup(data_idx, &res_data);
+    }
+    return 0;
+}
+
+int data_usb_detect(void)
+{   
+    USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
+    return 0;
+}
+	
+static char dir_name[32];
+static char fname[64];
+static char line[128];
+static FIL file;
+
+int data_export(struct lb_idx *table, int len)
+{
+    FRESULT res;
+    int i, index;
+    UINT bw;
+    RTC_TimeTypeDef  RTC_TimeStructure;
+    RTC_DateTypeDef  RTC_DateStructure;
+
+    RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
+    RTC_GetDate(RTC_Format_BIN, &RTC_DateStructure);
+
+    sprintf(dir_name, "%d:/TCZY20%02d%02d%02d%02d%02d%02d",
+        USB, RTC_DateStructure.RTC_Year, RTC_DateStructure.RTC_Month,
+        RTC_DateStructure.RTC_Date, RTC_TimeStructure.RTC_Hours,
+        RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds);
+
+    res = f_mkdir(dir_name);
+    if (res != FR_OK)
+        return -res;
+
+    for (i = 0; i < len; i++) {
+        index = table[i].data_idx;
+        data_get(&res_data, index);
+        sprintf(fname, "%d:/%s/%s.txt",
+            USB, dir_name, data_table[index].string);
+        res = f_open(&file, fname, FA_CREATE_ALWAYS | FA_WRITE);
+        if (res != FR_OK)
+            continue;
+        if (res_data.type == DATA_TYPE_STAND)
+            sprintf(line, "实验类型：其他氯离子检测实验\n");
+        else
+            sprintf(line, "实验类型：水泥氯离子检测实验\n");
+        f_write(&file, line, sizeof(line), &bw);
+        sprintf(line, "序号: %d\n", res_data.index);
+        f_write(&file, line, sizeof(line), &bw);
+        sprintf(line, "时间: 20%02d-%02d-%02d    %02d:%02d\n",
+            res_data.year, res_data.month, res_data.day,
+            res_data.hour, res_data.minute);
+        f_write(&file, line, sizeof(line), &bw);
+        sprintf(line, "硝酸银浓度: %.4fmol/L\n", res_data.agno3_dosage);
+        f_write(&file, line, sizeof(line), &bw);
+        sprintf(line, "空白实验用量: %.2fmL\n", res_data.block_agno3_used);
+        f_write(&file, line, sizeof(line), &bw);
+        sprintf(line, "硝酸银用量: %.2fmL\n", res_data.cl_agno3_used);
+        f_write(&file, line, sizeof(line), &bw);
+        if (res_data.type == DATA_TYPE_CL) {
+            sprintf(line, "水泥氯离子质量分数: %.3f%%\n", res_data.cl_percentage);
+            f_write(&file, line, sizeof(line), &bw);
+        } else {
+            sprintf(line, "PPM: %.1f\n", res_data.ppm);
+            f_write(&file, line, sizeof(line), &bw);
+            sprintf(line, "氯离子浓度: %fmol/L\n", res_data.cl_dosage);
+            f_write(&file, line, sizeof(line), &bw);
+        }
+        f_close(&file);
     }
     return 0;
 }

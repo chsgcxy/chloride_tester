@@ -207,8 +207,9 @@ void touch_calibrate(int force)
 	/* to enable ADS7843 irq */
 	_read_phy(CMD_RDX);
 	_read_phy(CMD_RDY);
+
 #if 1
-	if (sysconf_is_valid() && !force) {
+	if ((conf->touch_valid == TOUCH_VALID_FLAG) && !force) {
 		printf("get touch config, x_coe=%lf, y_coe=%lf, x_cor=%d, y_cor=%d\r\n",
 			conf->x_coe, conf->y_coe, conf->x_correct, conf->y_correct);
 		ptouch->x_coe = conf->x_coe;
@@ -218,6 +219,7 @@ void touch_calibrate(int force)
 		return;
 	}
 #endif
+
 do_calc:
 	TOUCH_DBG_PRINT("do touch calibrate...\r\n");
 	GUI_SetBkColor(GUI_DARKGRAY);
@@ -337,6 +339,7 @@ do_calc:
 	conf->y_coe = ptouch->y_coe;
 	conf->x_correct = ptouch->correct.x;
 	conf->y_correct = ptouch->correct.y;
+	conf->touch_valid = TOUCH_VALID_FLAG;
 
 	TOUCH_DBG_PRINT("calibrate succeed, correct=(%d,%d)\r\n",
 		ptouch->correct.x, ptouch->correct.y);

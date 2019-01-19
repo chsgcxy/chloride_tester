@@ -13,13 +13,11 @@ static int valid_flag;
 int sysconf_load(void)
 {
     w25xxx_read_sector((uint8_t *)&g_cfg, SYSCONF_SECTOR, sizeof(struct sysconf));
-    if (g_cfg.magic == SYSCONF_MAGIC)
-        valid_flag = 1;
-    else {
-        valid_flag = 0;
-        g_cfg.volt_scale = DEFAULT_VOLT_SCALE;
+    if (g_cfg.magic != SYSCONF_MAGIC) {
+        g_cfg.touch_valid = 0;
+        g_cfg.zsb_valid = 0;
     }
-    return valid_flag;
+    return 0;
 }
 
 int sysconf_save(void)

@@ -1,6 +1,8 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
+#include "usbh_usr.h"
+
 struct ui_msg {
 #define MSG_LOAD_UI_MENU         0x01
 #define MSG_LOAD_UI_BLOCKTEST    0x02
@@ -11,7 +13,6 @@ struct ui_msg {
 #define MSG_LOAD_UI_TOUCH_CALC   0x07
     int msg;
     int param0;
-    WM_HWIN hWin;
 };
 
 extern struct ui_msg g_ui_msg;
@@ -26,5 +27,8 @@ struct ui_exper_info {
 struct ui_exper_test {
     int func;
 };
+
+extern USBH_HOST USB_Host;
+extern USB_OTG_CORE_HANDLE USB_OTG_Core;
 
 #endif

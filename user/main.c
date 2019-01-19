@@ -6,7 +6,6 @@
 #include "croutine.h"
 #include "semphr.h"
 #include "event_groups.h"
-#include "usbh_usr.h" 
 #include "stm32_uart.h"
 #include "stm32_spi.h"
 #include "report.h"
@@ -27,13 +26,14 @@
 #include "data.h"
 #include "rtc.h"
 
-USBH_HOST  USB_Host;
-USB_OTG_CORE_HANDLE  USB_OTG_Core;
 struct ui_msg g_ui_msg;
 
 static struct tprinter g_printer;
 static TaskHandle_t handle_touch, handle_gui;
 static struct ui_exper_test test_func;
+
+USBH_HOST  USB_Host;
+USB_OTG_CORE_HANDLE  USB_OTG_Core;
 
 extern int main_menu_creat(void);
 extern int ui_blocktest_creat(struct ui_exper_test *test);
@@ -51,6 +51,14 @@ static void task_touch(void *args)
 {
 	while (1) {
 		touch_update();
+		vTaskDelay(10);
+	}
+}
+
+static void task_usb(void *args)
+{
+	while (1) {
+		USBH_Process(&USB_OTG_Core, &USB_Host);
 		vTaskDelay(10);
 	}
 }
@@ -92,20 +100,12 @@ static void task_ui(void *args)
 	}
 }
 
-static void task_usb(void *args)
-{
-	while (1) {
-		USBH_Process(&USB_OTG_Core, &USB_Host);
-		vTaskDelay(100);
-	}
-}
-
 static void task_init(void)
 {
 	xTaskCreate(task_touch, "touch", 128, NULL, 2, &handle_touch);
 	xTaskCreate(task_ui, "ui", 512, NULL, 1, &handle_gui);
 	xTaskCreate(exper_task, "exper", 512, NULL, 1, NULL);
-	xTaskCreate(task_usb, "usb", 512, NULL, 1, NULL);
+	xTaskCreate(task_usb, "usb", 256, NULL, 1, NULL);
 }
 
 static int g_printer_send(uint8_t *buf, int len)
@@ -172,7 +172,6 @@ int main(void)
 	/* run rtos */
 	vTaskStartScheduler();
 
-	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
 	/* if run here, system error */
 	while (1) {
 		printf("system error!\r\n");

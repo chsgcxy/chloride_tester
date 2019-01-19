@@ -1,6 +1,7 @@
 #include "stepmotor.h"
 #include "delay.h"
 #include "stdio.h"
+#include "sysconf.h"
 
 /*  DIR:  PC7
  *  STEP: PC6
@@ -71,4 +72,37 @@ void relay_ctrl(int ctrl)
         GPIO_SetBits(GPIOC, GPIO_Pin_0);
         GPIO_SetBits(GPIOC, GPIO_Pin_1);
     }
+}
+
+uint32_t stepmotor_calibrate(void)
+{
+    int count = 0;
+    int i = 400;
+    struct sysconf *cfg;
+
+    relay_ctrl(MOTOR_WATER_PUT);
+    if (stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML * i)) {
+        while (i--) {
+            if (stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML))
+                break;
+            else
+                count++;
+        }
+        if (i == 0) {
+            printf("calibrate error, put error!\r\n");       
+            return 0;
+        }
+    } else {
+        printf("calibrate error, get error!\r\n");
+        return 0;
+    }
+        
+    printf("count = %d\r\n", count);
+
+    cfg = sysconf_get();
+    cfg->zsb_valid = ZSB_VALID_FLAG;
+    cfg->zsb_len = count;
+    sysconf_save();
+
+    return count;
 }

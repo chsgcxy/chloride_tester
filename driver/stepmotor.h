@@ -14,6 +14,6 @@
 extern int stepmotor_init(void);
 extern int stepmotor_run(int dir, int step);
 extern void relay_ctrl(int ctrl);
-
+extern uint32_t stepmotor_calibrate(void);
 
 #endif

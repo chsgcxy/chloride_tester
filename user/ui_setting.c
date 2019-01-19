@@ -51,7 +51,7 @@
 #define ID_SPINBOX_5 (GUI_ID_USER + 0x0F)
 #define ID_TEXT_5 (GUI_ID_USER + 0x10)
 #define ID_TEXT_6 (GUI_ID_USER + 0x11)
-#define ID_BUTTON_2 (GUI_ID_USER + 0x12)
+#define ID_BUTTON_ZSBXCJZ (GUI_ID_USER + 0x12)
 #define ID_BUTTON_3 (GUI_ID_USER + 0x13)
 
 // USER START (Optionally insert additional defines)
@@ -66,9 +66,10 @@ extern const GUI_FONT GUI_FontHZ_kaiti_28;
 **********************************************************************
 */
 extern int diag_err_creat(struct ui_exper_info *info);
+extern int diag_info_creat(struct ui_exper_info *info);
 // USER START (Optionally insert additional static data)
 // USER END
-
+static struct ui_exper_info ginfo;
 /*********************************************************************
 *
 *       _aDialogCreate
@@ -77,7 +78,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
     
     {BUTTON_CreateIndirect, "触摸屏校准", ID_BUTTON_0, 10, 10, 300, 155, 0, 0x0, 0},
-    
+    {BUTTON_CreateIndirect, "注射泵行程校准", ID_BUTTON_ZSBXCJZ, 480, 10, 300, 155, 0, 0x0, 0},
+
     {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_0, 10, 230, 110, 70, 0, 0x0, 0},
     {TEXT_CreateIndirect, "年", ID_TEXT_0, 123, 250, 25, 35, 0, 0x64, 0},
     {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_1, 150, 230, 110, 70, 0, 0x0, 0},
@@ -150,6 +152,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_ZSBXCJZ);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         //
@@ -226,7 +232,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //   
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        BUTTON_SetTextColor(hItem, 0, GUI_RED);
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
@@ -254,6 +260,30 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
+        case ID_BUTTON_ZSBXCJZ: // Notifications sent by 'Button'
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // touch calc
+                beep_clicked();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_DisableWindow(pMsg->hWin);
+                WM_Exec();
+                ginfo.func = INFO_ZSB_CALI;
+                ginfo.flag = 0;
+                diag_info_creat(&ginfo);
+                ctrl_all_items(pMsg->hWin, 1);
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;            
         case ID_BUTTON_1: // Notifications sent by 'Button'
             switch (NCode)
             {

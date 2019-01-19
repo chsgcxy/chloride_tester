@@ -33,6 +33,7 @@
 #include "usbh_msc_scsi.h"
 #include "usbh_msc_bot.h"
 #include "diskio.h"
+#include "main.h"
 
 /** @addtogroup USBH_USER
 * @{
@@ -65,28 +66,9 @@
 #else
     #define USB_DBG_PRINT(fmt, args...)
 #endif
-/**
-* @}
-*/ 
 
-
-/** @defgroup USBH_USR_Private_Macros
-* @{
-*/ 
-extern USB_OTG_CORE_HANDLE          USB_OTG_Core;
-/**
-* @}
-*/ 
-
-
-/** @defgroup USBH_USR_Private_Variables
-* @{
-*/ 
-uint8_t USBH_USR_ApplicationState = USH_USR_FS_INIT;
-uint8_t filenameString[15]  = {0};
+uint8_t USBH_USR_AppState = USH_USR_UNREADY;
 FATFS fatfs;
-FIL file;
-uint8_t line_idx = 0;
 
 /*  Points to the DEVICE_PROP structure of current device */
 /*  The purpose of this register is to speed up the execution */
@@ -348,61 +330,6 @@ void USBH_USR_OverCurrentDetected(void)
 }
 
 /**
-* @brief  Explore_Disk 
-*         Displays disk content
-* @param  path: pointer to root path
-* @retval None
-*/
-static uint8_t Explore_Disk(char *path , uint8_t recu_level)
-{
-    FRESULT res;
-    FILINFO fno;
-    DIR dir;
-    char *fn;
-    char tmp[14];
-  
-    res = f_opendir(&dir, path);
-    if (res == FR_OK) {
-        while (HCD_IsDeviceConnected(&USB_OTG_Core)) {
-            res = f_readdir(&dir, &fno);
-            if (res != FR_OK || fno.fname[0] == 0) {
-                break;
-            }
-            if (fno.fname[0] == '.') {
-                continue;
-            }
-
-            fn = fno.fname;
-            strcpy(tmp, fn); 
-
-            line_idx++;
-            if (line_idx > 9) {
-                line_idx = 0;
-            } 
-          
-            if (recu_level == 1) {
-                USB_DBG_PRINT("   |__");
-            } else if(recu_level == 2) {
-                USB_DBG_PRINT("   |   |__");
-            }
-          
-            if ((fno.fattrib & AM_MASK) == AM_DIR) {
-                strcat(tmp, "\n");
-                USB_DBG_PRINT("%s", tmp);
-            } else {
-                strcat(tmp, "\n"); 
-                USB_DBG_PRINT("%s", tmp);
-            }
-
-            if (((fno.fattrib & AM_MASK) == AM_DIR) && (recu_level == 1)) {
-                Explore_Disk(fn, 2);
-            }
-        }
-    }
-    return res;
-}
-
-/**
 * @brief  USBH_USR_MSC_Application 
 *         Demo application for mass storage
 * @param  None
@@ -410,66 +337,30 @@ static uint8_t Explore_Disk(char *path , uint8_t recu_level)
 */
 int USBH_USR_MSC_Application(void)
 {
-    FRESULT res;
-    uint8_t writeTextBuff[] = "STM32 USB Host demo!";
-    uint16_t bytesWritten;
-  
-    USB_DBG_PRINT("%s: run MSC application.\r\n", __FUNCTION__);
-
-    switch (USBH_USR_ApplicationState) {
-    case USH_USR_FS_INIT:
-        if (f_mount(USB, &fatfs) != FR_OK) {
-            USB_DBG_PRINT("> Cannot initialize File System.\r\n");
-            return -1;
-        }
-        USB_DBG_PRINT("> File System initialized.\r\n");
-        USB_DBG_PRINT("> Disk capacity : %d MBytes\r\n", 
-            (USBH_MSC_Param.MSCapacity / 1024) * (USBH_MSC_Param.MSPageLength / 1024)); 
-    
-        if (USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED) {
-            USB_DBG_PRINT("%s:%s", __FUNCTION__, MSG_WR_PROTECT);
-        }
-    
-        USBH_USR_ApplicationState = USH_USR_FS_READLIST;
+    switch (USBH_USR_AppState) {
+    case USH_USR_UNREADY:
+        USBH_USR_AppState = USH_USR_READY;
         break;
-    case USH_USR_FS_READLIST:
-        USB_DBG_PRINT("%s:%s", __FUNCTION__, MSG_ROOT_CONT);
-        Explore_Disk("0:/", 1);
-        line_idx = 0;   
-        USBH_USR_ApplicationState = USH_USR_FS_WRITEFILE;
+    case USH_USR_READY:
         break;
-    case USH_USR_FS_WRITEFILE:
-        if (!HCD_IsDeviceConnected(&USB_OTG_Core)) {
+    case USH_USR_SAVE_FILE:
+        if (!HCD_IsDeviceConnected(&USB_OTG_Core))
             USB_DBG_PRINT("%s: HCD is not connected!\r\n", __FUNCTION__);
-        }
         
         USB_DBG_PRINT("> Writing File to disk flash ...\n");
         
         if (USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED) {
             USB_DBG_PRINT( "> Disk flash is write protected \n");
-            USBH_USR_ApplicationState = USH_USR_FS_DRAW;
+            USBH_USR_AppState = USH_USR_ERROR;
             break;
         }
     
-        //f_mount(0, &fatfs);
-        res = f_open(&file, "0:STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE);
-        if (res == FR_OK) {
-            res = f_write(&file, writeTextBuff, sizeof(writeTextBuff), (void *)&bytesWritten);
-            if ((bytesWritten == 0) || (res != FR_OK)) {
-                USB_DBG_PRINT("> STM32.TXT CANNOT be writen! (%d), %d bytes written\r\n",
-                    res, bytesWritten);
-            } else {
-                USB_DBG_PRINT("> 'STM32.TXT' file created\n");
-            }
-            f_close(&file);
-            f_mount(USB, NULL); 
-        } else {
-            USB_DBG_PRINT("> creat file fail! (%d)\r\n", res);
-        }
+        f_mount(USB, &fatfs);
 
-        USBH_USR_ApplicationState = USH_USR_FS_DRAW;
+        f_mount(USB, NULL);
+        USBH_USR_AppState = USH_USR_FINISHED;
         break;
-    case USH_USR_FS_DRAW:
+    case USH_USR_ERROR:
         USB_DBG_PRINT("%s: draw\r\n", __FUNCTION__);
         break;
     default:
@@ -487,7 +378,7 @@ int USBH_USR_MSC_Application(void)
 */
 void USBH_USR_DeInit(void)
 {
-    USBH_USR_ApplicationState = USH_USR_FS_INIT;
+    USBH_USR_AppState = USH_USR_UNREADY;
 }
 
 

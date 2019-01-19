@@ -68,11 +68,13 @@ extern  USBH_Usr_cb_TypeDef USR_cb;
 /** @defgroup USBH_USR_Exported_Defines
   * @{
   */ 
-/* State Machine for the USBH_USR_ApplicationState */
-#define USH_USR_FS_INIT       0
-#define USH_USR_FS_READLIST   1
-#define USH_USR_FS_WRITEFILE  2
-#define USH_USR_FS_DRAW       3
+/* State Machine for the USBH_USR_AppState */
+#define USH_USR_UNREADY       0
+#define USH_USR_READY         1
+#define USH_USR_SAVE_FILE     2
+#define USH_USR_ERROR         3
+#define USH_USR_FINISHED      4
+#define USH_USR_EXIT          5
 /**
   * @}
   */ 
@@ -87,7 +89,7 @@ extern  USBH_Usr_cb_TypeDef USR_cb;
 /** @defgroup USBH_USR_Exported_Variables
   * @{
   */ 
-extern  uint8_t USBH_USR_ApplicationState ;
+extern  uint8_t USBH_USR_AppState ;
 /**
   * @}
   */ 

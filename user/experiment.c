@@ -24,8 +24,8 @@ enum exper_sm{
 };
 
 
+uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 
-#define EXPER_TOTAL_ML        (228)
 #define EXPER_DISCARD         (5)
 #define EXPER_WINDOWS         (10)
 #define EXPER_BUF_CNT         (EXPER_DISCARD * 2 + EXPER_WINDOWS)
@@ -73,7 +73,8 @@ static float exper_stock_percentage = 0.0;
 void exper_init(void)
 {
     int i;
-    
+    struct sysconf *cfg;
+
     static struct exper_stat stat;
     static struct exper_msg msg;
     static struct exper_ctrl ctrl;
@@ -101,6 +102,18 @@ void exper_init(void)
         gexper[i].data.agno3_stock = &exper_agno3_stock;
         gexper[i].data.stock_percentage = &exper_stock_percentage;
     }
+
+    cfg = sysconf_get();
+    if (cfg->zsb_valid != ZSB_VALID_FLAG) {
+        printf("zsb invalid, use default.\r\n");
+        zsb_total_step = ZSB_LEN_DEFAULT;
+        cfg->zsb_len = ZSB_LEN_DEFAULT;
+        cfg->zsb_valid = ZSB_VALID_FLAG;
+        sysconf_save();
+    } else {
+        zsb_total_step = cfg->zsb_len;
+    }
+    printf("zsb total step = %d\r\n", zsb_total_step);
 }
 
 static int is_run = 0;
@@ -156,12 +169,12 @@ static void _exper_oil_get(struct experiment *exper)
         }
 
         if (stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML)) {
-            exper_agno3_stock = EXPER_TOTAL_ML;
+            exper_agno3_stock = zsb_total_step;
             break;
         } else {
             exper_agno3_stock++;
-            if (exper_agno3_stock >= EXPER_TOTAL_ML) {
-                exper_agno3_stock = EXPER_TOTAL_ML - 1;
+            if (exper_agno3_stock >= zsb_total_step) {
+                exper_agno3_stock = zsb_total_step - 1;
                 correct++;
             }
         }
@@ -177,13 +190,13 @@ static void _exper_oil_get(struct experiment *exper)
             return;
         } else {
             /* update progress */
-            exper_stock_percentage = exper_agno3_stock * 100 / EXPER_TOTAL_ML;
+            exper_stock_percentage = exper_agno3_stock * 100 / zsb_total_step;
             exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
             exper_update_ui(exper);
         }
     }
 
-    exper_stock_percentage = exper_agno3_stock * 100 / EXPER_TOTAL_ML;
+    exper_stock_percentage = exper_agno3_stock * 100 / zsb_total_step;
     exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
     exper_update_ui(exper);
 }
@@ -234,12 +247,12 @@ static void _exper_oil_put(struct experiment *exper, int delay)
             exper_update_ui(exper);
             return;
         } else {
-            exper_stock_percentage = exper_agno3_stock * 100 / EXPER_TOTAL_ML;
+            exper_stock_percentage = exper_agno3_stock * 100 / zsb_total_step;
             exper_update_ui(exper);
         }
     }
 
-    exper_stock_percentage = exper_agno3_stock * 100 / EXPER_TOTAL_ML;
+    exper_stock_percentage = exper_agno3_stock * 100 / zsb_total_step;
     exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
     exper_update_ui(exper);
 }
@@ -389,7 +402,7 @@ static void do_test(struct experiment *exper, int mode)
     ctrl->volt_diff = 0.0;
     data->agno3_used = 0.0;
 
-    uint32_t exper_sm = STATUS_EXPER_START;
+    uint32_t exper_sm = STATUS_EXPER_STOP;
     uint32_t stop_sm = STATUS_PREJUMP;
 
     float step_ml = 0.3;
@@ -417,7 +430,7 @@ static void do_test(struct experiment *exper, int mode)
         } else {
             data->agno3_used += step_ml;
             *data->agno3_stock -= step;
-            *data->stock_percentage = *data->agno3_stock * 100 / EXPER_TOTAL_ML;
+            *data->stock_percentage = *data->agno3_stock * 100 / zsb_total_step;
         }
         stat->stat = EXPER_STAT_UPDATE_AGNO3_USED;
         exper_update_ui(exper);
@@ -546,7 +559,6 @@ static void do_test(struct experiment *exper, int mode)
             default:
                 return;
             }
-            break;
         default:
             break;
         }

@@ -3,6 +3,9 @@
 
 #include "stm32f2xx.h"
 
+#define ZSB_VALID_FLAG      0xAA55A5A0
+#define TOUCH_VALID_FLAG    0xAA55A5A1
+
 struct sysconf {
     uint32_t magic;
 	double x_coe;
@@ -10,6 +13,10 @@ struct sysconf {
 	int32_t x_correct;
 	int32_t y_correct;
 	float volt_scale;
+	uint32_t touch_valid;
+
+	uint32_t zsb_valid;
+	uint32_t zsb_len;
 };
 
 extern int sysconf_load(void);
