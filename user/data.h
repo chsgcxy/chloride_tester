@@ -50,6 +50,19 @@ struct data_ui {
     uint8_t valid;
 };
 
+struct data_usb_cmd {
+    struct lb_idx *table;
+    int len;
+
+#define USB_INVALID       0xA0    
+#define USB_READY         0xA1
+#define USB_EXPORT        0xA2
+#define USB_ERROR         0xA3
+#define USB_QUIT          0xA4
+#define USB_MKDIR         0xA5    
+    int cmd;
+};
+
 extern int data_save(struct result_data *stream);
 extern int data_del(int idx);
 extern int data_delall(void);
@@ -61,5 +74,8 @@ extern int data_count(void);
 
 extern int data_init(void);
 extern int data_indextable_update(struct lb_idx *lbi);
+extern int data_export(struct lb_idx *table, int len);
+extern int data_usb_detect(void);
+extern int data_mkdir(void);
 
 #endif

@@ -59,7 +59,7 @@
 /** @defgroup USBH_USR_Private_Defines
 * @{
 */
-#define USB_USR_DBG
+//#define USB_USR_DBG
 
 #ifdef USB_USR_DBG 
     #define USB_DBG_PRINT(fmt, args...)     printf(fmt, ##args)
@@ -67,7 +67,7 @@
     #define USB_DBG_PRINT(fmt, args...)
 #endif
 
-uint8_t USBH_USR_AppState = USH_USR_UNREADY;
+static struct data_usb_cmd usb_cmd;
 FATFS fatfs;
 
 /*  Points to the DEVICE_PROP structure of current device */
@@ -130,6 +130,7 @@ const uint8_t MSG_UNREC_ERROR[]      = "> UNRECOVERED ERROR STATE";
 void USBH_USR_Init(void)
 {
     USB_DBG_PRINT("%s:%s\r\n", __FUNCTION__, MSG_HOST_INIT);
+    usb_cmd.cmd = USB_INVALID;
 }
 
 /**
@@ -335,38 +336,83 @@ void USBH_USR_OverCurrentDetected(void)
 * @param  None
 * @retval Staus
 */
+
+
 int USBH_USR_MSC_Application(void)
 {
-    switch (USBH_USR_AppState) {
-    case USH_USR_UNREADY:
-        USBH_USR_AppState = USH_USR_READY;
+    switch (usb_cmd.cmd) {
+    case USB_INVALID:
+        f_mount(USB, &fatfs);
+        usb_cmd.cmd = USB_READY;
         break;
-    case USH_USR_READY:
+    case USB_READY:
         break;
-    case USH_USR_SAVE_FILE:
-        if (!HCD_IsDeviceConnected(&USB_OTG_Core))
-            USB_DBG_PRINT("%s: HCD is not connected!\r\n", __FUNCTION__);
-        
-        USB_DBG_PRINT("> Writing File to disk flash ...\n");
-        
-        if (USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED) {
-            USB_DBG_PRINT( "> Disk flash is write protected \n");
-            USBH_USR_AppState = USH_USR_ERROR;
+    case USB_MKDIR:
+        if (!HCD_IsDeviceConnected(&USB_OTG_Core)) {
+            USB_DBG_PRINT("%s > HCD is not connected!\r\n", __FUNCTION__);
+            usb_cmd.cmd = USB_INVALID;
             break;
         }
-    
-        f_mount(USB, &fatfs);
-
-        f_mount(USB, NULL);
-        USBH_USR_AppState = USH_USR_FINISHED;
+        
+        if (USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED) {
+            USB_DBG_PRINT( "%s > Disk flash is write protected\r\n", __FUNCTION__);
+            usb_cmd.cmd = USB_INVALID;
+            break;
+        }
+        
+        if (data_mkdir())
+            usb_cmd.cmd = USB_ERROR;
+        else
+            usb_cmd.cmd = USB_READY;
+        break;        
+    case USB_EXPORT:
+        if (!HCD_IsDeviceConnected(&USB_OTG_Core)) {
+            USB_DBG_PRINT("%s > HCD is not connected!\r\n", __FUNCTION__);
+            usb_cmd.cmd = USB_INVALID;
+            break;
+        }
+        
+        if (USBH_MSC_Param.MSWriteProtect == DISK_WRITE_PROTECTED) {
+            USB_DBG_PRINT( "%s > Disk flash is write protected\r\n", __FUNCTION__);
+            usb_cmd.cmd = USB_INVALID;
+            break;
+        }
+        
+        data_export(usb_cmd.table, usb_cmd.len);
+        usb_cmd.cmd = USB_READY;
         break;
-    case USH_USR_ERROR:
-        USB_DBG_PRINT("%s: draw\r\n", __FUNCTION__);
+    case USB_ERROR:
         break;
+    case USB_QUIT:
+        usb_cmd.cmd = USB_INVALID;
+        return 1;
     default:
+        usb_cmd.cmd = USB_INVALID;
         break;
+    }  
+    return 0;
+}
+
+
+int usb_cmd_set(struct data_usb_cmd *cmd)
+{
+    memcpy(&usb_cmd, cmd, sizeof(struct data_usb_cmd));
+    return 0;
+}
+
+int usb_cmd_get(void)
+{
+    return usb_cmd.cmd;
+}
+
+int usb_wait_ready(void)
+{
+    int cnt = 0;
+
+    for (cnt = 0; cnt < 20000000; cnt++) {
+        if (usb_cmd.cmd == USB_READY)
+            return 1;
     }
-  
     return 0;
 }
 
@@ -378,7 +424,7 @@ int USBH_USR_MSC_Application(void)
 */
 void USBH_USR_DeInit(void)
 {
-    USBH_USR_AppState = USH_USR_UNREADY;
+    usb_cmd.cmd = USB_INVALID;
 }
 
 

@@ -57,6 +57,7 @@ static void task_touch(void *args)
 
 static void task_usb(void *args)
 {
+	data_usb_detect();
 	while (1) {
 		USBH_Process(&USB_OTG_Core, &USB_Host);
 		vTaskDelay(10);
@@ -115,7 +116,7 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
-    int status = 0;
+    //int status = 0;
 	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */

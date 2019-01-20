@@ -35,6 +35,7 @@
 #include "usb_conf.h"
 #include <stdio.h>
 #include "usbh_msc_core.h"
+#include "data.h"
 
 /** @addtogroup USBH_USER
   * @{
@@ -69,12 +70,7 @@ extern  USBH_Usr_cb_TypeDef USR_cb;
   * @{
   */ 
 /* State Machine for the USBH_USR_AppState */
-#define USH_USR_UNREADY       0
-#define USH_USR_READY         1
-#define USH_USR_SAVE_FILE     2
-#define USH_USR_ERROR         3
-#define USH_USR_FINISHED      4
-#define USH_USR_EXIT          5
+
 /**
   * @}
   */ 
@@ -119,6 +115,11 @@ void USBH_USR_DeInit(void);
 void USBH_USR_DeviceNotSupported(void);
 void USBH_USR_UnrecoveredError(void);
 int USBH_USR_MSC_Application(void);
+
+
+extern int usb_cmd_set(struct data_usb_cmd *cmd);
+extern int usb_cmd_get(void);
+extern int usb_wait_ready(void);
 
 /**
   * @}

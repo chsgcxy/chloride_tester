@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include "main.h"
 #include "diskio.h"
+#include "string.h"
 
 #define DATA_CFG_SECTOR      W25X20_BLOCK_TO_SECTOR(1)
 #define DATA_START_SECTOR    W25X20_BLOCK_TO_SECTOR(2)
@@ -257,10 +258,32 @@ static char fname[64];
 static char line[128];
 static FIL file;
 
+
+int data_mkdir(void)
+{
+    int i = 0;
+    int res;
+    while (i < 10000) {
+        sprintf(dir_name, "%d:TCZY%04d", USB, i);
+        //printf("try mkdir %s\r\n", dir_name);
+        res = f_mkdir(dir_name);
+        if (res == FR_OK) {
+            //printf("ok!\r\n");
+            break;
+        } else if (res == FR_EXIST)
+            i++;
+        else {
+            //printf("mkdir error %d\r\n", res);
+            return -res;
+        }
+    }
+    return 0;
+}
+
 int data_export(struct lb_idx *table, int len)
 {
     FRESULT res;
-    int i, index;
+    int i, index, total;
     UINT bw;
     RTC_TimeTypeDef  RTC_TimeStructure;
     RTC_DateTypeDef  RTC_DateStructure;
@@ -268,48 +291,61 @@ int data_export(struct lb_idx *table, int len)
     RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
     RTC_GetDate(RTC_Format_BIN, &RTC_DateStructure);
 
-    sprintf(dir_name, "%d:/TCZY20%02d%02d%02d%02d%02d%02d",
-        USB, RTC_DateStructure.RTC_Year, RTC_DateStructure.RTC_Month,
-        RTC_DateStructure.RTC_Date, RTC_TimeStructure.RTC_Hours,
-        RTC_TimeStructure.RTC_Minutes, RTC_TimeStructure.RTC_Seconds);
-
-    res = f_mkdir(dir_name);
-    if (res != FR_OK)
-        return -res;
-
     for (i = 0; i < len; i++) {
         index = table[i].data_idx;
         data_get(&res_data, index);
-        sprintf(fname, "%d:/%s/%s.txt",
-            USB, dir_name, data_table[index].string);
+
+        sprintf(fname, "%s/data%03d.txt", dir_name, res_data.index);   
+        //printf("creat file %s\r\n", fname);
         res = f_open(&file, fname, FA_CREATE_ALWAYS | FA_WRITE);
-        if (res != FR_OK)
+        if (res != FR_OK) {
+            //printf("creat file fail %d\r\n", res);
             continue;
+        }
+            
         if (res_data.type == DATA_TYPE_STAND)
-            sprintf(line, "实验类型：其他氯离子检测实验\n");
+            sprintf(line, "实验类型:  其他氯离子检测实验\r\n");
         else
-            sprintf(line, "实验类型：水泥氯离子检测实验\n");
-        f_write(&file, line, sizeof(line), &bw);
-        sprintf(line, "序号: %d\n", res_data.index);
-        f_write(&file, line, sizeof(line), &bw);
-        sprintf(line, "时间: 20%02d-%02d-%02d    %02d:%02d\n",
+            sprintf(line, "实验类型:  水泥氯离子检测实验\r\n");
+        f_write(&file, line, strlen(line), &bw);
+        sprintf(line, "序号:  %d\r\n", res_data.index);
+        f_write(&file, line, strlen(line), &bw);
+        sprintf(line, "时间:  20%02d-%02d-%02d    %02d:%02d\r\n",
             res_data.year, res_data.month, res_data.day,
             res_data.hour, res_data.minute);
-        f_write(&file, line, sizeof(line), &bw);
-        sprintf(line, "硝酸银浓度: %.4fmol/L\n", res_data.agno3_dosage);
-        f_write(&file, line, sizeof(line), &bw);
-        sprintf(line, "空白实验用量: %.2fmL\n", res_data.block_agno3_used);
-        f_write(&file, line, sizeof(line), &bw);
-        sprintf(line, "硝酸银用量: %.2fmL\n", res_data.cl_agno3_used);
-        f_write(&file, line, sizeof(line), &bw);
+        f_write(&file, line, strlen(line), &bw);
+        sprintf(line, "硝酸银浓度:  %.4fmol/L\r\n", res_data.agno3_dosage);
+        f_write(&file, line, strlen(line), &bw);
+        sprintf(line, "空白实验用量:  %.2fmL\r\n", res_data.block_agno3_used);
+        f_write(&file, line, strlen(line), &bw);
+        sprintf(line, "硝酸银用量:  %.2fmL\r\n", res_data.cl_agno3_used);
+        f_write(&file, line, strlen(line), &bw);
         if (res_data.type == DATA_TYPE_CL) {
-            sprintf(line, "水泥氯离子质量分数: %.3f%%\n", res_data.cl_percentage);
-            f_write(&file, line, sizeof(line), &bw);
+            sprintf(line, "水泥氯离子质量分数:  %.3f%%\r\n", res_data.cl_percentage);
+            f_write(&file, line, strlen(line), &bw);
         } else {
-            sprintf(line, "PPM: %.1f\n", res_data.ppm);
-            f_write(&file, line, sizeof(line), &bw);
-            sprintf(line, "氯离子浓度: %fmol/L\n", res_data.cl_dosage);
-            f_write(&file, line, sizeof(line), &bw);
+            sprintf(line, "PPM:  %.1f\r\n", res_data.ppm);
+            f_write(&file, line, strlen(line), &bw);
+            sprintf(line, "氯离子浓度:  %fmol/L\r\n", res_data.cl_dosage);
+            f_write(&file, line, strlen(line), &bw);
+        }
+        sprintf(line, "\r\n试样检测数据:\r\n");
+        f_write(&file, line, strlen(line), &bw);
+        sprintf(line, "硝酸银用量(mL)\t电极电位(mV)\t电位差(mV)\r\n");
+        f_write(&file, line, strlen(line), &bw);
+
+        for (total = 0; total < res_data.items_cnt; total++) {  
+            if (total < res_data.items_cnt - 1) {
+                sprintf(line, "  %.2f\t\t%.1f\n\t\t%.1f\r\n",
+                    res_data.items[total].agno3_used,
+                    res_data.items[total].volt,
+                    res_data.items[total + 1].delta_v);                
+            } else {
+                sprintf(line, "  %.2f\t\t%.1f\r\n",
+                    res_data.items[total].agno3_used,
+                    res_data.items[total].volt);
+            }
+            f_write(&file, line, strlen(line), &bw);
         }
         f_close(&file);
     }
