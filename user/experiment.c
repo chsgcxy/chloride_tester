@@ -409,13 +409,17 @@ static void do_test(struct experiment *exper, int mode)
     int step = 3;
     float volt_diff = 0.0;
     float volt;
+    float correct_ml = 0.0;
     float prevolt = 0.0;
     TickType_t msdelay = 3000;
     float volt_line = 5.0;
         
     while (1) {
-        if (*data->stock_percentage < 5)
+        if (*data->stock_percentage < 5) {
             _exper_oil_get(exper);
+            correct_ml = 0.18;
+        }
+            
         if (exper->msg->stop) {
             exper->msg->stop = 0;
             return;
@@ -505,7 +509,7 @@ static void do_test(struct experiment *exper, int mode)
         case STATUS_EXPER_STOP:
             switch (mode) {
             case EXPER_MSG_AGNO3_START:
-                data->agno3_agno3_used = count_agno3_used(exper);
+                data->agno3_agno3_used = count_agno3_used(exper) - correct_ml;
                 data->agno3_dosage = data->nacl_dosage * 10 / data->agno3_agno3_used;
                 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nAgNo3 test finished.\r\n");
@@ -518,7 +522,7 @@ static void do_test(struct experiment *exper, int mode)
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_BLOCK_START:
-                data->block_agno3_used = count_agno3_used(exper);
+                data->block_agno3_used = count_agno3_used(exper) - correct_ml;
 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nblock test finished.\r\n");
                 EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
@@ -529,7 +533,7 @@ static void do_test(struct experiment *exper, int mode)
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_CL_START:
-                data->cl_agno3_used = count_agno3_used(exper);
+                data->cl_agno3_used = count_agno3_used(exper) - correct_ml;
                 data->cl_percentage = (data->agno3_dosage * (float)3.545 * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_weight;
 
                 EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
@@ -542,7 +546,7 @@ static void do_test(struct experiment *exper, int mode)
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_STAND_START:
-                data->cl_agno3_used = count_agno3_used(exper);
+                data->cl_agno3_used = count_agno3_used(exper) - correct_ml;
                 data->cl_dosage = (data->agno3_dosage * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_volume;
                 data->ppm = data->cl_dosage * (float)35450;
                 

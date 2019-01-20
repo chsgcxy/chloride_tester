@@ -9,7 +9,7 @@
 #define MOTOR_WATER_PUT    0
 #define MOTOR_WATER_GET    1
 
-#define MOTOR_WATER_01ML   194
+#define MOTOR_WATER_01ML   193
 
 extern int stepmotor_init(void);
 extern int stepmotor_run(int dir, int step);

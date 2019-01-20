@@ -115,7 +115,8 @@ static int g_printer_send(uint8_t *buf, int len)
 
 int main(void)
 {
-    /* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
+    int status = 0;
+	/* disable global interrupt, it will be opened by prvStartFirstTask int port.c */
 	//__set_PRIMASK(1);
 	/* enable CRC, for stemwin */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);
@@ -151,7 +152,44 @@ int main(void)
 	ds18b20_open();
 	//w25xxx_erase_chip();
 	stepmotor_init();
-	
+
+#if 0	
+	while (1) {
+		status = uart_get_status();
+		switch (status) {
+		case 0x01:
+			relay_ctrl(MOTOR_WATER_PUT);
+			printf("OK!\r\n");
+			break;
+		case 0x02:
+			relay_ctrl(MOTOR_WATER_GET);
+			printf("OK!\r\n");
+			break;
+		case 0x03:
+			stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML);
+			printf("OK!\r\n");
+			break;
+		case 0x04:
+			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML);
+			printf("OK!\r\n");
+			break;
+		case 0x05:
+			stepmotor_run(MOTOR_DIR_DOWN, MOTOR_WATER_01ML * 100);
+			printf("OK!\r\n");
+			break;
+		case 0x06:
+			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 100);
+			printf("OK!\r\n");
+			break;
+		case 0x07:
+			stepmotor_run(MOTOR_DIR_UP, MOTOR_WATER_01ML * 3);
+			printf("OK!\r\n");			
+		default:
+			break;
+		}
+		status = 0;
+	}
+#endif	
 	
 	/* load from flash */
 	sysconf_load();
