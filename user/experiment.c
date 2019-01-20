@@ -43,6 +43,7 @@ uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 //#define EXPER_TEST
 
 #define EXPER_CNT     2
+#define MOTO_ERROR_SCAL         10
 
 struct exper_ctrl {
     struct exper_buf buf[50];
@@ -157,7 +158,7 @@ void exper_update_ui(struct experiment *exper)
     WM_BroadcastMessage(exper->ui);
 }
 
-static void _exper_oil_get(struct experiment *exper)
+static int _exper_oil_get(struct experiment *exper)
 {
     int correct = 0;
     
@@ -179,7 +180,7 @@ static void _exper_oil_get(struct experiment *exper)
             }
         }
 
-        if (correct > 20) {
+        if (correct > MOTO_ERROR_SCAL) {
             /* report error */
             exper_agno3_stock = 0;
             exper_stock_percentage = 0.0;
@@ -187,18 +188,19 @@ static void _exper_oil_get(struct experiment *exper)
             exper_update_ui(exper);
             exper->stat->stat = EXPER_STAT_ERR_MOTOR;
             exper_update_ui(exper);
-            return;
+            return 1;
         } else {
             /* update progress */
             exper_stock_percentage = exper_agno3_stock * 100 / zsb_total_step;
             exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
-            exper_update_ui(exper);
+            exper_update_ui(exper);           
         }
     }
 
     exper_stock_percentage = exper_agno3_stock * 100 / zsb_total_step;
     exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
     exper_update_ui(exper);
+    return 0;
 }
 
 static void exper_oil_get(struct experiment *exper)
@@ -208,12 +210,12 @@ static void exper_oil_get(struct experiment *exper)
     exper_update_ui(exper);
 }
 
-static void _exper_oil_put(struct experiment *exper, int delay)
+static int _exper_oil_put(struct experiment *exper, int delay)
 {
     int correct = 0;
     
     if (exper_agno3_stock == 0)
-        return;
+        return 0;
 
     exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
 
@@ -239,13 +241,13 @@ static void _exper_oil_put(struct experiment *exper, int delay)
         if (delay)
             vTaskDelay(delay);
         
-        if (correct > 20) {
+        if (correct > MOTO_ERROR_SCAL) {
             exper_agno3_stock = 0;
             exper_stock_percentage = 0.0;
             exper_update_ui(exper);
             exper->stat->stat = EXPER_STAT_ERR_MOTOR;
             exper_update_ui(exper);
-            return;
+            return 1;
         } else {
             exper_stock_percentage = exper_agno3_stock * 100 / zsb_total_step;
             exper_update_ui(exper);
@@ -255,6 +257,7 @@ static void _exper_oil_put(struct experiment *exper, int delay)
     exper_stock_percentage = exper_agno3_stock * 100 / zsb_total_step;
     exper->stat->stat = EXPER_STAT_UPDATE_PROGRESS;
     exper_update_ui(exper);
+    return 0;
 }
 
 static void exper_oil_put(struct experiment *exper)
@@ -268,11 +271,17 @@ static void exper_oil_clear(struct experiment *exper)
 {
     int i;
 
-    for (i = 0; i < 3; i++) {
-        _exper_oil_get(exper);
-        _exper_oil_put(exper, 0);
-    }
+    if (_exper_oil_put(exper, 0))
+        goto finished;
 
+    for (i = 0; i < 3; i++) {
+        if (_exper_oil_get(exper))
+            goto finished;
+        if (_exper_oil_put(exper, 0))
+            goto finished;
+    }
+    
+finished:
     exper->stat->stat = EXPER_STAT_OIL_CLEAR_FINISHED;
     exper_update_ui(exper); 
 }
@@ -402,7 +411,7 @@ static void do_test(struct experiment *exper, int mode)
     ctrl->volt_diff = 0.0;
     data->agno3_used = 0.0;
 
-    uint32_t exper_sm = STATUS_EXPER_STOP;
+    uint32_t exper_sm = STATUS_EXPER_START;
     uint32_t stop_sm = STATUS_PREJUMP;
 
     float step_ml = 0.3;
@@ -415,8 +424,9 @@ static void do_test(struct experiment *exper, int mode)
     float volt_line = 5.0;
         
     while (1) {
-        if (*data->stock_percentage < 5) {
-            _exper_oil_get(exper);
+        if (exper_agno3_stock < 10) {
+            if (_exper_oil_get(exper))
+                exper_sm = STATUS_EXPER_STOP;
             correct_ml = 0.18;
         }
             
