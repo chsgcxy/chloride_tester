@@ -30,7 +30,7 @@ uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 #define EXPER_WINDOWS         (10)
 #define EXPER_BUF_CNT         (EXPER_DISCARD * 2 + EXPER_WINDOWS)
 
-#define EXPER_DBG
+//#define EXPER_DBG
 
 #ifdef EXPER_DBG
 	#define EXPER_DBG_PRINT(fmt, args...)    printf(fmt, ##args)
@@ -106,7 +106,7 @@ void exper_init(void)
 
     cfg = sysconf_get();
     if (cfg->zsb_valid != ZSB_VALID_FLAG) {
-        printf("zsb invalid, use default.\r\n");
+        EXPER_DBG_PRINT("zsb invalid, use default.\r\n");
         zsb_total_step = ZSB_LEN_DEFAULT;
         cfg->zsb_len = ZSB_LEN_DEFAULT;
         cfg->zsb_valid = ZSB_VALID_FLAG;
@@ -114,7 +114,7 @@ void exper_init(void)
     } else {
         zsb_total_step = cfg->zsb_len;
     }
-    printf("zsb total step = %d\r\n", zsb_total_step);
+    EXPER_DBG_PRINT("zsb total step = %d\r\n", zsb_total_step);
 }
 
 static int is_run = 0;
@@ -418,7 +418,6 @@ static void do_test(struct experiment *exper, int mode)
     int step = 3;
     float volt_diff = 0.0;
     float volt;
-    float correct_ml = 0.0;
     float prevolt = 0.0;
     TickType_t msdelay = 3000;
     float volt_line = 5.0;
@@ -427,7 +426,10 @@ static void do_test(struct experiment *exper, int mode)
         if (exper_agno3_stock < 10) {
             if (_exper_oil_get(exper))
                 exper_sm = STATUS_EXPER_STOP;
-            correct_ml = 0.18;
+            else {
+                relay_ctrl(MOTOR_WATER_PUT);
+                stepmotor_run(MOTOR_DIR_UP, 347); // STEP_01ML * 1.8
+            }
         }
             
         if (exper->msg->stop) {
@@ -487,7 +489,7 @@ static void do_test(struct experiment *exper, int mode)
                 ctrl->jump = ctrl->count - 1;
             }
             ctrl->count++;
-            printf("volt diff = %f\r\n", volt_diff);
+            EXPER_DBG_PRINT("volt diff = %f\r\n", volt_diff);
             
             if (volt_diff > volt_line)
                 msdelay = 15000;
@@ -519,7 +521,7 @@ static void do_test(struct experiment *exper, int mode)
         case STATUS_EXPER_STOP:
             switch (mode) {
             case EXPER_MSG_AGNO3_START:
-                data->agno3_agno3_used = count_agno3_used(exper) - correct_ml;
+                data->agno3_agno3_used = count_agno3_used(exper);
                 data->agno3_dosage = data->nacl_dosage * 10 / data->agno3_agno3_used;
                 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nAgNo3 test finished.\r\n");
@@ -532,7 +534,7 @@ static void do_test(struct experiment *exper, int mode)
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_BLOCK_START:
-                data->block_agno3_used = count_agno3_used(exper) - correct_ml;
+                data->block_agno3_used = count_agno3_used(exper);
 
                 EXPER_DBG_PRINT("\r\n\r\n\r\nblock test finished.\r\n");
                 EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
@@ -543,7 +545,7 @@ static void do_test(struct experiment *exper, int mode)
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_CL_START:
-                data->cl_agno3_used = count_agno3_used(exper) - correct_ml;
+                data->cl_agno3_used = count_agno3_used(exper);
                 data->cl_percentage = (data->agno3_dosage * (float)3.545 * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_weight;
 
                 EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
@@ -556,7 +558,7 @@ static void do_test(struct experiment *exper, int mode)
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_STAND_START:
-                data->cl_agno3_used = count_agno3_used(exper) - correct_ml;
+                data->cl_agno3_used = count_agno3_used(exper);
                 data->cl_dosage = (data->agno3_dosage * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_volume;
                 data->ppm = data->cl_dosage * (float)35450;
                 
@@ -577,7 +579,7 @@ static void do_test(struct experiment *exper, int mode)
             break;
         }
 
-        printf("exper sm = 0x%x, finished sm = 0x%x\r\n",
+        EXPER_DBG_PRINT("exper sm = 0x%x, finished sm = 0x%x\r\n",
             exper_sm, stop_sm);
 
         stat->stat = EXPER_STAT_UPDATE_GRAPH;
@@ -662,7 +664,7 @@ void exper_msg_set(struct exper_msg *msg, int idx)
         return;    
     
     cur_exper = &(gexper[idx]);
-    printf("exper %s get msg.msg=%x, stop=%d\r\n",
+    EXPER_DBG_PRINT("exper %s get msg.msg=%x, stop=%d\r\n",
         cur_exper->name, msg->msg, msg->stop);
     memcpy(cur_exper->msg, msg, sizeof(struct exper_msg));
 

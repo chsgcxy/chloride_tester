@@ -390,7 +390,7 @@ int USBH_USR_MSC_Application(void)
         usb_cmd.cmd = USB_INVALID;
         break;
     } 
-    printf("usb status = %d\r\n", usb_cmd.cmd);
+    //printf("usb status = %d\r\n", usb_cmd.cmd);
     return 0;
 }
 

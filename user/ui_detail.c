@@ -204,7 +204,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_RETURN);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        BUTTON_SetTextColor(hItem, 0, GUI_RED);
         BUTTON_SetText(hItem, "·µ»Ø");
         //
         // Initialization of 'Button'

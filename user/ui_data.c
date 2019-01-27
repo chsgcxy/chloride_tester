@@ -385,10 +385,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
 
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_DisableWindow(pMsg->hWin);
+                WM_Exec();
+
                 if (count <= 0) {
-                    ctrl_all_items(pMsg->hWin, 0);
-                    WM_DisableWindow(pMsg->hWin);
-                    WM_Exec();
                     ginfo.func = INFO_DATA_EXPORT;
                     ginfo.flag = 0;
                     ginfo.str = "没有可导出数据";
@@ -402,6 +403,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ginfo.flag = 0;
                 ginfo.str = "正在检测U盘......";
                 diag_err_creat(&ginfo);
+                WM_EnableWindow(pMsg->hWin);
+                ctrl_all_items(pMsg->hWin, 1);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
