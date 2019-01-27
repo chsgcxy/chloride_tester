@@ -57,7 +57,6 @@ static void task_touch(void *args)
 
 static void task_usb(void *args)
 {
-	data_usb_detect();
 	while (1) {
 		USBH_Process(&USB_OTG_Core, &USB_Host);
 		vTaskDelay(10);

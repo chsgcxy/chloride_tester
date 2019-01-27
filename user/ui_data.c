@@ -75,8 +75,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {BUTTON_CreateIndirect, "删除", ID_BUTTON_DEL, 430, 180, 140, 60, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "全部删除", ID_BUTTON_DELALL, 640, 180, 140, 60, 0, 0x0, 0},
     
-    {BUTTON_CreateIndirect, "导出", ID_BUTTON_EXP, 430, 330, 140, 60, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "全部导出", ID_BUTTON_EXPALL, 640, 330, 140, 60, 0, 0x0, 0},
+    //{BUTTON_CreateIndirect, "导出", ID_BUTTON_EXP, 430, 330, 140, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "导出至U盘", ID_BUTTON_EXPALL, 430, 330, 350, 60, 0, 0x0, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -90,9 +90,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 static struct lb_idx idx_table[DATA_MAX_NUM];
 static struct ui_exper_info ginfo;
 static int count = 0;
-
-static struct data_usb_cmd usb_cmd;
-static int mkdir_flag = 0;
 
 // USER START (Optionally insert additional static code)
 // USER END
@@ -110,6 +107,13 @@ static void ctrl_all_items(WM_HWIN hWin, int enable)
             WM_DisableWindow(hItem);
     }    
 }
+
+void uidata_usb_cmd_load(struct data_usb_cmd *cmd)
+{
+    cmd->table = idx_table;
+    cmd->len = count;
+    cmd->cmd = USB_EXPORT;
+}
 /*********************************************************************
 *
 *       _cbDialog
@@ -121,7 +125,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int Id;
     int i;
     struct data_ui *du;
-    int status;
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -160,9 +163,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        //hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
+        //BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        //BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //
         // Initialization of 'Button'
         //
@@ -375,56 +378,30 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_EXP: // Notifications sent by 'Button'
+        case ID_BUTTON_EXPALL: // Notifications sent by 'Button'
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
 
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTBOX_0);
-                i = LISTBOX_GetSel(hItem);
-                if (count == 0) {
+                if (count <= 0) {
                     ctrl_all_items(pMsg->hWin, 0);
                     WM_DisableWindow(pMsg->hWin);
                     WM_Exec();
-                    ginfo.func = ERROR_DATA_LOOKUP;
+                    ginfo.func = INFO_DATA_EXPORT;
                     ginfo.flag = 0;
                     ginfo.str = "没有可导出数据";
                     diag_err_creat(&ginfo);
                     WM_EnableWindow(pMsg->hWin);
                     ctrl_all_items(pMsg->hWin, 1);
                     break;
-                } else if (i >= count) {
-                    ctrl_all_items(pMsg->hWin, 0);
-                    WM_DisableWindow(pMsg->hWin);
-                    WM_Exec();
-                    ginfo.func = ERROR_DATA_LOOKUP;
-                    ginfo.flag = 0;
-                    ginfo.str = "系统异常,找不到对应数据";
-                    diag_err_creat(&ginfo);
-                    WM_EnableWindow(pMsg->hWin);
-                    ctrl_all_items(pMsg->hWin, 1);
-                    break;
                 }
 
-                status = usb_wait_ready();
-
-                if (status && !mkdir_flag) {
-                    usb_cmd.cmd = USB_MKDIR;
-                    usb_cmd_set(&usb_cmd);
-                    mkdir_flag = 1;
-                    usb_wait_ready();  
-                }
-                
-                if (mkdir_flag) {
-                    usb_cmd.cmd = USB_EXPORT;
-                    usb_cmd.table = &idx_table[i];
-                    usb_cmd.len = 1;
-                    usb_cmd_set(&usb_cmd);
-                    usb_wait_ready();
-                }
-                // USER END
+                ginfo.func = INFO_DATA_EXPROTING;
+                ginfo.flag = 0;
+                ginfo.str = "正在检测U盘......";
+                diag_err_creat(&ginfo);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
@@ -452,24 +429,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_EXPALL: // Notifications sent by 'Button'
-            switch (NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                beep_clicked();
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
-            // USER START (Optionally insert additional code for further Ids)
-            // USER END
         }
         break;
     // USER START (Optionally insert additional message handling)

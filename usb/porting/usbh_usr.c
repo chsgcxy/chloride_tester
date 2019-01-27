@@ -389,7 +389,8 @@ int USBH_USR_MSC_Application(void)
     default:
         usb_cmd.cmd = USB_INVALID;
         break;
-    }  
+    } 
+    printf("usb status = %d\r\n", usb_cmd.cmd);
     return 0;
 }
 
@@ -405,14 +406,16 @@ int usb_cmd_get(void)
     return usb_cmd.cmd;
 }
 
-int usb_wait_ready(void)
+int usb_wait_ready(int ms)
 {
-    int cnt = 0;
-
-    for (cnt = 0; cnt < 20000000; cnt++) {
+    int i = 0;
+    
+    while (ms--) {
         if (usb_cmd.cmd == USB_READY)
             return 1;
+        for (i = 0; i < 24000; i++);
     }
+        
     return 0;
 }
 

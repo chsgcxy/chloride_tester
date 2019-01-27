@@ -272,7 +272,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_Exec();
                 ginfo.func = INFO_ZSB_CALI;
                 ginfo.flag = 0;
-                diag_info_creat(&ginfo);
+                if (!diag_info_creat(&ginfo))
+                    diag_err_creat(&ginfo);
                 ctrl_all_items(pMsg->hWin, 1);
                 // USER END
                 break;

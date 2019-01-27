@@ -23,6 +23,9 @@ struct exper_msg {
 
 #define INFO_DATE_SAVE           0xC1
 #define INFO_ZSB_CALI            0xC2
+
+#define INFO_DATA_EXPORT         0xD1
+#define INFO_DATA_EXPROTING      0xD2
     int msg;
 };
 

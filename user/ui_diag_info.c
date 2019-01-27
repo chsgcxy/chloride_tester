@@ -27,8 +27,6 @@
 #include "string.h"
 #include "stdio.h"
 #include "experiment.h"
-#include "stepmotor.h"
-#include "delay.h"
 /*********************************************************************
 *
 *       Defines
@@ -66,8 +64,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
     int NCode;
     int Id;
-    uint32_t res;
-    char buf[32];
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -100,6 +96,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
         case INFO_ZSB_CALI:
             BUTTON_SetText(hItem, "开始校准");
+            break;
+        case INFO_DATA_EXPORT:
+            BUTTON_SetText(hItem, "导出");
+            break;
         default:
             break;
         }
@@ -153,6 +153,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case INFO_ZSB_CALI:
                 TEXT_SetText(hItem, "即将进行注射泵行程校准");
                 break;
+            case INFO_DATA_EXPORT:
+                TEXT_SetText(hItem, "即将导出数据到U盘");
+                break;
             default:
                 break;
             }
@@ -184,6 +187,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case INFO_ZSB_CALI:
             TEXT_SetText(hItem, "请根据说明书谨慎操作");
             break;
+        case INFO_DATA_EXPORT:
+            TEXT_SetText(hItem, "请确保U盘插入");
+            break;
         default:
             break;
         }
@@ -199,43 +205,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
-
-                switch (ginfo.func) {
-                case INFO_ZSB_CALI:
-                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-                    WM_HideWindow(hItem);
-                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-                    WM_HideWindow(hItem);
-                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
-                    TEXT_SetText(hItem, "校准中,请稍后......");
-                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
-                    WM_HideWindow(hItem);
-                    WM_Exec();
-                    res = stepmotor_calibrate();
-                    if (res) {
-                        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
-                        WM_ShowWindow(hItem);
-                        TEXT_SetText(hItem, "校准成功, 即将自动返回");
-                        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
-                        WM_ShowWindow(hItem);
-                        sprintf(buf, "注射泵行程: %.1fmL", ((float)res / 10));
-                        TEXT_SetText(hItem, buf);
-                    } else {
-                        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
-                        WM_ShowWindow(hItem);
-                        TEXT_SetText(hItem, "校准失败, 即将自动返回");
-                        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
-                        WM_ShowWindow(hItem);
-                        TEXT_SetText(hItem, "电机或限位开关异常");
-                    }
-                    WM_Exec();
-                    delay_ms(3000);
-                    GUI_EndDialog(pMsg->hWin, 0);
-                    break;
-                default:
-                    GUI_EndDialog(pMsg->hWin, 0);
-                    break;
-                }
+                GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:

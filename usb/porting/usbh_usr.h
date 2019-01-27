@@ -119,7 +119,7 @@ int USBH_USR_MSC_Application(void);
 
 extern int usb_cmd_set(struct data_usb_cmd *cmd);
 extern int usb_cmd_get(void);
-extern int usb_wait_ready(void);
+extern int usb_wait_ready(int ms);
 
 /**
   * @}

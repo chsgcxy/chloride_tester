@@ -88,9 +88,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0},
     {LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 5, 5, 420, 460, 0, 0x0, 0},
     
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 660, 300, 100, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PRINT, 460, 300, 100, 50, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 460, 400, 300, 50, 0, 0x0, 0},
+    //{BUTTON_CreateIndirect, "Button", ID_BUTTON_EXP, 660, 300, 100, 50, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_PRINT, 460, 300, 300, 60, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 460, 410, 300, 60, 0, 0x0, 0},
 
     {TEXT_CreateIndirect, "Text", ID_TEXT_DATE, 440, 10, 250, 25, 0, 0x64, 0},
 
@@ -209,10 +209,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        BUTTON_SetText(hItem, "导出");
+        //hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
+        //BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        //BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        //BUTTON_SetText(hItem, "导出");
         //
         // Initialization of 'Button'
         //
@@ -361,22 +361,22 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER END
             }
             break;
-        case ID_BUTTON_EXP: // Notifications sent by 'Button'
-            switch (NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                beep_clicked();
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
+        //case ID_BUTTON_EXP: // Notifications sent by 'Button'
+        //    switch (NCode)
+        //    {
+        //    case WM_NOTIFICATION_CLICKED:
+        //        // USER START (Optionally insert code for reacting on notification message)
+        //        beep_clicked();
+        //        // USER END
+        //        break;
+        //    case WM_NOTIFICATION_RELEASED:
+        //        // USER START (Optionally insert code for reacting on notification message)
+        //        // USER END
+        //        break;
+        //        // USER START (Optionally insert additional code for further notification handling)
+        //        // USER END
+        //    }
+        //    break;
         case ID_BUTTON_PRINT: // Notifications sent by 'Button'
             switch (NCode)
             {
