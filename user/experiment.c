@@ -30,7 +30,7 @@ uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 #define EXPER_WINDOWS         (10)
 #define EXPER_BUF_CNT         (EXPER_DISCARD * 2 + EXPER_WINDOWS)
 
-#define EXPER_DBG
+//#define EXPER_DBG
 
 #ifdef EXPER_DBG
 	#define EXPER_DBG_PRINT(fmt, args...)    printf(fmt, ##args)

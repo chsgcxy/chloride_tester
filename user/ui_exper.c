@@ -539,6 +539,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     test_func = 0;
                 } else {
                     GRAPH_DATA_XY_Clear(pdataGRP);
+                    graph_cnt = 1;
+                    GRAPH_SCALE_SetOff(hScaleH, 0);
+                    GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                     BUTTON_SetText(hItem, "停止实验");
                     BUTTON_SetTextColor(hItem, 0, GUI_RED);
@@ -582,6 +585,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     test_func = 0;
                 } else {
                     GRAPH_DATA_XY_Clear(pdataGRP);
+                    graph_cnt = 1;
+                    GRAPH_SCALE_SetOff(hScaleH, 0);
+                    GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
                     BUTTON_SetText(hItem, "停止实验");
                     BUTTON_SetTextColor(hItem, 0, GUI_RED);
@@ -626,6 +632,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     test_func = 0;
                 } else {
                     GRAPH_DATA_XY_Clear(pdataGRP);
+                    graph_cnt = 1;
+                    GRAPH_SCALE_SetOff(hScaleH, 0);
+                    GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                     BUTTON_SetText(hItem, "停止实验");
                     BUTTON_SetTextColor(hItem, 0, GUI_RED);

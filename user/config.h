@@ -5,7 +5,7 @@
 //#define BOARD_TYPE_DEMO
 #define BOARD_TYPE_MY
 
-#define SOFTWARE_VERSION_STR    "V2.3.2"
+#define SOFTWARE_VERSION_STR    "V2.3.3"
 
 #define ZSB_LEN_DEFAULT         245
 
