@@ -182,6 +182,7 @@ static void progress_show(WM_HWIN hItem, int progress)
 }
 
 static struct exper_data data;
+static int graph_cnt = 1;
 /*********************************************************************
 *
 *       _cbDialog
@@ -208,6 +209,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             exper_data_get(&data, 1);
         else
             exper_data_get(&data, 0);
+
+        graph_cnt = 1;
         //
         // Initialization of 'Framewin'
         //
@@ -741,6 +744,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_STAT_UPDATE_GRAPH:
                 point.x = (int)(stat->data.agno3_used * 10);
                 point.y = (int)(stat->data.volt);
+
+                if (point.x >= graph_cnt * 250) {
+                    GRAPH_DATA_XY_Clear(pdataGRP);
+                    GRAPH_SCALE_SetOff(hScaleH, graph_cnt * -250);
+                    GRAPH_DATA_XY_SetOffX(pdataGRP, graph_cnt * -250);
+                    graph_cnt++;
+                    WM_Exec();
+                }
+                
                 GRAPH_DATA_XY_AddPoint(pdataGRP, &point);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
                 sprintf(buf, "%.3fmV", stat->data.volt);

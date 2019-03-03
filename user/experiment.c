@@ -30,7 +30,7 @@ uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 #define EXPER_WINDOWS         (10)
 #define EXPER_BUF_CNT         (EXPER_DISCARD * 2 + EXPER_WINDOWS)
 
-//#define EXPER_DBG
+#define EXPER_DBG
 
 #ifdef EXPER_DBG
 	#define EXPER_DBG_PRINT(fmt, args...)    printf(fmt, ##args)
@@ -44,9 +44,10 @@ uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 
 #define EXPER_CNT     2
 #define MOTO_ERROR_SCAL         10
+#define BUF_CNT            2000
 
 struct exper_ctrl {
-    struct exper_buf buf[50];
+    struct exper_buf buf[2000];
     float volt_diff;
     int count;
     int jump;
@@ -495,6 +496,10 @@ static void do_test(struct experiment *exper, int mode)
                 msdelay = 15000;
             else
                 msdelay = 10000;
+
+            /* can not beyond buf len */
+            if (ctrl->count >= BUF_CNT - 3)
+                stop_sm = STATUS_FINISHED;
             
             switch (stop_sm) {
             case STATUS_PREJUMP:
