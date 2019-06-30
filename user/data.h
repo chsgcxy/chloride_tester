@@ -18,8 +18,9 @@ struct result_data {
 
     uint16_t index;
 
-#define DATA_TYPE_STAND  0x01
-#define DATA_TYPE_CL     0x02
+#define DATA_TYPE_STAND    0x01
+#define DATA_TYPE_CL       0x02
+#define DATA_TYPE_DORRPER  0x03
     uint8_t type;
 
     uint8_t valid;

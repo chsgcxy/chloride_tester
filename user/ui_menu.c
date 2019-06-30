@@ -38,22 +38,31 @@
 #define ID_IMAGE_STAND       (GUI_ID_USER + 0x03)
 #define ID_IMAGE_DATA        (GUI_ID_USER + 0x04)
 #define ID_IMAGE_SETTING     (GUI_ID_USER + 0x05)
+#define ID_IMAGE_DROPPER     (GUI_ID_USER + 0x06)
 
-#define ID_TEXT_BLOCKTEST    (GUI_ID_USER + 0x06)
-#define ID_TEXT_STAND        (GUI_ID_USER + 0x07)
-#define ID_TEXT_DATA         (GUI_ID_USER + 0x08)
-#define ID_TEXT_SETTING      (GUI_ID_USER + 0x09)
-#define ID_TEXT_VERSION      (GUI_ID_USER + 0x0A)
+#define ID_TEXT_BLOCKTEST    (GUI_ID_USER + 0x07)
+#define ID_TEXT_STAND        (GUI_ID_USER + 0x08)
+#define ID_TEXT_DATA         (GUI_ID_USER + 0x09)
+#define ID_TEXT_SETTING      (GUI_ID_USER + 0x0A)
+#define ID_TEXT_DROPPER      (GUI_ID_USER + 0x0B)
+
+#define ID_TEXT_VERSION      (GUI_ID_USER + 0x0C)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_BITMAP bmprocess_running_72px;
 extern const GUI_BITMAP bmchemical_72px;
 extern const GUI_BITMAP bmpic_view_72px;
 extern const GUI_BITMAP bmstand_72px;
+extern const GUI_BITMAP bmdropper_72px;
 
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
 // USER END
+
+#define BMP_LINE1_YPOS      (50)
+#define TEXT_LINE1_YPOS     (BMP_LINE1_YPOS + 72)
+#define BMP_LINE2_YPOS      (TEXT_LINE1_YPOS + 100)
+#define TEXT_LINE2_YPOS     (BMP_LINE2_YPOS + 72)
 
 /*********************************************************************
 *
@@ -62,15 +71,17 @@ extern const GUI_FONT GUI_FontHZ_kaiti_20;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0 },
 
-    { IMAGE_CreateIndirect, "block", ID_IMAGE_BLOCKTEST, 102, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "stand", ID_IMAGE_STAND, 274, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "data", ID_IMAGE_DATA, 446, 140, 72, 72, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 620, 140, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "block", ID_IMAGE_BLOCKTEST, 102, BMP_LINE1_YPOS, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "stand", ID_IMAGE_STAND, 274, BMP_LINE1_YPOS, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "data", ID_IMAGE_DATA, 446, BMP_LINE1_YPOS, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "setting", ID_IMAGE_SETTING, 620, BMP_LINE1_YPOS, 72, 72, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "dropper", ID_IMAGE_DROPPER, 102, BMP_LINE2_YPOS, 54, 72, 0, 0, 0 },
     
-    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 82, 212, 120, 45, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "stand", ID_TEXT_STAND, 254, 212, 120, 45, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 426, 212, 120, 45, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 600, 212, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "block", ID_TEXT_BLOCKTEST, 82, TEXT_LINE1_YPOS, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "stand", ID_TEXT_STAND, 254, TEXT_LINE1_YPOS, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 426, TEXT_LINE1_YPOS, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 600, TEXT_LINE1_YPOS, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "dropper", ID_TEXT_DROPPER, 82, TEXT_LINE2_YPOS, 120, 45, 0, 0x0, 0 },
 
     { TEXT_CreateIndirect, SOFTWARE_VERSION_STR, ID_TEXT_VERSION, 730, 395, 90, 16, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)
@@ -140,6 +151,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         TEXT_SetTextColor(hItem, GUI_BLACK);
         TEXT_SetText(hItem, "系统设置");
 
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_DROPPER);
+        IMAGE_SetBitmap(hItem, &bmdropper_72px);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DROPPER);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        TEXT_SetText(hItem, "全项滴定");
+
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_VERSION);
         TEXT_SetFont(hItem, GUI_FONT_20_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
@@ -190,6 +209,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
                 g_ui_msg.msg = MSG_LOAD_UI_SETTING;
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_IMAGE_DROPPER:
+        case ID_TEXT_DROPPER:
+            switch(NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                beep_clicked();
+                g_ui_msg.msg = MSG_LOAD_UI_DROPPER;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
             default:

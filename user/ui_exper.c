@@ -21,6 +21,13 @@
 // USER START (Optionally insert additional includes)
 // USER END
 
+/* What else can I say? this code is toooooo shit.
+ * But I unwilling to waste time on code optimization.
+ * Now, I have to add two new ui whitch will make the things worse.
+ * But I have to do this. Hope that there wont be more needs
+ * in the future, so let's end it.
+ */
+
 #include "DIALOG.h"
 #include "main.h"
 #include "experiment.h"
@@ -204,8 +211,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
-
-        if (gtest.func == MSG_LOAD_UI_STAND)
+        if (gtest.func == MSG_LOAD_UI_DROPPER)
+            exper_data_get(&data, 2);
+        else if (gtest.func == MSG_LOAD_UI_STAND)
             exper_data_get(&data, 1);
         else
             exper_data_get(&data, 0);
@@ -241,17 +249,28 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        if (gtest.func == MSG_LOAD_UI_DROPPER) {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
+            WM_HideWindow(hItem);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+            WM_HideWindow(hItem);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+            BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+            BUTTON_SetText(hItem, "开始滴定");
+            BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        } else {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
+            BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+            BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+            BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+            BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
-        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+            BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+            BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        }
         //
         // Initialization of 'Text'
         //
@@ -260,6 +279,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(hItem, GUI_BLACK);
         if (gtest.func == MSG_LOAD_UI_STAND)
             TEXT_SetText(hItem, "AgNO3标准液浓度");
+        else if (gtest.func == MSG_LOAD_UI_DROPPER)
+            WM_HideWindow(hItem);
 
         if (gtest.func == MSG_LOAD_UI_STAND) {
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
@@ -268,6 +289,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
             sprintf(buf, "%.4fmol/L", data.agno3_dosage);
             EDIT_SetText(hItem, buf);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
+            WM_HideWindow(hItem);
+        } else if (gtest.func == MSG_LOAD_UI_DROPPER) {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
+            WM_HideWindow(hItem);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
             WM_HideWindow(hItem);
         } else {
@@ -298,6 +324,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
+        if (gtest.func == MSG_LOAD_UI_DROPPER)
+            TEXT_SetText(hItem, "滴定液用量");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
@@ -316,39 +344,57 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetText(hItem, buf);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND);
-        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-        TEXT_SetTextColor(hItem, GUI_BLACK);
-
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
-        EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
-        EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
-        EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        sprintf(buf, "%.2fmol/L", data.nacl_dosage);
-        EDIT_SetText(hItem, buf);
+        if (gtest.func == MSG_LOAD_UI_DROPPER)
+            WM_HideWindow(hItem);
+        else {
+            TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+        }
         
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
+        if (gtest.func == MSG_LOAD_UI_DROPPER)
+            WM_HideWindow(hItem);
+        else {
+            EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
+            EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
+            EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
+            sprintf(buf, "%.2fmol/L", data.nacl_dosage);
+            EDIT_SetText(hItem, buf);
+        }
+
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (gtest.func == MSG_LOAD_UI_STAND)
+
+        if (gtest.func == MSG_LOAD_UI_DROPPER)
+            WM_HideWindow(hItem);
+        else if (gtest.func == MSG_LOAD_UI_STAND)
             TEXT_SetText(hItem, "氯离子浓度");
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
-        if (gtest.func == MSG_LOAD_UI_STAND)
+
+        if (gtest.func == MSG_LOAD_UI_DROPPER)
+            WM_HideWindow(hItem);
+        else if (gtest.func == MSG_LOAD_UI_STAND)
             TEXT_SetText(hItem, "--- mol/L");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SNZL);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (gtest.func == MSG_LOAD_UI_STAND)
+        if (gtest.func == MSG_LOAD_UI_DROPPER)
+            WM_HideWindow(hItem);
+        else if (gtest.func == MSG_LOAD_UI_STAND)
             TEXT_SetText(hItem, "待测试样体积");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
         EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        if (gtest.func == MSG_LOAD_UI_STAND)
+        if (gtest.func == MSG_LOAD_UI_DROPPER)
+            WM_HideWindow(hItem);
+        else if (gtest.func == MSG_LOAD_UI_STAND)
             sprintf(buf, "%dmL", data.sample_volume);
         else
             sprintf(buf, "%dg", data.sample_weight);
@@ -358,9 +404,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         if (gtest.func == MSG_LOAD_UI_STAND) {
             TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
             TEXT_SetTextColor(hItem, GUI_BLACK);
-        } else {
+        } else
             WM_HideWindow(hItem);
-        }
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
         if (gtest.func == MSG_LOAD_UI_STAND) {
@@ -565,7 +610,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
                 /* cancel */
-                ginfo.func = EXPER_MSG_AGNO3_START;
+                if (gtest.func == MSG_LOAD_UI_DROPPER)
+                    ginfo.func = EXPER_MSG_DROPPER_START;
+                else
+                    ginfo.func = EXPER_MSG_AGNO3_START;
                 ginfo.flag = test_func;
 
                 ctrl_all_items(pMsg->hWin, 0);
@@ -578,7 +626,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     
                 if (test_func) {
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
-                    BUTTON_SetText(hItem, "AgNO3检测");
+                    if (gtest.func == MSG_LOAD_UI_DROPPER)
+                        BUTTON_SetText(hItem, "开始滴定");
+                    else
+                        BUTTON_SetText(hItem, "AgNO3检测");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                     ctrl_all_items(pMsg->hWin, 1);
                     msg.stop = 1;
@@ -596,8 +647,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     msg.stop = 0;
                     test_func = 1;
                 }
-                msg.msg = EXPER_MSG_AGNO3_START;
-                if (gtest.func == MSG_LOAD_UI_STAND)
+                
+                if (gtest.func == MSG_LOAD_UI_DROPPER)
+                    msg.msg = EXPER_MSG_DROPPER_START;
+                else
+                    msg.msg = EXPER_MSG_AGNO3_START;
+                
+                if (gtest.func == MSG_LOAD_UI_DROPPER)
+                    exper_msg_set(&msg, 2);
+                else if (gtest.func == MSG_LOAD_UI_STAND)
                     exper_msg_set(&msg, 1);
                 else
                     exper_msg_set(&msg, 0);
@@ -890,11 +948,32 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
+            case EXPER_STAT_DROPPER_FINISHED:
+                beep_finished();
+                test_func = 0;
+                printf("dropper finieshed...............................\r\n");
+                printf("used = %f \r\n", stat->data.agno3_agno3_used);
+
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
+                sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used);
+                TEXT_SetText(hItem, buf);
+
+                WM_Exec();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(stat);
+                
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+                BUTTON_SetText(hItem, "开始滴定");
+                BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                ctrl_all_items(pMsg->hWin, 1);
+                break;
             default:
                 break;
         }
         break;
     default:
+        printf("default.........\r\n");
         WM_DefaultProc(pMsg);
         break;
     }

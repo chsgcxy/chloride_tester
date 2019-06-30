@@ -138,14 +138,22 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
-        TEXT_SetText(hItem, "AgNO3用量");
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
+        switch (stat->stat) {
+        case EXPER_STAT_DROPPER_FINISHED:
+            TEXT_SetText(hItem, "滴定液用量");
+            break;
+        default:
+            TEXT_SetText(hItem, "AgNO3用量");
+            break;
+        }
         //
         // Initialization of 'Text'
         //
         switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
+        case EXPER_STAT_DROPPER_FINISHED:
             sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used);
             break;
         case EXPER_STAT_BLOCK_FINISHED:
@@ -173,6 +181,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, "AgNO3浓度");
             break;
         case EXPER_STAT_BLOCK_FINISHED:
+        case EXPER_STAT_DROPPER_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
@@ -196,6 +205,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, buf);
             break;
         case EXPER_STAT_BLOCK_FINISHED:
+        case EXPER_STAT_DROPPER_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
@@ -215,6 +225,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
         case EXPER_STAT_CL_FINISHED:
+        case EXPER_STAT_DROPPER_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_STAND_FINISHED:
@@ -230,6 +241,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
         case EXPER_STAT_CL_FINISHED:
+        case EXPER_STAT_DROPPER_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_STAND_FINISHED:
@@ -250,6 +262,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
+        case EXPER_STAT_DROPPER_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
@@ -269,6 +282,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
+        case EXPER_STAT_DROPPER_FINISHED:
             BUTTON_SetText(hItem, "确定");
             break;
         case EXPER_STAT_CL_FINISHED:
@@ -287,6 +301,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         switch (stat->stat) {
         case EXPER_STAT_AGNO3_FINISHED:
         case EXPER_STAT_BLOCK_FINISHED:
+        case EXPER_STAT_DROPPER_FINISHED:
             WM_HideWindow(hItem);
             break;
         case EXPER_STAT_CL_FINISHED:
@@ -313,6 +328,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 switch (stat->stat) {
                 case EXPER_STAT_AGNO3_FINISHED:
                 case EXPER_STAT_BLOCK_FINISHED:
+                case EXPER_STAT_DROPPER_FINISHED:
                     break;
                 case EXPER_STAT_CL_FINISHED:
                     ctrl_all_items(pMsg->hWin, 0);
@@ -348,6 +364,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 switch (stat->stat) {
                 case EXPER_STAT_AGNO3_FINISHED:
                 case EXPER_STAT_BLOCK_FINISHED:
+                case EXPER_STAT_DROPPER_FINISHED:
                     GUI_EndDialog(pMsg->hWin, 0);
                     break;
                 case EXPER_STAT_CL_FINISHED:

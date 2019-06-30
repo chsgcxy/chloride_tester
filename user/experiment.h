@@ -14,6 +14,8 @@ struct exper_msg {
 #define EXPER_MSG_OIL_GET        0x05
 #define EXPER_MSG_OIL_PUT        0x06
 #define EXPER_MSG_OIL_CLEAR      0x07
+#define EXPER_MSG_DROPPER_START  0x08
+#define EXPER_MSG_UPDATE_AD      0x09
 
 #define DATA_MSG_DEL             0xA0
 #define DATA_MSG_DEL_ALL         0xA1
@@ -72,6 +74,7 @@ struct exper_stat {
 #define EXPER_STAT_STAND_FINISHED        0x0A
 #define EXPER_STAT_FAIL                  0x0B
 #define EXPER_STAT_UPDATE_AGNO3_USED     0x0C
+#define EXPER_STAT_DROPPER_FINISHED      0x0D
     int stat;
     struct exper_data data;
 };

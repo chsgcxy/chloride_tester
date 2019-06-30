@@ -42,7 +42,7 @@ uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 
 //#define EXPER_TEST
 
-#define EXPER_CNT     2
+#define EXPER_CNT     3
 #define MOTO_ERROR_SCAL         10
 #define BUF_CNT            2000
 
@@ -84,6 +84,7 @@ void exper_init(void)
     
     gexper[0].name = "shuini";
     gexper[1].name = "qita";
+    gexper[2].name = "dropper";
 
     for (i = 0; i < EXPER_CNT; i++) {
         gexper[i].ctrl = &ctrl;
@@ -500,7 +501,7 @@ static void do_test(struct experiment *exper, int mode)
             /* can not beyond buf len */
             if (ctrl->count >= BUF_CNT - 3)
                 stop_sm = STATUS_FINISHED;
-            
+
             switch (stop_sm) {
             case STATUS_PREJUMP:
                 if (volt_diff > volt_line)
@@ -577,6 +578,16 @@ static void do_test(struct experiment *exper, int mode)
                 stat->stat = EXPER_STAT_STAND_FINISHED;
                 exper_update_ui(exper);
                 return;
+            case EXPER_MSG_DROPPER_START:
+                data->cl_agno3_used = count_agno3_used(exper);
+                
+                EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
+                EXPER_DBG_PRINT("AgNo3 used actual is %f\r\n", data->cl_agno3_used);
+
+                result_data_creat(exper, DATA_TYPE_DORRPER);
+                stat->stat = EXPER_STAT_DROPPER_FINISHED;
+                exper_update_ui(exper);
+                return;
             default:
                 return;
             }
@@ -613,6 +624,19 @@ void exper_task(void *args)
 #endif            
             cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
+        case EXPER_MSG_DROPPER_START:
+             EXPER_DBG_PRINT("EXPER_MSG_DROPPER_START\r\n");     
+#ifdef EXPER_TEST
+            cur_exper->data.agno3_agno3_used = 10.1;
+            cur_exper->data.agno3_used = 11.3;
+            cur_exper->data.agno3_dosage = 0.0312;
+            cur_exper->stat->stat = EXPER_STAT_DROPPER_FINISHED;
+            exper_update_ui(cur_exper);
+#else        
+            do_test(cur_exper, EXPER_MSG_DROPPER_START);
+#endif            
+            cur_exper->msg->msg = EXPER_MSG_NONE;
+            break;
         case EXPER_MSG_BLOCK_START:
             EXPER_DBG_PRINT("EXPER_MSG_BLOCK_START\r\n");
 #ifdef EXPER_TEST
@@ -626,7 +650,7 @@ void exper_task(void *args)
         case EXPER_MSG_CL_START:
             EXPER_DBG_PRINT("EXPER_MSG_CL_START\r\n");
 #ifdef EXPER_TEST
-            result_data_creat(cur_exper, REP_TYPE_CL);
+            result_data_creat(cur_exper, DATA_TYPE_CL);
             cur_exper->stat->stat = EXPER_STAT_CL_FINISHED;
             exper_update_ui(cur_exper);
 #else             
@@ -637,7 +661,7 @@ void exper_task(void *args)
         case EXPER_MSG_STAND_START:
             EXPER_DBG_PRINT("EXPER_MSG_STAND_START\r\n");
 #ifdef EXPER_TEST
-            result_data_creat(cur_exper, REP_TYPE_STAND);
+            result_data_creat(cur_exper, DATA_TYPE_STAND);
             cur_exper->stat->stat = EXPER_STAT_STAND_FINISHED;
             exper_update_ui(cur_exper);
 #else              

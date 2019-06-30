@@ -80,6 +80,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_MSG_BLOCK_START:
         case EXPER_MSG_CL_START:
         case EXPER_MSG_STAND_START:
+        case EXPER_MSG_DROPPER_START:
             if (ginfo.flag)
                 BUTTON_SetText(hItem, "停止实验");
             else
@@ -141,6 +142,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_MSG_STAND_START:
                 TEXT_SetText(hItem, "即将进行氯离子含量检测");
                 break;
+            case EXPER_MSG_DROPPER_START:
+                TEXT_SetText(hItem, "即将进行溶液滴定");
+                break;
             case EXPER_MSG_OIL_CLEAR:
                 TEXT_SetText(hItem, "即将进行检测仪自动清洗");
                 break;
@@ -169,6 +173,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_MSG_BLOCK_START:
         case EXPER_MSG_CL_START:
         case EXPER_MSG_STAND_START:
+        case EXPER_MSG_DROPPER_START:
             if (ginfo.flag)
                 TEXT_SetText(hItem, "确定停止实验吗?");
             else

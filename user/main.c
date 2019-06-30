@@ -94,6 +94,10 @@ static void task_ui(void *args)
 			vTaskResume(handle_touch);
 			ui_setting_creat();
 			break;
+		case MSG_LOAD_UI_DROPPER:
+			test_func.func = MSG_LOAD_UI_DROPPER;
+			ui_blocktest_creat(&test_func);
+			break;
 		default:
 			break;
 		}
