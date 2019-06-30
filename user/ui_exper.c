@@ -94,6 +94,7 @@ extern char *numpad_get(void);
 
 static struct ui_exper_info ginfo;
 static struct ui_exper_test gtest;
+
 /*********************************************************************
 *
 *       Static data
@@ -190,6 +191,7 @@ static void progress_show(WM_HWIN hItem, int progress)
 
 static struct exper_data data;
 static int graph_cnt = 1;
+static uint8_t timer_onoff = 1;
 /*********************************************************************
 *
 *       _cbDialog
@@ -205,8 +207,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     char *p;
     GUI_POINT point;
     struct exper_stat *stat;
+
     // USER START (Optionally insert additional variables)
     // USER END
+    timer_onoff = 1;
 
     switch (pMsg->MsgId)
     {
@@ -449,6 +453,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         GRAPH_AttachData(hItem, pdataGRP);
         GRAPH_DATA_XY_Clear(pdataGRP);
         // USER END
+
+        /* creat a timer to update volt from adc */
+        WM_CreateTimer(pMsg->hWin, 0, 1000, 0);
+
         break;
     case WM_NOTIFY_PARENT:
         Id = WM_GetId(pMsg->hWinSrc);
@@ -563,6 +571,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
+                timer_onoff = 0;
+
                 /* cancel */
                 ginfo.func = EXPER_MSG_BLOCK_START;
                 ginfo.flag = test_func;
@@ -609,6 +619,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
+                timer_onoff = 0;
                 /* cancel */
                 if (gtest.func == MSG_LOAD_UI_DROPPER)
                     ginfo.func = EXPER_MSG_DROPPER_START;
@@ -668,6 +679,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
+                timer_onoff = 0;
                 
                 if (gtest.func == MSG_LOAD_UI_STAND)
                     ginfo.func = EXPER_MSG_STAND_START;
@@ -719,6 +731,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
+
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
                 if (numpad_creat()) {
@@ -971,6 +984,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             default:
                 break;
         }
+        break;
+    case WM_TIMER:
+        if (timer_onoff)
+            WM_RestartTimer(pMsg->Data.v, 1000);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
+        TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
+        TEXT_SetTextColor(hItem, GUI_GREEN);
+        sprintf(buf, "%.3fmV", exper_volt_get());
+        TEXT_SetText(hItem, buf);
         break;
     default:
         printf("default.........\r\n");

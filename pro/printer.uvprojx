@@ -483,6 +483,11 @@
               <FileType>1</FileType>
               <FilePath>..\user\ui_exper.c</FilePath>
             </File>
+            <File>
+              <FileName>dropper_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\dropper_72px.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

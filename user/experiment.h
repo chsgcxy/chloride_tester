@@ -15,7 +15,6 @@ struct exper_msg {
 #define EXPER_MSG_OIL_PUT        0x06
 #define EXPER_MSG_OIL_CLEAR      0x07
 #define EXPER_MSG_DROPPER_START  0x08
-#define EXPER_MSG_UPDATE_AD      0x09
 
 #define DATA_MSG_DEL             0xA0
 #define DATA_MSG_DEL_ALL         0xA1
