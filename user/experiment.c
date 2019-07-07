@@ -297,7 +297,7 @@ static void float_swap(float *float1, float *float2)
     *float2 = temp;
 }
 
-static float exper_filter(void)
+float exper_filter(void)
 {
 	int i, j;
     float volt = 0;

@@ -86,5 +86,6 @@ extern void exper_init(void);
 extern void exper_print_report(int index);
 extern void exper_data_get(struct exper_data *data, int idx);
 extern void exper_data_set(struct exper_data *data, int idx);
+extern float exper_filter(void);
 
 #endif

@@ -163,20 +163,18 @@ int ad770x_init(void)
 	return 0;
 }
 
-double ad7705_read(void)
+float ad7705_read(void)
 {
 	u16 data;
-	double volt;
+	float volt;
 	
 	while (1) {
 		if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) == 0) {
 			data = AD770xReadDataReg();
-			volt = (double)((double)data * ((double)5000 / (double)65535)) - (double)1955.0;
+			volt = ((float)data * 0.0762940) - 1983.8;
 			//volt = (double)((double)data * ((double)2500 / (double)65535)) - (double)204.0;				
 			AD770xWriteSetupReg(setup_reg);
 			return volt;
 		}
 	}
 }
-
-
