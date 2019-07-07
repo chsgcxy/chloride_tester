@@ -1,140 +1,152 @@
 #include "ds18b20.h"
-#include "stm32f2xx.h"
 #include "delay.h"
-#include "string.h"
-#include "stdio.h"
 
-#define CFG_IN     GPIO_Mode_IN   
-#define CFG_OUT    GPIO_Mode_OUT   
-  
-static void ds18b20_gpio_cfg(GPIOMode_TypeDef mode)
-{
-    GPIO_InitTypeDef GPIO_InitStructure;
-    
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-	GPIO_InitStructure.GPIO_Mode = mode;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
+//复位DS18B20
+void DS18B20_Rst(void)	   
+{                 
+	DS18B20_IO_OUT(); 	//SET PG11 OUTPUT
+    DS18B20_DQ_OUT=0; 	//拉低DQ
+    delay_us(750);    	//拉低750us
+    DS18B20_DQ_OUT=1; 	//DQ=1 
+	delay_us(15);     	//15US
 }
-
-static void ds18b20_gpio_set(uint8_t val)
-{
-    if (val)
-        GPIO_SetBits(GPIOC, GPIO_Pin_4);
-    else
-        GPIO_ResetBits(GPIOC, GPIO_Pin_4);
+//等待DS18B20的回应
+//返回1:未检测到DS18B20的存在
+//返回0:存在
+u8 DS18B20_Check(void) 	   
+{   
+	u8 retry=0;
+	DS18B20_IO_IN();	//SET PG11 INPUT	 
+    while (DS18B20_DQ_IN&&retry<200)
+	{
+		retry++;
+		delay_us(1);
+	};	 
+	if(retry>=200)return 1;
+	else retry=0;
+    while (!DS18B20_DQ_IN&&retry<240)
+	{
+		retry++;
+		delay_us(1);
+	};
+	if(retry>=240)return 1;	    
+	return 0;
 }
-
-static uint8_t ds18b20_gpio_get(void)
+//从DS18B20读取一个位
+//返回值：1/0
+u8 DS18B20_Read_Bit(void) 	 
 {
-    return GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_4);
+    u8 data;
+	DS18B20_IO_OUT();	//SET PG11 OUTPUT
+    DS18B20_DQ_OUT=0; 
+	delay_us(2);
+    DS18B20_DQ_OUT=1; 
+	DS18B20_IO_IN();	//SET PG11 INPUT
+	delay_us(12);
+	if(DS18B20_DQ_IN)data=1;
+    else data=0;	 
+    delay_us(50);           
+    return data;
 }
-
-static void ds18b20_reset(void)
-{
-    ds18b20_gpio_cfg(CFG_OUT);
-    ds18b20_gpio_set(0);
-    delay_us(750);
-    ds18b20_gpio_set(1);
-    delay_us(15);  
+//从DS18B20读取一个字节
+//返回值：读到的数据
+u8 DS18B20_Read_Byte(void)     
+{        
+    u8 i,j,dat;
+    dat=0;
+	for (i=1;i<=8;i++) 
+	{
+        j=DS18B20_Read_Bit();
+        dat=(j<<7)|(dat>>1);
+    }						    
+    return dat;
 }
-
-static int ds18b20_check(void)
-{
-    int retry = 50;
-
-    ds18b20_gpio_cfg(CFG_IN); 
-    while (ds18b20_gpio_get() && retry--)
-        delay_us(1);
-    return retry;
-}
-
-int ds18b20_open(void)  
-{  
-    GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
-    GPIO_ResetBits(GPIOC, GPIO_Pin_4);
-  
-    ds18b20_reset();
-    return 0;  
-}  
-
-static void write_byte(unsigned char data)  
-{  
-    int i = 0;  
-  
-    ds18b20_gpio_cfg(CFG_OUT);
-  
-    for (i = 0; i < 8; i++) {
-        //ds18b20_gpio_set(1);
-        //delay_us(1);  
-        ds18b20_gpio_set(0);  
-        delay_us(1);
-        ds18b20_gpio_set(data & 0x01);  
-        delay_us(80);
-        ds18b20_gpio_set(1);
-        delay_us(15);
-        data >>= 1;
-    }  
-    ds18b20_gpio_set(1);
-}  
-  
-static unsigned char read_byte(void)  
-{  
-    int i;  
-    unsigned char data = 0;  
-  
-    for (i = 0; i < 8; i++) {
-        ds18b20_gpio_cfg(CFG_OUT);  
-        ds18b20_gpio_set(0);
-        delay_us(2);
-        ds18b20_gpio_set(1);
-        delay_us(1);
-        ds18b20_gpio_cfg(CFG_IN);
-        delay_us(20);
-        data >>= 1;
-        if (ds18b20_gpio_get())  
-            data |= 0x80;  
-        delay_us(70);
+//写一个字节到DS18B20
+//dat：要写入的字节
+void DS18B20_Write_Byte(u8 dat)     
+ {             
+    u8 j;
+    u8 testb;
+	DS18B20_IO_OUT();	//SET PG11 OUTPUT;
+    for (j=1;j<=8;j++) 
+	{
+        testb=dat&0x01;
+        dat=dat>>1;
+        if (testb) 
+        {
+            DS18B20_DQ_OUT=0;	// Write 1
+            delay_us(2);                            
+            DS18B20_DQ_OUT=1;
+            delay_us(60);             
+        }
+        else 
+        {
+            DS18B20_DQ_OUT=0;	// Write 0
+            delay_us(60);             
+            DS18B20_DQ_OUT=1;
+            delay_us(2);                          
+        }
     }
-    return data;  
-}  
-  
-float ds18b20_get_temp(void)  
-{  
-    unsigned char result[2] = { 0x00, 0x00 }; 
-    int val;
-    float temp = 0;
-  
-    ds18b20_reset();
-    ds18b20_check();
-    delay_us(50);
-    write_byte(0xcc);  
-    write_byte(0x44);  
-    delay_us(50);
+}
+//开始温度转换
+void DS18B20_Start(void) 
+{   						               
+    DS18B20_Rst();	   
+	DS18B20_Check();	 
+    DS18B20_Write_Byte(0xcc);	// skip rom
+    DS18B20_Write_Byte(0x44);	// convert
+} 
 
-    ds18b20_reset();
-    ds18b20_check();
-    delay_us(50);
-    write_byte(0xcc);  
-    write_byte(0xbe);
-    result[0] = read_byte();
-    result[1] = read_byte();
-    printf("res0=%x, res1=%x\r\n", result[0], result[1]);
-  
-    val = result[1];
-    val <<= 8;
-    val |= result[0];
-    temp = (float)val * 0.0625;
-   
-    return temp;
+//初始化DS18B20的IO口 DQ 同时检测DS的存在
+//返回1:不存在
+//返回0:存在    	 
+u8 DS18B20_Init(void)
+{
+ 	GPIO_InitTypeDef  GPIO_InitStructure;
+ 	
+ 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);	 //使能PORTG口时钟 
+	
+ 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;				//PORTG.11 推挽输出
+ 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		  
+ 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+ 	GPIO_Init(GPIOG, &GPIO_InitStructure);
+
+ 	GPIO_SetBits(GPIOG,GPIO_Pin_11);    //输出1
+
+	DS18B20_Rst();
+
+	return DS18B20_Check();
 }  
+//从ds18b20得到温度值
+//精度：0.1C
+//返回值：温度值 （-550~1250） 
+short DS18B20_Get_Temp(void)
+{
+    u8 temp;
+    u8 TL,TH;
+	short tem;
+    DS18B20_Start ();  			// ds1820 start convert
+    DS18B20_Rst();
+    DS18B20_Check();	 
+    DS18B20_Write_Byte(0xcc);	// skip rom
+    DS18B20_Write_Byte(0xbe);	// convert	    
+    TL=DS18B20_Read_Byte(); 	// LSB   
+    TH=DS18B20_Read_Byte(); 	// MSB  
+	    	  
+    if(TH>7)
+    {
+        TH=~TH;
+        TL=~TL; 
+        temp=0;					//温度为负  
+    }else temp=1;				//温度为正	  	  
+    tem=TH; 					//获得高八位
+    tem<<=8;    
+    tem+=TL;					//获得底八位
+    tem=(float)tem*0.625;		//转换     
+	if(temp)return tem; 		//返回温度值
+	else return -tem;    
+}
+
+
+
+ 
