@@ -153,7 +153,7 @@ int main(void)
 	ad770x_init();
 	beep_init();
 	w25xxx_init();
-	ds18b20_open();
+	ds18b20_init();
 	//w25xxx_erase_chip();
 	stepmotor_init();
 

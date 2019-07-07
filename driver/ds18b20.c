@@ -1,152 +1,170 @@
 #include "ds18b20.h"
 #include "delay.h"
+#include "stm32f2xx.h"
 
-//复位DS18B20
-void DS18B20_Rst(void)	   
-{                 
-	DS18B20_IO_OUT(); 	//SET PG11 OUTPUT
-    DS18B20_DQ_OUT=0; 	//拉低DQ
-    delay_us(750);    	//拉低750us
-    DS18B20_DQ_OUT=1; 	//DQ=1 
-	delay_us(15);     	//15US
+
+#define GPIO_MODE_SET(GPIOx, pinpos, mode)    do { \
+    GPIOx->MODER  &= ~(GPIO_MODER_MODER0 << (pinpos * 2)); \
+    GPIOx->MODER |= (((uint32_t)mode) << (pinpos * 2)); \
+} while(0); 
+
+#define GPIO_PIN_VAL_GET(GPIOx, GPIO_Pin)    (GPIOx->IDR & GPIO_Pin)
+
+#define GPIO_PIN_VAL_SET(GPIOx, GPIO_Pin, BitVal)    do { \
+  if (BitVal != Bit_RESET) \
+    GPIOx->BSRRL = GPIO_Pin; \
+  else \
+    GPIOx->BSRRH = GPIO_Pin; \
+} while(0);
+
+
+#define DS18B20_IO_IN()    GPIO_MODE_SET(GPIOC, 3, GPIO_Mode_IN)
+#define DS18B20_IO_OUT()    GPIO_MODE_SET(GPIOC, 3, GPIO_Mode_OUT)
+#define DS18B20_DQ_OUT(bitval)    GPIO_PIN_VAL_SET(GPIOC, GPIO_Pin_4, bitval)
+#define DS18B20_DQ_IN    GPIO_PIN_VAL_GET(GPIOC, GPIO_Pin_4) 
+
+void ds18b20_reset(void)
+{
+    DS18B20_IO_OUT();   //SET PG11 OUTPUT
+    DS18B20_DQ_OUT(0); //拉低DQ
+    delay_us(750);      //拉低750us
+    DS18B20_DQ_OUT(1); //DQ=1
+    delay_us(15);       //15US
 }
-//等待DS18B20的回应
-//返回1:未检测到DS18B20的存在
-//返回0:存在
-u8 DS18B20_Check(void) 	   
-{   
-	u8 retry=0;
-	DS18B20_IO_IN();	//SET PG11 INPUT	 
-    while (DS18B20_DQ_IN&&retry<200)
-	{
-		retry++;
-		delay_us(1);
-	};	 
-	if(retry>=200)return 1;
-	else retry=0;
-    while (!DS18B20_DQ_IN&&retry<240)
-	{
-		retry++;
-		delay_us(1);
-	};
-	if(retry>=240)return 1;	    
-	return 0;
+
+static u8 ds18b20_check(void)
+{
+    u8 retry = 0;
+    DS18B20_IO_IN(); //SET PG11 INPUT
+    while (DS18B20_DQ_IN && retry < 200)
+    {
+        retry++;
+        delay_us(1);
+    };
+    if (retry >= 200)
+        return 1;
+    else
+        retry = 0;
+    while (!DS18B20_DQ_IN && retry < 240)
+    {
+        retry++;
+        delay_us(1);
+    };
+    if (retry >= 240)
+        return 1;
+    return 0;
 }
-//从DS18B20读取一个位
-//返回值：1/0
-u8 DS18B20_Read_Bit(void) 	 
+
+static u8 ds18b20_read_bit(void)
 {
     u8 data;
-	DS18B20_IO_OUT();	//SET PG11 OUTPUT
-    DS18B20_DQ_OUT=0; 
-	delay_us(2);
-    DS18B20_DQ_OUT=1; 
-	DS18B20_IO_IN();	//SET PG11 INPUT
-	delay_us(12);
-	if(DS18B20_DQ_IN)data=1;
-    else data=0;	 
-    delay_us(50);           
+    DS18B20_IO_OUT(); //SET PG11 OUTPUT
+    DS18B20_DQ_OUT(0);
+    delay_us(2);
+    DS18B20_DQ_OUT(1);
+    DS18B20_IO_IN(); //SET PG11 INPUT
+    delay_us(12);
+    if (DS18B20_DQ_IN)
+        data = 1;
+    else
+        data = 0;
+    delay_us(50);
     return data;
 }
-//从DS18B20读取一个字节
-//返回值：读到的数据
-u8 DS18B20_Read_Byte(void)     
-{        
-    u8 i,j,dat;
-    dat=0;
-	for (i=1;i<=8;i++) 
-	{
-        j=DS18B20_Read_Bit();
-        dat=(j<<7)|(dat>>1);
-    }						    
+
+static u8 ds18b20_read_byte(void)
+{
+    u8 i, j, dat;
+    dat = 0;
+    for (i = 1; i <= 8; i++)
+    {
+        j = ds18b20_read_bit();
+        dat = (j << 7) | (dat >> 1);
+    }
     return dat;
 }
-//写一个字节到DS18B20
-//dat：要写入的字节
-void DS18B20_Write_Byte(u8 dat)     
- {             
+
+static void ds18b20_write_byte(u8 dat)
+{
     u8 j;
     u8 testb;
-	DS18B20_IO_OUT();	//SET PG11 OUTPUT;
-    for (j=1;j<=8;j++) 
-	{
-        testb=dat&0x01;
-        dat=dat>>1;
-        if (testb) 
+    DS18B20_IO_OUT(); //SET PG11 OUTPUT;
+    for (j = 1; j <= 8; j++)
+    {
+        testb = dat & 0x01;
+        dat = dat >> 1;
+        if (testb)
         {
-            DS18B20_DQ_OUT=0;	// Write 1
-            delay_us(2);                            
-            DS18B20_DQ_OUT=1;
-            delay_us(60);             
+            DS18B20_DQ_OUT(0); // Write 1
+            delay_us(2);
+            DS18B20_DQ_OUT(1);
+            delay_us(60);
         }
-        else 
+        else
         {
-            DS18B20_DQ_OUT=0;	// Write 0
-            delay_us(60);             
-            DS18B20_DQ_OUT=1;
-            delay_us(2);                          
+            DS18B20_DQ_OUT(0); // Write 0
+            delay_us(60);
+            DS18B20_DQ_OUT(1);
+            delay_us(2);
         }
     }
 }
-//开始温度转换
-void DS18B20_Start(void) 
-{   						               
-    DS18B20_Rst();	   
-	DS18B20_Check();	 
-    DS18B20_Write_Byte(0xcc);	// skip rom
-    DS18B20_Write_Byte(0x44);	// convert
-} 
 
-//初始化DS18B20的IO口 DQ 同时检测DS的存在
-//返回1:不存在
-//返回0:存在    	 
-u8 DS18B20_Init(void)
+static void ds18b20_start_convert(void)
 {
- 	GPIO_InitTypeDef  GPIO_InitStructure;
- 	
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);	 //使能PORTG口时钟 
-	
- 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;				//PORTG.11 推挽输出
- 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		  
- 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
- 	GPIO_Init(GPIOG, &GPIO_InitStructure);
-
- 	GPIO_SetBits(GPIOG,GPIO_Pin_11);    //输出1
-
-	DS18B20_Rst();
-
-	return DS18B20_Check();
-}  
-//从ds18b20得到温度值
-//精度：0.1C
-//返回值：温度值 （-550~1250） 
-short DS18B20_Get_Temp(void)
-{
-    u8 temp;
-    u8 TL,TH;
-	short tem;
-    DS18B20_Start ();  			// ds1820 start convert
-    DS18B20_Rst();
-    DS18B20_Check();	 
-    DS18B20_Write_Byte(0xcc);	// skip rom
-    DS18B20_Write_Byte(0xbe);	// convert	    
-    TL=DS18B20_Read_Byte(); 	// LSB   
-    TH=DS18B20_Read_Byte(); 	// MSB  
-	    	  
-    if(TH>7)
-    {
-        TH=~TH;
-        TL=~TL; 
-        temp=0;					//温度为负  
-    }else temp=1;				//温度为正	  	  
-    tem=TH; 					//获得高八位
-    tem<<=8;    
-    tem+=TL;					//获得底八位
-    tem=(float)tem*0.625;		//转换     
-	if(temp)return tem; 		//返回温度值
-	else return -tem;    
+    ds18b20_reset();
+    ds18b20_check();
+    ds18b20_write_byte(0xcc); // skip rom
+    ds18b20_write_byte(0x44); // convert
 }
 
+int ds18b20_init(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
 
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 
- 
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+    GPIO_SetBits(GPIOC, GPIO_Pin_4); //输出1
+
+    ds18b20_reset();
+
+    return ds18b20_check();
+}
+
+float ds18b20_get_temp(void)
+{
+    u8 temp;
+    u8 TL, TH;
+    short val;
+    float result;
+
+    ds18b20_start_convert();
+    ds18b20_reset();
+    ds18b20_check();
+    ds18b20_write_byte(0xcc); // skip rom
+    ds18b20_write_byte(0xbe); // convert
+    TL = ds18b20_read_byte(); // LSB
+    TH = ds18b20_read_byte(); // MSB
+
+    if (TH > 7)
+    {
+        TH = ~TH;
+        TL = ~TL;
+        temp = 0; //温度为负
+    }
+    else
+        temp = 1; //温度为正
+    val = TH;
+    val <<= 8;
+    val += TL;
+    result = (float)val * 0.625;
+    if (temp)
+        return result;
+    else
+        return -result;
+}
