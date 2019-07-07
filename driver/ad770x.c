@@ -142,7 +142,7 @@ void AD770xIoInit(void)
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_UP;  
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;  
     GPIO_Init(GPIOA, &GPIO_InitStructure); 
 
 	AD770X_ClrRst();

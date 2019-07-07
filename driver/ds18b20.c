@@ -1,14 +1,13 @@
 #include "ds18b20.h"
 #include "delay.h"
 #include "stm32f2xx.h"
+#include "stdio.h"
 
 
 #define GPIO_MODE_SET(GPIOx, pinpos, mode)    do { \
     GPIOx->MODER  &= ~(GPIO_MODER_MODER0 << (pinpos * 2)); \
     GPIOx->MODER |= (((uint32_t)mode) << (pinpos * 2)); \
-} while(0); 
-
-#define GPIO_PIN_VAL_GET(GPIOx, GPIO_Pin)    (GPIOx->IDR & GPIO_Pin)
+} while(0);
 
 #define GPIO_PIN_VAL_SET(GPIOx, GPIO_Pin, BitVal)    do { \
   if (BitVal != Bit_RESET) \
@@ -18,10 +17,10 @@
 } while(0);
 
 
-#define DS18B20_IO_IN()    GPIO_MODE_SET(GPIOC, 3, GPIO_Mode_IN)
-#define DS18B20_IO_OUT()    GPIO_MODE_SET(GPIOC, 3, GPIO_Mode_OUT)
+#define DS18B20_IO_IN()    GPIO_MODE_SET(GPIOC, 4, GPIO_Mode_IN)
+#define DS18B20_IO_OUT()    GPIO_MODE_SET(GPIOC, 4, GPIO_Mode_OUT)
 #define DS18B20_DQ_OUT(bitval)    GPIO_PIN_VAL_SET(GPIOC, GPIO_Pin_4, bitval)
-#define DS18B20_DQ_IN    GPIO_PIN_VAL_GET(GPIOC, GPIO_Pin_4) 
+#define DS18B20_DQ_IN    GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_4)
 
 void ds18b20_reset(void)
 {
@@ -32,10 +31,11 @@ void ds18b20_reset(void)
     delay_us(15);       //15US
 }
 
-static u8 ds18b20_check(void)
+static int ds18b20_check(void)
 {
     u8 retry = 0;
     DS18B20_IO_IN(); //SET PG11 INPUT
+
     while (DS18B20_DQ_IN && retry < 200)
     {
         retry++;
@@ -45,6 +45,7 @@ static u8 ds18b20_check(void)
         return 1;
     else
         retry = 0;
+
     while (!DS18B20_DQ_IN && retry < 240)
     {
         retry++;
@@ -125,8 +126,9 @@ int ds18b20_init(void)
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 
     GPIO_SetBits(GPIOC, GPIO_Pin_4); //Êä³ö1
@@ -162,7 +164,7 @@ float ds18b20_get_temp(void)
     val = TH;
     val <<= 8;
     val += TL;
-    result = (float)val * 0.625;
+    result = (float)val * 0.0625;
     if (temp)
         return result;
     else
