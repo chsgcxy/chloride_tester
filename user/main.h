@@ -12,6 +12,7 @@ struct ui_msg {
 #define MSG_LOAD_UI_DETAIL       0x06
 #define MSG_LOAD_UI_TOUCH_CALC   0x07
 #define MSG_LOAD_UI_DROPPER      0x08
+#define MSG_LOAD_UI_EXTEST       0x09
     int msg;
     int param0;
 };

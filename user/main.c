@@ -98,6 +98,10 @@ static void task_ui(void *args)
 			test_func.func = MSG_LOAD_UI_DROPPER;
 			ui_blocktest_creat(&test_func);
 			break;
+		case MSG_LOAD_UI_EXTEST:
+			test_func.func = MSG_LOAD_UI_EXTEST;
+			ui_blocktest_creat(&test_func);
+			break;
 		default:
 			break;
 		}

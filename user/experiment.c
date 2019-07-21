@@ -42,7 +42,7 @@ uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 
 //#define EXPER_TEST
 
-#define EXPER_CNT     3
+#define EXPER_CNT     4
 #define MOTO_ERROR_SCAL         10
 #define BUF_CNT            2000
 
@@ -85,6 +85,7 @@ void exper_init(void)
     gexper[0].name = "shuini";
     gexper[1].name = "qita";
     gexper[2].name = "dropper";
+    gexper[3].name = "extest";
 
     for (i = 0; i < EXPER_CNT; i++) {
         gexper[i].ctrl = &ctrl;
@@ -105,6 +106,9 @@ void exper_init(void)
         gexper[i].data.agno3_stock = &exper_agno3_stock;
         gexper[i].data.stock_percentage = &exper_stock_percentage;
     }
+
+    /* default cl- dosage when extest */
+    gexper[3].data.nacl_dosage = 0.1;
 
     cfg = sysconf_get();
     if (cfg->zsb_valid != ZSB_VALID_FLAG) {
@@ -423,6 +427,7 @@ static void do_test(struct experiment *exper, int mode)
     float prevolt = 0.0;
     TickType_t msdelay = 3000;
     float volt_line = 5.0;
+    float v;
         
     while (1) {
         if (exper_agno3_stock < 10) {
@@ -580,12 +585,93 @@ static void do_test(struct experiment *exper, int mode)
                 return;
             case EXPER_MSG_DROPPER_START:
                 data->cl_agno3_used = count_agno3_used(exper);
+                data->cl_agno3_used2 = data->agno3_used;
                 
                 EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
                 EXPER_DBG_PRINT("AgNo3 used actual is %f\r\n", data->cl_agno3_used);
 
                 result_data_creat(exper, DATA_TYPE_DORRPER);
                 stat->stat = EXPER_STAT_DROPPER_FINISHED;
+                exper_update_ui(exper);
+                return;
+            case EXPER_MSG_AGNO3_EXTEST_START1:
+                data->agno3_agno3_used = count_agno3_used(exper);
+                data->agno3_agno3_used2 = data->agno3_used;
+                
+                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_AGNO3_EXTEST_START1 finished.\r\n");
+                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
+                    ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("AgNo3 used actual %.3f\r\n", data->agno3_agno3_used);
+                EXPER_DBG_PRINT("AgNo3 total used %.3f\r\n", data->agno3_agno3_used2);
+
+                stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED1;
+                exper_update_ui(exper);
+                return;
+            case EXPER_MSG_AGNO3_EXTEST_START2:
+                data->agno3_agno3_used2 += count_agno3_used(exper);
+                data->agno3_dosage = data->nacl_dosage * 10 / (data->agno3_agno3_used2 - data->agno3_agno3_used);
+                
+                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_AGNO3_EXTEST_START2 finished.\r\n");
+                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
+                    ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->agno3_agno3_used);
+                EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->agno3_agno3_used2);
+                EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", data->agno3_dosage);
+                /* agno3 test stage2 finished in extest
+                 * is same with agno3 finished
+                 */
+                stat->stat = EXPER_STAT_AGNO3_FINISHED;
+                exper_update_ui(exper);
+                return;
+            case EXPER_MSG_BLOCK_EXTEST_START1:
+                data->block_agno3_used = count_agno3_used(exper);
+                data->block_agno3_used2 = data->agno3_used;
+
+                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_BLOCK_EXTEST_START1 finished.\r\n");
+                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
+                    ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->block_agno3_used);
+                EXPER_DBG_PRINT("AgNo3 total used %.3f\r\n", data->block_agno3_used2);
+
+                stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED1;
+                exper_update_ui(exper);
+                return;
+            case EXPER_MSG_BLOCK_EXTEST_START2:
+                data->block_agno3_used2 += count_agno3_used(exper);
+
+                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_BLOCK_EXTEST_START2 finished.\r\n");
+                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
+                    ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->block_agno3_used);    
+                EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->block_agno3_used2);
+
+                stat->stat = EXPER_STAT_BLOCK_FINISHED;
+                exper_update_ui(exper);
+                return;
+            case EXPER_MSG_CL_EXTEST_START1:
+                data->cl_agno3_used = count_agno3_used(exper);
+                data->cl_agno3_used2 = data->agno3_used;
+
+                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_CL_EXTEST_START1 finished.\r\n");
+                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("AgNo3 total used %.3f\r\n", data->cl_agno3_used2);
+                
+                stat->stat = EXPER_STAT_CL_EXTEST_FINISHED1;
+                exper_update_ui(exper);
+                return;
+            case EXPER_MSG_CL_EXTEST_START2:
+                data->cl_agno3_used2 += count_agno3_used(exper);
+                v = ((data->cl_agno3_used - data->block_agno3_used) + (data->cl_agno3_used2 - data->block_agno3_used2)) / 2.0;
+                data->cl_percentage = (data->agno3_dosage * (float)3.545 * v) / data->sample_weight;
+                
+                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_CL_EXTEST_START2 finished.\r\n");
+                EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->cl_agno3_used2);
+                EXPER_DBG_PRINT("cl percentage is %f%%\r\n", data->cl_percentage);
+                
+                result_data_creat(exper, DATA_TYPE_CL);
+                result_data_save(exper);
+                stat->stat = EXPER_STAT_CL_FINISHED;
                 exper_update_ui(exper);
                 return;
             default:
@@ -679,6 +765,68 @@ void exper_task(void *args)
             break;
         case EXPER_MSG_OIL_CLEAR:
             exper_oil_clear(cur_exper);
+            cur_exper->msg->msg = EXPER_MSG_NONE;
+            break;
+
+        /* add for extest..... */
+        case EXPER_MSG_AGNO3_EXTEST_START1:
+            EXPER_DBG_PRINT("EXPER_MSG_AGNO3_EXTEST_START1\r\n");
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED1;
+            exper_update_ui(cur_exper);
+#else
+            do_test(cur_exper, EXPER_MSG_AGNO3_EXTEST_START1);
+#endif
+            cur_exper->msg->msg = EXPER_MSG_NONE;
+            break;
+        case EXPER_MSG_AGNO3_EXTEST_START2:
+            EXPER_DBG_PRINT("EXPER_MSG_AGNO3_EXTEST_START2\r\n");
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED2;
+            exper_update_ui(cur_exper);
+#else
+            do_test(cur_exper, EXPER_MSG_AGNO3_EXTEST_START2);
+#endif            
+            cur_exper->msg->msg = EXPER_MSG_NONE;
+            break;
+        case EXPER_MSG_BLOCK_EXTEST_START1:
+            EXPER_DBG_PRINT("EXPER_MSG_BLOCK_EXTEST_START1\r\n");
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED1;
+            exper_update_ui(cur_exper);
+#else            
+            do_test(cur_exper, EXPER_MSG_BLOCK_EXTEST_START1);
+#endif     
+            cur_exper->msg->msg = EXPER_MSG_NONE;
+            break;
+        case EXPER_MSG_BLOCK_EXTEST_START2:
+            EXPER_DBG_PRINT("EXPER_MSG_BLOCK_EXTEST_START2\r\n");
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED2;
+            exper_update_ui(cur_exper);
+#else                       
+            do_test(cur_exper, EXPER_MSG_BLOCK_EXTEST_START2);
+#endif
+            cur_exper->msg->msg = EXPER_MSG_NONE;
+            break;
+        case EXPER_MSG_CL_EXTEST_START1:
+            EXPER_DBG_PRINT("EXPER_MSG_CL_EXTEST_START1\r\n");
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_CL_EXTEST_FINISHED1;
+            exper_update_ui(cur_exper);
+#else
+            do_test(cur_exper, EXPER_MSG_CL_EXTEST_START1);
+#endif
+            cur_exper->msg->msg = EXPER_MSG_NONE;
+            break;
+        case EXPER_MSG_CL_EXTEST_START2:
+            EXPER_DBG_PRINT("EXPER_MSG_CL_EXTEST_START2\r\n");
+#ifdef EXPER_TEST
+            cur_exper->stat->stat = EXPER_STAT_CL_EXTEST_FINISHED2;
+            exper_update_ui(cur_exper);
+#else
+            do_test(cur_exper, EXPER_MSG_CL_EXTEST_START2);
+#endif
             cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
         default:

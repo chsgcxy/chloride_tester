@@ -191,7 +191,17 @@ static void progress_show(WM_HWIN hItem, int progress)
 }
 
 static struct exper_data data;
+
+/** 
+ * about ui graph control, when fill the full graph,
+ * clear and fill from start
+ */
 static int graph_cnt = 1;
+
+/**
+ * use a timer to update volt and temp, and we want
+ * to stop it when do exper. 
+ */
 static uint8_t timer_onoff = 1;
 /*********************************************************************
 *
@@ -216,12 +226,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
-        if (gtest.func == MSG_LOAD_UI_DROPPER)
+
+        switch (gtest.func) {
+        case MSG_LOAD_UI_EXTEST:
+            exper_data_get(&data, 3);
+            break;
+        case MSG_LOAD_UI_DROPPER:
             exper_data_get(&data, 2);
-        else if (gtest.func == MSG_LOAD_UI_STAND)
+            break;
+        case MSG_LOAD_UI_STAND:
             exper_data_get(&data, 1);
-        else
+            break;
+        case MSG_LOAD_UI_BLOCKTEST:
             exper_data_get(&data, 0);
+            break;
+        default:
+            return;
+        }
 
         graph_cnt = 1;
         //
@@ -276,18 +297,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
             BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         }
+
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (gtest.func == MSG_LOAD_UI_STAND)
+        switch (gtest.func) {
+        case MSG_LOAD_UI_STAND:
+        case MSG_LOAD_UI_EXTEST:
             TEXT_SetText(hItem, "AgNO3标准液浓度");
-        else if (gtest.func == MSG_LOAD_UI_DROPPER)
-            WM_HideWindow(hItem);
-
-        if (gtest.func == MSG_LOAD_UI_STAND) {
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
             EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
             EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
@@ -296,12 +316,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             EDIT_SetText(hItem, buf);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
             WM_HideWindow(hItem);
-        } else if (gtest.func == MSG_LOAD_UI_DROPPER) {
+            break;
+        case MSG_LOAD_UI_DROPPER:
+            WM_HideWindow(hItem);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
             WM_HideWindow(hItem);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
             WM_HideWindow(hItem);
-        } else {
+            break;
+        default:
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
             TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
             TEXT_SetTextColor(hItem, GUI_RED);
@@ -309,6 +332,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, buf);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
             WM_HideWindow(hItem);
+            break;
         }
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEMP);
@@ -456,7 +480,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // USER END
 
         /* creat a timer to update volt from adc */
-        WM_CreateTimer(pMsg->hWin, 0, 5000, 0);
+        WM_CreateTimer(pMsg->hWin, 0, 1000, 0);
 
         break;
     case WM_NOTIFY_PARENT:
@@ -606,11 +630,27 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     msg.stop = 0;
                     test_func = 1;
                 }
-                msg.msg = EXPER_MSG_BLOCK_START;
-                if (gtest.func == MSG_LOAD_UI_STAND)
+
+                switch (gtest.func) {
+                case MSG_LOAD_UI_EXTEST:
+                    exper_msg_set(&msg, 3);
+                    msg.msg = EXPER_MSG_BLOCK_EXTEST_START1;
+                    break;
+                case MSG_LOAD_UI_DROPPER:
+                    exper_msg_set(&msg, 2);
+                    msg.msg = EXPER_MSG_BLOCK_START;
+                    break;
+                case MSG_LOAD_UI_STAND:
                     exper_msg_set(&msg, 1);
-                else
+                    msg.msg = EXPER_MSG_BLOCK_START;
+                    break;
+                case MSG_LOAD_UI_BLOCKTEST:
                     exper_msg_set(&msg, 0);
+                    msg.msg = EXPER_MSG_BLOCK_START;
+                    break;
+                default:
+                    break;
+                }
                 break;
             default:
                 break;
@@ -621,7 +661,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
                 timer_onoff = 0;
-                /* cancel */
+                
+                /* give a message box to show exper info, for
+                 * make sure to do the certaion exper and avoid
+                 * click mistake.
+                 */
                 if (gtest.func == MSG_LOAD_UI_DROPPER)
                     ginfo.func = EXPER_MSG_DROPPER_START;
                 else
@@ -659,18 +703,27 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     msg.stop = 0;
                     test_func = 1;
                 }
-                
-                if (gtest.func == MSG_LOAD_UI_DROPPER)
-                    msg.msg = EXPER_MSG_DROPPER_START;
-                else
-                    msg.msg = EXPER_MSG_AGNO3_START;
-                
-                if (gtest.func == MSG_LOAD_UI_DROPPER)
+
+                switch (gtest.func) {
+                case MSG_LOAD_UI_EXTEST:
+                    exper_msg_set(&msg, 3);
+                    msg.msg = EXPER_MSG_AGNO3_EXTEST_START1;
+                    break;
+                case MSG_LOAD_UI_DROPPER:
                     exper_msg_set(&msg, 2);
-                else if (gtest.func == MSG_LOAD_UI_STAND)
+                    msg.msg = EXPER_MSG_DROPPER_START;
+                    break;
+                case MSG_LOAD_UI_STAND:
                     exper_msg_set(&msg, 1);
-                else
+                    msg.msg = EXPER_MSG_AGNO3_START;
+                    break;
+                case MSG_LOAD_UI_BLOCKTEST:
                     exper_msg_set(&msg, 0);
+                    msg.msg = EXPER_MSG_AGNO3_START;
+                    break;
+                default:
+                    break;
+                }
                 break;
             default:
                 break;
@@ -715,14 +768,26 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     test_func = 1;
                 }
 
-                if (gtest.func == MSG_LOAD_UI_STAND)
-                    msg.msg = EXPER_MSG_STAND_START;
-                else
+                switch (gtest.func) {
+                case MSG_LOAD_UI_EXTEST:
+                    exper_msg_set(&msg, 3);
+                    msg.msg = EXPER_MSG_CL_EXTEST_START1;
+                    break;
+                case MSG_LOAD_UI_DROPPER:
+                    exper_msg_set(&msg, 2);
                     msg.msg = EXPER_MSG_CL_START;
-                if (gtest.func == MSG_LOAD_UI_STAND)
+                    break;
+                case MSG_LOAD_UI_STAND:
                     exper_msg_set(&msg, 1);
-                else
+                    msg.msg = EXPER_MSG_STAND_START;
+                    break;
+                case MSG_LOAD_UI_BLOCKTEST:
                     exper_msg_set(&msg, 0);
+                    msg.msg = EXPER_MSG_CL_START;
+                    break;
+                default:
+                    break;
+                }
                 break;
             default:
                 break;
@@ -741,14 +806,30 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
                     sprintf(buf, "%.2fmol/L", fval); 
                     EDIT_SetText(hItem, buf);
-                    if (gtest.func == MSG_LOAD_UI_STAND) {
+
+                    switch (gtest.func) {
+                    case MSG_LOAD_UI_EXTEST:
+                        exper_data_get(&data, 3);
+                        data.nacl_dosage = fval;
+                        exper_data_set(&data, 3);
+                        break;
+                    case MSG_LOAD_UI_DROPPER:
+                        exper_data_get(&data, 2);
+                        data.nacl_dosage = fval;
+                        exper_data_set(&data, 2);
+                        break;
+                    case MSG_LOAD_UI_STAND:
                         exper_data_get(&data, 1);
                         data.nacl_dosage = fval;
                         exper_data_set(&data, 1);
-                    } else {
+                        break;
+                    case MSG_LOAD_UI_BLOCKTEST:
                         exper_data_get(&data, 0);
                         data.nacl_dosage = fval;
                         exper_data_set(&data, 0);
+                        break;
+                    default:
+                        break;
                     }
                 }
                 ctrl_all_items(pMsg->hWin, 1);
@@ -767,18 +848,39 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     p = numpad_get();
                     sscanf(p, "%d", &ival);                    
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
-                    if (gtest.func == MSG_LOAD_UI_STAND) {                        
+
+                    switch (gtest.func) {
+                    case MSG_LOAD_UI_EXTEST:
+                        sprintf(buf, "%dg", ival);
+                        exper_data_get(&data, 3);
+                        data.sample_weight = ival;
+                        exper_data_set(&data, 3);
+                        EDIT_SetText(hItem, buf);
+                        break;
+                    case MSG_LOAD_UI_DROPPER:
+                        sprintf(buf, "%dg", ival);
+                        exper_data_get(&data, 2);
+                        data.sample_weight = ival;
+                        exper_data_set(&data, 2);
+                        EDIT_SetText(hItem, buf);
+                        break;
+                    case MSG_LOAD_UI_STAND:
                         sprintf(buf, "%dmL", ival);
                         exper_data_get(&data, 1);
                         data.sample_volume = ival;
                         exper_data_set(&data, 1);
-                    } else {
+                        EDIT_SetText(hItem, buf);
+                        break;
+                    case MSG_LOAD_UI_BLOCKTEST:
                         sprintf(buf, "%dg", ival);
                         exper_data_get(&data, 0);
                         data.sample_weight = ival;
                         exper_data_set(&data, 0);
-                    }
-                    EDIT_SetText(hItem, buf);                    
+                        EDIT_SetText(hItem, buf);
+                        break;
+                    default:
+                        break;
+                    }              
                 }
                 ctrl_all_items(pMsg->hWin, 1);
             }
@@ -981,6 +1083,69 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetText(hItem, "开始滴定");
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_items(pMsg->hWin, 1);
+                break;
+            case EXPER_STAT_AGNO3_EXTEST_FINISHED1:
+                beep_finished();
+                ginfo.func = EXPER_MSG_AGNO3_EXTEST_START1;
+                ginfo.flag = 0;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+                    BUTTON_SetText(hItem, "AgNO3检测");
+                    BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    ctrl_all_items(pMsg->hWin, 1);
+                    test_func = 0;
+                } else {
+                    GRAPH_DATA_XY_Clear(pdataGRP);
+                    graph_cnt = 1;
+                    GRAPH_SCALE_SetOff(hScaleH, 0);
+                    GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
+                    msg.msg = EXPER_MSG_AGNO3_EXTEST_START2;
+                }
+                break;
+            case EXPER_STAT_BLOCK_EXTEST_FINISHED1:
+                beep_finished();
+                ginfo.func = EXPER_MSG_BLOCK_EXTEST_START1;
+                ginfo.flag = 0;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
+                    BUTTON_SetText(hItem, "空白实验");
+                    BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    ctrl_all_items(pMsg->hWin, 1);
+                    test_func = 0;
+                } else {
+                    GRAPH_DATA_XY_Clear(pdataGRP);
+                    graph_cnt = 1;
+                    GRAPH_SCALE_SetOff(hScaleH, 0);
+                    GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
+                    msg.msg = EXPER_MSG_BLOCK_EXTEST_START2;
+                }
+                break;
+            case EXPER_STAT_CL_EXTEST_FINISHED1:
+                beep_finished();
+                ginfo.func = EXPER_MSG_CL_EXTEST_START1;
+                ginfo.flag = 0;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
+                    BUTTON_SetText(hItem, "氯离子检测");
+                    BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    ctrl_all_items(pMsg->hWin, 1);
+                    test_func = 0;
+                } else {
+                    GRAPH_DATA_XY_Clear(pdataGRP);
+                    graph_cnt = 1;
+                    GRAPH_SCALE_SetOff(hScaleH, 0);
+                    GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
+                    msg.msg = EXPER_MSG_CL_EXTEST_START2;
+                }
                 break;
             default:
                 break;

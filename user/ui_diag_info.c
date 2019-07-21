@@ -101,6 +101,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case INFO_DATA_EXPORT:
             BUTTON_SetText(hItem, "导出");
             break;
+        case EXPER_MSG_AGNO3_EXTEST_START1:
+        case EXPER_MSG_BLOCK_EXTEST_START1:
+        case EXPER_MSG_CL_EXTEST_START1:
+            BUTTON_SetText(hItem, "继续实验");
+            break;
         default:
             break;
         }
@@ -160,6 +165,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case INFO_DATA_EXPORT:
                 TEXT_SetText(hItem, "即将导出数据到U盘");
                 break;
+            case EXPER_MSG_AGNO3_EXTEST_START1:
+            case EXPER_MSG_BLOCK_EXTEST_START1:
+            case EXPER_MSG_CL_EXTEST_START1:
+                TEXT_SetText(hItem, "请再加入10mL 0.1mol/L氯化钠标准溶液");
+                break;
             default:
                 break;
             }
@@ -194,6 +204,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
         case INFO_DATA_EXPORT:
             TEXT_SetText(hItem, "请确保U盘插入");
+            break;
+        case EXPER_MSG_AGNO3_EXTEST_START1:
+        case EXPER_MSG_BLOCK_EXTEST_START1:
+        case EXPER_MSG_CL_EXTEST_START1:
+            TEXT_SetText(hItem, "加入完成后, 点击继续实验");
             break;
         default:
             break;

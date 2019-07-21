@@ -958,6 +958,11 @@
               <FileType>1</FileType>
               <FilePath>..\picture\logo_170px.c</FilePath>
             </File>
+            <File>
+              <FileName>extern_72px.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\picture\extern_72px.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
