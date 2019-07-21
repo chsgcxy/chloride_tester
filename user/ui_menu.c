@@ -86,7 +86,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "data", ID_TEXT_DATA, 426, TEXT_LINE1_YPOS, 120, 45, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "setting", ID_TEXT_SETTING, 600, TEXT_LINE1_YPOS, 120, 45, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "dropper", ID_TEXT_DROPPER, 82, TEXT_LINE2_YPOS, 120, 45, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "extest", ID_TEXT_DROPPER, 254, TEXT_LINE2_YPOS, 120, 45, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "extest", ID_TEXT_EXTEST, 247, TEXT_LINE2_YPOS, 140, 45, 0, 0x0, 0 },
 
     { TEXT_CreateIndirect, SOFTWARE_VERSION_STR, ID_TEXT_VERSION, 730, 395, 90, 16, 0, 0x0, 0 },
     // USER START (Optionally insert additional widgets)

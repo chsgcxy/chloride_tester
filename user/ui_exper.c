@@ -80,6 +80,8 @@
 #define ID_TEXT_PPM                 (GUI_ID_USER + 0x1B)
 #define ID_TEXT_PPM_VALUE           (GUI_ID_USER + 0x1C)
 
+#define ID_TEXT_TITLE               (GUI_ID_USER + 0x1D)
+
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
@@ -114,6 +116,8 @@ static struct ui_exper_test gtest;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     
+    {TEXT_CreateIndirect, "氯离子标准液浓度", ID_TEXT_TITLE, 265, 2, 310, 32, 0, 0x64, 0},
+
     {TEXT_CreateIndirect, "溶液存量", ID_TEXT_RYCL, 5, 425, 120, 35, 0, 0x64, 0},
     {PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 135, 425, 150, 30, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "吸液", ID_BUTTON_GET, 320, 415, 120, 50, 0, 0x0, 0},
@@ -144,7 +148,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {BUTTON_CreateIndirect, "空白实验", ID_BUTTON_START_BLOCK, 600, 205, 180, 60, 0, 0x0, 0},
     {BUTTON_CreateIndirect, "氯离子检测", ID_BUTTON_START_TEST, 600, 300, 180, 60, 0, 0x0, 0},
     
-    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 265, 15, 310, 330, 0, 0x0, 0 },
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 265, 35, 310, 310, 0, 0x0, 0 },
     {TEXT_CreateIndirect, "电极电位", ID_TEXT_DJDW, 325, 350, 135, 25, 0, 0x64, 0},
     {TEXT_CreateIndirect, "320.1mV", ID_TEXT_DJDW_VALUE, 455, 353, 130, 25, 0, 0x64, 0},
     {TEXT_CreateIndirect, "温度", ID_TEXT_TEMP, 353, 380, 80, 25, 0, 0x64, 0},
@@ -227,18 +231,26 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     {
     case WM_INIT_DIALOG:
 
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TITLE);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_BLUE);
+        TEXT_SetTextAlign(hItem, GUI_TA_HCENTER);
         switch (gtest.func) {
         case MSG_LOAD_UI_EXTEST:
             exper_data_get(&data, 3);
+            TEXT_SetText(hItem, "外加剂检测");
             break;
         case MSG_LOAD_UI_DROPPER:
             exper_data_get(&data, 2);
+            TEXT_SetText(hItem, "全项滴定");
             break;
         case MSG_LOAD_UI_STAND:
             exper_data_get(&data, 1);
+            TEXT_SetText(hItem, "其他检测");
             break;
         case MSG_LOAD_UI_BLOCKTEST:
             exper_data_get(&data, 0);
+            TEXT_SetText(hItem, "水泥检测");
             break;
         default:
             return;
@@ -394,16 +406,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-
         if (gtest.func == MSG_LOAD_UI_DROPPER)
             WM_HideWindow(hItem);
         else if (gtest.func == MSG_LOAD_UI_STAND)
             TEXT_SetText(hItem, "氯离子浓度");
+        else if (gtest.func == MSG_LOAD_UI_EXTEST)
+            TEXT_SetText(hItem, "氯离子质量分数");
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
-
         if (gtest.func == MSG_LOAD_UI_DROPPER)
             WM_HideWindow(hItem);
         else if (gtest.func == MSG_LOAD_UI_STAND)
@@ -459,7 +471,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         progress_show(hItem, *data.stock_percentage);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_0);
-        GRAPH_SetBorder(hItem, 35, 3, 3, 15);
+        GRAPH_SetBorder(hItem, 35, 2, 3, 15);
         GRAPH_SetGridVis(hItem, 2);
         GRAPH_SetGridFixedX(hItem, 2);
         GRAPH_SetGridDistY(hItem, 20);
@@ -467,14 +479,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         
         hScaleV = GRAPH_SCALE_Create(3, GUI_TA_LEFT, GRAPH_SCALE_CF_VERTICAL, 20);
         GRAPH_SCALE_SetTextColor(hScaleV, GUI_RED);
-        GRAPH_SCALE_SetOff(hScaleV, -100);
+        GRAPH_SCALE_SetOff(hScaleV, -120);
         GRAPH_AttachScale(hItem, hScaleV);
         
         hScaleH = GRAPH_SCALE_Create(320, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
         pdataGRP = GRAPH_DATA_XY_Create(GUI_GREEN, 350, 0, 0);
-        GRAPH_DATA_XY_SetOffY(pdataGRP, -100);
+        GRAPH_DATA_XY_SetOffY(pdataGRP, -120);
         GRAPH_AttachData(hItem, pdataGRP);
         GRAPH_DATA_XY_Clear(pdataGRP);
         // USER END
