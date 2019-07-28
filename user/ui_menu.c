@@ -162,7 +162,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DROPPER);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        TEXT_SetText(hItem, "全项滴定");
+        TEXT_SetText(hItem, "手动滴定");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_EXTEST);
         IMAGE_SetBitmap(hItem, &bmextern_72px);

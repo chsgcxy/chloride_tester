@@ -109,6 +109,7 @@ void exper_init(void)
 
     /* default cl- dosage when extest */
     gexper[3].data.nacl_dosage = 0.1;
+    gexper[3].data.agno3_dosage = 0.1;
 
     cfg = sysconf_get();
     if (cfg->zsb_valid != ZSB_VALID_FLAG) {
@@ -390,6 +391,8 @@ static void result_data_creat(struct experiment *exper, int type)
     res->ppm = exper->data.ppm;
     res->block_agno3_used = exper->data.block_agno3_used;
     res->agno3_dosage = exper->data.agno3_dosage;
+    res->block_agno3_used2 = exper->data.block_agno3_used2;
+    res->cl_agno3_used2 = exper->data.cl_agno3_used2;
 
     RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
     RTC_GetDate(RTC_Format_BIN, &RTC_DateStructure);
@@ -609,18 +612,18 @@ static void do_test(struct experiment *exper, int mode)
                 return;
             case EXPER_MSG_AGNO3_EXTEST_START2:
                 data->agno3_agno3_used2 += count_agno3_used(exper);
-                data->agno3_dosage = data->nacl_dosage * 10 / (data->agno3_agno3_used2 - data->agno3_agno3_used);
-                
-                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_AGNO3_EXTEST_START2 finished.\r\n");
-                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
-                    ctrl->count, ctrl->jump);
                 EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->agno3_agno3_used);
                 EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->agno3_agno3_used2);
+                
+                data->agno3_dosage = data->nacl_dosage * 10 / (data->agno3_agno3_used2 - data->agno3_agno3_used);
+                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_AGNO3_EXTEST_START2 finished.\r\n");
+                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
+                    ctrl->count, ctrl->jump);       
                 EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", data->agno3_dosage);
                 /* agno3 test stage2 finished in extest
                  * is same with agno3 finished
                  */
-                stat->stat = EXPER_STAT_AGNO3_FINISHED;
+                stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED2;
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_BLOCK_EXTEST_START1:
@@ -638,14 +641,14 @@ static void do_test(struct experiment *exper, int mode)
                 return;
             case EXPER_MSG_BLOCK_EXTEST_START2:
                 data->block_agno3_used2 += count_agno3_used(exper);
-
+                EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->block_agno3_used);    
+                EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->block_agno3_used2);
+                
+                //data->block_agno3_used = data->block_agno3_used2 - data->block_agno3_used;
                 EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_BLOCK_EXTEST_START2 finished.\r\n");
                 EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
                     ctrl->count, ctrl->jump);
-                EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->block_agno3_used);    
-                EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->block_agno3_used2);
-
-                stat->stat = EXPER_STAT_BLOCK_FINISHED;
+                stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED2;
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_CL_EXTEST_START1:
@@ -661,6 +664,7 @@ static void do_test(struct experiment *exper, int mode)
                 return;
             case EXPER_MSG_CL_EXTEST_START2:
                 data->cl_agno3_used2 += count_agno3_used(exper);
+
                 v = ((data->cl_agno3_used - data->block_agno3_used) + (data->cl_agno3_used2 - data->block_agno3_used2)) / 2.0;
                 data->cl_percentage = (data->agno3_dosage * (float)3.545 * v) / data->sample_weight;
                 
@@ -669,9 +673,9 @@ static void do_test(struct experiment *exper, int mode)
                 EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->cl_agno3_used2);
                 EXPER_DBG_PRINT("cl percentage is %f%%\r\n", data->cl_percentage);
                 
-                result_data_creat(exper, DATA_TYPE_CL);
+                result_data_creat(exper, DATA_TYPE_EXTEST);
                 result_data_save(exper);
-                stat->stat = EXPER_STAT_CL_FINISHED;
+                stat->stat = EXPER_STAT_CL_EXTEST_FINISHED2;
                 exper_update_ui(exper);
                 return;
             default:
@@ -785,7 +789,7 @@ void exper_task(void *args)
         case EXPER_MSG_AGNO3_EXTEST_START2:
             EXPER_DBG_PRINT("EXPER_MSG_AGNO3_EXTEST_START2\r\n");
 #ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_AGNO3_FINISHED;
+            cur_exper->stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED2;
             exper_update_ui(cur_exper);
 #else
             do_test(cur_exper, EXPER_MSG_AGNO3_EXTEST_START2);
@@ -808,7 +812,7 @@ void exper_task(void *args)
         case EXPER_MSG_BLOCK_EXTEST_START2:
             EXPER_DBG_PRINT("EXPER_MSG_BLOCK_EXTEST_START2\r\n");
 #ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_BLOCK_FINISHED;
+            cur_exper->stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED2;
             exper_update_ui(cur_exper);
 #else                       
             do_test(cur_exper, EXPER_MSG_BLOCK_EXTEST_START2);
@@ -831,7 +835,8 @@ void exper_task(void *args)
         case EXPER_MSG_CL_EXTEST_START2:
             EXPER_DBG_PRINT("EXPER_MSG_CL_EXTEST_START2\r\n");
 #ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_CL_FINISHED;
+            cur_exper->stat->stat = EXPER_STAT_CL_EXTEST_FINISHED2;
+            result_data_creat(cur_exper, DATA_TYPE_EXTEST);
             exper_update_ui(cur_exper);
 #else
             do_test(cur_exper, EXPER_MSG_CL_EXTEST_START2);

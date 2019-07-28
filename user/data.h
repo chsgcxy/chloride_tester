@@ -21,6 +21,7 @@ struct result_data {
 #define DATA_TYPE_STAND    0x01
 #define DATA_TYPE_CL       0x02
 #define DATA_TYPE_DORRPER  0x03
+#define DATA_TYPE_EXTEST   0x04
     uint8_t type;
 
     uint8_t valid;
@@ -38,6 +39,9 @@ struct result_data {
     float ppm;
     float block_agno3_used;
     float agno3_dosage;
+
+    float block_agno3_used2;
+    float cl_agno3_used2;
 };
 
 /* this listbox index table provide a method that find

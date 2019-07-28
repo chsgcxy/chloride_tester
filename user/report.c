@@ -11,9 +11,13 @@
 #define STRING_DATE         "测试日期: "
 #define STRING_SSJCDY       "试样检测数据:"
 #define STRING_XSYYL        "硝酸银用量: "
+#define STRING_XSYYL_10     "试样10mL时硝酸银用量: "
+#define STRING_XSYYL_20     "试样20mL时硝酸银用量: "
 #define STRING_XSYND        "硝酸银浓度: "
 #define STRING_KBSYXSYYL    "空白实验硝酸银用量: "
-#define STRING_MKSYHLLZ     "水泥氯离子质量分数: "
+#define STRING_KBSYXSYYL_10    "空白实验10mL时硝酸银用量: "
+#define STRING_KBSYXSYYL_20    "空白实验20mL时硝酸银用量: "
+#define STRING_MKSYHLLZ     "试样氯离子质量分数: "
 #define STRING_PPM          "       PPM: "
 #define STRING_LLZND        "氯离子浓度: "
 #define STRING_AGNO3        "AgNO3/mL"
@@ -48,6 +52,7 @@ int report_show(struct result_data *rp)
 
     switch (rp->type) {
     case DATA_TYPE_CL:
+    case DATA_TYPE_EXTEST:
         tprinter_send(report_printer, STRING_MKSYHLLZ, sizeof(STRING_MKSYHLLZ));
         sprintf(buf, "%.3f%%", rp->cl_percentage);
         tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
@@ -71,17 +76,53 @@ int report_show(struct result_data *rp)
         break;
     }
 
-    tprinter_send(report_printer, STRING_XSYYL, sizeof(STRING_XSYYL));
-    sprintf(buf, "%.2f(ml)", rp->cl_agno3_used);
-    tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
-    tprinter_newline(report_printer);
-    tprinter_newline(report_printer);
+    if (rp->type == DATA_TYPE_EXTEST) {
+        sprintf(buf, "%.2f(ml)", rp->cl_agno3_used2);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        tprinter_send(report_printer, STRING_XSYYL_20, sizeof(STRING_XSYYL_20));
+        tprinter_newline(report_printer);
+        tprinter_newline(report_printer);
+    } else {
+        tprinter_send(report_printer, STRING_XSYYL, sizeof(STRING_XSYYL));
+        sprintf(buf, "%.2f(ml)", rp->cl_agno3_used);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        tprinter_newline(report_printer);
+    }
 
-    tprinter_send(report_printer, STRING_KBSYXSYYL, sizeof(STRING_KBSYXSYYL));
-    sprintf(buf, "%.2f(ml)", rp->block_agno3_used);
-    tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
-    tprinter_newline(report_printer);
-    tprinter_newline(report_printer);
+    if (rp->type == DATA_TYPE_EXTEST) {
+        sprintf(buf, "%.2f(ml)", rp->cl_agno3_used);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        tprinter_send(report_printer, STRING_XSYYL_10, sizeof(STRING_XSYYL_10));
+        tprinter_newline(report_printer);
+        tprinter_newline(report_printer);
+    }
+
+    if (rp->type == DATA_TYPE_EXTEST) {
+        sprintf(buf, "%.2f(ml)", rp->block_agno3_used2);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        tprinter_send(report_printer, STRING_KBSYXSYYL_20, sizeof(STRING_KBSYXSYYL_20));
+        tprinter_newline(report_printer);
+        tprinter_newline(report_printer);       
+    } else {
+        tprinter_send(report_printer, STRING_KBSYXSYYL, sizeof(STRING_KBSYXSYYL));
+        sprintf(buf, "%.2f(ml)", rp->block_agno3_used);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        tprinter_newline(report_printer);
+    }    
+    
+    if (rp->type == DATA_TYPE_EXTEST) {
+        sprintf(buf, "%.2f(ml)", rp->block_agno3_used);  
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        tprinter_send(report_printer, STRING_KBSYXSYYL_10, sizeof(STRING_KBSYXSYYL_10));
+        tprinter_newline(report_printer);
+        tprinter_newline(report_printer);
+    }
 
     tprinter_send(report_printer, STRING_XSYND, sizeof(STRING_XSYND));
     sprintf(buf, "%.4fmol/L", rp->agno3_dosage);

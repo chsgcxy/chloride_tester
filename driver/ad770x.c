@@ -172,7 +172,7 @@ float ad7705_read(void)
 		if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) == 0) {
 			data = AD770xReadDataReg();
 			//volt = ((float)data * 0.0762940) - 1250.0;
-			volt = (float)((float)data * ((float)2500.0 / (float)65535.0)) - (float)1226.5;				
+			volt = (float)((float)data * ((float)2500.0 / (float)65535.0)) - (float)204;				
 			AD770xWriteSetupReg(setup_reg);
 			return volt;
 		}

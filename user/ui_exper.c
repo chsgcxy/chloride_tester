@@ -243,7 +243,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
         case MSG_LOAD_UI_DROPPER:
             exper_data_get(&data, 2);
-            TEXT_SetText(hItem, "全项滴定");
+            TEXT_SetText(hItem, "手动滴定");
             break;
         case MSG_LOAD_UI_STAND:
             exper_data_get(&data, 1);
@@ -439,7 +439,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         else if (gtest.func == MSG_LOAD_UI_STAND)
             sprintf(buf, "%dmL", data.sample_volume);
         else
-            sprintf(buf, "%dg", data.sample_weight);
+            sprintf(buf, "%.4fg", data.sample_weight);
         EDIT_SetText(hItem, buf);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
@@ -483,7 +483,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         GRAPH_SCALE_SetOff(hScaleV, -120);
         GRAPH_AttachScale(hItem, hScaleV);
         
-        hScaleH = GRAPH_SCALE_Create(320, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
+        hScaleH = GRAPH_SCALE_Create(297, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
         pdataGRP = GRAPH_DATA_XY_Create(GUI_GREEN, 350, 0, 0);
@@ -859,21 +859,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_Exec();
                 if (numpad_creat()) {
                     p = numpad_get();
-                    sscanf(p, "%d", &ival);                    
+                    sscanf(p, "%f", &fval);                    
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
 
                     switch (gtest.func) {
                     case MSG_LOAD_UI_EXTEST:
-                        sprintf(buf, "%dg", ival);
+                        sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 3);
-                        data.sample_weight = ival;
+                        data.sample_weight = fval;
                         exper_data_set(&data, 3);
                         EDIT_SetText(hItem, buf);
                         break;
                     case MSG_LOAD_UI_DROPPER:
-                        sprintf(buf, "%dg", ival);
+                        sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 2);
-                        data.sample_weight = ival;
+                        data.sample_weight = fval;
                         exper_data_set(&data, 2);
                         EDIT_SetText(hItem, buf);
                         break;
@@ -885,9 +885,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         EDIT_SetText(hItem, buf);
                         break;
                     case MSG_LOAD_UI_BLOCKTEST:
-                        sprintf(buf, "%dg", ival);
+                        sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 0);
-                        data.sample_weight = ival;
+                        data.sample_weight = fval;
                         exper_data_set(&data, 0);
                         EDIT_SetText(hItem, buf);
                         break;
@@ -982,6 +982,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_AGNO3_FINISHED:
+            case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
                 beep_finished();
                 test_func = 0;
                 printf("agno3 finieshed...............................\r\n");
@@ -1012,6 +1013,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_BLOCK_FINISHED:
+            case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
                 beep_finished();
                 test_func = 0;
                 
@@ -1030,6 +1032,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
             case EXPER_STAT_CL_FINISHED:
+            case EXPER_STAT_CL_EXTEST_FINISHED2:
                 beep_finished();
                 test_func = 0;
 

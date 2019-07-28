@@ -72,7 +72,7 @@ struct exper_data {
     float cl_agno3_used2; // only extest use
 
     // test shuini use weight
-    int sample_weight;
+    float sample_weight;
     float cl_percentage;
 
     // test solution use volume

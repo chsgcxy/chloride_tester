@@ -142,7 +142,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 TEXT_SetText(hItem, "即将进行空白实验");
                 break;
             case EXPER_MSG_CL_START:
-                TEXT_SetText(hItem, "即将进行水泥氯离子含量检测");
+                TEXT_SetText(hItem, "即将进行试样氯离子含量检测");
                 break;
             case EXPER_MSG_STAND_START:
                 TEXT_SetText(hItem, "即将进行氯离子含量检测");

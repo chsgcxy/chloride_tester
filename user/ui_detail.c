@@ -286,10 +286,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MKSYHLLZ);
         TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (pres->type == DATA_TYPE_STAND)
+        switch (pres->type) {
+        case DATA_TYPE_STAND:
             TEXT_SetText(hItem, "氯离子浓度");
-        else
+            break;
+        case DATA_TYPE_EXTEST:
+            TEXT_SetText(hItem, "试样氯离子质量分数");
+            break;
+        default:
             TEXT_SetText(hItem, "水泥氯离子质量分数");
+            break;
+        }
+            
         //
         // Initialization of 'Text'
         //
@@ -305,17 +313,27 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
         TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (pres->type == DATA_TYPE_CL)
+        switch (pres->type) {
+        case DATA_TYPE_CL:
+        case DATA_TYPE_EXTEST:
             WM_HideWindow(hItem);
-
+            break;
+        default:
+            break;
+        }
+            
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (pres->type == DATA_TYPE_STAND) {
+        switch (pres->type) {
+        case DATA_TYPE_STAND:
             sprintf(buf, "%.1f", pres->ppm);
             TEXT_SetText(hItem, buf);
-        } else
-            WM_HideWindow(hItem);        
+            break;
+        default:
+            WM_HideWindow(hItem);
+            break;
+        }
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
