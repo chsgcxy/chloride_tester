@@ -37,6 +37,7 @@
 #include "beep.h"
 #include "string.h"
 #include "ds18b20.h"
+#include "ad770x.h"
 /*********************************************************************
 *
 *       Defines
@@ -127,7 +128,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {TEXT_CreateIndirect, "氯离子标准液浓度", ID_TEXT_NACLND, 5, 15, 250, 32, 0, 0x64, 0},
     {EDIT_CreateIndirect, "0.02mol/L", ID_EDIT_NACLND_VALUE, 35, 50, 150, 32, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "水泥试样质量", ID_TEXT_SNZL, 5, 85, 200, 32, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "待测试样质量", ID_TEXT_SNZL, 5, 85, 200, 32, 0, 0x64, 0},
     {EDIT_CreateIndirect, "5g", ID_EDIT_SNZL_VALUE, 35, 120, 150, 32, 0, 0x64, 0},
 
     {TEXT_CreateIndirect, "AgNO3浓度", ID_TEXT_NO3ND, 5, 155, 250, 32, 0, 0x64, 0},
@@ -622,14 +623,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 }
                 ctrl_all_items(pMsg->hWin, 1);
 
-                if (test_func) {
+                if (test_func) { /* force stop exper, update ui and status */
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                     BUTTON_SetText(hItem, "空白实验");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                     ctrl_all_items(pMsg->hWin, 1);
                     msg.stop = 1;
                     test_func = 0;
-                } else {
+                } else { /* start exper, update ui and status */
                     GRAPH_DATA_XY_Clear(pdataGRP);
                     graph_cnt = 1;
                     GRAPH_SCALE_SetOff(hScaleH, 0);
@@ -642,23 +643,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     msg.stop = 0;
                     test_func = 1;
                 }
-
+                /* send msg to exper thread */
                 switch (gtest.func) {
                 case MSG_LOAD_UI_EXTEST:
-                    exper_msg_set(&msg, 3);
                     msg.msg = EXPER_MSG_BLOCK_EXTEST_START1;
+                    exper_msg_set(&msg, 3);
                     break;
                 case MSG_LOAD_UI_DROPPER:
-                    exper_msg_set(&msg, 2);
                     msg.msg = EXPER_MSG_BLOCK_START;
+                    exper_msg_set(&msg, 2);   
                     break;
                 case MSG_LOAD_UI_STAND:
-                    exper_msg_set(&msg, 1);
                     msg.msg = EXPER_MSG_BLOCK_START;
+                    exper_msg_set(&msg, 1);  
                     break;
                 case MSG_LOAD_UI_BLOCKTEST:
-                    exper_msg_set(&msg, 0);
                     msg.msg = EXPER_MSG_BLOCK_START;
+                    exper_msg_set(&msg, 0);   
                     break;
                 default:
                     break;
@@ -692,7 +693,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 }
                 ctrl_all_items(pMsg->hWin, 1);
                     
-                if (test_func) {
+                if (test_func) { /* force stop exper */
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
                     if (gtest.func == MSG_LOAD_UI_DROPPER)
                         BUTTON_SetText(hItem, "开始滴定");
@@ -702,7 +703,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     ctrl_all_items(pMsg->hWin, 1);
                     msg.stop = 1;
                     test_func = 0;
-                } else {
+                } else { /* start exper */
                     GRAPH_DATA_XY_Clear(pdataGRP);
                     graph_cnt = 1;
                     GRAPH_SCALE_SetOff(hScaleH, 0);
@@ -718,20 +719,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
                 switch (gtest.func) {
                 case MSG_LOAD_UI_EXTEST:
-                    exper_msg_set(&msg, 3);
                     msg.msg = EXPER_MSG_AGNO3_EXTEST_START1;
+                    exper_msg_set(&msg, 3);      
                     break;
                 case MSG_LOAD_UI_DROPPER:
-                    exper_msg_set(&msg, 2);
                     msg.msg = EXPER_MSG_DROPPER_START;
+                    exper_msg_set(&msg, 2);   
                     break;
                 case MSG_LOAD_UI_STAND:
-                    exper_msg_set(&msg, 1);
                     msg.msg = EXPER_MSG_AGNO3_START;
+                    exper_msg_set(&msg, 1);      
                     break;
                 case MSG_LOAD_UI_BLOCKTEST:
-                    exper_msg_set(&msg, 0);
                     msg.msg = EXPER_MSG_AGNO3_START;
+                    exper_msg_set(&msg, 0);   
                     break;
                 default:
                     break;
@@ -782,20 +783,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
                 switch (gtest.func) {
                 case MSG_LOAD_UI_EXTEST:
-                    exper_msg_set(&msg, 3);
                     msg.msg = EXPER_MSG_CL_EXTEST_START1;
+                    exper_msg_set(&msg, 3);    
                     break;
                 case MSG_LOAD_UI_DROPPER:
-                    exper_msg_set(&msg, 2);
                     msg.msg = EXPER_MSG_CL_START;
+                    exper_msg_set(&msg, 2);     
                     break;
                 case MSG_LOAD_UI_STAND:
-                    exper_msg_set(&msg, 1);
                     msg.msg = EXPER_MSG_STAND_START;
+                    exper_msg_set(&msg, 1); 
                     break;
                 case MSG_LOAD_UI_BLOCKTEST:
-                    exper_msg_set(&msg, 0);
                     msg.msg = EXPER_MSG_CL_START;
+                    exper_msg_set(&msg, 0);   
                     break;
                 default:
                     break;
@@ -1115,6 +1116,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     GRAPH_SCALE_SetOff(hScaleH, 0);
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     msg.msg = EXPER_MSG_AGNO3_EXTEST_START2;
+                    msg.stop = 0;
+                    exper_msg_set(&msg, 3);
                 }
                 break;
             case EXPER_STAT_BLOCK_EXTEST_FINISHED1:
@@ -1136,6 +1139,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     GRAPH_SCALE_SetOff(hScaleH, 0);
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     msg.msg = EXPER_MSG_BLOCK_EXTEST_START2;
+                    msg.stop = 0;
+                    exper_msg_set(&msg, 3);
                 }
                 break;
             case EXPER_STAT_CL_EXTEST_FINISHED1:
@@ -1157,6 +1162,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     GRAPH_SCALE_SetOff(hScaleH, 0);
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     msg.msg = EXPER_MSG_CL_EXTEST_START2;
+                    msg.stop = 0;
+                    exper_msg_set(&msg, 3);
                 }
                 break;
             default:
@@ -1165,7 +1172,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         break;
     case WM_TIMER:
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
-        sprintf(buf, "%.3fmV", exper_filter());
+        sprintf(buf, "%.3fmV",  ad7705_read());
         TEXT_SetText(hItem, buf);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEMP_VALUE);
@@ -1176,11 +1183,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             buf[ival] = 0;
         }
         TEXT_SetText(hItem, buf);
+
         if (timer_onoff)
             WM_RestartTimer(pMsg->Data.v, 500);
         break;
     default:
-        printf("default.........\r\n");
         WM_DefaultProc(pMsg);
         break;
     }

@@ -30,7 +30,7 @@ uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 #define EXPER_WINDOWS         (10)
 #define EXPER_BUF_CNT         (EXPER_DISCARD * 2 + EXPER_WINDOWS)
 
-//#define EXPER_DBG
+#define EXPER_DBG
 
 #ifdef EXPER_DBG
 	#define EXPER_DBG_PRINT(fmt, args...)    printf(fmt, ##args)
@@ -777,12 +777,15 @@ void exper_task(void *args)
 #else
             do_test(cur_exper, EXPER_MSG_AGNO3_EXTEST_START1);
 #endif
-            cur_exper->msg->msg = EXPER_MSG_NONE;
+            vTaskSuspendAll();
+            if (cur_exper->msg->msg != EXPER_MSG_AGNO3_EXTEST_START2)
+                cur_exper->msg->msg = EXPER_MSG_NONE;
+            xTaskResumeAll();
             break;
         case EXPER_MSG_AGNO3_EXTEST_START2:
             EXPER_DBG_PRINT("EXPER_MSG_AGNO3_EXTEST_START2\r\n");
 #ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED2;
+            cur_exper->stat->stat = EXPER_STAT_AGNO3_FINISHED;
             exper_update_ui(cur_exper);
 #else
             do_test(cur_exper, EXPER_MSG_AGNO3_EXTEST_START2);
@@ -797,12 +800,15 @@ void exper_task(void *args)
 #else            
             do_test(cur_exper, EXPER_MSG_BLOCK_EXTEST_START1);
 #endif     
-            cur_exper->msg->msg = EXPER_MSG_NONE;
+            vTaskSuspendAll();
+            if (cur_exper->msg->msg != EXPER_MSG_BLOCK_EXTEST_START2)
+                cur_exper->msg->msg = EXPER_MSG_NONE;
+            xTaskResumeAll();
             break;
         case EXPER_MSG_BLOCK_EXTEST_START2:
             EXPER_DBG_PRINT("EXPER_MSG_BLOCK_EXTEST_START2\r\n");
 #ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED2;
+            cur_exper->stat->stat = EXPER_STAT_BLOCK_FINISHED;
             exper_update_ui(cur_exper);
 #else                       
             do_test(cur_exper, EXPER_MSG_BLOCK_EXTEST_START2);
@@ -817,12 +823,15 @@ void exper_task(void *args)
 #else
             do_test(cur_exper, EXPER_MSG_CL_EXTEST_START1);
 #endif
-            cur_exper->msg->msg = EXPER_MSG_NONE;
+            vTaskSuspendAll();
+            if (cur_exper->msg->msg != EXPER_MSG_CL_EXTEST_START2)
+                cur_exper->msg->msg = EXPER_MSG_NONE;
+            xTaskResumeAll();
             break;
         case EXPER_MSG_CL_EXTEST_START2:
             EXPER_DBG_PRINT("EXPER_MSG_CL_EXTEST_START2\r\n");
 #ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_CL_EXTEST_FINISHED2;
+            cur_exper->stat->stat = EXPER_STAT_CL_FINISHED;
             exper_update_ui(cur_exper);
 #else
             do_test(cur_exper, EXPER_MSG_CL_EXTEST_START2);
