@@ -53,6 +53,7 @@
 #define ID_TEXT_6 (GUI_ID_USER + 0x11)
 #define ID_BUTTON_ZSBXCJZ (GUI_ID_USER + 0x12)
 #define ID_BUTTON_3 (GUI_ID_USER + 0x13)
+#define ID_BUTTON_DJDWJZ (GUI_ID_USER + 0x14)
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_20;
@@ -77,8 +78,9 @@ static struct ui_exper_info ginfo;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0},
     
-    {BUTTON_CreateIndirect, "触摸屏校准", ID_BUTTON_0, 10, 10, 300, 155, 0, 0x0, 0},
-    {BUTTON_CreateIndirect, "注射泵行程校准", ID_BUTTON_ZSBXCJZ, 480, 10, 300, 155, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "触摸屏校准", ID_BUTTON_0, 10, 10, 200, 140, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "注射泵行程校准", ID_BUTTON_ZSBXCJZ, 285, 10, 200, 140, 0, 0x0, 0},
+    {BUTTON_CreateIndirect, "电极电位校准", ID_BUTTON_DJDWJZ, 580, 10, 200, 140, 0, 0x0, 0},
 
     {SPINBOX_CreateIndirect, "Spinbox", ID_SPINBOX_0, 10, 230, 110, 70, 0, 0x0, 0},
     {TEXT_CreateIndirect, "年", ID_TEXT_0, 123, 250, 25, 35, 0, 0x64, 0},
@@ -156,6 +158,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_ZSBXCJZ);
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_DJDWJZ);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         //
@@ -284,7 +290,24 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER START (Optionally insert additional code for further notification handling)
                 // USER END
             }
-            break;            
+            break;  
+        case ID_BUTTON_DJDWJZ:
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                beep_clicked();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_DisableWindow(pMsg->hWin);
+                WM_Exec();
+                ginfo.func = INFO_DJDW_CALC;
+                ginfo.flag = 0;
+                if (!diag_info_creat(&ginfo))
+                    diag_err_creat(&ginfo);
+                ctrl_all_items(pMsg->hWin, 1);
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                break;
+            }
+            break;             
         case ID_BUTTON_1: // Notifications sent by 'Button'
             switch (NCode)
             {

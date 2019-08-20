@@ -5,6 +5,7 @@
 
 #define ZSB_VALID_FLAG      0xAA55A5A0
 #define TOUCH_VALID_FLAG    0xAA55A5A1
+#define DJDW_VALID_FLAG     0xAA55A5A2
 
 struct sysconf {
     uint32_t magic;
@@ -17,6 +18,9 @@ struct sysconf {
 
 	uint32_t zsb_valid;
 	uint32_t zsb_len;
+
+	uint32_t djdw_valid;
+	float djdw_val;
 };
 
 extern int sysconf_load(void);

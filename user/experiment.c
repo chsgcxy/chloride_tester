@@ -26,8 +26,8 @@ enum exper_sm{
 
 uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 
-#define EXPER_DISCARD         (5)
-#define EXPER_WINDOWS         (10)
+#define EXPER_DISCARD         (10)
+#define EXPER_WINDOWS         (5)
 #define EXPER_BUF_CNT         (EXPER_DISCARD * 2 + EXPER_WINDOWS)
 
 #define EXPER_DBG
@@ -587,11 +587,10 @@ static void do_test(struct experiment *exper, int mode)
                 exper_update_ui(exper);
                 return;
             case EXPER_MSG_DROPPER_START:
-                data->cl_agno3_used = count_agno3_used(exper);
-                data->cl_agno3_used2 = data->agno3_used;
+                data->agno3_agno3_used = count_agno3_used(exper);
                 
                 EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %f\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("AgNo3 used actual is %f\r\n", data->agno3_agno3_used);
 
                 result_data_creat(exper, DATA_TYPE_DORRPER);
                 stat->stat = EXPER_STAT_DROPPER_FINISHED;
@@ -861,4 +860,18 @@ void exper_msg_set(struct exper_msg *msg, int idx)
 
 }
 
+float djdw_calc(void)
+{
+    float val;
+    struct sysconf *cfg;
+        
+    volt_base_clear();
+    val = exper_filter();
+    cfg = sysconf_get();
+    cfg->djdw_valid = DJDW_VALID_FLAG;
+    cfg->djdw_val = val;
+    sysconf_save();
+    volt_base_set(val);
 
+    return val;
+}

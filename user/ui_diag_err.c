@@ -69,6 +69,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int status;
     uint32_t res;
     char buf[32];
+    float volt;
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -97,6 +98,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, ginfo.str);
             break;
         case INFO_ZSB_CALI:
+        case INFO_DJDW_CALC:
             TEXT_SetText(hItem, "校准中,请稍后......");
             break;
         default:
@@ -115,6 +117,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case INFO_DATA_EXPORT:
         case INFO_DATA_EXPROTING:
         case INFO_ZSB_CALI:
+        case INFO_DJDW_CALC:
             WM_HideWindow(hItem);
             break;
         default:
@@ -133,6 +136,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case INFO_DATA_EXPORT:
         case INFO_DATA_EXPROTING:
         case INFO_ZSB_CALI:
+        case INFO_DJDW_CALC:
             IMAGE_SetBitmap(hItem, &bminfor_32px);
             break;
         default:
@@ -153,6 +157,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case INFO_DATA_EXPORT:
         case INFO_DATA_EXPROTING:
         case INFO_ZSB_CALI:
+        case INFO_DJDW_CALC:
             TEXT_SetText(hItem, "信息");
             break;
         default:
@@ -193,6 +198,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_ShowWindow(hItem);
                 TEXT_SetText(hItem, "电机或限位开关异常");
             }
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+            WM_ShowWindow(hItem);
+            break;
+        case INFO_DJDW_CALC:
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+            WM_HideWindow(hItem);
+            WM_Exec();
+            volt = djdw_calc();
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
+            TEXT_SetText(hItem, "校准成功!");
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
+            WM_ShowWindow(hItem);
+            sprintf(buf, "电极电位校准值: %.3f", volt);
+            TEXT_SetText(hItem, buf);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
             WM_ShowWindow(hItem);
             break;

@@ -32,6 +32,7 @@ struct exper_msg {
 
 #define INFO_DATE_SAVE           0xC1
 #define INFO_ZSB_CALI            0xC2
+#define INFO_DJDW_CALC           0xC3
 
 #define INFO_DATA_EXPORT         0xD1
 #define INFO_DATA_EXPROTING      0xD2
@@ -120,5 +121,6 @@ extern void exper_print_report(int index);
 extern void exper_data_get(struct exper_data *data, int idx);
 extern void exper_data_set(struct exper_data *data, int idx);
 extern float exper_filter(void);
+extern float djdw_calc(void);
 
 #endif

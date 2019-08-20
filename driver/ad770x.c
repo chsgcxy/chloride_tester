@@ -1,6 +1,7 @@
 #include "ad770x.h"
 #include "stm32_spi.h"
 #include "stdio.h"
+#include "sysconf.h"
 
 #define  AD7705_GLOBALS
 #define MAX_AD_TIME_OUT           (100 * 3)
@@ -58,9 +59,19 @@
 
 #define AD770X_ReadRdyStu( )   GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) 
 
-#define PPPPPPPPP   0.29
-
 static uint8_t setup_reg;
+
+static volatile float volt_base = 0.0;
+
+void volt_base_clear(void)
+{
+	volt_base = 0.0;
+}
+
+void volt_base_set(float volt)
+{
+	volt_base = volt;
+}
 
 void AD770xDelay(u16 i)
 {
@@ -153,6 +164,7 @@ void AD770xIoInit(void)
 
 int ad770x_init(void)
 {	
+	struct sysconf *conf = sysconf_get();
 	setup_reg = AUTO_CALI_MODE | GAIN_1 | UNIPOLAR | FSYNC_ON | BUF_NONE;
 
 	AD770xIoInit();
@@ -160,6 +172,14 @@ int ad770x_init(void)
 	AD770xWriteClockReg(CLOCK_REG_SET);
 	AD770xChangeChannel(0);
 
+	if (conf->djdw_valid == DJDW_VALID_FLAG)
+		volt_base = conf->djdw_val;
+	else
+	{
+		/* code */
+		volt_base = 0.0;
+	}
+	
 	return 0;
 }
 
@@ -172,7 +192,9 @@ float ad7705_read(void)
 		if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4) == 0) {
 			data = AD770xReadDataReg();
 			//volt = ((float)data * 0.0762940) - 1250.0;
-			volt = (float)((float)data * ((float)2500.0 / (float)65535.0)) - (float)204;				
+			volt = (float)((float)data * ((float)2500.0 / (float)65535.0)) - (float)204.0;
+			//printf("volt = %f, base = %f\r\n", volt, volt_base);
+			volt = volt - volt_base;
 			AD770xWriteSetupReg(setup_reg);
 			return volt;
 		}

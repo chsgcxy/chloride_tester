@@ -154,7 +154,6 @@ int main(void)
 	spi1_init();
 	spi2_init();
 	spi3_init();
-	ad770x_init();
 	beep_init();
 	w25xxx_init();
 	ds18b20_init();
@@ -205,6 +204,8 @@ int main(void)
 
 	touch_init();
 	touch_calibrate(0);
+
+	ad770x_init();
 
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;

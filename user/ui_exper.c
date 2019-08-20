@@ -207,7 +207,7 @@ static int graph_cnt = 1;
  * use a timer to update volt and temp, and we want
  * to stop it when do exper. 
  */
-static uint8_t timer_onoff = 1;
+static volatile uint8_t timer_onoff = 1;
 /*********************************************************************
 *
 *       _cbDialog
@@ -231,7 +231,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
-
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TITLE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLUE);
@@ -1179,7 +1178,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetText(hItem, buf);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEMP_VALUE);
-        ival = sprintf(buf, "%.1f", ds18b20_get_temp());
+        vTaskSuspendAll();
+        fval = ds18b20_get_temp();
+        xTaskResumeAll();
+        ival = sprintf(buf, "%.1f", fval);
         if (ival > 0 && ival < 10) {
             buf[ival++] = 0xBA;
             buf[ival++] = 0x43;

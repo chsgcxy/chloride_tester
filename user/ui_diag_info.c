@@ -101,6 +101,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case INFO_DATA_EXPORT:
             BUTTON_SetText(hItem, "导出");
             break;
+        case INFO_DJDW_CALC:
+            BUTTON_SetText(hItem, "开始校准");
+            break;
         case EXPER_MSG_AGNO3_EXTEST_START1:
         case EXPER_MSG_BLOCK_EXTEST_START1:
         case EXPER_MSG_CL_EXTEST_START1:
@@ -162,6 +165,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case INFO_ZSB_CALI:
                 TEXT_SetText(hItem, "即将进行注射泵行程校准");
                 break;
+            case INFO_DJDW_CALC:
+                TEXT_SetText(hItem, "即将进行电极电位校准");
+                break;
             case INFO_DATA_EXPORT:
                 TEXT_SetText(hItem, "即将导出数据到U盘");
                 break;
@@ -201,6 +207,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
         case INFO_ZSB_CALI:
             TEXT_SetText(hItem, "请根据说明书谨慎操作");
+            break;
+        case INFO_DJDW_CALC:
+            TEXT_SetText(hItem, "请短接电极正负输入后点击校准按钮");
             break;
         case INFO_DATA_EXPORT:
             TEXT_SetText(hItem, "请确保U盘插入");
