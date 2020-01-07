@@ -858,11 +858,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_Exec();
                 if (numpad_creat()) {
                     p = numpad_get();
-                    sscanf(p, "%f", &fval);                    
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
 
                     switch (gtest.func) {
                     case MSG_LOAD_UI_EXTEST:
+                        sscanf(p, "%f", &fval);
                         sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 3);
                         data.sample_weight = fval;
@@ -870,6 +870,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         EDIT_SetText(hItem, buf);
                         break;
                     case MSG_LOAD_UI_DROPPER:
+                        sscanf(p, "%f", &fval);
                         sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 2);
                         data.sample_weight = fval;
@@ -877,6 +878,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         EDIT_SetText(hItem, buf);
                         break;
                     case MSG_LOAD_UI_STAND:
+                        sscanf(p, "%d", &ival);
                         sprintf(buf, "%dmL", ival);
                         exper_data_get(&data, 1);
                         data.sample_volume = ival;
@@ -884,6 +886,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         EDIT_SetText(hItem, buf);
                         break;
                     case MSG_LOAD_UI_BLOCKTEST:
+                        sscanf(p, "%f", &fval);
                         sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 0);
                         data.sample_weight = fval;
