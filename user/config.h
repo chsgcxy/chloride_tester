@@ -9,6 +9,17 @@
 
 #define ZSB_LEN_DEFAULT         245
 
+#define ADC_TYPE_LTC2400   0
+#define ADC_TYPE_AD770X    1
+
+#define ADC_TYPE    ADC_TYPE_LTC2400
+
+#if (ADC_TYPE == ADC_TYPE_LTC2400)
+	#define EXPER_ADC_READ    ltc2400_read_data
+#elif (ADC_TYPE == ADC_TYPE_AD770X)
+	#define EXPER_ADC_READ    ad7705_read
+#endif
+
 /* board special config */
 #ifdef BOARD_TYPE_DEMO
     #define HSE_VALUE  ((uint32_t)25000000) /*!< Value of the External oscillator in Hz */

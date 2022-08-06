@@ -10,6 +10,7 @@
 #include "stm32_spi.h"
 #include "report.h"
 #include "ad770x.h"
+#include "ltc2400.h"
 #include "touch.h"
 #include "GUI.h"
 #include "WM.h"
@@ -205,7 +206,14 @@ int main(void)
 	touch_init();
 	touch_calibrate(0);
 
-	ad770x_init();
+	#if (ADC_TYPE == ADC_TYPE_LTC2400)
+		ltc2400_init();
+	#elif (ADC_TYPE == ADC_TYPE_AD770X)	
+		ad770x_init();
+	#else
+		printf("only support ADC type ADC_TYPE_LTC2400 or ADC_TYPE_AD770X\r\n");
+		return -1;
+	#endif
 
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;

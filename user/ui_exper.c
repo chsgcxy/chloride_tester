@@ -38,6 +38,7 @@
 #include "string.h"
 #include "ds18b20.h"
 #include "ad770x.h"
+#include "ltc2400.h"
 /*********************************************************************
 *
 *       Defines
@@ -1182,7 +1183,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     case WM_TIMER:
         // printf("init step 009\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
-        sprintf(buf, "%.3fmV",  ad7705_read());
+        sprintf(buf, "%.3fmV",  EXPER_ADC_READ());
         TEXT_SetText(hItem, buf);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TEMP_VALUE);

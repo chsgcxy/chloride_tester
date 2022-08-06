@@ -898,6 +898,11 @@
               <FileType>1</FileType>
               <FilePath>..\driver\ads1256.c</FilePath>
             </File>
+            <File>
+              <FileName>ltc2400.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\driver\ltc2400.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -7,6 +7,7 @@
 #include "main.h"
 #include "stepmotor.h"
 #include "ad770x.h"
+#include "ltc2400.h"
 #include "report.h"
 #include "sysconf.h"
 #include "data.h"
@@ -309,7 +310,7 @@ float exper_filter(void)
     static float volt_buff[20];
 
     for (i = 0; i < EXPER_BUF_CNT; i++)
-        volt_buff[i] = ad7705_read();
+        volt_buff[i] = EXPER_ADC_READ();
 
     /* sort */
 	for (i = 0; i < EXPER_BUF_CNT; i++) {
@@ -329,7 +330,7 @@ float exper_filter(void)
 
 float exper_volt_get(void)
 {
-    return ad7705_read();
+    return EXPER_ADC_READ();
 }
 
 static float count_agno3_used(struct experiment *exper)
