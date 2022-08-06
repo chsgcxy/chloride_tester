@@ -231,6 +231,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
+        //printf("init exper diag........\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TITLE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLUE);
@@ -309,7 +310,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
             BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
         }
-
+        //printf("init step 001\r\n");
         //
         // Initialization of 'Text'
         //
@@ -367,7 +368,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(hItem, GUI_BLACK);
         if (gtest.func == MSG_LOAD_UI_DROPPER)
             TEXT_SetText(hItem, "µÎ¶¨ÒºÓÃÁ¿");
-
+        //printf("init step 002\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
@@ -391,7 +392,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
             TEXT_SetTextColor(hItem, GUI_BLACK);
         }
-        
+        // printf("init step 003\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
         if (gtest.func == MSG_LOAD_UI_DROPPER)
             WM_HideWindow(hItem);
@@ -440,7 +441,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         else
             sprintf(buf, "%.4fg", data.sample_weight);
         EDIT_SetText(hItem, buf);
-        
+        // printf("init step 004\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
         if (gtest.func == MSG_LOAD_UI_STAND) {
             TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
@@ -481,7 +482,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         GRAPH_SCALE_SetTextColor(hScaleV, GUI_RED);
         GRAPH_SCALE_SetOff(hScaleV, -120);
         GRAPH_AttachScale(hItem, hScaleV);
-        
+        // printf("init step 005\r\n");
         hScaleH = GRAPH_SCALE_Create(297, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
         GRAPH_SCALE_SetTextColor(hScaleH, GUI_DARKGREEN);
         GRAPH_AttachScale(hItem, hScaleH);
@@ -496,6 +497,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         break;
     case WM_NOTIFY_PARENT:
+        // printf("init step 006\r\n");
         Id = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch (Id) {
@@ -591,7 +593,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
                 // USER START (Optionally insert code for reacting on notification message)
-                printf("run main menu\r\n");
+                // printf("run main menu\r\n");
                 g_ui_msg.msg = MSG_LOAD_UI_MENU;
                 GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
@@ -926,7 +928,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         default:
             break;
         }
+        break;
     case WM_USER:
+    // printf("init step 008\r\n");
         stat = (struct exper_stat *)pMsg->Data.p;
         switch (stat->stat) {
             case EXPER_STAT_ERR_MOTOR:
@@ -1176,6 +1180,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case WM_TIMER:
+        // printf("init step 009\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
         sprintf(buf, "%.3fmV",  ad7705_read());
         TEXT_SetText(hItem, buf);
