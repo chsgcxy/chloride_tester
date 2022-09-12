@@ -209,6 +209,7 @@ static int graph_cnt = 1;
  * to stop it when do exper. 
  */
 static volatile uint8_t timer_onoff = 1;
+
 /*********************************************************************
 *
 *       _cbDialog
@@ -383,8 +384,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_DJDW_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_GREEN);
-        sprintf(buf, "%.3fmV", exper_volt_get());
-        TEXT_SetText(hItem, buf);
+        TEXT_SetText(hItem, "0.0mV");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND);
         if (gtest.func == MSG_LOAD_UI_DROPPER)
@@ -494,7 +494,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // USER END
 
         /* creat a timer to update volt from adc */
-        WM_CreateTimer(pMsg->hWin, 0, 1000, 0);
+        timer_handle = WM_CreateTimer(pMsg->hWin, 0, 1000, 0);
 
         break;
     case WM_NOTIFY_PARENT:

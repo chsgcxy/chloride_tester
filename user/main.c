@@ -215,6 +215,13 @@ int main(void)
 		return -1;
 	#endif
 
+	// while (1) {
+	// 	float volt = 0.0;
+	// 	volt = EXPER_ADC_READ();
+	// 	delay_ms(50);
+	// 	printf("v=%f\r\n", volt);
+	// }
+
 	g_printer.name = "simple printer";
     g_printer.send = g_printer_send;
 	report_init(&g_printer);

@@ -27,8 +27,10 @@ enum exper_sm{
 
 uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
 
-#define EXPER_DISCARD         (10)
-#define EXPER_WINDOWS         (5)
+signed long timer_handle;
+
+#define EXPER_DISCARD         (4)
+#define EXPER_WINDOWS         (4)
 #define EXPER_BUF_CNT         (EXPER_DISCARD * 2 + EXPER_WINDOWS)
 
 #define EXPER_DBG
@@ -309,8 +311,12 @@ float exper_filter(void)
     float volt = 0;
     static float volt_buff[20];
 
-    for (i = 0; i < EXPER_BUF_CNT; i++)
+    for (i = 0; i < EXPER_BUF_CNT; i++) {
         volt_buff[i] = EXPER_ADC_READ();
+#if (ADC_TYPE == ADC_TYPE_LTC2400)
+        vTaskDelay(180);
+#endif
+    }
 
     /* sort */
 	for (i = 0; i < EXPER_BUF_CNT; i++) {
@@ -432,6 +438,8 @@ static void do_test(struct experiment *exper, int mode)
     TickType_t msdelay = 3000;
     float volt_line = 5.0;
     float v;
+
+    WM_DeleteTimer(timer_handle);
         
     while (1) {
         if (exper_agno3_stock < 10) {

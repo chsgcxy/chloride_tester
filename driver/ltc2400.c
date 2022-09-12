@@ -1,6 +1,8 @@
 #include "ltc2400.h"
 #include "delay.h"
 #include "stdio.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 #define		BIT0                (0x01)
 #define		BIT1                (0x02)
@@ -65,7 +67,11 @@ float ltc2400_read_data(void)
 	unsigned	char	LTC2400_RxDataChar = 0;
 	float volt = 0.0;
 
-	uint32_t LTC2400_OutData = 0;
+	uint32_t LTC2400_OutData;
+
+rerun:
+
+	LTC2400_OutData = 0;
 	
 	SCLOCK0;
 	CS0;
@@ -109,9 +115,15 @@ float ltc2400_read_data(void)
 	if ((LTC2400_RxDataChar & 0x3) == 0x3) {
 		LTC2400_OutData = 0x00ffffff;
 		printf("vin > Vref\r\n");
-	} else if ((LTC2400_RxDataChar & 0x1) == 0x1)
+		vTaskDelay(180);
+		// delay_ms(200);
+		goto rerun;
+	} else if ((LTC2400_RxDataChar & 0x1) == 0x1) {
 		printf("vin < 0\r\n");
-	else if ((LTC2400_RxDataChar & 0x2) == 0x2) {
+		vTaskDelay(180);
+		// delay_ms(200);
+		goto rerun;
+	} else if ((LTC2400_RxDataChar & 0x2) == 0x2) {
 		printf("0 < vin < Vref\r\n");
 	} else
 		LTC2400_OutData = 0;

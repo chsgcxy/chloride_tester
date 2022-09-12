@@ -112,6 +112,8 @@ struct exper_stat {
     struct exper_data data;
 };
 
+extern signed long timer_handle;
+
 extern void exper_msg_set(struct exper_msg *msg, int idx);
 extern void exper_task(void *args);
 extern char exper_busy(void);
