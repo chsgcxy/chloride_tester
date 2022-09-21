@@ -439,8 +439,11 @@ static void do_test(struct experiment *exper, int mode)
     float volt_line = 5.0;
     float v;
 
-    WM_DeleteTimer(timer_handle);
-        
+    if (timer_handle != -1) {
+        WM_DeleteTimer(timer_handle);
+        timer_handle = -1;
+    }
+
     while (1) {
         if (exper_agno3_stock < 10) {
             if (_exper_oil_get(exper))
