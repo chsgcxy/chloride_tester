@@ -877,13 +877,13 @@ float djdw_calc(void)
     float val;
     struct sysconf *cfg;
         
-    volt_base_clear();
+    EXPER_ADC_VOLT_BASE_CLEAR();
     val = exper_filter();
     cfg = sysconf_get();
     cfg->djdw_valid = DJDW_VALID_FLAG;
     cfg->djdw_val = val;
     sysconf_save();
-    volt_base_set(val);
+    EXPER_ADC_VOLT_BASE_SET(val);
 
     return val;
 }

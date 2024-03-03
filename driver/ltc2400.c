@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "sysconf.h"
 
 #define		BIT0                (0x01)
 #define		BIT1                (0x02)
@@ -28,9 +29,24 @@
 //LTC2400--相关变量的声明
 uint32_t LTC2400_24BitADC = 0;
 
+
+static volatile float volt_base = 0.0;
+
+void ltc2400_volt_base_clear(void)
+{
+	volt_base = 0.0;
+}
+
+void ltc2400_volt_base_set(float volt)
+{
+	volt_base = volt;
+}
+
+
 void ltc2400_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
+	struct sysconf *conf;
 	
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
     
@@ -47,6 +63,16 @@ void ltc2400_init(void)
 
     LTC2400_CS_HIGH;
     SCLOCK1;
+
+	conf = sysconf_get();
+	if (conf->djdw_valid == DJDW_VALID_FLAG)
+		volt_base = conf->djdw_val;
+	else
+	{
+		/* code */
+		volt_base = 0.0;
+	}
+
 }
 
 /************************************************************************* 
@@ -133,5 +159,6 @@ rerun:
 	volt *= 2500.0;
 	volt -= 1250.0;
 	volt *= 2.0;
+	volt = volt - volt_base;
 	return volt;
 }

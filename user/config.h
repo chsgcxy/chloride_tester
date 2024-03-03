@@ -5,7 +5,7 @@
 //#define BOARD_TYPE_DEMO
 #define BOARD_TYPE_MY
 
-#define SOFTWARE_VERSION_STR    "V3.1.0"
+#define SOFTWARE_VERSION_STR    "V3.2.0"
 
 #define ZSB_LEN_DEFAULT         245
 
@@ -16,8 +16,12 @@
 
 #if (ADC_TYPE == ADC_TYPE_LTC2400)
 	#define EXPER_ADC_READ    ltc2400_read_data
+	#define EXPER_ADC_VOLT_BASE_CLEAR    ltc2400_volt_base_clear
+	#define EXPER_ADC_VOLT_BASE_SET      ltc2400_volt_base_set
 #elif (ADC_TYPE == ADC_TYPE_AD770X)
-	#define EXPER_ADC_READ    ad7705_read
+	#define EXPER_ADC_READ               ad7705_read
+	#define EXPER_ADC_VOLT_BASE_CLEAR    ad770x_volt_base_clear
+	#define EXPER_ADC_VOLT_BASE_SET      ad770x_volt_base_set
 #endif
 
 /* board special config */

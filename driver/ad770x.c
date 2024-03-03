@@ -63,12 +63,12 @@ static uint8_t setup_reg;
 
 static volatile float volt_base = 0.0;
 
-void volt_base_clear(void)
+void ad770x_volt_base_clear(void)
 {
 	volt_base = 0.0;
 }
 
-void volt_base_set(float volt)
+void ad770x_volt_base_set(float volt)
 {
 	volt_base = volt;
 }

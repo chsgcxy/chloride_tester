@@ -5,5 +5,7 @@
 
 extern void ltc2400_init(void);
 extern float ltc2400_read_data(void);
+extern void ltc2400_volt_base_clear(void);
+extern void ltc2400_volt_base_set(float volt);
 
 #endif
