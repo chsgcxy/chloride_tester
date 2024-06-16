@@ -111,7 +111,7 @@ void exper_init(void)
     }
 
     /* default cl- dosage when extest */
-    gexper[3].data.nacl_dosage = 0.1;
+    gexper[3].data.nacl_dosage = 0.01;
     gexper[3].data.agno3_dosage = 0.01;
 
     cfg = sysconf_get();
@@ -442,7 +442,7 @@ static void do_test(struct experiment *exper, int mode)
 
     // fix 0.005 浓度 bug
     if (mode != EXPER_MSG_AGNO3_START) {
-        volt_line = 4.5;
+        volt_line = 4.3;
         volt_3to1_line = 7.5;
     }
 
