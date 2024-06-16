@@ -112,7 +112,7 @@ void exper_init(void)
 
     /* default cl- dosage when extest */
     gexper[3].data.nacl_dosage = 0.1;
-    gexper[3].data.agno3_dosage = 0.1;
+    gexper[3].data.agno3_dosage = 0.01;
 
     cfg = sysconf_get();
     if (cfg->zsb_valid != ZSB_VALID_FLAG) {
