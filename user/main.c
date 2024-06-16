@@ -142,16 +142,16 @@ int main(void)
 	GUI_Init();
 
 	/* show logo */
-	GUI_SetBkColor(GUI_WHITE);
+	GUI_SetBkColor(GUI_BLUE);
 	GUI_Clear();
-	GUI_DrawBitmap(&bmlogo, 315, 200);
+	//GUI_DrawBitmap(&bmlogo, 315, 200);
 	//GUI_SetFont(&GUI_FontHZ_kaiti_20);
-	GUI_SetColor(GUI_BLACK);
+	GUI_SetColor(GUI_WHITE);
 	//GUI_DispStringHCenterAt("ZCL-IIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(È«ï¿½Ô¶ï¿½ï¿½ï¿½Î»ï¿½Î¶ï¿½ï¿½ï¿½)", 400, 60);
 	GUI_SetFont(&GUI_FontHZ_kaiti_28);
-	GUI_DispStringHCenterAt("È«×Ô¶¯ÂÈÀë×Ó¼ì²âÒÇ", 400, 100);
+	GUI_DispStringHCenterAt("È«×Ô¶¯ÂÈÀë×Ó¼ì²âÒÇ", 400, 220);
 	delay_ms(1500);
-	
+
 	spi1_init();
 	spi2_init();
 	spi3_init();
