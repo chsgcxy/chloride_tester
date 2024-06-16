@@ -144,13 +144,13 @@ int main(void)
 	/* show logo */
 	GUI_SetBkColor(GUI_WHITE);
 	GUI_Clear();
-	GUI_DrawBitmap(&bmlogo, 315, 150);
-	GUI_SetFont(&GUI_FontHZ_kaiti_20);
-	GUI_SetColor(GUI_BLACK);
-	GUI_DispStringHCenterAt("ZCL-IIÐÍÂÈÀë×Ó(È«×Ô¶¯µçÎ»µÎ¶¨ÒÇ)", 400, 60);
-	GUI_SetFont(&GUI_FontHZ_kaiti_28);
-	GUI_DispStringHCenterAt("±±¾©Í¬´´ÖÐÒÇ¿Æ¼¼ÎªÄú·þÎñ", 400, 350);
-	delay_ms(1500);
+	// GUI_DrawBitmap(&bmlogo, 315, 150);
+	// GUI_SetFont(&GUI_FontHZ_kaiti_20);
+	// GUI_SetColor(GUI_BLACK);
+	// GUI_DispStringHCenterAt("ZCL-IIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(È«ï¿½Ô¶ï¿½ï¿½ï¿½Î»ï¿½Î¶ï¿½ï¿½ï¿½)", 400, 60);
+	// GUI_SetFont(&GUI_FontHZ_kaiti_28);
+	// GUI_DispStringHCenterAt("ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿Æ¼ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 400, 350);
+	// delay_ms(1500);
 	
 	spi1_init();
 	spi2_init();

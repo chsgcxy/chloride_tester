@@ -437,7 +437,14 @@ static void do_test(struct experiment *exper, int mode)
     float prevolt = 0.0;
     TickType_t msdelay = 3000;
     float volt_line = 5.0;
+    float volt_3to1_line = 8.0;
     float v;
+
+    // fix 0.005 浓度 bug
+    if (mode != EXPER_MSG_AGNO3_START) {
+        volt_line = 4.5;
+        volt_3to1_line = 7.5;
+    }
 
     if (timer_handle != -1) {
         WM_DeleteTimer(timer_handle);
@@ -489,7 +496,7 @@ static void do_test(struct experiment *exper, int mode)
         case STATUS_PRE_STEP01ML:
             volt_diff = volt - prevolt;
             prevolt = volt;
-            if (volt_diff > 8.0) {
+            if (volt_diff > volt_3to1_line) {
                 exper_sm = STATUS_START_STEP01ML;
                 msdelay = 10000;
                 step = 1;
