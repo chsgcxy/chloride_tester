@@ -440,11 +440,13 @@ static void do_test(struct experiment *exper, int mode)
     float volt_3to1_line = 8.0;
     float v;
 
-    // fix 0.005 浓度 bug
-    if (mode != EXPER_MSG_AGNO3_START) {
-        volt_line = 4.3;
-        volt_3to1_line = 7.5;
+    // fix 0.01 浓度 bug
+    if (data->agno3_dosage < 0.015 || mode == EXPER_MSG_DROPPER_START) {
+        volt_line = 3.3;
+        volt_3to1_line = 6.5;
     }
+
+    printf("scale: %f   %f\r\n", volt_line, volt_3to1_line);
 
     if (timer_handle != -1) {
         WM_DeleteTimer(timer_handle);
