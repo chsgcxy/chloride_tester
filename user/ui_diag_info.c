@@ -174,7 +174,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_MSG_AGNO3_EXTEST_START1:
             case EXPER_MSG_BLOCK_EXTEST_START1:
             case EXPER_MSG_CL_EXTEST_START1:
-                TEXT_SetText(hItem, "请再加入10mL 0.1mol/L氯化钠标准溶液");
+                TEXT_SetText(hItem, "请加入10mL 氯化钠标准溶液");
                 break;
             default:
                 break;
