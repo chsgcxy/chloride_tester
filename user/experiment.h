@@ -114,7 +114,7 @@ struct exper_stat {
 
 extern signed long timer_handle;
 
-extern void exper_msg_set(struct exper_msg *msg, int idx);
+extern void exper_msg_set(struct exper_msg *msg, int func);
 extern void exper_task(void *args);
 extern char exper_busy(void);
 extern float exper_volt_get(void);
@@ -124,5 +124,6 @@ extern void exper_data_get(struct exper_data *data, int idx);
 extern void exper_data_set(struct exper_data *data, int idx);
 extern float exper_filter(void);
 extern float djdw_calc(void);
+extern void exper_stock_clear(void);
 
 #endif

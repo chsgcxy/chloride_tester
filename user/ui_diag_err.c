@@ -184,6 +184,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             WM_HideWindow(hItem);
             WM_Exec();
             res = stepmotor_calibrate();
+            exper_stock_clear();
             if (res) {
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
                 TEXT_SetText(hItem, "校准成功!");

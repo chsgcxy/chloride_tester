@@ -75,6 +75,12 @@ static struct experiment *cur_exper = NULL;
 static int exper_agno3_stock = 0;
 static float exper_stock_percentage = 0.0;
 
+void exper_stock_clear(void)
+{
+    exper_agno3_stock = 0;
+    exper_stock_percentage = 0.0;
+}
+
 void exper_init(void)
 {
     int i;
@@ -869,16 +875,32 @@ void exper_task(void *args)
     }
 }
 
-void exper_msg_set(struct exper_msg *msg, int idx)
+void exper_msg_set(struct exper_msg *msg, int func)
 {
-    if (idx >= EXPER_CNT)
-        return;    
-    
-    cur_exper = &(gexper[idx]);
+    int index;
+
+    switch (func) {
+    case MSG_LOAD_UI_EXTEST:
+        index = 3;
+        break;
+    case MSG_LOAD_UI_DROPPER:
+        index = 2; 
+        break;
+    case MSG_LOAD_UI_STAND:
+        index = 1;  
+        break;
+    case MSG_LOAD_UI_BLOCKTEST:
+        index = 0;  
+        break;
+    default:
+        EXPER_DBG_PRINT("invalid func id %d\r\n", func);
+        return;
+    }
+
+    cur_exper = &(gexper[index]);
     EXPER_DBG_PRINT("exper %s get msg.msg=%x, stop=%d\r\n",
         cur_exper->name, msg->msg, msg->stop);
     memcpy(cur_exper->msg, msg, sizeof(struct exper_msg));
-
 }
 
 float djdw_calc(void)

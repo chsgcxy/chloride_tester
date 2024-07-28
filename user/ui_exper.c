@@ -514,10 +514,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 0);
                 msg.msg = EXPER_MSG_OIL_GET;
                 msg.stop = 0;
-                if (gtest.func == MSG_LOAD_UI_STAND)
-                    exper_msg_set(&msg, 1);
-                else
-                    exper_msg_set(&msg, 0);
+                exper_msg_set(&msg, gtest.func);
                 break;
             default:
                 break;
@@ -548,10 +545,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     put_func = 1;
                     msg.stop = 0;
                 }
-                if (gtest.func == MSG_LOAD_UI_STAND)
-                    exper_msg_set(&msg, 1);
-                else
-                    exper_msg_set(&msg, 0);
+                exper_msg_set(&msg, gtest.func);
                 break;
             default:
                 break;
@@ -579,10 +573,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ctrl_all_items(pMsg->hWin, 0);
                 msg.msg = EXPER_MSG_OIL_CLEAR;
                 msg.stop = 0;
-                if (gtest.func == MSG_LOAD_UI_STAND)
-                    exper_msg_set(&msg, 1);
-                else
-                    exper_msg_set(&msg, 0);
+                exper_msg_set(&msg, gtest.func);
                 break;
             default:
                 break;
@@ -649,23 +640,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 switch (gtest.func) {
                 case MSG_LOAD_UI_EXTEST:
                     msg.msg = EXPER_MSG_BLOCK_EXTEST_START1;
-                    exper_msg_set(&msg, 3);
                     break;
                 case MSG_LOAD_UI_DROPPER:
                     msg.msg = EXPER_MSG_BLOCK_START;
-                    exper_msg_set(&msg, 2);   
                     break;
                 case MSG_LOAD_UI_STAND:
                     msg.msg = EXPER_MSG_BLOCK_START;
-                    exper_msg_set(&msg, 1);  
                     break;
                 case MSG_LOAD_UI_BLOCKTEST:
-                    msg.msg = EXPER_MSG_BLOCK_START;
-                    exper_msg_set(&msg, 0);   
+                    msg.msg = EXPER_MSG_BLOCK_START; 
                     break;
                 default:
                     break;
                 }
+                exper_msg_set(&msg, gtest.func);
                 break;
             default:
                 break;
@@ -721,24 +709,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
                 switch (gtest.func) {
                 case MSG_LOAD_UI_EXTEST:
-                    msg.msg = EXPER_MSG_AGNO3_EXTEST_START1;
-                    exper_msg_set(&msg, 3);      
+                    msg.msg = EXPER_MSG_AGNO3_EXTEST_START1;   
                     break;
                 case MSG_LOAD_UI_DROPPER:
                     msg.msg = EXPER_MSG_DROPPER_START;
-                    exper_msg_set(&msg, 2);   
                     break;
                 case MSG_LOAD_UI_STAND:
-                    msg.msg = EXPER_MSG_AGNO3_START;
-                    exper_msg_set(&msg, 1);      
+                    msg.msg = EXPER_MSG_AGNO3_START;    
                     break;
                 case MSG_LOAD_UI_BLOCKTEST:
-                    msg.msg = EXPER_MSG_AGNO3_START;
-                    exper_msg_set(&msg, 0);   
+                    msg.msg = EXPER_MSG_AGNO3_START; 
                     break;
                 default:
                     break;
                 }
+                exper_msg_set(&msg, gtest.func);
                 break;
             default:
                 break;
@@ -786,23 +771,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 switch (gtest.func) {
                 case MSG_LOAD_UI_EXTEST:
                     msg.msg = EXPER_MSG_CL_EXTEST_START1;
-                    exper_msg_set(&msg, 3);    
                     break;
                 case MSG_LOAD_UI_DROPPER:
-                    msg.msg = EXPER_MSG_CL_START;
-                    exper_msg_set(&msg, 2);     
+                    msg.msg = EXPER_MSG_CL_START;  
                     break;
                 case MSG_LOAD_UI_STAND:
                     msg.msg = EXPER_MSG_STAND_START;
-                    exper_msg_set(&msg, 1); 
                     break;
                 case MSG_LOAD_UI_BLOCKTEST:
-                    msg.msg = EXPER_MSG_CL_START;
-                    exper_msg_set(&msg, 0);   
+                    msg.msg = EXPER_MSG_CL_START;  
                     break;
                 default:
                     break;
                 }
+                exper_msg_set(&msg, gtest.func);
                 break;
             default:
                 break;
@@ -1127,7 +1109,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     msg.msg = EXPER_MSG_AGNO3_EXTEST_START2;
                     msg.stop = 0;
-                    exper_msg_set(&msg, 3);
+                    exper_msg_set(&msg, MSG_LOAD_UI_EXTEST);
                 }
                 break;
             case EXPER_STAT_BLOCK_EXTEST_FINISHED1:
@@ -1150,7 +1132,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     msg.msg = EXPER_MSG_BLOCK_EXTEST_START2;
                     msg.stop = 0;
-                    exper_msg_set(&msg, 3);
+                    exper_msg_set(&msg, MSG_LOAD_UI_EXTEST);
                 }
                 break;
             case EXPER_STAT_CL_EXTEST_FINISHED1:
@@ -1173,7 +1155,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     msg.msg = EXPER_MSG_CL_EXTEST_START2;
                     msg.stop = 0;
-                    exper_msg_set(&msg, 3);
+                    exper_msg_set(&msg, MSG_LOAD_UI_EXTEST);
                 }
                 break;
             default:
