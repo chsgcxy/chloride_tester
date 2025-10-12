@@ -140,15 +140,15 @@ rerun:
 
 	if ((LTC2400_RxDataChar & 0x3) == 0x3) {
 		LTC2400_OutData = 0x00ffffff;
-		printf("vin > Vref\r\n");
+		//printf("vin > Vref\r\n");
 		vTaskDelay(180);
 		// delay_ms(200);
-		goto rerun;
+		return 0;
 	} else if ((LTC2400_RxDataChar & 0x1) == 0x1) {
-		printf("vin < 0\r\n");
+		//printf("vin < 0\r\n");
 		vTaskDelay(180);
 		// delay_ms(200);
-		goto rerun;
+		return 0;
 	} else if ((LTC2400_RxDataChar & 0x2) == 0x2) {
 		;
 		//printf("0 < vin < Vref\r\n");

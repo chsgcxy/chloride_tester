@@ -1095,20 +1095,22 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ginfo.flag = 0;
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
-                if (diag_info_creat(&ginfo)) {
-                    ctrl_all_items(pMsg->hWin, 1);
-                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
+                if (diag_info_creat(&ginfo)) { //cancel
+                    // ctrl_all_items(pMsg->hWin, 1); 
                     BUTTON_SetText(hItem, "AgNO3¼ì²â");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                     ctrl_all_items(pMsg->hWin, 1);
                     test_func = 0;
-                } else {
+                } else { // go on
+                    WM_EnableWindow(hItem);
                     GRAPH_DATA_XY_Clear(pdataGRP);
                     graph_cnt = 1;
                     GRAPH_SCALE_SetOff(hScaleH, 0);
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
                     msg.msg = EXPER_MSG_AGNO3_EXTEST_START2;
                     msg.stop = 0;
+                    test_func = 1;
                     exper_msg_set(&msg, MSG_LOAD_UI_EXTEST);
                 }
                 break;
@@ -1118,14 +1120,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ginfo.flag = 0;
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                 if (diag_info_creat(&ginfo)) {
                     ctrl_all_items(pMsg->hWin, 1);
-                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
                     BUTTON_SetText(hItem, "¿Õ°×ÊµÑé");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                     ctrl_all_items(pMsg->hWin, 1);
                     test_func = 0;
                 } else {
+                    WM_EnableWindow(hItem);
+                    test_func = 1;
                     GRAPH_DATA_XY_Clear(pdataGRP);
                     graph_cnt = 1;
                     GRAPH_SCALE_SetOff(hScaleH, 0);
@@ -1141,14 +1145,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 ginfo.flag = 0;
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                 if (diag_info_creat(&ginfo)) {
                     ctrl_all_items(pMsg->hWin, 1);
-                    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
                     BUTTON_SetText(hItem, "ÂÈÀë×Ó¼ì²â");
                     BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                     ctrl_all_items(pMsg->hWin, 1);
                     test_func = 0;
                 } else {
+                    test_func = 1;
+                    WM_EnableWindow(hItem);
                     GRAPH_DATA_XY_Clear(pdataGRP);
                     graph_cnt = 1;
                     GRAPH_SCALE_SetOff(hScaleH, 0);
