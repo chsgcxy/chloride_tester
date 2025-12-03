@@ -141,12 +141,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
-        case EXPER_STAT_DROPPER_FINISHED:
+        case EXPER_TYPE_MANUAL_TITRATION:
             TEXT_SetText(hItem, "滴定液用量");
             break;
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+        case EXPER_TYPE_ADMIXTURE_BLOCK1:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
             TEXT_SetText(hItem, "10mL时AgNO3用量");
             break;
         default:
@@ -157,18 +160,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Text'
         //
         switch (stat->stat) {
-        case EXPER_STAT_AGNO3_FINISHED:
-        case EXPER_STAT_DROPPER_FINISHED:
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+        case EXPER_TYPE_MANUAL_TITRATION:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
             sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used);
             break;
-        case EXPER_STAT_BLOCK_FINISHED:
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
+        case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_OTHER_BLOCK:
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
+        case EXPER_TYPE_ADMIXTURE_BLOCK1:
             sprintf(buf, "%.2fmL", stat->data.block_agno3_used);
             break;
-        case EXPER_STAT_CL_FINISHED:
-        case EXPER_STAT_STAND_FINISHED:
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
             sprintf(buf, "%.2fmL", stat->data.cl_agno3_used);
             break;
         default:
@@ -185,22 +193,27 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
-        case EXPER_STAT_AGNO3_FINISHED:
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
             TEXT_SetText(hItem, "AgNO3浓度");
             break;
-        case EXPER_STAT_BLOCK_FINISHED:
-        case EXPER_STAT_DROPPER_FINISHED:
+        case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_OTHER_BLOCK:
+        case EXPER_TYPE_MANUAL_TITRATION:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+        case EXPER_TYPE_ADMIXTURE_BLOCK1:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
             WM_HideWindow(hItem);
             break;
-        case EXPER_STAT_CL_FINISHED:
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
             TEXT_SetText(hItem, "水泥氯离子质量分数");
             break;
-        case EXPER_STAT_STAND_FINISHED:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             TEXT_SetText(hItem, "氯离子浓度");
             break;
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
             TEXT_SetText(hItem, "20mL时AgNO3用量");
             break;
         default:
@@ -213,31 +226,36 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, GUI_FONT_24_1);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
-        case EXPER_STAT_AGNO3_FINISHED:
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
             sprintf(buf, "%.4fmol/L", stat->data.agno3_dosage);
             TEXT_SetText(hItem, buf);
             break;
-        case EXPER_STAT_BLOCK_FINISHED:
-        case EXPER_STAT_DROPPER_FINISHED:
+        case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_OTHER_BLOCK:
+        case EXPER_TYPE_MANUAL_TITRATION:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+        case EXPER_TYPE_ADMIXTURE_BLOCK1:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
             WM_HideWindow(hItem);
             break;
-        case EXPER_STAT_CL_FINISHED:
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
             sprintf(buf, "%.3f%%", stat->data.cl_percentage);
             TEXT_SetText(hItem, buf);
             break;
-        case EXPER_STAT_STAND_FINISHED:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             sprintf(buf, "%fmol/L", stat->data.cl_dosage);
             TEXT_SetText(hItem, buf);
             break;
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
             sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used2);
             TEXT_SetText(hItem, buf);
             break;
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
             sprintf(buf, "%.2fmL", stat->data.block_agno3_used2);
             TEXT_SetText(hItem, buf);
             break;
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
             sprintf(buf, "%.2fmL", stat->data.cl_agno3_used2);
             TEXT_SetText(hItem, buf);
             break;
@@ -249,22 +267,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
-        case EXPER_STAT_AGNO3_FINISHED:
-        case EXPER_STAT_BLOCK_FINISHED:
-        case EXPER_STAT_CL_FINISHED:
-        case EXPER_STAT_DROPPER_FINISHED:
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
-            WM_HideWindow(hItem);
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             break;
-        case EXPER_STAT_STAND_FINISHED:
-            break;
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
             TEXT_SetText(hItem, "AgNO3浓度");
             break;
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
             TEXT_SetText(hItem, "试样氯离子质量分数");
             break;
         default:
+            WM_HideWindow(hItem);
             break;
         }
 
@@ -272,26 +284,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, GUI_FONT_24_1);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
-        case EXPER_STAT_AGNO3_FINISHED:
-        case EXPER_STAT_BLOCK_FINISHED:
-        case EXPER_STAT_CL_FINISHED:
-        case EXPER_STAT_DROPPER_FINISHED:
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
-            WM_HideWindow(hItem);
-            break;
-        case EXPER_STAT_STAND_FINISHED:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             sprintf(buf, "%.1f", stat->data.ppm);
             TEXT_SetText(hItem, buf);
             break;
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
             sprintf(buf, "%.4fmol/L", stat->data.agno3_dosage);
             TEXT_SetText(hItem, buf);
             break;
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
             sprintf(buf, "%.3f%%", stat->data.cl_percentage);
             TEXT_SetText(hItem, buf);
             break;
         default:
+            WM_HideWindow(hItem);
             break;
         }
 
@@ -300,67 +306,22 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        switch (stat->stat) {
-        case EXPER_STAT_AGNO3_FINISHED:
-        case EXPER_STAT_BLOCK_FINISHED:
-        case EXPER_STAT_DROPPER_FINISHED:
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
-            WM_HideWindow(hItem);
-            break;
-        case EXPER_STAT_CL_FINISHED:
-        case EXPER_STAT_STAND_FINISHED:
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
-            BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
-            BUTTON_SetText(hItem, "打印");
-            break;
-        default:
-            break;
-        }
+        BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        BUTTON_SetText(hItem, "打印");
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        switch (stat->stat) {
-        case EXPER_STAT_AGNO3_FINISHED:
-        case EXPER_STAT_BLOCK_FINISHED:
-        case EXPER_STAT_DROPPER_FINISHED:
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
-            BUTTON_SetText(hItem, "确定");
-            break;
-        case EXPER_STAT_CL_FINISHED:
-        case EXPER_STAT_STAND_FINISHED:
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
-            WM_HideWindow(hItem);
-            break;
-        default:
-            break;
-        }
+        WM_HideWindow(hItem);
         //
         // Initialization of 'Button'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        switch (stat->stat) {
-        case EXPER_STAT_AGNO3_FINISHED:
-        case EXPER_STAT_BLOCK_FINISHED:
-        case EXPER_STAT_DROPPER_FINISHED:
-        case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
-        case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
-            WM_HideWindow(hItem);
-            break;
-        case EXPER_STAT_CL_FINISHED:
-        case EXPER_STAT_STAND_FINISHED:
-        case EXPER_STAT_CL_EXTEST_FINISHED2:
-            BUTTON_SetText(hItem, "返回");
-            break;
-        default:
-            break;
-        }
+        BUTTON_SetText(hItem, "返回");
         // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
@@ -376,19 +337,34 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER START (Optionally insert code for reacting on notification message)
                 beep_clicked();
                 switch (stat->stat) {
-                case EXPER_STAT_CL_FINISHED:
+                case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+                case EXPER_TYPE_CEMENT_BLOCK:
+                case EXPER_TYPE_CEMENT_CHLORIDE_ION:
                     ctrl_all_items(pMsg->hWin, 0);
                     WM_Exec();
                     exper_print_report(0);
                     ctrl_all_items(pMsg->hWin, 1);
                     break;
-                case EXPER_STAT_STAND_FINISHED:
+                case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+                case EXPER_TYPE_OTHER_BLOCK:
+                case EXPER_TYPE_OTHER_CHLORIDE_ION:
                     ctrl_all_items(pMsg->hWin, 0);
                     WM_Exec();
                     exper_print_report(1);
                     ctrl_all_items(pMsg->hWin, 1);
                     break;
-                case EXPER_STAT_CL_EXTEST_FINISHED2:
+                case EXPER_TYPE_MANUAL_TITRATION:
+                    ctrl_all_items(pMsg->hWin, 0);
+                    WM_Exec();
+                    exper_print_report(2);
+                    ctrl_all_items(pMsg->hWin, 1);
+                    break;
+                case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+                case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+                case EXPER_TYPE_ADMIXTURE_BLOCK1:
+                case EXPER_TYPE_ADMIXTURE_BLOCK2:
+                case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
+                case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
                     ctrl_all_items(pMsg->hWin, 0);
                     WM_Exec();
                     exper_print_report(3);
@@ -411,19 +387,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                beep_clicked();
                 // USER START (Optionally insert code for reacting on notification message)
-                switch (stat->stat) {
-                case EXPER_STAT_AGNO3_FINISHED:
-                case EXPER_STAT_BLOCK_FINISHED:
-                case EXPER_STAT_DROPPER_FINISHED:
-                case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
-                case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
-                    GUI_EndDialog(pMsg->hWin, 0);
-                    break;
-                default:
-                    break;
-                }
+                beep_clicked();
+                GUI_EndDialog(pMsg->hWin, 0);
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:

@@ -239,19 +239,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(hItem, GUI_BLUE);
         TEXT_SetTextAlign(hItem, GUI_TA_HCENTER);
         switch (gtest.func) {
-        case MSG_LOAD_UI_EXTEST:
+        case MSG_LOAD_UI_ADMIXTURE:
             exper_data_get(&data, 3);
             TEXT_SetText(hItem, "外加剂检测");
             break;
-        case MSG_LOAD_UI_DROPPER:
+        case MSG_LOAD_UI_MANUAL_TITRATION:
             exper_data_get(&data, 2);
             TEXT_SetText(hItem, "手动滴定");
             break;
-        case MSG_LOAD_UI_STAND:
+        case MSG_LOAD_UI_OTHER:
             exper_data_get(&data, 1);
             TEXT_SetText(hItem, "其他检测");
             break;
-        case MSG_LOAD_UI_BLOCKTEST:
+        case MSG_LOAD_UI_CEMENT:
             exper_data_get(&data, 0);
             TEXT_SetText(hItem, "水泥检测");
             break;
@@ -290,7 +290,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-        if (gtest.func == MSG_LOAD_UI_DROPPER) {
+        if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION) {
             hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
             WM_HideWindow(hItem);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_TEST);
@@ -320,8 +320,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         switch (gtest.func) {
-        case MSG_LOAD_UI_STAND:
-        case MSG_LOAD_UI_EXTEST:
+        case MSG_LOAD_UI_OTHER:
+        case MSG_LOAD_UI_ADMIXTURE:
             TEXT_SetText(hItem, "AgNO3标准液浓度");
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
             EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
@@ -332,7 +332,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3ND_VALUE);
             WM_HideWindow(hItem);
             break;
-        case MSG_LOAD_UI_DROPPER:
+        case MSG_LOAD_UI_MANUAL_TITRATION:
             WM_HideWindow(hItem);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NO3ND_VALUE);
             WM_HideWindow(hItem);
@@ -368,7 +368,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (gtest.func == MSG_LOAD_UI_DROPPER)
+        if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION)
             TEXT_SetText(hItem, "滴定液用量");
         //printf("init step 002\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
@@ -387,7 +387,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetText(hItem, "0.0mV");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NACLND);
-        if (gtest.func == MSG_LOAD_UI_DROPPER)
+        if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION)
             WM_HideWindow(hItem);
         else {
             TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
@@ -395,7 +395,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         // printf("init step 003\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_NACLND_VALUE);
-        if (gtest.func == MSG_LOAD_UI_DROPPER)
+        if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION)
             WM_HideWindow(hItem);
         else {
             EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
@@ -408,50 +408,50 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENTAGE);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (gtest.func == MSG_LOAD_UI_DROPPER)
+        if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION)
             WM_HideWindow(hItem);
-        else if (gtest.func == MSG_LOAD_UI_STAND)
+        else if (gtest.func == MSG_LOAD_UI_OTHER)
             TEXT_SetText(hItem, "氯离子浓度");
-        else if (gtest.func == MSG_LOAD_UI_EXTEST)
+        else if (gtest.func == MSG_LOAD_UI_ADMIXTURE)
             TEXT_SetText(hItem, "氯离子质量分数");
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PERCENT_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_RED);
-        if (gtest.func == MSG_LOAD_UI_DROPPER)
+        if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION)
             WM_HideWindow(hItem);
-        else if (gtest.func == MSG_LOAD_UI_STAND)
+        else if (gtest.func == MSG_LOAD_UI_OTHER)
             TEXT_SetText(hItem, "--- mol/L");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_SNZL);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (gtest.func == MSG_LOAD_UI_DROPPER)
+        if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION)
             WM_HideWindow(hItem);
-        else if (gtest.func == MSG_LOAD_UI_STAND)
+        else if (gtest.func == MSG_LOAD_UI_OTHER)
             TEXT_SetText(hItem, "待测试样体积");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
         EDIT_SetTextColor(hItem, EDIT_CI_ENABELD, GUI_DARKGREEN);
         EDIT_SetFont(hItem, GUI_FONT_24B_ASCII);
         EDIT_SetTextAlign(hItem, TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        if (gtest.func == MSG_LOAD_UI_DROPPER)
+        if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION)
             WM_HideWindow(hItem);
-        else if (gtest.func == MSG_LOAD_UI_STAND)
+        else if (gtest.func == MSG_LOAD_UI_OTHER)
             sprintf(buf, "%dmL", data.sample_volume);
         else
             sprintf(buf, "%.4fg", data.sample_weight);
         EDIT_SetText(hItem, buf);
         // printf("init step 004\r\n");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
-        if (gtest.func == MSG_LOAD_UI_STAND) {
+        if (gtest.func == MSG_LOAD_UI_OTHER) {
             TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
             TEXT_SetTextColor(hItem, GUI_BLACK);
         } else
             WM_HideWindow(hItem);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
-        if (gtest.func == MSG_LOAD_UI_STAND) {
+        if (gtest.func == MSG_LOAD_UI_OTHER) {
             TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
             TEXT_SetTextColor(hItem, GUI_RED);
         } else {
@@ -498,7 +498,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         break;
     case WM_NOTIFY_PARENT:
-        // printf("init step 006\r\n");
         Id = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch (Id) {
@@ -605,7 +604,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 timer_onoff = 0;
 
                 /* cancel */
-                ginfo.func = EXPER_MSG_BLOCK_START;
+                switch (gtest.func) {
+                case MSG_LOAD_UI_CEMENT:
+                    ginfo.func = EXPER_TYPE_CEMENT_BLOCK;
+                    break;
+                case MSG_LOAD_UI_OTHER:
+                    ginfo.func = EXPER_TYPE_OTHER_BLOCK;
+                    break;
+                case MSG_LOAD_UI_ADMIXTURE:
+                    ginfo.func = EXPER_TYPE_ADMIXTURE_BLOCK1;
+                    break;
+                default:
+                    ginfo.func = EXPER_MSG_NONE;
+                    break;
+                }
                 ginfo.flag = test_func;
                 
                 ctrl_all_items(pMsg->hWin, 0);
@@ -638,19 +650,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 }
                 /* send msg to exper thread */
                 switch (gtest.func) {
-                case MSG_LOAD_UI_EXTEST:
-                    msg.msg = EXPER_MSG_BLOCK_EXTEST_START1;
+                case MSG_LOAD_UI_ADMIXTURE:
+                    msg.msg = EXPER_TYPE_ADMIXTURE_BLOCK1;
                     break;
-                case MSG_LOAD_UI_DROPPER:
-                    msg.msg = EXPER_MSG_BLOCK_START;
+                case MSG_LOAD_UI_OTHER:
+                    msg.msg = EXPER_TYPE_OTHER_BLOCK;
                     break;
-                case MSG_LOAD_UI_STAND:
-                    msg.msg = EXPER_MSG_BLOCK_START;
-                    break;
-                case MSG_LOAD_UI_BLOCKTEST:
-                    msg.msg = EXPER_MSG_BLOCK_START; 
+                case MSG_LOAD_UI_CEMENT:
+                    msg.msg = EXPER_TYPE_CEMENT_BLOCK; 
                     break;
                 default:
+                    msg.msg = EXPER_MSG_NONE;
                     break;
                 }
                 exper_msg_set(&msg, gtest.func);
@@ -669,10 +679,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                  * make sure to do the certaion exper and avoid
                  * click mistake.
                  */
-                if (gtest.func == MSG_LOAD_UI_DROPPER)
-                    ginfo.func = EXPER_MSG_DROPPER_START;
-                else
-                    ginfo.func = EXPER_MSG_AGNO3_START;
+                switch (gtest.func) {
+                case MSG_LOAD_UI_MANUAL_TITRATION:
+                    ginfo.func = EXPER_TYPE_MANUAL_TITRATION;
+                    break;
+                case MSG_LOAD_UI_CEMENT:
+                    ginfo.func = EXPER_TYPE_CEMENT_SLIVER_NITRATE;
+                    break;
+                case MSG_LOAD_UI_OTHER:
+                    ginfo.func = EXPER_TYPE_OTHER_SLIVER_NITRATE;
+                    break;
+                case MSG_LOAD_UI_ADMIXTURE:
+                    ginfo.func = EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1;
+                    break;
+                default:
+                    ginfo.func = EXPER_MSG_NONE;
+                    break;
+                }
                 ginfo.flag = test_func;
 
                 ctrl_all_items(pMsg->hWin, 0);
@@ -685,7 +708,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     
                 if (test_func) { /* force stop exper */
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_NO3);
-                    if (gtest.func == MSG_LOAD_UI_DROPPER)
+                    if (gtest.func == MSG_LOAD_UI_MANUAL_TITRATION)
                         BUTTON_SetText(hItem, "开始滴定");
                     else
                         BUTTON_SetText(hItem, "AgNO3检测");
@@ -708,19 +731,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 }
 
                 switch (gtest.func) {
-                case MSG_LOAD_UI_EXTEST:
-                    msg.msg = EXPER_MSG_AGNO3_EXTEST_START1;   
+                case MSG_LOAD_UI_ADMIXTURE:
+                    msg.msg = EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1;   
                     break;
-                case MSG_LOAD_UI_DROPPER:
-                    msg.msg = EXPER_MSG_DROPPER_START;
+                case MSG_LOAD_UI_MANUAL_TITRATION:
+                    msg.msg = EXPER_TYPE_MANUAL_TITRATION;
                     break;
-                case MSG_LOAD_UI_STAND:
-                    msg.msg = EXPER_MSG_AGNO3_START;    
+                case MSG_LOAD_UI_OTHER:
+                    msg.msg = EXPER_TYPE_OTHER_SLIVER_NITRATE;
                     break;
-                case MSG_LOAD_UI_BLOCKTEST:
-                    msg.msg = EXPER_MSG_AGNO3_START; 
+                case MSG_LOAD_UI_CEMENT:
+                    msg.msg = EXPER_TYPE_CEMENT_SLIVER_NITRATE; 
                     break;
                 default:
+                    msg.msg = EXPER_MSG_NONE;
                     break;
                 }
                 exper_msg_set(&msg, gtest.func);
@@ -734,11 +758,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
                 timer_onoff = 0;
-                
-                if (gtest.func == MSG_LOAD_UI_STAND)
-                    ginfo.func = EXPER_MSG_STAND_START;
-                else
-                    ginfo.func = EXPER_MSG_CL_START;
+                switch (gtest.func) {
+                case MSG_LOAD_UI_CEMENT:
+                    ginfo.func = EXPER_TYPE_CEMENT_CHLORIDE_ION;
+                    break;
+                case MSG_LOAD_UI_OTHER:
+                    ginfo.func = EXPER_TYPE_OTHER_CHLORIDE_ION;
+                    break;
+                case MSG_LOAD_UI_ADMIXTURE:
+                    ginfo.func = EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1;
+                    break;
+                default:
+                    ginfo.func = EXPER_MSG_NONE;
+                    break;
+                }
                 ginfo.flag = test_func;
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
@@ -769,19 +802,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 }
 
                 switch (gtest.func) {
-                case MSG_LOAD_UI_EXTEST:
-                    msg.msg = EXPER_MSG_CL_EXTEST_START1;
+                case MSG_LOAD_UI_OTHER:
+                    msg.msg = EXPER_TYPE_OTHER_CHLORIDE_ION;
                     break;
-                case MSG_LOAD_UI_DROPPER:
-                    msg.msg = EXPER_MSG_CL_START;  
+                case MSG_LOAD_UI_CEMENT:
+                    msg.msg = EXPER_TYPE_CEMENT_CHLORIDE_ION; 
                     break;
-                case MSG_LOAD_UI_STAND:
-                    msg.msg = EXPER_MSG_STAND_START;
-                    break;
-                case MSG_LOAD_UI_BLOCKTEST:
-                    msg.msg = EXPER_MSG_CL_START;  
+                case MSG_LOAD_UI_ADMIXTURE:
+                    msg.msg = EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1;
                     break;
                 default:
+                    msg.msg = EXPER_MSG_NONE;
                     break;
                 }
                 exper_msg_set(&msg, gtest.func);
@@ -805,22 +836,22 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     EDIT_SetText(hItem, buf);
 
                     switch (gtest.func) {
-                    case MSG_LOAD_UI_EXTEST:
+                    case MSG_LOAD_UI_ADMIXTURE:
                         exper_data_get(&data, 3);
                         data.nacl_dosage = fval;
                         exper_data_set(&data, 3);
                         break;
-                    case MSG_LOAD_UI_DROPPER:
+                    case MSG_LOAD_UI_MANUAL_TITRATION:
                         exper_data_get(&data, 2);
                         data.nacl_dosage = fval;
                         exper_data_set(&data, 2);
                         break;
-                    case MSG_LOAD_UI_STAND:
+                    case MSG_LOAD_UI_OTHER:
                         exper_data_get(&data, 1);
                         data.nacl_dosage = fval;
                         exper_data_set(&data, 1);
                         break;
-                    case MSG_LOAD_UI_BLOCKTEST:
+                    case MSG_LOAD_UI_CEMENT:
                         exper_data_get(&data, 0);
                         data.nacl_dosage = fval;
                         exper_data_set(&data, 0);
@@ -846,7 +877,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_SNZL_VALUE);
 
                     switch (gtest.func) {
-                    case MSG_LOAD_UI_EXTEST:
+                    case MSG_LOAD_UI_ADMIXTURE:
                         sscanf(p, "%f", &fval);
                         sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 3);
@@ -854,7 +885,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         exper_data_set(&data, 3);
                         EDIT_SetText(hItem, buf);
                         break;
-                    case MSG_LOAD_UI_DROPPER:
+                    case MSG_LOAD_UI_MANUAL_TITRATION:
                         sscanf(p, "%f", &fval);
                         sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 2);
@@ -862,7 +893,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         exper_data_set(&data, 2);
                         EDIT_SetText(hItem, buf);
                         break;
-                    case MSG_LOAD_UI_STAND:
+                    case MSG_LOAD_UI_OTHER:
                         sscanf(p, "%d", &ival);
                         sprintf(buf, "%dmL", ival);
                         exper_data_get(&data, 1);
@@ -870,7 +901,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         exper_data_set(&data, 1);
                         EDIT_SetText(hItem, buf);
                         break;
-                    case MSG_LOAD_UI_BLOCKTEST:
+                    case MSG_LOAD_UI_CEMENT:
                         sscanf(p, "%f", &fval);
                         sprintf(buf, "%.4fg", fval);
                         exper_data_get(&data, 0);
@@ -913,7 +944,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case WM_USER:
-    // printf("init step 008\r\n");
         stat = (struct exper_stat *)pMsg->Data.p;
         switch (stat->stat) {
             case EXPER_STAT_ERR_MOTOR:
@@ -970,8 +1000,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetText(hItem, "清洗");
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
-            case EXPER_STAT_AGNO3_FINISHED:
-            case EXPER_STAT_AGNO3_EXTEST_FINISHED2:
+            case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+            case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+            case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
                 beep_finished();
                 test_func = 0;
                 printf("agno3 finieshed...............................\r\n");
@@ -1001,8 +1032,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
-            case EXPER_STAT_BLOCK_FINISHED:
-            case EXPER_STAT_BLOCK_EXTEST_FINISHED2:
+            case EXPER_TYPE_CEMENT_BLOCK:
+            case EXPER_TYPE_OTHER_BLOCK:
+            case EXPER_TYPE_ADMIXTURE_BLOCK2:
                 beep_finished();
                 test_func = 0;
                 
@@ -1020,8 +1052,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
-            case EXPER_STAT_CL_FINISHED:
-            case EXPER_STAT_CL_EXTEST_FINISHED2:
+            case EXPER_TYPE_CEMENT_CHLORIDE_ION:
+            case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
                 beep_finished();
                 test_func = 0;
 
@@ -1043,7 +1075,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
-            case EXPER_STAT_STAND_FINISHED:
+            case EXPER_TYPE_OTHER_CHLORIDE_ION:
                 beep_finished();
                 test_func = 0;
 
@@ -1069,7 +1101,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
-            case EXPER_STAT_DROPPER_FINISHED:
+            case EXPER_TYPE_MANUAL_TITRATION:
                 beep_finished();
                 test_func = 0;
                 printf("dropper finieshed...............................\r\n");
@@ -1089,9 +1121,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
-            case EXPER_STAT_AGNO3_EXTEST_FINISHED1:
+            case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
                 beep_finished();
-                ginfo.func = EXPER_MSG_AGNO3_EXTEST_START1;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(stat);
+                ctrl_all_items(pMsg->hWin, 1);
+                WM_Exec();
+                ginfo.func = EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1_FINISHED;
                 ginfo.flag = 0;
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
@@ -1108,15 +1145,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     graph_cnt = 1;
                     GRAPH_SCALE_SetOff(hScaleH, 0);
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
-                    msg.msg = EXPER_MSG_AGNO3_EXTEST_START2;
+                    msg.msg = EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2;
                     msg.stop = 0;
                     test_func = 1;
-                    exper_msg_set(&msg, MSG_LOAD_UI_EXTEST);
+                    exper_msg_set(&msg, MSG_LOAD_UI_ADMIXTURE);
                 }
                 break;
-            case EXPER_STAT_BLOCK_EXTEST_FINISHED1:
+            case EXPER_TYPE_ADMIXTURE_BLOCK1:
                 beep_finished();
-                ginfo.func = EXPER_MSG_BLOCK_EXTEST_START1;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(stat);
+                ctrl_all_items(pMsg->hWin, 1);
+                WM_Exec();
+                ginfo.func = EXPER_TYPE_ADMIXTURE_BLOCK1_FINISHED;
                 ginfo.flag = 0;
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
@@ -1134,14 +1176,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     graph_cnt = 1;
                     GRAPH_SCALE_SetOff(hScaleH, 0);
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
-                    msg.msg = EXPER_MSG_BLOCK_EXTEST_START2;
+                    msg.msg = EXPER_TYPE_ADMIXTURE_BLOCK2;
                     msg.stop = 0;
-                    exper_msg_set(&msg, MSG_LOAD_UI_EXTEST);
+                    exper_msg_set(&msg, MSG_LOAD_UI_ADMIXTURE);
                 }
                 break;
-            case EXPER_STAT_CL_EXTEST_FINISHED1:
+            case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
                 beep_finished();
-                ginfo.func = EXPER_MSG_CL_EXTEST_START1;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(stat);
+                ctrl_all_items(pMsg->hWin, 1);
+                WM_Exec();
+                ginfo.func = EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1_FINISHED;
                 ginfo.flag = 0;
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
@@ -1159,9 +1206,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     graph_cnt = 1;
                     GRAPH_SCALE_SetOff(hScaleH, 0);
                     GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
-                    msg.msg = EXPER_MSG_CL_EXTEST_START2;
+                    msg.msg = EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2;
                     msg.stop = 0;
-                    exper_msg_set(&msg, MSG_LOAD_UI_EXTEST);
+                    exper_msg_set(&msg, MSG_LOAD_UI_ADMIXTURE);
                 }
                 break;
             default:

@@ -185,7 +185,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
-                g_ui_msg.msg = MSG_LOAD_UI_BLOCKTEST;
+                g_ui_msg.msg = MSG_LOAD_UI_CEMENT;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
             default:
@@ -197,7 +197,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
-                g_ui_msg.msg = MSG_LOAD_UI_STAND;
+                g_ui_msg.msg = MSG_LOAD_UI_OTHER;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
             default:
@@ -233,7 +233,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
-                g_ui_msg.msg = MSG_LOAD_UI_DROPPER;
+                g_ui_msg.msg = MSG_LOAD_UI_MANUAL_TITRATION;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
             default:
@@ -245,7 +245,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 beep_clicked();
-                g_ui_msg.msg = MSG_LOAD_UI_EXTEST;
+                g_ui_msg.msg = MSG_LOAD_UI_ADMIXTURE;
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
             default:

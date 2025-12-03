@@ -15,17 +15,9 @@ struct data_item {
 struct result_data {
     uint8_t magic;
     uint8_t crc;
-
     uint16_t index;
-
-#define DATA_TYPE_STAND    0x01
-#define DATA_TYPE_CL       0x02
-#define DATA_TYPE_DORRPER  0x03
-#define DATA_TYPE_EXTEST   0x04
     uint8_t type;
-
     uint8_t valid;
-    
     uint8_t year;
     uint8_t month;
     uint8_t day;
@@ -39,7 +31,8 @@ struct result_data {
     float ppm;
     float block_agno3_used;
     float agno3_dosage;
-
+    float agno3_agno3_used;
+    float agno3_agno3_used2;
     float block_agno3_used2;
     float cl_agno3_used2;
 };

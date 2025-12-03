@@ -59,7 +59,6 @@ struct exper_ctrl {
 
 struct experiment {
     char *name;
-    
     struct exper_data data;
     struct result_data res;
 
@@ -91,10 +90,10 @@ void exper_init(void)
     static struct exper_ctrl ctrl;
     static struct WM_MESSAGE ui;
     
-    gexper[0].name = "shuini";
-    gexper[1].name = "qita";
-    gexper[2].name = "dropper";
-    gexper[3].name = "extest";
+    gexper[0].name = "CEMENT";
+    gexper[1].name = "OTHER";
+    gexper[2].name = "MANUAL_TITRATION";
+    gexper[3].name = "ADMIXTURE";
 
     for (i = 0; i < EXPER_CNT; i++) {
         gexper[i].ctrl = &ctrl;
@@ -144,7 +143,7 @@ void exper_print_report(int idx)
 {
     if (idx >= EXPER_CNT)
         return;
-    
+
     report_show(&gexper[idx].res);
 }
               
@@ -406,6 +405,8 @@ static void result_data_creat(struct experiment *exper, int type)
     res->agno3_dosage = exper->data.agno3_dosage;
     res->block_agno3_used2 = exper->data.block_agno3_used2;
     res->cl_agno3_used2 = exper->data.cl_agno3_used2;
+    res->agno3_agno3_used = exper->data.agno3_agno3_used;
+    res->agno3_agno3_used2 = exper->data.agno3_agno3_used2;
 
     RTC_GetTime(RTC_Format_BIN, &RTC_TimeStructure);
     RTC_GetDate(RTC_Format_BIN, &RTC_DateStructure);
@@ -447,7 +448,7 @@ static void do_test(struct experiment *exper, int mode)
     float v;
 
     // fix 0.01 浓度 bug
-    if (data->agno3_dosage < 0.015 || mode == EXPER_MSG_DROPPER_START) {
+    if (data->agno3_dosage < 0.015 || mode == EXPER_TYPE_MANUAL_TITRATION) {
         volt_line = 3.3;
         volt_3to1_line = 6.5;
     }
@@ -560,148 +561,130 @@ static void do_test(struct experiment *exper, int mode)
             }
             break;
         case STATUS_EXPER_STOP:
+            EXPER_DBG_PRINT("[exper]: exper %d finished.\r\n", mode);
             switch (mode) {
-            case EXPER_MSG_AGNO3_START:
+            case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+            case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
                 data->agno3_agno3_used = count_agno3_used(exper);
                 data->agno3_dosage = data->nacl_dosage * 10 / data->agno3_agno3_used;
-                
-                EXPER_DBG_PRINT("\r\n\r\n\r\nAgNo3 test finished.\r\n");
-                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
-                    ctrl->count, ctrl->jump);
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->agno3_agno3_used);
-                EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", data->agno3_dosage);
-
-                stat->stat = EXPER_STAT_AGNO3_FINISHED;
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used %.3f\r\n", data->agno3_agno3_used);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate concentration %.4f\r\n", data->agno3_dosage);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_BLOCK_START:
+            case EXPER_TYPE_CEMENT_BLOCK:
+            case EXPER_TYPE_OTHER_BLOCK:
                 data->block_agno3_used = count_agno3_used(exper);
-
-                EXPER_DBG_PRINT("\r\n\r\n\r\nblock test finished.\r\n");
-                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
-                    ctrl->count, ctrl->jump);
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->block_agno3_used);
-
-                stat->stat = EXPER_STAT_BLOCK_FINISHED;
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used actual %.3f\r\n", data->block_agno3_used);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_CL_START:
+            case EXPER_TYPE_CEMENT_CHLORIDE_ION:
                 data->cl_agno3_used = count_agno3_used(exper);
                 data->cl_percentage = (data->agno3_dosage * (float)3.545 * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_weight;
-
-                EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->cl_agno3_used);
-                EXPER_DBG_PRINT("cl percentage is %f%%\r\n", data->cl_percentage);
-                
-                result_data_creat(exper, DATA_TYPE_CL);
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used %.3f\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("[exper]: chloride ion percentage is %f%%\r\n", data->cl_percentage);
+                result_data_creat(exper, mode);
                 result_data_save(exper);
-                stat->stat = EXPER_STAT_CL_FINISHED;
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_STAND_START:
+            case EXPER_TYPE_OTHER_CHLORIDE_ION:
                 data->cl_agno3_used = count_agno3_used(exper);
                 data->cl_dosage = (data->agno3_dosage * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_volume;
                 data->ppm = data->cl_dosage * (float)35450;
-                
-                EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %f\r\n", data->cl_agno3_used);
-                EXPER_DBG_PRINT("cl dosage is %f\r\n", data->cl_dosage);
-                EXPER_DBG_PRINT("ppm %f\r\n", data->ppm);
-
-                result_data_creat(exper, DATA_TYPE_STAND);
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used actual %f\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("[exper]: chloride ion concentration %f\r\n", data->cl_dosage);
+                EXPER_DBG_PRINT("[exper]: ppm %f\r\n", data->ppm);
+                result_data_creat(exper, mode);
                 result_data_save(exper);
-                stat->stat = EXPER_STAT_STAND_FINISHED;
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_DROPPER_START:
+            case EXPER_TYPE_MANUAL_TITRATION:
                 data->agno3_agno3_used = count_agno3_used(exper);
-                
-                EXPER_DBG_PRINT("\r\n\r\n\r\ncl test finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %f\r\n", data->agno3_agno3_used);
-
-                result_data_creat(exper, DATA_TYPE_DORRPER);
-                stat->stat = EXPER_STAT_DROPPER_FINISHED;
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used %f\r\n", data->agno3_agno3_used);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_AGNO3_EXTEST_START1:
+            case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
                 data->agno3_agno3_used = count_agno3_used(exper);
                 data->agno3_agno3_used2 = data->agno3_used;
-                
-                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_AGNO3_EXTEST_START1 finished.\r\n");
-                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
-                    ctrl->count, ctrl->jump);
-                EXPER_DBG_PRINT("AgNo3 used actual %.3f\r\n", data->agno3_agno3_used);
-                EXPER_DBG_PRINT("AgNo3 total used %.3f\r\n", data->agno3_agno3_used2);
-
-                stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED1;
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used %.3f\r\n", data->agno3_agno3_used);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate total used %.3f\r\n", data->agno3_agno3_used2);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_AGNO3_EXTEST_START2:
+            case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
                 data->agno3_agno3_used2 += count_agno3_used(exper);
-                EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->agno3_agno3_used);
-                EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->agno3_agno3_used2);
-                
                 data->agno3_dosage = data->nacl_dosage * 10 / (data->agno3_agno3_used2 - data->agno3_agno3_used);
-                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_AGNO3_EXTEST_START2 finished.\r\n");
-                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
-                    ctrl->count, ctrl->jump);       
-                EXPER_DBG_PRINT("AgNo3 nongdu is %.4f\r\n", data->agno3_dosage);
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used step1 %.3f.\r\n", data->agno3_agno3_used);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used step2 %.3f.\r\n", data->agno3_agno3_used2);     
+                EXPER_DBG_PRINT("[exper]: concentration is %.4f.\r\n", data->agno3_dosage);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
                 /* agno3 test stage2 finished in extest
                  * is same with agno3 finished
                  */
-                stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED2;
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_BLOCK_EXTEST_START1:
+            case EXPER_TYPE_ADMIXTURE_BLOCK1:
                 data->block_agno3_used = count_agno3_used(exper);
                 data->block_agno3_used2 = data->agno3_used;
-
-                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_BLOCK_EXTEST_START1 finished.\r\n");
-                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
-                    ctrl->count, ctrl->jump);
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->block_agno3_used);
-                EXPER_DBG_PRINT("AgNo3 total used %.3f\r\n", data->block_agno3_used2);
-
-                stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED1;
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used %.3f.\r\n", data->block_agno3_used);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate total used %.3f.\r\n", data->block_agno3_used2);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_BLOCK_EXTEST_START2:
+            case EXPER_TYPE_ADMIXTURE_BLOCK2:
                 data->block_agno3_used2 += count_agno3_used(exper);
-                EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->block_agno3_used);    
-                EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->block_agno3_used2);
-                
-                //data->block_agno3_used = data->block_agno3_used2 - data->block_agno3_used;
-                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_BLOCK_EXTEST_START2 finished.\r\n");
-                EXPER_DBG_PRINT("ctrl->count = %d, ctrl->jump = %d.\r\n",
-                    ctrl->count, ctrl->jump);
-                stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED2;
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used step1 %.3f\r\n", data->block_agno3_used);    
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used step2 %.3f\r\n", data->block_agno3_used2);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_CL_EXTEST_START1:
+            case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
                 data->cl_agno3_used = count_agno3_used(exper);
                 data->cl_agno3_used2 = data->agno3_used;
-
-                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_CL_EXTEST_START1 finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used actual is %.3f\r\n", data->cl_agno3_used);
-                EXPER_DBG_PRINT("AgNo3 total used %.3f\r\n", data->cl_agno3_used2);
-                
-                stat->stat = EXPER_STAT_CL_EXTEST_FINISHED1;
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used actual %.3f.\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate total used %.3f.\r\n", data->cl_agno3_used2);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
-            case EXPER_MSG_CL_EXTEST_START2:
+            case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
                 data->cl_agno3_used2 += count_agno3_used(exper);
-
                 v = ((data->cl_agno3_used - data->block_agno3_used) + (data->cl_agno3_used2 - data->block_agno3_used2)) / 2.0;
                 data->cl_percentage = (data->agno3_dosage * (float)3.545 * v) / data->sample_weight;
-                
-                EXPER_DBG_PRINT("\r\n\r\n\r\nEXPER_MSG_CL_EXTEST_START2 finished.\r\n");
-                EXPER_DBG_PRINT("AgNo3 used step1 %.3f\r\n", data->cl_agno3_used);
-                EXPER_DBG_PRINT("AgNo3 used step2 %.3f\r\n", data->cl_agno3_used2);
-                EXPER_DBG_PRINT("cl percentage is %f%%\r\n", data->cl_percentage);
-                
-                result_data_creat(exper, DATA_TYPE_EXTEST);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used step1 %.3f\r\n", data->cl_agno3_used);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used step2 %.3f\r\n", data->cl_agno3_used2);
+                EXPER_DBG_PRINT("[exper]: chloride ion percentage %f%%\r\n", data->cl_percentage);
+                result_data_creat(exper, mode);
                 result_data_save(exper);
-                stat->stat = EXPER_STAT_CL_EXTEST_FINISHED2;
+                stat->stat = mode;
                 exper_update_ui(exper);
                 return;
             default:
@@ -711,8 +694,7 @@ static void do_test(struct experiment *exper, int mode)
             break;
         }
 
-        EXPER_DBG_PRINT("exper sm = 0x%x, finished sm = 0x%x\r\n",
-            exper_sm, stop_sm);
+        EXPER_DBG_PRINT("exper sm = 0x%x, finished sm = 0x%x\r\n", exper_sm, stop_sm);
 
         stat->stat = EXPER_STAT_UPDATE_GRAPH;
         exper_update_ui(exper);
@@ -727,63 +709,36 @@ void exper_task(void *args)
         switch (cur_exper->msg->msg) {
         case EXPER_MSG_NONE:
             break;
-        case EXPER_MSG_AGNO3_START:
-            EXPER_DBG_PRINT("EXPER_MSG_AGNO3_START\r\n");     
-#ifdef EXPER_TEST
-            cur_exper->data.agno3_agno3_used = 10.1;
-            cur_exper->data.agno3_used = 11.3;
-            cur_exper->data.agno3_dosage = 0.0312;
-            cur_exper->stat->stat = EXPER_STAT_AGNO3_FINISHED;
-            exper_update_ui(cur_exper);
-#else        
-            do_test(cur_exper, EXPER_MSG_AGNO3_START);
-#endif            
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+        case EXPER_TYPE_MANUAL_TITRATION:
+        case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+        case EXPER_TYPE_OTHER_BLOCK:
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+            EXPER_DBG_PRINT("exper_task: run task id %d\r\n", cur_exper->msg->msg);
+            do_test(cur_exper, cur_exper->msg->msg);
             cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
-        case EXPER_MSG_DROPPER_START:
-             EXPER_DBG_PRINT("EXPER_MSG_DROPPER_START\r\n");     
-#ifdef EXPER_TEST
-            cur_exper->data.agno3_agno3_used = 10.1;
-            cur_exper->data.agno3_used = 11.3;
-            cur_exper->data.agno3_dosage = 0.0312;
-            cur_exper->stat->stat = EXPER_STAT_DROPPER_FINISHED;
-            exper_update_ui(cur_exper);
-#else        
-            do_test(cur_exper, EXPER_MSG_DROPPER_START);
-#endif            
-            cur_exper->msg->msg = EXPER_MSG_NONE;
-            break;
-        case EXPER_MSG_BLOCK_START:
-            EXPER_DBG_PRINT("EXPER_MSG_BLOCK_START\r\n");
-#ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_BLOCK_FINISHED;
-            exper_update_ui(cur_exper);
-#else            
-            do_test(cur_exper, EXPER_MSG_BLOCK_START);
-#endif            
-            cur_exper->msg->msg = EXPER_MSG_NONE;
-            break;
-        case EXPER_MSG_CL_START:
-            EXPER_DBG_PRINT("EXPER_MSG_CL_START\r\n");
-#ifdef EXPER_TEST
-            result_data_creat(cur_exper, DATA_TYPE_CL);
-            cur_exper->stat->stat = EXPER_STAT_CL_FINISHED;
-            exper_update_ui(cur_exper);
-#else             
-            do_test(cur_exper, EXPER_MSG_CL_START);
-#endif            
-            cur_exper->msg->msg = EXPER_MSG_NONE;
-            break;
-        case EXPER_MSG_STAND_START:
-            EXPER_DBG_PRINT("EXPER_MSG_STAND_START\r\n");
-#ifdef EXPER_TEST
-            result_data_creat(cur_exper, DATA_TYPE_STAND);
-            cur_exper->stat->stat = EXPER_STAT_STAND_FINISHED;
-            exper_update_ui(cur_exper);
-#else              
-            do_test(cur_exper, EXPER_MSG_STAND_START);
-#endif            
-            cur_exper->msg->msg = EXPER_MSG_NONE;
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+        case EXPER_TYPE_ADMIXTURE_BLOCK1:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
+            EXPER_DBG_PRINT("exper_task: run task id %d\r\n", cur_exper->msg->msg);
+            do_test(cur_exper, cur_exper->msg->msg);
+            vTaskSuspendAll();
+            switch (cur_exper->msg->msg) {
+            case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+            case EXPER_TYPE_ADMIXTURE_BLOCK2:
+            case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+                break;
+            default:
+                cur_exper->msg->msg = EXPER_MSG_NONE;
+                break;
+            }
+            xTaskResumeAll();
             break;
         case EXPER_MSG_OIL_GET:
             exper_oil_get(cur_exper);
@@ -797,78 +752,6 @@ void exper_task(void *args)
             exper_oil_clear(cur_exper);
             cur_exper->msg->msg = EXPER_MSG_NONE;
             break;
-
-        /* add for extest..... */
-        case EXPER_MSG_AGNO3_EXTEST_START1:
-            EXPER_DBG_PRINT("EXPER_MSG_AGNO3_EXTEST_START1\r\n");
-#ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED1;
-            exper_update_ui(cur_exper);
-#else
-            do_test(cur_exper, EXPER_MSG_AGNO3_EXTEST_START1);
-#endif
-            vTaskSuspendAll();
-            if (cur_exper->msg->msg != EXPER_MSG_AGNO3_EXTEST_START2)
-                cur_exper->msg->msg = EXPER_MSG_NONE;
-            xTaskResumeAll();
-            break;
-        case EXPER_MSG_AGNO3_EXTEST_START2:
-            EXPER_DBG_PRINT("EXPER_MSG_AGNO3_EXTEST_START2\r\n");
-#ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_AGNO3_EXTEST_FINISHED2;
-            exper_update_ui(cur_exper);
-#else
-            do_test(cur_exper, EXPER_MSG_AGNO3_EXTEST_START2);
-#endif            
-            cur_exper->msg->msg = EXPER_MSG_NONE;
-            break;
-        case EXPER_MSG_BLOCK_EXTEST_START1:
-            EXPER_DBG_PRINT("EXPER_MSG_BLOCK_EXTEST_START1\r\n");
-#ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED1;
-            exper_update_ui(cur_exper);
-#else            
-            do_test(cur_exper, EXPER_MSG_BLOCK_EXTEST_START1);
-#endif     
-            vTaskSuspendAll();
-            if (cur_exper->msg->msg != EXPER_MSG_BLOCK_EXTEST_START2)
-                cur_exper->msg->msg = EXPER_MSG_NONE;
-            xTaskResumeAll();
-            break;
-        case EXPER_MSG_BLOCK_EXTEST_START2:
-            EXPER_DBG_PRINT("EXPER_MSG_BLOCK_EXTEST_START2\r\n");
-#ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_BLOCK_EXTEST_FINISHED2;
-            exper_update_ui(cur_exper);
-#else                       
-            do_test(cur_exper, EXPER_MSG_BLOCK_EXTEST_START2);
-#endif
-            cur_exper->msg->msg = EXPER_MSG_NONE;
-            break;
-        case EXPER_MSG_CL_EXTEST_START1:
-            EXPER_DBG_PRINT("EXPER_MSG_CL_EXTEST_START1\r\n");
-#ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_CL_EXTEST_FINISHED1;
-            exper_update_ui(cur_exper);
-#else
-            do_test(cur_exper, EXPER_MSG_CL_EXTEST_START1);
-#endif
-            vTaskSuspendAll();
-            if (cur_exper->msg->msg != EXPER_MSG_CL_EXTEST_START2)
-                cur_exper->msg->msg = EXPER_MSG_NONE;
-            xTaskResumeAll();
-            break;
-        case EXPER_MSG_CL_EXTEST_START2:
-            EXPER_DBG_PRINT("EXPER_MSG_CL_EXTEST_START2\r\n");
-#ifdef EXPER_TEST
-            cur_exper->stat->stat = EXPER_STAT_CL_EXTEST_FINISHED2;
-            result_data_creat(cur_exper, DATA_TYPE_EXTEST);
-            exper_update_ui(cur_exper);
-#else
-            do_test(cur_exper, EXPER_MSG_CL_EXTEST_START2);
-#endif
-            cur_exper->msg->msg = EXPER_MSG_NONE;
-            break;
         default:
             break;
         }
@@ -880,17 +763,17 @@ void exper_msg_set(struct exper_msg *msg, int func)
     int index;
 
     switch (func) {
-    case MSG_LOAD_UI_EXTEST:
+    case MSG_LOAD_UI_ADMIXTURE:
         index = 3;
         break;
-    case MSG_LOAD_UI_DROPPER:
-        index = 2; 
+    case MSG_LOAD_UI_MANUAL_TITRATION:
+        index = 2;
         break;
-    case MSG_LOAD_UI_STAND:
-        index = 1;  
+    case MSG_LOAD_UI_OTHER:
+        index = 1;
         break;
-    case MSG_LOAD_UI_BLOCKTEST:
-        index = 0;  
+    case MSG_LOAD_UI_CEMENT:
+        index = 0;
         break;
     default:
         EXPER_DBG_PRINT("invalid func id %d\r\n", func);
@@ -898,7 +781,7 @@ void exper_msg_set(struct exper_msg *msg, int func)
     }
 
     cur_exper = &(gexper[index]);
-    EXPER_DBG_PRINT("exper %s get msg.msg=%x, stop=%d\r\n",
+    EXPER_DBG_PRINT("exper %s get msg.msg=0x%x, stop=%d\r\n",
         cur_exper->name, msg->msg, msg->stop);
     memcpy(cur_exper->msg, msg, sizeof(struct exper_msg));
 }

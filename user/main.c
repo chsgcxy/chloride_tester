@@ -72,12 +72,12 @@ static void task_ui(void *args)
 		case MSG_LOAD_UI_MENU:
 			main_menu_creat();
 			break;
-		case MSG_LOAD_UI_BLOCKTEST:
-			test_func.func = MSG_LOAD_UI_BLOCKTEST;
+		case MSG_LOAD_UI_CEMENT:
+			test_func.func = MSG_LOAD_UI_CEMENT;
 			ui_blocktest_creat(&test_func);
 			break;
-		case MSG_LOAD_UI_STAND:
-			test_func.func = MSG_LOAD_UI_STAND;
+		case MSG_LOAD_UI_OTHER:
+			test_func.func = MSG_LOAD_UI_OTHER;
 			ui_blocktest_creat(&test_func);
 			break;
 		case MSG_LOAD_UI_SETTING:
@@ -95,12 +95,12 @@ static void task_ui(void *args)
 			vTaskResume(handle_touch);
 			ui_setting_creat();
 			break;
-		case MSG_LOAD_UI_DROPPER:
-			test_func.func = MSG_LOAD_UI_DROPPER;
+		case MSG_LOAD_UI_MANUAL_TITRATION:
+			test_func.func = MSG_LOAD_UI_MANUAL_TITRATION;
 			ui_blocktest_creat(&test_func);
 			break;
-		case MSG_LOAD_UI_EXTEST:
-			test_func.func = MSG_LOAD_UI_EXTEST;
+		case MSG_LOAD_UI_ADMIXTURE:
+			test_func.func = MSG_LOAD_UI_ADMIXTURE;
 			ui_blocktest_creat(&test_func);
 			break;
 		default:
@@ -147,7 +147,6 @@ int main(void)
 	//GUI_DrawBitmap(&bmlogo, 315, 200);
 	//GUI_SetFont(&GUI_FontHZ_kaiti_20);
 	GUI_SetColor(GUI_WHITE);
-	//GUI_DispStringHCenterAt("ZCL-IIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(È«ï¿½Ô¶ï¿½ï¿½ï¿½Î»ï¿½Î¶ï¿½ï¿½ï¿½)", 400, 60);
 	GUI_SetFont(&GUI_FontHZ_kaiti_28);
 	GUI_DispStringHCenterAt("È«×Ô¶¯ÂÈÀë×Ó¼ì²âÒÇ", 400, 220);
 	delay_ms(1500);

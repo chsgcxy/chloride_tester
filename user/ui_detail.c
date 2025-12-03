@@ -212,7 +212,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_EXP);
         //BUTTON_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         //BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
-        //BUTTON_SetText(hItem, "导出");
+        //BUTTON_SetText(hItem, "锟斤拷锟斤拷");
         //
         // Initialization of 'Button'
         //
@@ -278,7 +278,35 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_XSYYL_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        sprintf(buf, "%.2fmL", pres->cl_agno3_used);
+        switch (pres->type) {
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+        case EXPER_TYPE_MANUAL_TITRATION:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+            sprintf(buf, "%.2fmL", pres->agno3_agno3_used);
+            break;
+        case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_OTHER_BLOCK:
+        case EXPER_TYPE_ADMIXTURE_BLOCK1:
+            sprintf(buf, "%.2fmL", pres->block_agno3_used);
+            break;
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
+            sprintf(buf, "%.2fmL", pres->cl_agno3_used);
+            break;
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+            sprintf(buf, "%.2fmL", pres->agno3_agno3_used2);
+            break;
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
+            sprintf(buf, "%.2fmL", pres->block_agno3_used2);
+            break;
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+            sprintf(buf, "%.2fmL", pres->cl_agno3_used2);
+            break;
+        default:
+            break;
+        }
         TEXT_SetText(hItem, buf);
         //
         // Initialization of 'Text'
@@ -287,46 +315,57 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         switch (pres->type) {
-        case DATA_TYPE_STAND:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             TEXT_SetText(hItem, "氯离子浓度");
             break;
-        case DATA_TYPE_EXTEST:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
             TEXT_SetText(hItem, "试样氯离子质量分数");
             break;
-        default:
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
             TEXT_SetText(hItem, "水泥氯离子质量分数");
             break;
+        default:
+            WM_HideWindow(hItem);
+            break;
         }
-            
+
         //
         // Initialization of 'Text'
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_MKSYHLLZ_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        if (pres->type == DATA_TYPE_STAND)
+        switch (pres->type) {
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             sprintf(buf, "%fmol/L", pres->cl_dosage);
-        else
+            TEXT_SetText(hItem, buf);
+            break;
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
             sprintf(buf, "%.3f%%", pres->cl_percentage);
-        TEXT_SetText(hItem, buf);
+            TEXT_SetText(hItem, buf);
+            break;
+        default:
+            WM_HideWindow(hItem);
+            break;
+        }
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM);
         TEXT_SetFont(hItem,  &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         switch (pres->type) {
-        case DATA_TYPE_CL:
-        case DATA_TYPE_EXTEST:
-            WM_HideWindow(hItem);
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             break;
         default:
+            WM_HideWindow(hItem);
             break;
         }
-            
+
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_PPM_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
         switch (pres->type) {
-        case DATA_TYPE_STAND:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             sprintf(buf, "%.1f", pres->ppm);
             TEXT_SetText(hItem, buf);
             break;

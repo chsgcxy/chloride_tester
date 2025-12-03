@@ -3,26 +3,26 @@
 
 #include "WM.h"
 
-struct exper_msg {
-    int stop;
-
-#define EXPER_MSG_NONE           0x00
-#define EXPER_MSG_AGNO3_START    0x01
-#define EXPER_MSG_BLOCK_START    0x02
-#define EXPER_MSG_CL_START       0x03
-#define EXPER_MSG_STAND_START    0x04
-#define EXPER_MSG_OIL_GET        0x05
-#define EXPER_MSG_OIL_PUT        0x06
-#define EXPER_MSG_OIL_CLEAR      0x07
-#define EXPER_MSG_DROPPER_START  0x08
-
-/* add this for extest, a new exper method, shit..... */
-#define EXPER_MSG_AGNO3_EXTEST_START1    0x10
-#define EXPER_MSG_AGNO3_EXTEST_START2    0x11
-#define EXPER_MSG_BLOCK_EXTEST_START1    0x12
-#define EXPER_MSG_BLOCK_EXTEST_START2    0x13
-#define EXPER_MSG_CL_EXTEST_START1       0x14
-#define EXPER_MSG_CL_EXTEST_START2       0x15
+#define EXPER_MSG_NONE                                0x00
+#define EXPER_TYPE_CEMENT_SLIVER_NITRATE              0x01
+#define EXPER_TYPE_CEMENT_BLOCK                       0x02
+#define EXPER_TYPE_CEMENT_CHLORIDE_ION                0x03
+#define EXPER_TYPE_OTHER_SLIVER_NITRATE               0x11
+#define EXPER_TYPE_OTHER_BLOCK                        0x12
+#define EXPER_TYPE_OTHER_CHLORIDE_ION                 0x13
+#define EXPER_TYPE_MANUAL_TITRATION                   0x21
+#define EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1          0x31
+#define EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2          0x32
+#define EXPER_TYPE_ADMIXTURE_BLOCK1                   0x33
+#define EXPER_TYPE_ADMIXTURE_BLOCK2                   0x34
+#define EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1            0x35
+#define EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2            0x36
+#define EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1_FINISHED 0x37
+#define EXPER_TYPE_ADMIXTURE_BLOCK1_FINISHED          0x38
+#define EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1_FINISHED   0x39
+#define EXPER_MSG_OIL_GET                             0x41
+#define EXPER_MSG_OIL_PUT                             0x42
+#define EXPER_MSG_OIL_CLEAR                           0x43
 
 #define DATA_MSG_DEL             0xA0
 #define DATA_MSG_DEL_ALL         0xA1
@@ -36,6 +36,18 @@ struct exper_msg {
 
 #define INFO_DATA_EXPORT         0xD1
 #define INFO_DATA_EXPROTING      0xD2
+
+#define EXPER_STAT_ERR_MOTOR             0xE1
+#define EXPER_STAT_UPDATE_PROGRESS       0xE2
+#define EXPER_STAT_UPDATE_GRAPH          0xE3
+#define EXPER_STAT_OIL_GET_FINISHED      0xE4
+#define EXPER_STAT_OIL_PUT_FINISHED      0xE5
+#define EXPER_STAT_OIL_CLEAR_FINISHED    0xE6
+#define EXPER_STAT_FAIL                  0xF0
+#define EXPER_STAT_UPDATE_AGNO3_USED     0xF1
+
+struct exper_msg {
+    int stop;
     int msg;
 };
 
@@ -83,31 +95,6 @@ struct exper_data {
 };
 
 struct exper_stat {
-#define EXPER_STAT_ERR_MOTOR             0x01
-#define EXPER_STAT_UPDATE_PROGRESS       0x02
-#define EXPER_STAT_UPDATE_GRAPH          0x03
-#define EXPER_STAT_OIL_GET_FINISHED      0x04
-#define EXPER_STAT_OIL_PUT_FINISHED      0x05
-#define EXPER_STAT_OIL_CLEAR_FINISHED    0x06
-#define EXPER_STAT_AGNO3_FINISHED        0x07
-#define EXPER_STAT_BLOCK_FINISHED        0x08
-#define EXPER_STAT_CL_FINISHED           0x09
-#define EXPER_STAT_STAND_FINISHED        0x0A
-#define EXPER_STAT_FAIL                  0x0B
-#define EXPER_STAT_UPDATE_AGNO3_USED     0x0C
-#define EXPER_STAT_DROPPER_FINISHED      0x0D
-
-/**
- * add this for extest, correspond to exper_msg,
- * oh shit................
- */
-#define EXPER_STAT_AGNO3_EXTEST_FINISHED1    0x20
-#define EXPER_STAT_AGNO3_EXTEST_FINISHED2    0x21
-#define EXPER_STAT_BLOCK_EXTEST_FINISHED1    0x22
-#define EXPER_STAT_BLOCK_EXTEST_FINISHED2    0x23
-#define EXPER_STAT_CL_EXTEST_FINISHED1       0x24
-#define EXPER_STAT_CL_EXTEST_FINISHED2       0x25
-
     int stat;
     struct exper_data data;
 };

@@ -5,14 +5,14 @@
 
 struct ui_msg {
 #define MSG_LOAD_UI_MENU         0x01
-#define MSG_LOAD_UI_BLOCKTEST    0x02
-#define MSG_LOAD_UI_STAND        0x03
+#define MSG_LOAD_UI_CEMENT    0x02
+#define MSG_LOAD_UI_OTHER        0x03
 #define MSG_LOAD_UI_SETTING      0x04
 #define MSG_LOAD_UI_DATA         0x05
 #define MSG_LOAD_UI_DETAIL       0x06
 #define MSG_LOAD_UI_TOUCH_CALC   0x07
-#define MSG_LOAD_UI_DROPPER      0x08
-#define MSG_LOAD_UI_EXTEST       0x09
+#define MSG_LOAD_UI_MANUAL_TITRATION      0x08
+#define MSG_LOAD_UI_ADMIXTURE       0x09
     int msg;
     int param0;
 };

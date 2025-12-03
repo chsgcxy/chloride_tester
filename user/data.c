@@ -4,6 +4,7 @@
 #include "main.h"
 #include "diskio.h"
 #include "string.h"
+#include "experiment.h"
 
 #define DATA_CFG_SECTOR      W25X20_BLOCK_TO_SECTOR(1)
 #define DATA_START_SECTOR    W25X20_BLOCK_TO_SECTOR(2)
@@ -302,11 +303,33 @@ int data_export(struct lb_idx *table, int len)
             //printf("creat file fail %d\r\n", res);
             continue;
         }
-            
-        if (res_data.type == DATA_TYPE_STAND)
-            sprintf(line, "实验类型:  其他氯离子检测实验\r\n");
-        else
+
+        switch (res_data.type) {
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+        case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
             sprintf(line, "实验类型:  水泥氯离子检测实验\r\n");
+            break;
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+        case EXPER_TYPE_OTHER_BLOCK:
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
+            sprintf(line, "实验类型:  其他氯离子检测实验\r\n");
+            break;
+        case EXPER_TYPE_MANUAL_TITRATION:
+            sprintf(line, "实验类型:  手动滴定实验\r\n");
+            break;
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+        case EXPER_TYPE_ADMIXTURE_BLOCK1:
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+            sprintf(line, "实验类型:  外加剂检测实验\r\n");
+            break;
+        default:
+            break;
+        }
+
         f_write(&file, line, strlen(line), &bw);
         sprintf(line, "序号:  %d\r\n", res_data.index);
         f_write(&file, line, strlen(line), &bw);
@@ -320,14 +343,23 @@ int data_export(struct lb_idx *table, int len)
         f_write(&file, line, strlen(line), &bw);
         sprintf(line, "硝酸银用量:  %.2fmL\r\n", res_data.cl_agno3_used);
         f_write(&file, line, strlen(line), &bw);
-        if (res_data.type == DATA_TYPE_CL) {
+        switch (res_data.type) {
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
             sprintf(line, "水泥氯离子质量分数:  %.3f%%\r\n", res_data.cl_percentage);
             f_write(&file, line, strlen(line), &bw);
-        } else {
+            break;
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
             sprintf(line, "PPM:  %.1f\r\n", res_data.ppm);
             f_write(&file, line, strlen(line), &bw);
             sprintf(line, "氯离子浓度:  %fmol/L\r\n", res_data.cl_dosage);
             f_write(&file, line, strlen(line), &bw);
+            break;
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+            sprintf(line, "氯离子浓度:  %fmol/L\r\n", res_data.cl_dosage);
+            f_write(&file, line, strlen(line), &bw);
+            break;
+        default:
+            break;
         }
         sprintf(line, "\r\n试样检测数据:\r\n");
         f_write(&file, line, strlen(line), &bw);
