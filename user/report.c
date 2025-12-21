@@ -8,7 +8,7 @@
  * Chinese characters are not used directly because it depends on the encoding of the editor.
  * use amo tools function ascii2hex to creat this string.
  * */
-#define STRING_TITLE        "检测报告"
+#define STRING_TITLE        "   检测报告"
 #define STRING_TYPE         "实验类型: "
 #define STRING_INDEX        "实验编号: "
 #define STRING_DATE         "测试日期: "
