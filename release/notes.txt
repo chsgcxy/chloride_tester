@@ -16,7 +16,7 @@ printer_v3.5.2_20251220.hex
 1. 修改了打印报告中的标题对齐
 
 printer_v3.5.3_20260707.hex
-
+修改了阈值电压
 volt_line = 3.3;
 volt_3to1_line = 5.0;
 if (mode == EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2 ||
@@ -24,4 +24,17 @@ if (mode == EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2 ||
     mode == EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2) {
     volt_line = 3.0;
     volt_3to1_line = 4.0;
+
+printer_v3.5.4_20260707.hex
+修改了阈值电压
+if (data->agno3_dosage < 0.015 || mode == EXPER_TYPE_MANUAL_TITRATION) {
+    volt_line = 3.3;
+    volt_3to1_line = 5.5;
+    if (mode == EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2 ||
+        mode == EXPER_TYPE_ADMIXTURE_BLOCK2 ||
+        mode == EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2) {
+        volt_line = 3.0;
+        volt_3to1_line = 4.2;
+    }
+}
 
