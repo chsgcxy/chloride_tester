@@ -450,7 +450,13 @@ static void do_test(struct experiment *exper, int mode)
     // fix 0.01 浓度 bug
     if (data->agno3_dosage < 0.015 || mode == EXPER_TYPE_MANUAL_TITRATION) {
         volt_line = 3.3;
-        volt_3to1_line = 6.5;
+        volt_3to1_line = 5.0;
+        if (mode == EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2 ||
+            mode == EXPER_TYPE_ADMIXTURE_BLOCK2 ||
+            mode == EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2) {
+            volt_line = 3.0;
+            volt_3to1_line = 4.0;
+        }
     }
 
     printf("scale: %f   %f\r\n", volt_line, volt_3to1_line);
