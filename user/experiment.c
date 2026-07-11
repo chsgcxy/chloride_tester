@@ -552,14 +552,14 @@ static void do_test(struct experiment *exper, int mode)
 
             /* can not beyond buf len */
             if (ctrl->count >= BUF_CNT - 10)
-                stop_sm = STATUS_FINISHED;
+                stop_sm = STATUS_EXPER_STOP;
 
             switch (stop_sm) {
             case STATUS_PREJUMP:
                 if (volt_diff > volt_line)
                     stop_sm = STATUS_READJUMP;
                 if (--pre_jump_count <= 0)
-                    stop_sm = STATUS_FINISHED;
+                    stop_sm = STATUS_EXPER_STOP;
                 break;
             case STATUS_READJUMP:
                 if (volt_diff > volt_line)
@@ -576,12 +576,11 @@ static void do_test(struct experiment *exper, int mode)
                 }
                 break;
             case STATUS_FINISHED_CONFUSION:
-                if (confusion_count > 0) {
-                    confusion_count--;
+                if (--confusion_count > 0) {
                     if (volt_diff > volt_line)
                         stop_sm = STATUS_JUMPED;
                 } else
-                    stop_sm = STATUS_FINISHED;
+                    stop_sm = STATUS_EXPER_STOP;
                 break;
             case STATUS_FINISHED:
                 exper_sm = STATUS_EXPER_STOP;
