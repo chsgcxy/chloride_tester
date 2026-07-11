@@ -1,2 +1,4 @@
-pro/Objects
-pro/Listings
+pro/
+.vscode
+pro/JLinkLog.txt
+pro/printer.uvguix.liu_x

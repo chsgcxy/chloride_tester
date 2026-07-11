@@ -317,13 +317,17 @@ float exper_filter(void)
 	int i, j;
     float volt = 0;
     static float volt_buff[20];
-
+    EXPER_DBG_PRINT("exper volt source:\r\n");
     for (i = 0; i < EXPER_BUF_CNT; i++) {
+        vTaskSuspendAll();
         volt_buff[i] = EXPER_ADC_READ();
+        xTaskResumeAll();
+        EXPER_DBG_PRINT("%f ", volt_buff[i]);
 #if (ADC_TYPE == ADC_TYPE_LTC2400)
-        vTaskDelay(180);
+        vTaskDelay(50);
 #endif
     }
+    EXPER_DBG_PRINT("\r\n");
 
     /* sort */
 	for (i = 0; i < EXPER_BUF_CNT; i++) {
@@ -444,6 +448,7 @@ static void do_test(struct experiment *exper, int mode)
     float step_ml = 0.3;
     int step = 3;
     float volt_diff = 0.0;
+    float pre_volt_diff = 0.0;
     float volt;
     float prevolt = 0.0;
     TickType_t msdelay = 3000;
@@ -513,9 +518,10 @@ static void do_test(struct experiment *exper, int mode)
             exper_sm = STATUS_PRE_STEP01ML;         
             break;
         case STATUS_PRE_STEP01ML:
+            pre_volt_diff = volt_diff; // filter for volt drop
             volt_diff = volt - prevolt;
             prevolt = volt;
-            if (volt_diff > volt_3to1_line) {
+            if (volt_diff > volt_3to1_line && pre_volt_diff > 0) {
                 exper_sm = STATUS_START_STEP01ML;
                 msdelay = 10000;
                 step = 1;
