@@ -324,7 +324,7 @@ float exper_filter(void)
         xTaskResumeAll();
         EXPER_DBG_PRINT("%f ", volt_buff[i]);
 #if (ADC_TYPE == ADC_TYPE_LTC2400)
-        vTaskDelay(50);
+        vTaskDelay(180);
 #endif
     }
     EXPER_DBG_PRINT("\r\n");

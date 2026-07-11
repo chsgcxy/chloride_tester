@@ -38,3 +38,9 @@ if (data->agno3_dosage < 0.015 || mode == EXPER_TYPE_MANUAL_TITRATION) {
     }
 }
 
+printer_v3.6.2_20260711
+1. 修改了实验结束机制
+2. 0.3ml转0.1ml时，加入了电压负值导致的跳变的过滤器
+3. 增加了越变点采集保护
+4. 增加了电压采集打印
+
