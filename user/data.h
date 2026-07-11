@@ -4,6 +4,7 @@
 #include "stm32f2xx.h"
 
 #define DATA_MAX_NUM         100
+#define DATA_ITEMS_NUM       10
 
 struct data_item {
     float agno3_used;
@@ -24,7 +25,7 @@ struct result_data {
     uint8_t hour;
     uint8_t minute;
     uint8_t items_cnt;
-    struct data_item items[10];
+    struct data_item items[DATA_ITEMS_NUM];
     float cl_agno3_used;
     float cl_dosage;
     float cl_percentage;

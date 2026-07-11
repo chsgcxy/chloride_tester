@@ -20,12 +20,14 @@ enum exper_sm{
     STATUS_PREJUMP,
     STATUS_READJUMP,
     STATUS_JUMPED,
+    STATUS_FINISHED_CONFUSION,
     STATUS_FINISHED,
     STATUS_EXPER_STOP,
 };
 
 
 uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
+#define PRE_JUMP_MAX_NUM  100
 
 signed long timer_handle;
 
@@ -50,7 +52,7 @@ signed long timer_handle;
 #define BUF_CNT            2000
 
 struct exper_ctrl {
-    struct exper_buf buf[2000];
+    struct exper_buf buf[BUF_CNT];
     float volt_diff;
     int count;
     int jump;
@@ -371,7 +373,7 @@ static void result_data_creat(struct experiment *exper, int type)
 {
     int i = 0;
     int pre_idx = 3;
-    int data_cnt = 9;
+    int data_cnt = DATA_ITEMS_NUM -1;
     struct result_data *res = &exper->res;
     struct data_item *items = res->items;
     struct exper_ctrl *ctrl = exper->ctrl;
@@ -436,6 +438,8 @@ static void do_test(struct experiment *exper, int mode)
 
     uint32_t exper_sm = STATUS_EXPER_START;
     uint32_t stop_sm = STATUS_PREJUMP;
+    uint8_t confusion_count;
+    uint8_t pre_jump_count = PRE_JUMP_MAX_NUM;
 
     float step_ml = 0.3;
     int step = 3;
@@ -541,22 +545,36 @@ static void do_test(struct experiment *exper, int mode)
                 msdelay = 10000;
 
             /* can not beyond buf len */
-            if (ctrl->count >= BUF_CNT - 3)
+            if (ctrl->count >= BUF_CNT - 10)
                 stop_sm = STATUS_FINISHED;
 
             switch (stop_sm) {
             case STATUS_PREJUMP:
                 if (volt_diff > volt_line)
                     stop_sm = STATUS_READJUMP;
+                if (--pre_jump_count <= 0)
+                    stop_sm = STATUS_FINISHED;
                 break;
             case STATUS_READJUMP:
                 if (volt_diff > volt_line)
                     stop_sm = STATUS_JUMPED;
-                else 
+                else {
+                    pre_jump_count = PRE_JUMP_MAX_NUM;
                     stop_sm = STATUS_PREJUMP;
+                }
                 break;
             case STATUS_JUMPED:
-                if (volt_diff < volt_line)
+                if (volt_diff < volt_line) {
+                  stop_sm = STATUS_FINISHED_CONFUSION;
+                  confusion_count = 3;
+                }
+                break;
+            case STATUS_FINISHED_CONFUSION:
+                if (confusion_count > 0) {
+                    confusion_count--;
+                    if (volt_diff > volt_line)
+                        stop_sm = STATUS_JUMPED;
+                } else
                     stop_sm = STATUS_FINISHED;
                 break;
             case STATUS_FINISHED:
