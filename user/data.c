@@ -307,6 +307,7 @@ int data_export(struct lb_idx *table, int len)
         switch (res_data.type) {
         case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
         case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_CEMENT_BLOCK2:
         case EXPER_TYPE_CEMENT_CHLORIDE_ION:
             sprintf(line, "实验类型:  水泥氯离子检测实验\r\n");
             break;

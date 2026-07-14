@@ -21,6 +21,7 @@
 #define STRING_XSYYL_AGNO3    "硝酸银检测硝酸银用量"
 #define STRING_XSYND        "硝酸银浓度: "
 #define STRING_KBSYXSYYL    "空白实验硝酸银用量: "
+#define STRING_KBSYXSYYL2   "空白实验2硝酸银用量: "
 #define STRING_KBSYXSYYL_10    "空白实验10mL时硝酸银用量: "
 #define STRING_KBSYXSYYL_20    "空白实验20mL时硝酸银用量: "
 #define STRING_MKSYHLLZ     "试样氯离子质量分数: "
@@ -32,6 +33,7 @@
 
 #define STRING_CEMENT_SLIVER_NITRATE "水泥检测硝酸银检测"
 #define STRING_CEMENT_BLOCK "水泥检测空白实验"
+#define STRING_CEMENT_BLOCK2 "水泥检测空白实验2"
 #define STRING_CEMENT_CHLORIDE_ION "水泥检测氯离子检测"
 #define STRING_OTHER_SLIVER_NITRATE "其他测试硝酸银检测"
 #define STRING_OTHER_BLOCK "其他测试空白实验"
@@ -145,6 +147,12 @@ int report_show(struct result_data *rp)
         tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
         tprinter_newline(report_printer);
         tprinter_newline(report_printer);
+    case EXPER_TYPE_CEMENT_BLOCK2:
+        tprinter_send(report_printer, STRING_KBSYXSYYL2, sizeof(STRING_KBSYXSYYL2));
+        sprintf(buf, "%.2f(ml)", rp->block_agno3_used2);
+        tprinter_send(report_printer, (uint8_t *)buf, strlen(buf));
+        tprinter_newline(report_printer);
+        tprinter_newline(report_printer);
     case EXPER_TYPE_CEMENT_BLOCK:
     case EXPER_TYPE_OTHER_BLOCK:
         tprinter_send(report_printer, STRING_KBSYXSYYL, sizeof(STRING_KBSYXSYYL));
@@ -227,6 +235,9 @@ int report_show(struct result_data *rp)
         break;
     case EXPER_TYPE_CEMENT_BLOCK:
         tprinter_send(report_printer, STRING_CEMENT_BLOCK, strlen(STRING_CEMENT_BLOCK));
+        break;
+    case EXPER_TYPE_CEMENT_BLOCK2:
+        tprinter_send(report_printer, STRING_CEMENT_BLOCK2, strlen(STRING_CEMENT_BLOCK2));
         break;
     case EXPER_TYPE_CEMENT_CHLORIDE_ION:
         tprinter_send(report_printer, STRING_CEMENT_CHLORIDE_ION, strlen(STRING_CEMENT_CHLORIDE_ION));

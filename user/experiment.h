@@ -7,6 +7,8 @@
 #define EXPER_TYPE_CEMENT_SLIVER_NITRATE              0x01
 #define EXPER_TYPE_CEMENT_BLOCK                       0x02
 #define EXPER_TYPE_CEMENT_CHLORIDE_ION                0x03
+#define EXPER_TYPE_CEMENT_BLOCK2                      0x04
+#define EXPER_TYPE_CEMENT_BLOCK_FINISHED              0x05
 #define EXPER_TYPE_OTHER_SLIVER_NITRATE               0x11
 #define EXPER_TYPE_OTHER_BLOCK                        0x12
 #define EXPER_TYPE_OTHER_CHLORIDE_ION                 0x13

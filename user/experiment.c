@@ -614,6 +614,15 @@ static void do_test(struct experiment *exper, int mode)
                 stat->stat = mode;
                 exper_update_ui(exper);
                 return;
+            case EXPER_TYPE_CEMENT_BLOCK2:
+                data->block_agno3_used2 = count_agno3_used(exper);
+                EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
+                EXPER_DBG_PRINT("[exper]: sliver nitrate used actual %.3f\r\n", data->block_agno3_used2);
+                result_data_creat(exper, mode);
+                result_data_save(exper);
+                stat->stat = mode;
+                exper_update_ui(exper);
+                return;
             case EXPER_TYPE_CEMENT_CHLORIDE_ION:
                 data->cl_agno3_used = count_agno3_used(exper);
                 data->cl_percentage = (data->agno3_dosage * (float)3.545 * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_weight;
@@ -740,7 +749,7 @@ void exper_task(void *args)
             break;
         case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
         case EXPER_TYPE_MANUAL_TITRATION:
-        case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_CEMENT_BLOCK2:
         case EXPER_TYPE_OTHER_SLIVER_NITRATE:
         case EXPER_TYPE_OTHER_BLOCK:
         case EXPER_TYPE_CEMENT_CHLORIDE_ION:
@@ -755,6 +764,7 @@ void exper_task(void *args)
         case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
         case EXPER_TYPE_ADMIXTURE_BLOCK1:
         case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
+        case EXPER_TYPE_CEMENT_BLOCK:
             EXPER_DBG_PRINT("exper_task: run task id %d\r\n", cur_exper->msg->msg);
             do_test(cur_exper, cur_exper->msg->msg);
             vTaskSuspendAll();
@@ -762,6 +772,7 @@ void exper_task(void *args)
             case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
             case EXPER_TYPE_ADMIXTURE_BLOCK2:
             case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+            case EXPER_TYPE_CEMENT_BLOCK2:
                 break;
             default:
                 cur_exper->msg->msg = EXPER_MSG_NONE;

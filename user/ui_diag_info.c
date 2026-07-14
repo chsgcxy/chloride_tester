@@ -78,6 +78,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         switch (ginfo.func) {
         case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
         case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_CEMENT_BLOCK2:
         case EXPER_TYPE_CEMENT_CHLORIDE_ION:
         case EXPER_TYPE_OTHER_SLIVER_NITRATE:
         case EXPER_TYPE_OTHER_BLOCK:
@@ -97,6 +98,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1_FINISHED:
         case EXPER_TYPE_ADMIXTURE_BLOCK1_FINISHED:
         case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1_FINISHED:
+        case EXPER_TYPE_CEMENT_BLOCK_FINISHED:
             BUTTON_SetText(hItem, "继续实验");
             break;
         case EXPER_MSG_OIL_CLEAR:
@@ -152,6 +154,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 TEXT_SetText(hItem, "即将进行AgNO3浓度检测");
                 break;
             case EXPER_TYPE_CEMENT_BLOCK:
+                TEXT_SetText(hItem, "即将进行空白实验1");
+                break;
             case EXPER_TYPE_OTHER_BLOCK:
             case EXPER_TYPE_ADMIXTURE_BLOCK1:
                 TEXT_SetText(hItem, "即将进行空白实验");
@@ -189,6 +193,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1_FINISHED:
                 TEXT_SetText(hItem, "请加入10mL 氯化钠标准溶液");
                 break;
+            case EXPER_TYPE_CEMENT_BLOCK_FINISHED:
+                TEXT_SetText(hItem, "即将进行空白实验2");
+                break;
             default:
                 break;
             }
@@ -199,6 +206,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(hItem, GUI_WHITE);
         switch (ginfo.func) {
         case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_CEMENT_BLOCK2:
         case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
         case EXPER_TYPE_CEMENT_CHLORIDE_ION:
         case EXPER_TYPE_OTHER_SLIVER_NITRATE:
@@ -220,6 +228,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_TYPE_ADMIXTURE_BLOCK1_FINISHED:
         case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1_FINISHED:
             TEXT_SetText(hItem, "加入完成后, 点击继续实验");
+            break;
+        case EXPER_TYPE_CEMENT_BLOCK_FINISHED:
+            TEXT_SetText(hItem, "点击继续实验");
             break;
         case EXPER_MSG_OIL_CLEAR:
             TEXT_SetText(hItem, "确定开始清洗吗?");

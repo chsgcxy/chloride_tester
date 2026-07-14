@@ -1032,9 +1032,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
                 ctrl_all_items(pMsg->hWin, 1);
                 break;
-            case EXPER_TYPE_CEMENT_BLOCK:
             case EXPER_TYPE_OTHER_BLOCK:
             case EXPER_TYPE_ADMIXTURE_BLOCK2:
+            case EXPER_TYPE_CEMENT_BLOCK2:
                 beep_finished();
                 test_func = 0;
                 
@@ -1209,6 +1209,36 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     msg.msg = EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2;
                     msg.stop = 0;
                     exper_msg_set(&msg, MSG_LOAD_UI_ADMIXTURE);
+                }
+                break;
+            case EXPER_TYPE_CEMENT_BLOCK:
+                beep_finished();
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                diag_res_creat(stat);
+                ctrl_all_items(pMsg->hWin, 1);
+                WM_Exec();
+                ginfo.func = EXPER_TYPE_CEMENT_BLOCK_FINISHED;
+                ginfo.flag = 0;
+                ctrl_all_items(pMsg->hWin, 0);
+                WM_Exec();
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_START_BLOCK);
+                if (diag_info_creat(&ginfo)) {
+                    ctrl_all_items(pMsg->hWin, 1);
+                    BUTTON_SetText(hItem, "¿Õ°×ÊµÑé2");
+                    BUTTON_SetTextColor(hItem, 0, GUI_BLUE);
+                    ctrl_all_items(pMsg->hWin, 1);
+                    test_func = 0;
+                } else {
+                    WM_EnableWindow(hItem);
+                    test_func = 1;
+                    GRAPH_DATA_XY_Clear(pdataGRP);
+                    graph_cnt = 1;
+                    GRAPH_SCALE_SetOff(hScaleH, 0);
+                    GRAPH_DATA_XY_SetOffX(pdataGRP, 0);
+                    msg.msg = EXPER_TYPE_CEMENT_BLOCK2;
+                    msg.stop = 0;
+                    exper_msg_set(&msg, MSG_LOAD_UI_CEMENT);
                 }
                 break;
             default:

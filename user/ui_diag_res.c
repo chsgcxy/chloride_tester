@@ -36,10 +36,10 @@
 */
 #define ID_WINDOW_0          (GUI_ID_USER + 0x00)
 #define ID_TEXT_0            (GUI_ID_USER + 0x01)
-#define ID_TEXT_1            (GUI_ID_USER + 0x03)
-#define ID_TEXT_2            (GUI_ID_USER + 0x04)
-#define ID_TEXT_3            (GUI_ID_USER + 0x05)
-#define ID_TEXT_4            (GUI_ID_USER + 0x06)
+#define ID_TITLE_LINE1       (GUI_ID_USER + 0x03)
+#define ID_DATA_LINE1        (GUI_ID_USER + 0x04)
+#define ID_TITLE_LINE2       (GUI_ID_USER + 0x05)
+#define ID_DATA_LINE2        (GUI_ID_USER + 0x06)
 #define ID_BUTTON_0          (GUI_ID_USER + 0x07)
 #define ID_BUTTON_1          (GUI_ID_USER + 0x08)
 #define ID_BUTTON_2          (GUI_ID_USER + 0x09)
@@ -66,11 +66,11 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 151, 119, 500, 240, 0, 0x0, 0},
     {TEXT_CreateIndirect, "实验结果", ID_TEXT_0, 182, 12, 133, 25, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "Text", ID_TEXT_1, 10, 60, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_2, 275, 60, 150, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TITLE_LINE1, 10, 60, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_DATA_LINE1, 275, 60, 150, 25, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "Text", ID_TEXT_3, 10, 100, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_4, 275, 100, 150, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TITLE_LINE2, 10, 100, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_DATA_LINE2, 275, 100, 150, 25, 0, 0x64, 0},
     
     {TEXT_CreateIndirect, "PPM", ID_TEXT_PPM, 10, 140, 250, 25, 0, 0x64, 0},
     {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_PPM_VALUE, 275, 140, 150, 25, 0, 0x64, 0},
@@ -137,7 +137,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TITLE_LINE1);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
@@ -151,6 +151,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_TYPE_ADMIXTURE_BLOCK1:
         case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
             TEXT_SetText(hItem, "10mL时AgNO3用量");
+            break;
+        case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_CEMENT_BLOCK2:
+            TEXT_SetText(hItem, "空白实验1 AgNO3用量");
             break;
         default:
             TEXT_SetText(hItem, "AgNO3用量");
@@ -168,6 +172,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used);
             break;
         case EXPER_TYPE_CEMENT_BLOCK:
+        case EXPER_TYPE_CEMENT_BLOCK2:
         case EXPER_TYPE_OTHER_BLOCK:
         case EXPER_TYPE_ADMIXTURE_BLOCK2:
         case EXPER_TYPE_ADMIXTURE_BLOCK1:
@@ -182,14 +187,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         default:
             break;
         }
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_2);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_DATA_LINE1);
         TEXT_SetFont(hItem, GUI_FONT_24_1);
         TEXT_SetText(hItem, buf);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_3);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TITLE_LINE2);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
@@ -216,13 +221,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
             TEXT_SetText(hItem, "20mL时AgNO3用量");
             break;
+        case EXPER_TYPE_CEMENT_BLOCK2:
+            TEXT_SetText(hItem, "空白实验2 AgNO3用量");
+            break;
         default:
             break;
         }
         //
         // Initialization of 'Text'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_4);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_DATA_LINE2);
         TEXT_SetFont(hItem, GUI_FONT_24_1);
         TEXT_SetTextColor(hItem, GUI_MAKE_COLOR(0x00FFFFFF));
         switch (stat->stat) {
@@ -252,6 +260,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(hItem, buf);
             break;
         case EXPER_TYPE_ADMIXTURE_BLOCK2:
+        case EXPER_TYPE_CEMENT_BLOCK2:
             sprintf(buf, "%.2fmL", stat->data.block_agno3_used2);
             TEXT_SetText(hItem, buf);
             break;
@@ -339,6 +348,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 switch (stat->stat) {
                 case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
                 case EXPER_TYPE_CEMENT_BLOCK:
+                case EXPER_TYPE_CEMENT_BLOCK2:
                 case EXPER_TYPE_CEMENT_CHLORIDE_ION:
                     ctrl_all_items(pMsg->hWin, 0);
                     WM_Exec();
