@@ -32,7 +32,7 @@
 #define STRING_DELTAV       "Δ/mV"
 
 #define STRING_CEMENT_SLIVER_NITRATE "水泥检测硝酸银检测"
-#define STRING_CEMENT_BLOCK "水泥检测空白实验"
+#define STRING_CEMENT_BLOCK "水泥检测空白实验1"
 #define STRING_CEMENT_BLOCK2 "水泥检测空白实验2"
 #define STRING_CEMENT_CHLORIDE_ION "水泥检测氯离子检测"
 #define STRING_OTHER_SLIVER_NITRATE "其他测试硝酸银检测"

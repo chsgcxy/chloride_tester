@@ -66,11 +66,11 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 151, 119, 500, 240, 0, 0x0, 0},
     {TEXT_CreateIndirect, "实验结果", ID_TEXT_0, 182, 12, 133, 25, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "Text", ID_TITLE_LINE1, 10, 60, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_DATA_LINE1, 275, 60, 150, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TITLE_LINE1, 10, 60, 270, 30, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_DATA_LINE1, 295, 60, 150, 30, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "Text", ID_TITLE_LINE2, 10, 100, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_DATA_LINE2, 275, 100, 150, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TITLE_LINE2, 10, 100, 270, 30, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_DATA_LINE2, 295, 100, 150, 30, 0, 0x64, 0},
     
     {TEXT_CreateIndirect, "PPM", ID_TEXT_PPM, 10, 140, 250, 25, 0, 0x64, 0},
     {TEXT_CreateIndirect, "0.02mol/L", ID_TEXT_PPM_VALUE, 275, 140, 150, 25, 0, 0x64, 0},

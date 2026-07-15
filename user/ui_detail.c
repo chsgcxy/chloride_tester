@@ -44,6 +44,7 @@
 #define ID_BUTTON_PRINT (GUI_ID_USER + 0x05)
 
 #define ID_TEXT_DATE (GUI_ID_USER + 0x06)
+#define ID_TEXT_TITILE (GUI_ID_USER + 0x13)
 
 #define ID_TEXT_IDX (GUI_ID_USER + 0x07)
 #define ID_TEXT_IDX_VALUE (GUI_ID_USER + 0x08)
@@ -62,6 +63,21 @@
 
 #define ID_TEXT_PPM (GUI_ID_USER + 0x11)
 #define ID_TEXT_PPM_VALUE (GUI_ID_USER + 0x12)
+
+#define STRING_CEMENT_SLIVER_NITRATE "Ë®Äà¼ì²âÏõËáÒø¼ì²â"
+#define STRING_CEMENT_BLOCK "Ë®Äà¼ì²â¿Õ°×ÊµÑé1"
+#define STRING_CEMENT_BLOCK2 "Ë®Äà¼ì²â¿Õ°×ÊµÑé2"
+#define STRING_CEMENT_CHLORIDE_ION "Ë®Äà¼ì²âÂÈÀë×Ó¼ì²â"
+#define STRING_OTHER_SLIVER_NITRATE "ÆäËû²âÊÔÏõËáÒø¼ì²â"
+#define STRING_OTHER_BLOCK "ÆäËû²âÊÔ¿Õ°×ÊµÑé"
+#define STRING_OTHER_CHLORIDE_ION "ÆäËû²âÊÔÂÈÀë×Ó¼ì²â"
+#define STRING_MANUAL_TITRATION "ÊÖ¶¯µÎ¶¨"
+#define STRING_ADMIXTURE_SLIVER_NITRATE1 "Íâ¼Ó¼Á¼ì²âÏõËáÒø¼ì²â10mL"
+#define STRING_ADMIXTURE_SLIVER_NITRATE2 "Íâ¼Ó¼Á¼ì²âÏõËáÒø¼ì²â20mL"
+#define STRING_ADMIXTURE_BLOCK1 "Íâ¼Ó¼Á¼ì²â¿Õ°×ÊµÑé10mL"
+#define STRING_ADMIXTURE_BLOCK2 "Íâ¼Ó¼Á¼ì²â¿Õ°×ÊµÑé20mL"
+#define STRING_ADMIXTURE_CHLORIDE_ION1 "Íâ¼Ó¼Á¼ì²âÂÈÀë×Ó¼ì²â10mL"
+#define STRING_ADMIXTURE_CHLORIDE_ION2 "Íâ¼Ó¼Á¼ì²âÂÈÀë×Ó¼ì²â20mL"
 
 // USER START (Optionally insert additional defines)
 extern const GUI_FONT GUI_FontHZ_kaiti_28;
@@ -93,24 +109,25 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     {BUTTON_CreateIndirect, "Button", ID_BUTTON_RETURN, 460, 410, 300, 60, 0, 0x0, 0},
 
     {TEXT_CreateIndirect, "Text", ID_TEXT_DATE, 440, 10, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_TITILE, 440, 40, 350, 25, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "Text", ID_TEXT_IDX, 440, 40, 50, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_IDX_VALUE, 640, 40, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_IDX, 440, 70, 50, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_IDX_VALUE, 640, 70, 80, 25, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "ÏõËáÒøÅ¨¶È", ID_TEXT_XSYND, 440, 70, 195, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYND_VALUE, 640, 70, 150, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "ÏõËáÒøÅ¨¶È", ID_TEXT_XSYND, 440, 100, 195, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYND_VALUE, 640, 100, 150, 25, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "¿Õ°×ÊµÑéÓÃÁ¿", ID_TEXT_KBSYXXYYL, 440, 100, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_KBSYXXYYL_VALUE, 640, 100, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "¿Õ°×ÊµÑéÓÃÁ¿", ID_TEXT_KBSYXXYYL, 440, 130, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_KBSYXXYYL_VALUE, 640, 130, 80, 25, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "ÏõËáÒøÓÃÁ¿", ID_TEXT_XSYYL, 440, 130, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYYL_VALUE, 640, 130, 80, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "ÏõËáÒøÓÃÁ¿", ID_TEXT_XSYYL, 440, 160, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_XSYYL_VALUE, 640, 160, 80, 25, 0, 0x64, 0},
     
-    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ, 440, 160, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ_VALUE, 640, 190, 150, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ, 440, 190, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_MKSYHLLZ_VALUE, 640, 220, 150, 25, 0, 0x64, 0},
 
-    {TEXT_CreateIndirect, "PPM", ID_TEXT_PPM, 440, 220, 250, 25, 0, 0x64, 0},
-    {TEXT_CreateIndirect, "Text", ID_TEXT_PPM_VALUE, 640, 220, 81, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "PPM", ID_TEXT_PPM, 440, 250, 250, 25, 0, 0x64, 0},
+    {TEXT_CreateIndirect, "Text", ID_TEXT_PPM_VALUE, 640, 250, 81, 25, 0, 0x64, 0},
     // USER START (Optionally insert additional widgets)
     // USER END
 };
@@ -249,12 +266,39 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_KBSYXXYYL);
         TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
         TEXT_SetTextColor(hItem, GUI_BLACK);
+        switch (pres->type) {
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+        case EXPER_TYPE_MANUAL_TITRATION:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+            WM_HideWindow(hItem);
+            break;
+        default:
+            break;
+        }
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_KBSYXXYYL_VALUE);
         TEXT_SetFont(hItem, GUI_FONT_24_ASCII);
         TEXT_SetTextColor(hItem, GUI_BLACK);
-        sprintf(buf, "%.2fmL", pres->block_agno3_used);
-        TEXT_SetText(hItem, buf);
+        switch (pres->type) {
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+        case EXPER_TYPE_MANUAL_TITRATION:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+            WM_HideWindow(hItem);
+            break;
+        case EXPER_TYPE_CEMENT_BLOCK2:
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
+            sprintf(buf, "%.2fmL", pres->block_agno3_used2);
+            TEXT_SetText(hItem, buf);
+            break;
+        default:
+            sprintf(buf, "%.2fmL", pres->block_agno3_used);
+            TEXT_SetText(hItem, buf);
+            break;
+        }
 
         //
         // Initialization of 'Text'
@@ -265,6 +309,56 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(buf, "20%02d-%02d-%02d      %02d:%02d",
             pres->year, pres->month, pres->day, pres->hour, pres->minute);
         TEXT_SetText(hItem, buf);
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_TITILE);
+        TEXT_SetFont(hItem, &GUI_FontHZ_kaiti_20);
+        TEXT_SetTextColor(hItem, GUI_BLACK);
+        switch (pres->type) {
+        case EXPER_TYPE_CEMENT_SLIVER_NITRATE:
+            TEXT_SetText(hItem, STRING_CEMENT_SLIVER_NITRATE);
+            break;
+        case EXPER_TYPE_CEMENT_BLOCK:
+            TEXT_SetText(hItem, STRING_CEMENT_BLOCK);
+            break;
+        case EXPER_TYPE_CEMENT_BLOCK2:
+            TEXT_SetText(hItem, STRING_CEMENT_BLOCK2);
+            break;
+        case EXPER_TYPE_CEMENT_CHLORIDE_ION:
+            TEXT_SetText(hItem, STRING_CEMENT_CHLORIDE_ION);
+            break;
+        case EXPER_TYPE_OTHER_SLIVER_NITRATE:
+            TEXT_SetText(hItem, STRING_OTHER_SLIVER_NITRATE);
+            break;
+        case EXPER_TYPE_OTHER_BLOCK:
+            TEXT_SetText(hItem, STRING_OTHER_BLOCK);
+            break;
+        case EXPER_TYPE_OTHER_CHLORIDE_ION:
+            TEXT_SetText(hItem, STRING_OTHER_CHLORIDE_ION);
+            break;
+        case EXPER_TYPE_MANUAL_TITRATION:
+            TEXT_SetText(hItem, STRING_MANUAL_TITRATION);
+            break;
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE1:
+            TEXT_SetText(hItem, STRING_ADMIXTURE_SLIVER_NITRATE1);
+            break;
+        case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
+            TEXT_SetText(hItem, STRING_ADMIXTURE_SLIVER_NITRATE2);
+            break;
+        case EXPER_TYPE_ADMIXTURE_BLOCK1:
+            TEXT_SetText(hItem, STRING_ADMIXTURE_BLOCK1);
+            break;
+        case EXPER_TYPE_ADMIXTURE_BLOCK2:
+            TEXT_SetText(hItem, STRING_ADMIXTURE_BLOCK2);
+            break;
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION1:
+            TEXT_SetText(hItem, STRING_ADMIXTURE_CHLORIDE_ION1);
+            break;
+        case EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2:
+            TEXT_SetText(hItem, STRING_ADMIXTURE_CHLORIDE_ION2);
+            break;
+        default:
+            break;
+        }
         //
         // Initialization of 'Text'
         //

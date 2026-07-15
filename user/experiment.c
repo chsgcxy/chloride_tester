@@ -624,11 +624,9 @@ static void do_test(struct experiment *exper, int mode)
                 exper_update_ui(exper);
                 return;
             case EXPER_TYPE_CEMENT_CHLORIDE_ION:
-            {
-                float block_agno3_used_avg = (data->block_agno3_used + data->block_agno3_used2) / 2.0;
+                data->block_agno3_used = (data->block_agno3_used + data->block_agno3_used2) / 2.0;
                 data->cl_agno3_used = count_agno3_used(exper);
-                data->cl_percentage = (data->agno3_dosage * (float)3.545 * (data->cl_agno3_used - block_agno3_used_avg)) / data->sample_weight;
-            }
+                data->cl_percentage = (data->agno3_dosage * (float)3.545 * (data->cl_agno3_used - data->block_agno3_used)) / data->sample_weight;
                 EXPER_DBG_PRINT("[exper]: count=%d jump=%d.\r\n", ctrl->count, ctrl->jump);
                 EXPER_DBG_PRINT("[exper]: sliver nitrate used %.3f\r\n", data->cl_agno3_used);
                 EXPER_DBG_PRINT("[exper]: chloride ion percentage is %f%%\r\n", data->cl_percentage);
