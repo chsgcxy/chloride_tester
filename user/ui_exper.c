@@ -1005,9 +1005,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2:
                 beep_finished();
                 test_func = 0;
-                printf("agno3 finieshed...............................\r\n");
-                printf("agno3_dosage = %f, used = %f \r\n",
-                    stat->data.agno3_dosage, stat->data.agno3_agno3_used);
+                printf("agno3 finieshed.\r\n");
+                printf("agno3_dosage = %f\r\n", stat->data.agno3_dosage);
                 // show agno3 nongdu to text and edit, when shui ni test
                 // ID_TEXT_NO3ND_VALUE will show, and ID_EDIT_NO3ND_VALUE
                 // will hide; when stand test, ID_EDIT_NO3ND_VALUE will
@@ -1019,7 +1018,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 EDIT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used);
+                if (stat->stat == EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2) {
+                    sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used2);
+                    printf("Agno3 used = %f\r\n", stat->data.agno3_agno3_used2);
+                } else {
+                    sprintf(buf, "%.2fmL", stat->data.agno3_agno3_used);
+                    printf("Agno3 used = %f\r\n", stat->data.agno3_agno3_used);
+                }
                 TEXT_SetText(hItem, buf);
 
                 WM_Exec();
@@ -1039,7 +1044,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 test_func = 0;
                 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.2fmL", stat->data.block_agno3_used);
+                if (stat->stat == EXPER_TYPE_OTHER_BLOCK)
+                    sprintf(buf, "%.2fmL", stat->data.block_agno3_used);
+                else
+                    sprintf(buf, "%.2fmL", stat->data.block_agno3_used2);
                 TEXT_SetText(hItem, buf);
 
                 WM_Exec();
@@ -1062,9 +1070,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 TEXT_SetText(hItem, buf);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_NO3YL_VALUE);
-                sprintf(buf, "%.2fmL", stat->data.cl_agno3_used);
+                if (stat->stat == EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2)
+                    sprintf(buf, "%.2fmL", stat->data.cl_agno3_used2);
+                else
+                    sprintf(buf, "%.2fmL", stat->data.cl_agno3_used);
                 TEXT_SetText(hItem, buf);
-                
+
                 WM_Exec();
                 ctrl_all_items(pMsg->hWin, 0);
                 WM_Exec();
