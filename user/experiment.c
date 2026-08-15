@@ -21,13 +21,12 @@ enum exper_sm{
     STATUS_READJUMP,
     STATUS_JUMPED,
     STATUS_FINISHED_CONFUSION,
-    STATUS_FINISHED,
     STATUS_EXPER_STOP,
 };
 
 
 uint32_t zsb_total_step = ZSB_LEN_DEFAULT;
-#define PRE_JUMP_MAX_NUM  100
+#define PRE_JUMP_MAX_NUM  20
 
 signed long timer_handle;
 
@@ -459,12 +458,12 @@ static void do_test(struct experiment *exper, int mode)
     // fix 0.01 浓度 bug
     if (data->agno3_dosage < 0.015 || mode == EXPER_TYPE_MANUAL_TITRATION) {
         volt_line = 3.3;
-        volt_3to1_line = 5.0;
+        volt_3to1_line = 4.7;
         if (mode == EXPER_TYPE_ADMIXTURE_SLIVER_NITRATE2 ||
             mode == EXPER_TYPE_ADMIXTURE_BLOCK2 ||
             mode == EXPER_TYPE_ADMIXTURE_CHLORIDE_ION2) {
             volt_line = 3.0;
-            volt_3to1_line = 4.0;
+            volt_3to1_line = 3.7;
         }
     }
 
@@ -473,6 +472,13 @@ static void do_test(struct experiment *exper, int mode)
     if (timer_handle != -1) {
         WM_DeleteTimer(timer_handle);
         timer_handle = -1;
+    }
+
+    if (_exper_oil_get(exper))
+        exper_sm = STATUS_EXPER_STOP;
+    else {
+        relay_ctrl(MOTOR_WATER_PUT);
+        stepmotor_run(MOTOR_DIR_UP, 347); // STEP_01ML * 1.8
     }
 
     while (1) {
@@ -560,6 +566,7 @@ static void do_test(struct experiment *exper, int mode)
                     stop_sm = STATUS_READJUMP;
                 if (--pre_jump_count <= 0)
                     stop_sm = STATUS_EXPER_STOP;
+                EXPER_DBG_PRINT("[exper]: pre_jump_count = %d.\r\n", pre_jump_count);
                 break;
             case STATUS_READJUMP:
                 if (volt_diff > volt_line)
@@ -579,16 +586,20 @@ static void do_test(struct experiment *exper, int mode)
                 if (--confusion_count > 0) {
                     if (volt_diff > volt_line)
                         stop_sm = STATUS_JUMPED;
-                } else
+                } else {
+                    exper_sm = STATUS_EXPER_STOP;
                     stop_sm = STATUS_EXPER_STOP;
+                }
                 break;
-            case STATUS_FINISHED:
+            case STATUS_EXPER_STOP:
                 exper_sm = STATUS_EXPER_STOP;
                 break;
             default:
                 break;                
             }
-            break;
+
+            if (exper_sm != STATUS_EXPER_STOP)
+                break;
         case STATUS_EXPER_STOP:
             EXPER_DBG_PRINT("[exper]: exper %d finished.\r\n", mode);
             switch (mode) {
